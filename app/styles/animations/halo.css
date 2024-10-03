@@ -1,0 +1,25 @@
+@keyframes moveLeft {
+  0% {
+    transform: translateX(-100%); /* Départ de l'extérieur */
+  }
+  100% {
+    transform: translateX(100%); /* Arrivée à l'intérieur */
+  }
+}
+
+@keyframes moveRight {
+  0% {
+    transform: translateX(100%); /* Départ de l'extérieur */
+  }
+  100% {
+    transform: translateX(-100%); /* Arrivée à l'intérieur */
+  }
+}
+
+.animate-moveLeft {
+  animation: moveLeft 3s ease-in-out infinite; /* Durée et type d'animation */
+}
+
+.animate-moveRight {
+  animation: moveRight 3s ease-in-out infinite; /* Durée et type d'animation */
+}

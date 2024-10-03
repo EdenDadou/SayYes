@@ -1,0 +1,38 @@
+@keyframes moveGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.holographic-effect {
+  animation: moveGradient 5s ease infinite;
+  background-size: 400% 400%;
+}
+
+
+.holographic-text {
+  background: linear-gradient(270deg, #E1FF8B, #DCD5FF, #DCC4FF, #B0F5FF, #B0F5F0,  #E1FF8B);
+  background-size: 400%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-animation 5s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
