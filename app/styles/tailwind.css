@@ -39,5 +39,21 @@ body {
     color-scheme: dark;
   }
 
+  .bg-gradient {
+    background: linear-gradient(90deg, #2F2F2F, #929292);
+    -webkit-background-clip: text; /* Pour les navigateurs basés sur WebKit */
+    -webkit-text-fill-color: transparent; /* Pour les navigateurs basés sur WebKit */
+  }
+  .bg-gradient-custom {
+    background: linear-gradient(180deg, #2d2d2d -60.84%, #121111 76.57%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(40deg, #474747 -1.05%, #929292 74.31%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+  }
+
 
 }

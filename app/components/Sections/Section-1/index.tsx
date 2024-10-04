@@ -1,9 +1,8 @@
-import SvgBgGeometrie from "~/assets/icons/BgGeometrie";
-import SvgDecoIntro from "~/assets/icons/DecoIntro";
-import SvgStars from "~/assets/icons/Stars";
-import SvgTexteIntro from "~/assets/icons/TexteIntro";
+import SvgBgGeometrie from "~/assets/icons/Section1/BgGeometrie";
+import SvgDecoIntro from "~/assets/icons/Section1/DecoIntro";
+import SvgStars from "~/assets/icons/Section1/Stars";
+import SvgTexteIntro from "~/assets/icons/Section1/TexteIntro";
 import "~/styles/index";
-import ScrollingBanner from "./components/ScrollingBanner";
 
 interface Section1Props {
   isIntroFinish: boolean;
@@ -30,6 +29,11 @@ export default function Section1({ isIntroFinish }: Section1Props) {
       {/* Front Layer */}
       <div className="relative w-full z-10">
         {/* Contenu gauche*/}
+        {/* <div className="absolute left-0 top-10 h-full w-1/2 overflow-hidden">
+          <div className="absolute right-[-60%] h-full w-[200%]">
+            <SvgDecoIntro className="w-full h-full" />
+          </div>
+        </div> */}
 
         {/* Contenu central */}
         <div className="relative flex flex-col justify-center items-center w-full h-max gap-8 py-36">
@@ -53,6 +57,11 @@ export default function Section1({ isIntroFinish }: Section1Props) {
         </div>
 
         {/* Contenu droite */}
+        {/* <div className="absolute right-0 top-10 h-full w-1/2 overflow-hidden">
+          <div className="absolute left-[50%] h-full w-[200%]">
+            <SvgDecoIntro className="w-full h-full" />
+          </div>
+        </div> */}
       </div>
     </div>
   );

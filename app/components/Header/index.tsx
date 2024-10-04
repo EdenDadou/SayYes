@@ -1,20 +1,36 @@
-import SvgLogo from "~/assets/icons/Logo";
+import SvgLogo from "~/assets/icons/Header/Logo";
 import Button from "../Button";
-import SvgFlamme from "~/assets/icons/Flamme";
-import SvgCoeur from "~/assets/icons/Coeur";
-import SvgSmile from "~/assets/icons/Smile";
-import SvgLight from "~/assets/icons/Light";
-import SvgCtaParlonsDesign from "~/assets/icons/CtaParlonsDesign";
+import SvgFlamme from "~/assets/icons/Header/Flamme";
+import SvgCoeur from "~/assets/icons/Header/Coeur";
+import SvgSmile from "~/assets/icons/Header/Smile";
+import SvgLight from "~/assets/icons/Header/Light";
+import SvgCtaParlonsDesign from "~/assets/icons/Header/CtaParlonsDesign";
+import { useEffect, useState } from "react";
 
-interface HeaderProps {
-  showHeader: boolean;
-}
+const Header = () => {
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-const Header = ({ showHeader }: HeaderProps) => {
-  console.log(showHeader);
+  const controlHeader = () => {
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > lastScrollY) {
+      setShowHeader(false);
+    } else {
+      setShowHeader(true);
+    }
+    setLastScrollY(currentScrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", controlHeader);
+    return () => {
+      window.removeEventListener("scroll", controlHeader);
+    };
+  }, [lastScrollY]);
+
   return (
     <div
-      className={`sticky top-0 w-full bg-gray-400 h-24  flex flex-row items-center justify-between px-7 shadow-3xl z-50 header-transition
+      className={`sticky top-0 w-full bg-gray-400 h-24  flex flex-row items-center justify-between px-7 shadow-3xl z-50 header-transition shadow-custom-inset drop-shadow-custom-black drop-shadow-custom-black-opacity
         ${showHeader ? "translate-y-0" : "-translate-y-[120%]"} `}
     >
       {/* Titre principal */}

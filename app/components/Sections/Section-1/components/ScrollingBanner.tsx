@@ -1,4 +1,4 @@
-import SvgLogoAllClients from "~/assets/icons/LogoAllClients";
+import SvgLogoAllClients from "~/assets/icons/Section2/LogoAllClients";
 
 const ScrollingBanner = () => {
   return (

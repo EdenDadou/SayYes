@@ -5,6 +5,7 @@ import "../styles/index";
 import { useEffect, useRef, useState } from "react";
 import Section1 from "~/components/Sections/Section-1";
 import Section2 from "~/components/Sections/Section-2";
+import Section3 from "~/components/Sections/Section-3";
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,61 +15,33 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  // const [loading, setLoading] = useState(false);
-  // const [isIntroFinish, setIsIntroFinish] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [isIntroFinish, setIsIntroFinish] = useState(false);
-  useEffect(() => {
-    const timeoutLoading = setTimeout(() => {
-      setLoading(false);
-    }, 4500);
+  const [loading, setLoading] = useState(false);
+  const [isIntroFinish, setIsIntroFinish] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  // const [isIntroFinish, setIsIntroFinish] = useState(false);
+  // useEffect(() => {
+  //   const timeoutLoading = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 4500);
 
-    const timeoutLine = setTimeout(() => {
-      setIsIntroFinish(true);
-    }, 5000);
-    return () => {
-      clearTimeout(timeoutLoading);
-      clearTimeout(timeoutLine);
-    };
-  }, []);
-
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const controlHeader = () => {
-    if (containerRef.current) {
-      const currentScrollY = window.scrollY;
-      console.log("coucou", currentScrollY);
-      if (currentScrollY > lastScrollY) {
-        // Scroll vers le bas - cacher le header
-        setShowHeader(false);
-      } else {
-        // Scroll vers le haut - afficher le header
-        setShowHeader(true);
-      }
-      setLastScrollY(currentScrollY);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", controlHeader);
-    return () => {
-      window.removeEventListener("scroll", controlHeader);
-    };
-  }, [lastScrollY]);
+  //   const timeoutLine = setTimeout(() => {
+  //     setIsIntroFinish(true);
+  //   }, 5000);
+  //   return () => {
+  //     clearTimeout(timeoutLoading);
+  //     clearTimeout(timeoutLine);
+  //   };
+  // }, []);
 
   return (
     <div className="flex items-center justify-center w-full">
-      <LoaderIntro loading={loading} />
+      {/* <LoaderIntro loading={loading} /> */}
       {!loading ? (
-        <div
-          className="flex flex-col items-center justify-start w-full"
-          ref={containerRef}
-        >
-          <Header showHeader={showHeader} />
+        <div className="flex flex-col items-center justify-start w-full">
+          <Header />
           <Section1 isIntroFinish={isIntroFinish} />
           <Section2 />
+          <Section3 />
         </div>
       ) : null}
     </div>
