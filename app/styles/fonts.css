@@ -24,5 +24,6 @@
     font-style: normal;
     font-weight: 700;
     font-display: swap;
-    src: url(/fonts/Jakarta/PlusJakartaSans-Bold.ttf) format('truetype');
+    src: url(/fonts/Jakarta/PlusJakartaSans-Bold.ttf) format('ttf');
   }
+  

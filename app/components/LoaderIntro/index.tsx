@@ -2,12 +2,12 @@ interface LoaderIntroProps {
   loading: boolean;
 }
 
-const LoaderIntro = ({ loading }: LoaderIntroProps) => {
+export default function LoaderIntro({ loading }: LoaderIntroProps) {
   return (
-    <div className="absolute w-full h-screen">
-      <div className="absolute inset-0 z-50">
+    <div className={`absolute w-full h-screen top-0 left-0 right-0 z-50`}>
+      <div className="absolute inset-0">
         <video
-          className={`w-full h-full object-cover transition-opacity duration-1000 ${
+          className={`w-full h-screen object-cover transition-opacity duration-1000 ${
             loading ? "opacity-100" : "opacity-0"
           }`}
           autoPlay
@@ -18,6 +18,4 @@ const LoaderIntro = ({ loading }: LoaderIntroProps) => {
       </div>
     </div>
   );
-};
-
-export default LoaderIntro;
+}

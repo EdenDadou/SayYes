@@ -2,11 +2,10 @@ import SvgLogoAllClients from "~/assets/icons/LogoAllClients";
 
 const ScrollingBanner = () => {
   return (
-    <div className="absolute bg-gray-400 w-full h-28 bottom-0 left-0 right-0 flex items-center overflow-hidden">
-      <div className="inline-flex animate-scroll whitespace-nowrap scroll-right">
+    <div className="bg-gradient-custom filter drop-shadow-custom shadow-inset-custom w-full h-28 top-0 left-0 right-0 flex items-center overflow-hidden">
+      <div className="inline-flex animate-scroll whitespace-nowrap scroll-right gap-10">
         <SvgLogoAllClients className="inline-block" />
         <SvgLogoAllClients className="inline-block" />
-        <SvgLogoAllClients className="inline-block" />ß
       </div>
     </div>
   );

@@ -2,10 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Jakarta';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/PlusJakartaSans-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Jakarta Medium';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/PlusJakartaSans-Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Jakarta Semi Bold';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/PlusJakartaSans-SemiBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Jakarta Bold';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/PlusJakartaSans-Bold.ttf) format('truetype');
+}
+
+
 html,
 body {
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+
+
 }

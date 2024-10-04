@@ -1,12 +1,12 @@
 @keyframes scrollRight {
     0% {
-      transform: translateX(-50%);
+      transform: translateX(0%);
     }
     100% {
-      transform: translateX(50%);
+      transform: translateX(-50%);
     }
   }
   
   .scroll-right {
-    animation: scrollRight 40s linear infinite;
+    animation: scrollRight 10s linear infinite;
   }

@@ -1,11 +1,11 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgSection2Bg = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={1280}
+    width={1480}
     height={302}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1300 300"
     {...props}
   >
     <g filter="url(#filter0_di_2993_3711)">
