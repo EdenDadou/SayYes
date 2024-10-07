@@ -8,41 +8,6 @@ const SvgSmile = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 32 34"
     {...props}
   >
-    <defs>
-      {/* Dégradé linéaire pour l'effet holographique */}
-      <linearGradient
-        id="holographicGradient"
-        x1="0%"
-        y1="0%"
-        x2="100%"
-        y2="0%"
-      >
-        <stop offset="0%" stopColor="#DCC4FF">
-          <animate
-            attributeName="stop-color"
-            values="#DCC4FF; #B0F5FF; #B0F5F0; #E1FF8B; #DCD5FF; #DCC4FF"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-        <stop offset="50%" stopColor="#E1FF8B">
-          <animate
-            attributeName="stop-color"
-            values="#E1FF8B;##DCD5FF; #DCC4FF; #B0F5FF;#B0F5F0; #E1FF8B"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-        <stop offset="100%" stopColor="##DCD5FF">
-          <animate
-            attributeName="stop-color"
-            values="##DCD5FF; #DCC4FF; #B0F5FF;#B0F5F0;  #E1FF8B; ##DCD5FF"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-      </linearGradient>
-    </defs>
     <g filter="url(#filter0_bd_2993_3897)">
       <path
         d="M12 6.43359C8.69127 6.43359 6 9.12486 6 12.4336C6 15.7423 8.69127 18.4336 12 18.4336C15.3087 18.4336 18 15.7423 18 12.4336C18 9.12486 15.3087 6.43359 12 6.43359ZM12 16.523C9.74487 16.523 7.91061 14.6887 7.91061 12.4336C7.91061 12.154 8.13774 11.9268 8.41737 11.9268C8.69699 11.9268 8.92413 12.154 8.92413 12.4336C8.92413 14.1295 10.3041 15.5095 12 15.5095C13.6959 15.5095 15.0759 14.1295 15.0759 12.4336C15.0759 12.154 15.303 11.9268 15.5826 11.9268C15.8623 11.9268 16.0894 12.154 16.0894 12.4336C16.0894 14.6887 14.2551 16.523 12 16.523Z"

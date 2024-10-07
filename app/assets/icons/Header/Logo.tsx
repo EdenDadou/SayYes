@@ -9,42 +9,6 @@ const SvgLogo = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <defs>
-      {/* Dégradé linéaire pour l'effet holographique */}
-      <linearGradient
-        id="holographicGradient"
-        x1="0%"
-        y1="0%"
-        x2="100%"
-        y2="0%"
-      >
-        <stop offset="0%" stopColor="#DCC4FF">
-          <animate
-            attributeName="stop-color"
-            values="#DCC4FF; #B0F5FF; #B0F5F0; #E1FF8B; #DCD5FF; #DCC4FF"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-        <stop offset="50%" stopColor="#E1FF8B">
-          <animate
-            attributeName="stop-color"
-            values="#E1FF8B;##DCD5FF; #DCC4FF; #B0F5FF;#B0F5F0; #E1FF8B"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-        <stop offset="100%" stopColor="##DCD5FF">
-          <animate
-            attributeName="stop-color"
-            values="##DCD5FF; #DCC4FF; #B0F5FF;#B0F5F0;  #E1FF8B; ##DCD5FF"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-      </linearGradient>
-    </defs>
-
     <path
       d="M327.656 125.162L315.824 159.623L341.988 157.797L327.656 125.162Z"
       fill="url(#holographicGradient)"

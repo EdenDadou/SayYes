@@ -46,7 +46,7 @@ export default function CardPink() {
       className="relative flex justify-center transition-transform duration-500 ease-in-out"
       style={{ transform: `scale(${scale})` }}
     >
-      <SvgCardPinkContent className="absolute top-28 right-20" />
+      {/* <SvgCardPinkContent className="absolute top-28 right-20" /> */}
       <div className="absolute flex flex-col gap-8 top-24 left-20 w-1/3 h-fit px-10 py-12">
         <SvgCardPinkLogo />
         <SvgCardPinkTitle />

@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const svgDir = path.join(__dirname, "../../assets/icons/svg");
 const outputDir = path.join(__dirname, "../../assets/icons");
 
-console.log("Chemin du dossier SVG:", svgDir); // Affichez le chemin
+console.info("Chemin du dossier SVG:", svgDir); // Affichez le chemin
 
 fs.readdir(svgDir, (err, files) => {
   if (err) {
@@ -24,7 +24,7 @@ fs.readdir(svgDir, (err, files) => {
 
     // Vérifiez si le fichier de sortie existe déjà
     if (fs.existsSync(outputFilePath)) {
-      console.log(
+      console.info(
         `Le fichier ${outputFilePath} existe déjà, il ne sera pas écrasé.`
       );
     } else {
@@ -39,7 +39,7 @@ fs.readdir(svgDir, (err, files) => {
             );
             return;
           }
-          console.log(`Généré: ${outputFilePath}`);
+          console.info(`Généré: ${outputFilePath}`);
         }
       );
     }

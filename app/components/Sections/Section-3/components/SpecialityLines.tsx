@@ -6,7 +6,6 @@ export default function SpecialityLines() {
   const [isHovered, setIsHovered] = useState("");
 
   const handleMouseEnter = (title: string) => {
-    console.log("hover");
     setIsHovered(title);
   };
 
@@ -19,7 +18,7 @@ export default function SpecialityLines() {
         <div
           key={title}
           className={`border-white/30 border-[0.35px] flex justify-center  ${
-            isHovered === title ? "bg-gradient-hover" : "bg-gray-600"
+            isHovered === title ? "bg-gradient-gray-400-hover" : "bg-gray-600"
           }`}
           onMouseEnter={() => handleMouseEnter(title)}
           onMouseLeave={() => handleMouseLeave(title)}
@@ -56,7 +55,7 @@ export default function SpecialityLines() {
             {list.map((item, i) => (
               <div
                 key={i}
-                className={`col-span-1 w-[90%] bg-gradient box-shadow-custom flex justify-center items-center p-2 border-[0.5px] shadow-[0px_0.35px_0.5px_0px_#FFFFFF_inset] rounded-full ${
+                className={`col-span-1 w-[90%] bg-gradient-gray-400 box-shadow-custom flex justify-center items-center p-2 border-[0.5px] shadow-[0px_0.35px_0.5px_0px_#FFFFFF_inset] rounded-full ${
                   isHovered === title ? "holographic-border" : "border-white/30"
                 }`}
               >

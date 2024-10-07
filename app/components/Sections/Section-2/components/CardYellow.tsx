@@ -46,7 +46,7 @@ export default function CardYellow() {
       className="relative flex justify-center transition-transform duration-500 ease-in-out"
       style={{ transform: `scale(${scale})` }}
     >
-      <SvgCardYellowContent className="absolute top-28 right-20" />
+      {/* <SvgCardYellowContent className="absolute top-28 right-20" /> */}
       <div className="absolute flex flex-col justify-start gap-8 top-24 left-20 w-1/3 h-fit px-10 py-12">
         <SvgCardYellowLogo />
         <SvgCardYellowTitle />

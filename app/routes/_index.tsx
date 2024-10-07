@@ -8,6 +8,7 @@ import Section2 from "~/components/Sections/Section-2";
 import Section3 from "~/components/Sections/Section-3";
 import SvgSection3Bg from "~/assets/icons/Section3/Section3Bg";
 import Section4 from "~/components/Sections/Section-4";
+import Section5 from "~/components/Sections/Section-5";
 
 export const meta: MetaFunction = () => {
   return [
@@ -45,6 +46,7 @@ export default function Index() {
           <Section2 />
           <Section3 />
           <Section4 />
+          <Section5 />
         </div>
       ) : null}
     </div>

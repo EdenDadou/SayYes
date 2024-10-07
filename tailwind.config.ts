@@ -27,6 +27,7 @@ export default {
         'pink-100': '#DCD5FF',
         'pink-200': '#DCC4FF',
         'gray-100': '#C0C0C0',
+        'gray-200': '#BABABA',
         'gray-400': '#1d1d1d',
         'gray-500': '#1B1B1B',
         'gray-600': '#121212',

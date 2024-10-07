@@ -8,41 +8,6 @@ const SvgFlamme = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 28 33"
     {...props}
   >
-    <defs>
-      {/* Dégradé linéaire pour l'effet holographique */}
-      <linearGradient
-        id="holographicGradient"
-        x1="0%"
-        y1="0%"
-        x2="100%"
-        y2="0%"
-      >
-        <stop offset="0%" stopColor="#DCC4FF">
-          <animate
-            attributeName="stop-color"
-            values="#DCC4FF; #B0F5FF; #B0F5F0; #E1FF8B; #DCD5FF; #DCC4FF"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-        <stop offset="50%" stopColor="#E1FF8B">
-          <animate
-            attributeName="stop-color"
-            values="#E1FF8B;##DCD5FF; #DCC4FF; #B0F5FF;#B0F5F0; #E1FF8B"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-        <stop offset="100%" stopColor="##DCD5FF">
-          <animate
-            attributeName="stop-color"
-            values="##DCD5FF; #DCC4FF; #B0F5FF;#B0F5F0;  #E1FF8B; ##DCD5FF"
-            dur="5s"
-            repeatCount="indefinite"
-          />
-        </stop>
-      </linearGradient>
-    </defs>
     <g filter="url(#filter0_di_2993_3900)">
       <path
         d="M14.1281 8.0332C14.3723 9.95231 12.5814 10.8319 12.5814 10.8319C12.6628 4.35368 7.53299 4.43364 7.53299 4.43364C8.59126 5.23327 9.81234 8.11316 6.71893 9.95231C6.67384 9.97937 6.62876 10.0064 6.58492 10.0335C1.83709 12.9712 4.07512 20.2441 9.6821 20.4299C9.75223 20.4324 9.82236 20.4336 9.8925 20.4336C13.2652 20.4336 15.9466 17.7481 15.9992 14.4351C16.0455 11.4802 14.1281 8.03197 14.1281 8.03197V8.0332Z"
