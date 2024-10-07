@@ -10,3 +10,54 @@
   .scroll-right {
     animation: scrollRight 20s linear infinite;
   }
+
+.icon {
+  transition: transform 0.3s ease, opacity 0.3s ease; /* Transition pour le mouvement et l'opacité */
+  position: absolute; /* Permet de superposer les icônes */
+  bottom: 0; /* Alignement à la base du conteneur */
+  opacity: 1; /* Opacité par défaut */
+}
+
+.icon-up {
+  transform: translateY(-40%); /* Fait monter l'icône normale hors de l'écran */
+  opacity: 0; /* Rend l'icône normale invisible lorsqu'elle monte */
+}
+
+.icon-down {
+  transform: translateY(0); /* Position de l'icône au survol */
+  opacity: 1; /* Opacité de l'icône au survol */
+}
+/* Animation pour chaque colonne */
+@keyframes translateYUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%); /* Défilement de 100% pour permettre un défilement complet */
+  }
+}
+
+@keyframes translateYDown {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%); /* Défilement vers le bas */
+  }
+}
+
+@keyframes scrollTop {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.scroll-top {
+  animation: translateYUp 80s linear infinite;
+}
+.scroll-bottom {
+  animation: translateYDown 80s linear infinite;
+}

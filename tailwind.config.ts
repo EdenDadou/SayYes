@@ -8,6 +8,7 @@ export default {
       fontFamily: {
         jakarta: "Jakarta",
         "jakarta-bold": '"Jakarta Bold"',
+        "jakarta-extra-bold": '"Jakarta Extra Bold"',
       },
       sans: [
         '"Inter"',
@@ -27,6 +28,8 @@ export default {
         'pink-200': '#DCC4FF',
         'gray-100': '#C0C0C0',
         'gray-400': '#1d1d1d',
+        'gray-500': '#1B1B1B',
+        'gray-600': '#121212',
       },
       textShadow: {
         sm: '0 1px 2px var(--tw-shadow-color)',

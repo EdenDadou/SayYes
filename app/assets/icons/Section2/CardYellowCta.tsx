@@ -50,7 +50,7 @@ const SvgCardYellowCta = (props: SVGProps<SVGSVGElement>) => (
           result="hardAlpha"
         />
         <feMorphology
-          radius={16}
+          radius={1}
           operator="dilate"
           in="SourceAlpha"
           result="effect1_dropShadow_2993_4662"

@@ -138,7 +138,7 @@ const SvgCardPinkBg = (props: SVGProps<SVGSVGElement>) => (
           result="hardAlpha"
         />
         <feMorphology
-          radius={5}
+          radius={1}
           operator="dilate"
           in="SourceAlpha"
           result="effect1_dropShadow_2994_5167"

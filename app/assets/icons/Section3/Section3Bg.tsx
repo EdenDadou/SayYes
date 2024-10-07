@@ -5,7 +5,7 @@ const SvgSection3Bg = (props: SVGProps<SVGSVGElement>) => (
     height={1129}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 1300 300"
+    viewBox="0 0 980 1200"
     {...props}
   >
     <line

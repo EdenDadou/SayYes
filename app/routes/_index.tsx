@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import Section1 from "~/components/Sections/Section-1";
 import Section2 from "~/components/Sections/Section-2";
 import Section3 from "~/components/Sections/Section-3";
+import SvgSection3Bg from "~/assets/icons/Section3/Section3Bg";
+import Section4 from "~/components/Sections/Section-4";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,11 +39,12 @@ export default function Index() {
     <div className="flex items-center justify-center w-full">
       {/* <LoaderIntro loading={loading} /> */}
       {!loading ? (
-        <div className="flex flex-col items-center justify-start w-full">
+        <div className="flex flex-col items-center justify-start w-full bg-gray-600">
           <Header />
           <Section1 isIntroFinish={isIntroFinish} />
           <Section2 />
           <Section3 />
+          <Section4 />
         </div>
       ) : null}
     </div>

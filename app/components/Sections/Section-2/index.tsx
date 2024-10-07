@@ -8,7 +8,7 @@ import Intro2 from "./components/Intro2";
 
 export default function Section2() {
   return (
-    <div className="relative w-full h-fit overflow-hidden ">
+    <div className="relative w-full h-fit overflow-hidden mb-5 z-40">
       <ScrollingBanner />
       <div className="relative w-full h-fit z-10 flex justify-center">
         {/* Bg Layer */}
@@ -18,9 +18,11 @@ export default function Section2() {
         {/* Front Layer */}
         <div className="max-w-[1200px] py-40 flex flex-col justify-center">
           <Intro2 />
-          <CardYellow />
-          <CardPink />
-          <CardBlue />
+          <div className="flex flex-col gap-20">
+            <CardYellow />
+            <CardPink />
+            <CardBlue />
+          </div>
         </div>
       </div>
     </div>

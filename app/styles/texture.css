@@ -1,0 +1,16 @@
+ 
+  .bg-gradient {
+    background: linear-gradient(180deg, #454545,#1B1B1B);
+  }
+  .bg-gradient-hover {
+    background: linear-gradient(180deg, #515151 -60.84%, #202020 76.57%);
+  }
+
+
+
+  .text-gradient {
+    background: linear-gradient(40deg, #474747 -1.05%, #929292 74.31%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+  }

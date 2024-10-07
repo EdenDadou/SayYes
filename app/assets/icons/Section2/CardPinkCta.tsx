@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgCardPinkCta = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -52,7 +51,7 @@ const SvgCardPinkCta = (props: SVGProps<SVGSVGElement>) => (
           result="hardAlpha"
         />
         <feMorphology
-          radius={16}
+          radius={1}
           operator="dilate"
           in="SourceAlpha"
           result="effect1_dropShadow_2994_5303"

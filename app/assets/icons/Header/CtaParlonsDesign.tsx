@@ -15,7 +15,7 @@ const SvgCtaParlonsDesign = (props: SVGProps<SVGSVGElement>) => (
     <g filter="url(#filter1_bdi_2993_3885)">
       <path
         d="M50.3604 12.5H269V67H38L50.3604 12.5Z"
-        fill="url(#paint1_linear_2993_3885)"
+        fill="url(#holographicGradient)"
       />
       <path
         d="M38.1878 66.85L50.4802 12.65H268.85V66.85H38.1878Z"
@@ -105,18 +105,6 @@ const SvgCtaParlonsDesign = (props: SVGProps<SVGSVGElement>) => (
       >
         <stop stopColor="#626262" />
         <stop offset={1} />
-      </linearGradient>
-      <linearGradient
-        id="paint1_linear_2993_3885"
-        x1={48.2081}
-        y1={26.4679}
-        x2={259.494}
-        y2={-5.97574}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DCC4FF" />
-        <stop offset={0.5} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#E1FF8B" />
       </linearGradient>
     </defs>
   </svg>

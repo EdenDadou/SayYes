@@ -22,17 +22,24 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-animation 5s ease infinite;
+  animation:moveGradient 5s ease infinite;
 }
 
-@keyframes gradient-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.holographic-border {
+  position: relative; 
+}
+
+/* Pseudo-élément pour créer l'effet holographique */
+.holographic-border::before {
+  content: '';
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  z-index: -1; /* Met le pseudo-élément derrière le contenu */
+  background: linear-gradient(270deg, #E1FF8B, #DCD5FF, #DCC4FF, #B0F5FF, #B0F5F0, #E1FF8B);
+  animation: moveGradient 5s ease infinite; /* Animation du dégradé */
+  border-radius: 90px; /* Pour que le flou soit arrondi également */
+  filter: blur(3px); /* Ajoute un flou à l'effet holographique */
 }

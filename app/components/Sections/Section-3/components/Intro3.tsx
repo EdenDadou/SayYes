@@ -10,7 +10,7 @@ export default function Intro3() {
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
-    const maxScroll = 4400;
+    const maxScroll = 4800;
     const lettersToShow = Math.min(
       Math.floor((scrollPosition / maxScroll) * text.length),
       text.length
@@ -26,11 +26,11 @@ export default function Intro3() {
   }, []);
 
   return (
-    <div className="flex flex-row justify-between items-center gap-36 w-full pb-20">
+    <div className="flex flex-row justify-between items-end gap-36 w-full pb-20 px-10 max-w-[1200px] z-20">
       <div className="w-1/3 h-fit">
         <SvgSection3Intro />
       </div>
-      <p className="font-jakarta text-3xl font-bold">
+      <p className="font-jakarta text-3xl font-bold w-2/5">
         {text.split("").map((letter, index) => (
           <span
             id="text-animed-section-2"

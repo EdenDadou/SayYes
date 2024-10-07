@@ -16,7 +16,7 @@ export default function Intro2() {
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
-    const maxScroll = 1400;
+    const maxScroll = 1500;
     const lettersToShow = Math.min(
       Math.floor((scrollPosition / maxScroll) * text.length),
       text.length
@@ -25,7 +25,7 @@ export default function Intro2() {
   };
 
   return (
-    <div className="flex flex-row justify-between items-end gap-36 w-full px-20 ">
+    <div className="flex flex-row justify-between items-end gap-36 w-full px-20 mb-20">
       <div className="w-1/3 h-fit">
         <SvgSection2Intro />
       </div>

@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgCardBlueContent = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -3589,65 +3588,6 @@ const SvgCardBlueContent = (props: SVGProps<SVGSVGElement>) => (
         />
       </filter>
       <filter
-        id="filter49_di_2994_5333"
-        x={283.968}
-        y={406.318}
-        width={89.2568}
-        height={89.2568}
-        filterUnits="userSpaceOnUse"
-        colorInterpolationFilters="sRGB"
-      >
-        <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          type="matrix"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          result="hardAlpha"
-        />
-        <feMorphology
-          radius={16}
-          operator="dilate"
-          in="SourceAlpha"
-          result="effect1_dropShadow_2994_5333"
-        />
-        <feOffset dx={7.18891} dy={7.18891} />
-        <feGaussianBlur stdDeviation={8.62669} />
-        <feComposite in2="hardAlpha" operator="out" />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.8 0"
-        />
-        <feBlend
-          mode="normal"
-          in2="BackgroundImageFix"
-          result="effect1_dropShadow_2994_5333"
-        />
-        <feBlend
-          mode="normal"
-          in="SourceGraphic"
-          in2="effect1_dropShadow_2994_5333"
-          result="shape"
-        />
-        <feColorMatrix
-          in="SourceAlpha"
-          type="matrix"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          result="hardAlpha"
-        />
-        <feOffset dy={0.3} />
-        <feGaussianBlur stdDeviation={0.4} />
-        <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0.596078 0 0 0 0 0.596078 0 0 0 0 0.596078 0 0 0 1 0"
-        />
-        <feBlend
-          mode="normal"
-          in2="shape"
-          result="effect2_innerShadow_2994_5333"
-        />
-      </filter>
-      <filter
         id="filter50_ddi_2994_5333"
         x={306.615}
         y={429.018}
@@ -3860,65 +3800,7 @@ const SvgCardBlueContent = (props: SVGProps<SVGSVGElement>) => (
           result="effect3_innerShadow_2994_5333"
         />
       </filter>
-      <filter
-        id="filter53_di_2994_5333"
-        x={284.913}
-        y={101.227}
-        width={88.3034}
-        height={64.2406}
-        filterUnits="userSpaceOnUse"
-        colorInterpolationFilters="sRGB"
-      >
-        <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          type="matrix"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          result="hardAlpha"
-        />
-        <feMorphology
-          radius={16}
-          operator="dilate"
-          in="SourceAlpha"
-          result="effect1_dropShadow_2994_5333"
-        />
-        <feOffset dx={1.59938} dy={1.59938} />
-        <feGaussianBlur stdDeviation={5.99766} />
-        <feComposite in2="hardAlpha" operator="out" />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
-        />
-        <feBlend
-          mode="normal"
-          in2="BackgroundImageFix"
-          result="effect1_dropShadow_2994_5333"
-        />
-        <feBlend
-          mode="normal"
-          in="SourceGraphic"
-          in2="effect1_dropShadow_2994_5333"
-          result="shape"
-        />
-        <feColorMatrix
-          in="SourceAlpha"
-          type="matrix"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          result="hardAlpha"
-        />
-        <feOffset dy={0.359445} />
-        <feGaussianBlur stdDeviation={0.647002} />
-        <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0.470588 0 0 0 0 0.470588 0 0 0 0 0.470588 0 0 0 1 0"
-        />
-        <feBlend
-          mode="normal"
-          in2="shape"
-          result="effect2_innerShadow_2994_5333"
-        />
-      </filter>
+
       <filter
         id="filter54_bd_2994_5333"
         x={291.309}
