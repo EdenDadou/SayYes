@@ -1,10 +1,10 @@
-import SvgSection4BgBase from "~/assets/icons/Section4/Section4BgBase";
-import SvgSection4BgLt from "~/assets/icons/Section4/Section4BgLt";
-import SvgSection4BgRt from "~/assets/icons/Section4/Section4BgRt";
+import SvgSection4BgBase from "~/assets/icons/IconsSection4/Section4BgBase";
+import SvgSection4BgLt from "~/assets/icons/IconsSection4/Section4BgLt";
+import SvgSection4BgRt from "~/assets/icons/IconsSection4/Section4BgRt";
 import Section4Intro from "./components/Section4Intro";
-import SvgSection4Outro from "~/assets/icons/Section4/Section4Outro";
+import SvgSection4Outro from "~/assets/icons/IconsSection4/Section4Outro";
 import "~/styles/index";
-import SvgCheck from "~/assets/icons/Section4/Check";
+import SvgCheck from "~/assets/icons/IconsSection4/Check";
 import { motion } from "framer-motion";
 
 const engagementsL1 = [

@@ -1,8 +1,8 @@
-import SvgCardBlueBg from "~/assets/icons/Section2/CardBlueBg";
-import SvgCardBlueLogo from "~/assets/icons/Section2/CardBlueLogo";
-import SvgCardBlueTitle from "~/assets/icons/Section2/CardBlueTitle";
-import SvgCardBlueCta from "~/assets/icons/Section2/CardBlueCta";
-import SvgCardBlueContent from "~/assets/icons/Section2/CardBlueContent";
+import SvgCardBlueBg from "~/assets/icons/IconsSection2/CardBlueBg";
+import SvgCardBlueLogo from "~/assets/icons/IconsSection2/CardBlueLogo";
+import SvgCardBlueTitle from "~/assets/icons/IconsSection2/CardBlueTitle";
+import SvgCardBlueCta from "~/assets/icons/IconsSection2/CardBlueCta";
+import SvgCardBlueContent from "~/assets/icons/IconsSection2/CardBlueContent";
 import "~/styles/index";
 import { useEffect, useRef, useState } from "react";
 

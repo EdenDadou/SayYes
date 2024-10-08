@@ -9,6 +9,7 @@ import Section3 from "~/components/Sections/Section-3";
 import SvgSection3Bg from "~/assets/icons/Section3/Section3Bg";
 import Section4 from "~/components/Sections/Section-4";
 import Section5 from "~/components/Sections/Section-5";
+import Lenis from "@studio-freight/lenis";
 
 export const meta: MetaFunction = () => {
   return [
@@ -36,6 +37,18 @@ export default function Index() {
   //   };
   // }, []);
 
+  useEffect(() => {
+    const lenis = new Lenis();
+
+    function raf(time: number) {
+      lenis.raf(time);
+
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+  });
+
   return (
     <div className="flex items-center justify-center w-full">
       {/* <LoaderIntro loading={loading} /> */}
@@ -45,8 +58,8 @@ export default function Index() {
           <Section1 isIntroFinish={isIntroFinish} />
           <Section2 />
           <Section3 />
-          <Section4 />
-          <Section5 />
+          {/* <Section4 />
+          <Section5 /> */}
         </div>
       ) : null}
     </div>

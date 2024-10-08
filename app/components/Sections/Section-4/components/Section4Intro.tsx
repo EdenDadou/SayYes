@@ -1,9 +1,9 @@
-import SvgSection4Intro from "~/assets/icons/Section4/Section4Intro";
-import SvgCardKickOff from "~/assets/icons/Section4/CardKickOff";
-import SvgCardConception from "~/assets/icons/Section4/CardConception";
-import SvgCardCreation from "~/assets/icons/Section4/CardCreation";
-import SvgCardDeclinaison from "~/assets/icons/Section4/CardDeclinaison";
-import SvgCardLivraison from "~/assets/icons/Section4/CardLivraison";
+import SvgSection4Intro from "~/assets/icons/IconsSection4/Section4Intro";
+import SvgCardKickOff from "~/assets/icons/IconsSection4/CardKickOff";
+import SvgCardConception from "~/assets/icons/IconsSection4/CardConception";
+import SvgCardCreation from "~/assets/icons/IconsSection4/CardCreation";
+import SvgCardDeclinaison from "~/assets/icons/IconsSection4/CardDeclinaison";
+import SvgCardLivraison from "~/assets/icons/IconsSection4/CardLivraison";
 import { useInView } from "react-intersection-observer";
 import { AnimatedCard } from "./AnimatedCard";
 import "~/styles/index";

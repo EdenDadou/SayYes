@@ -1,7 +1,7 @@
-import SvgBgGeometrie from "~/assets/icons/Section1/BgGeometrie";
-import SvgDecoIntro from "~/assets/icons/Section1/DecoIntro";
-import SvgStars from "~/assets/icons/Section1/Stars";
-import SvgTexteIntro from "~/assets/icons/Section1/TexteIntro";
+import SvgBgGeometrie from "~/assets/icons/IconsSection1/BgGeometrie";
+import SvgDecoIntro from "~/assets/icons/IconsSection1/DecoIntro";
+import SvgStars from "~/assets/icons/IconsSection1/Stars";
+import SvgTexteIntro from "~/assets/icons/IconsSection1/TexteIntro";
 import "~/styles/index";
 
 interface Section1Props {

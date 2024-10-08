@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import SvgIntroSection5 from "~/assets/icons/Section5/IntroSection5";
+import SvgIntroSection5 from "~/assets/icons/IconsSection5/IntroSection5";
 import "~/styles/index";
 
 export default function Section5() {

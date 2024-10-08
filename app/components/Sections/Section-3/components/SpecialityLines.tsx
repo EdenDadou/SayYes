@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "~/styles/index";
 import { specialityList } from "./specialityList";
 
 export default function SpecialityLines() {
+  const container = useRef(null);
   const [isHovered, setIsHovered] = useState("");
 
   const handleMouseEnter = (title: string) => {
@@ -16,6 +17,7 @@ export default function SpecialityLines() {
     <div className="w-full flex flex-col z-20">
       {specialityList.map(({ title, list, icon, iconHover }) => (
         <div
+          ref={container}
           key={title}
           className={`border-white/30 border-[0.35px] flex justify-center  ${
             isHovered === title ? "bg-gradient-gray-400-hover" : "bg-gray-600"
@@ -23,7 +25,7 @@ export default function SpecialityLines() {
           onMouseEnter={() => handleMouseEnter(title)}
           onMouseLeave={() => handleMouseLeave(title)}
         >
-          <div className="realtive overflow-hidden grid grid-cols-7 w-full items-center h-[100px] max-w-[1200px]">
+          <div className="relative overflow-hidden grid grid-cols-7 w-full items-center h-[100px] max-w-[1200px]">
             <div className="flex flex-row items-center justify-start col-span-2">
               <div className="w-[28%] flex items-center justify-center">
                 <div

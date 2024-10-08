@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from "react";
-import SvgCardYellowBg from "~/assets/icons/Section2/CardYellowBg";
-import SvgCardYellowContent from "~/assets/icons/Section2/CardYellowContent";
-import SvgCardYellowLogo from "~/assets/icons/Section2/CardYellowLogo";
-import SvgCardYellowTitle from "~/assets/icons/Section2/CardYellowTitle";
-import SvgCardYellowCta from "~/assets/icons/Section2/CardYellowCta";
+import SvgCardYellowBg from "~/assets/icons/IconsSection2/CardYellowBg";
+import SvgCardYellowContent from "~/assets/icons/IconsSection2/CardYellowContent";
+import SvgCardYellowLogo from "~/assets/icons/IconsSection2/CardYellowLogo";
+import SvgCardYellowTitle from "~/assets/icons/IconsSection2/CardYellowTitle";
+import SvgCardYellowCta from "~/assets/icons/IconsSection2/CardYellowCta";
 import "~/styles/index";
 
 export default function CardYellow() {

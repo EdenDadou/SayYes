@@ -1,30 +1,81 @@
-import SvgSection2Bg from "~/assets/icons/Section2/Section2Bg";
+import SvgSection2Bg from "~/assets/icons/IconsSection2/Section2Bg";
 import ScrollingBanner from "../Section-1/components/ScrollingBanner";
-import CardYellow from "./components/CardYellow";
-import "~/styles/index";
-import CardBlue from "./components/CardBlue";
-import CardPink from "./components/CardPink";
 import Intro2 from "./components/Intro2";
+import SvgCardYellowTitle from "~/assets/icons/IconsSection2/CardYellowTitle";
+import SvgCardYellowLogo from "~/assets/icons/IconsSection2/CardYellowLogo";
+import SvgCardYellowCta from "~/assets/icons/IconsSection2/CardYellowCta";
+import SvgCardYellowBg from "~/assets/icons/IconsSection2/CardYellowBg";
+import Card from "./components/Card";
+import SvgCardPinkLogo from "~/assets/icons/IconsSection2/CardPinkLogo";
+import SvgCardPinkTitle from "~/assets/icons/IconsSection2/CardPinkTitle";
+import SvgCardPinkCta from "~/assets/icons/IconsSection2/CardPinkCta";
+import SvgCardPinkBg from "~/assets/icons/IconsSection2/CardPinkBg";
+import SvgCardBlueLogo from "~/assets/icons/IconsSection2/CardBlueLogo";
+import SvgCardBlueTitle from "~/assets/icons/IconsSection2/CardBlueTitle";
+import SvgCardBlueCta from "~/assets/icons/IconsSection2/CardBlueCta";
+import SvgCardBlueBg from "~/assets/icons/IconsSection2/CardBlueBg";
+import { useRef } from "react";
+import { useScroll } from "framer-motion";
+import "~/styles/index";
+
+const cards = [
+  {
+    id: 1,
+    logo: <SvgCardYellowLogo />,
+    title: <SvgCardYellowTitle />,
+    desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
+    cta: <SvgCardYellowCta className="cursor-pointer" />,
+    bg: <SvgCardYellowBg className="relative" />,
+    image: "./images/illustration_identity.png",
+  },
+  {
+    id: 2,
+    logo: <SvgCardPinkLogo />,
+    title: <SvgCardPinkTitle />,
+    desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
+    cta: <SvgCardPinkCta className="cursor-pointer" />,
+    bg: <SvgCardPinkBg className="relative" />,
+    image: "./images/illustration_digital.png",
+  },
+  {
+    id: 3,
+    logo: <SvgCardBlueLogo />,
+    title: <SvgCardBlueTitle />,
+    desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
+    cta: <SvgCardBlueCta className="cursor-pointer" />,
+    bg: <SvgCardBlueBg className="relative" />,
+    image: "./images/illustration_facilitation.png",
+  },
+];
 
 export default function Section2() {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+
+    offset: ["start start", "end end"],
+  });
+
   return (
-    <div className="relative w-full h-fit overflow-hidden mb-5 z-40">
+    <div className="relative w-full h-full">
       <ScrollingBanner />
-      <div className="relative w-full h-fit z-10 flex justify-center">
-        {/* Bg Layer */}
-        <div className="absolute h-screen w-full top-10 right-0 left-0 z-0 ">
-          <SvgSection2Bg className="w-full" />
-        </div>
-        {/* Front Layer */}
-        <div className="max-w-[1200px] py-40 flex flex-col justify-center">
-          <Intro2 />
-          <div className="flex flex-col gap-20">
-            <CardYellow />
-            <CardPink />
-            <CardBlue />
-          </div>
-        </div>
-      </div>
+      <SvgSection2Bg className="absolute top-40" />
+      <Intro2 />
+      <main className="pt-20 pb-10" ref={container}>
+        {cards.map((item, index) => {
+          const targetScale = 1 - (cards.length - index) * 0.05;
+          return (
+            <Card
+              i={index}
+              key={`p_${index}`}
+              {...item}
+              progress={scrollYProgress}
+              range={[index * 0.25, 1]}
+              targetScale={targetScale}
+            />
+          );
+        })}
+      </main>
     </div>
   );
 }

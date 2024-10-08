@@ -1,5 +1,5 @@
 import type { SVGProps } from "react";
-const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
+const SvgCardPinkBg = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width={1183}
     height={766}
@@ -7,14 +7,14 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <g filter="url(#filter0_di_2993_4527)">
+    <g filter="url(#filter0_di_2994_5167)">
       <path
         d="M25.999 729.383L532.807 729.383L586.169 665.348L1146.29 665.348L1146.29 26.0032L659.169 26.0029L605.738 90.0375H25.999V729.383Z"
         fill="#1B1B1B"
       />
     </g>
     <mask
-      id="mask0_2993_4527"
+      id="mask0_2994_5167"
       style={{
         maskType: "alpha",
       }}
@@ -26,31 +26,31 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
     >
       <path
         d="M25.999 729.381L532.807 729.381L586.169 665.346L1146.29 665.346L1146.29 26.0012L659.169 26.0009L605.738 90.0356H25.999V729.381Z"
-        fill="url(#paint0_linear_2993_4527)"
+        fill="url(#paint0_linear_2994_5167)"
         fillOpacity={0.8}
       />
     </mask>
-    <g mask="url(#mask0_2993_4527)">
-      <g opacity={0.2} filter="url(#filter1_f_2993_4527)">
+    <g mask="url(#mask0_2994_5167)">
+      {/* <g opacity={0.3} filter="url(#filter1_f_2994_5167)">
         <ellipse
           cx={1032.9}
           cy={111.596}
           rx={158.761}
           ry={161.977}
           transform="rotate(-29.9484 1032.9 111.596)"
-          fill="url(#paint1_linear_2993_4527)"
+          fill="url(#paint1_linear_2994_5167)"
         />
       </g>
-      <g opacity={0.2} filter="url(#filter2_f_2993_4527)">
+      <g opacity={0.3} filter="url(#filter2_f_2994_5167)">
         <ellipse
           cx={137.477}
           cy={227.918}
           rx={158.761}
           ry={215.453}
           transform="rotate(-29.9484 137.477 227.918)"
-          fill="url(#paint2_linear_2993_4527)"
+          fill="url(#paint2_linear_2994_5167)"
         />
-      </g>
+      </g> */}
       <g opacity={0.7}>
         <path
           d="M657.892 -161.541V814.487"
@@ -122,7 +122,7 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
     </g>
     <defs>
       <filter
-        id="filter0_di_2993_4527"
+        id="filter0_di_2994_5167"
         x={-0.000976562}
         y={0.00195312}
         width={1182.29}
@@ -141,7 +141,7 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
           radius={1}
           operator="dilate"
           in="SourceAlpha"
-          result="effect1_dropShadow_2993_4527"
+          result="effect1_dropShadow_2994_5167"
         />
         <feOffset dx={5} dy={5} />
         <feGaussianBlur stdDeviation={7.5} />
@@ -153,12 +153,12 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
         <feBlend
           mode="normal"
           in2="BackgroundImageFix"
-          result="effect1_dropShadow_2993_4527"
+          result="effect1_dropShadow_2994_5167"
         />
         <feBlend
           mode="normal"
           in="SourceGraphic"
-          in2="effect1_dropShadow_2993_4527"
+          in2="effect1_dropShadow_2994_5167"
           result="shape"
         />
         <feColorMatrix
@@ -177,11 +177,11 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
         <feBlend
           mode="normal"
           in2="shape"
-          result="effect2_innerShadow_2993_4527"
+          result="effect2_innerShadow_2994_5167"
         />
       </filter>
       <filter
-        id="filter1_f_2993_4527"
+        id="filter1_f_2994_5167"
         x={749.303}
         y={-173.613}
         width={567.187}
@@ -198,11 +198,11 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
         />
         <feGaussianBlur
           stdDeviation={62}
-          result="effect1_foregroundBlur_2993_4527"
+          result="effect1_foregroundBlur_2994_5167"
         />
       </filter>
       <filter
-        id="filter2_f_2993_4527"
+        id="filter2_f_2994_5167"
         x={-161.15}
         y={-98.9453}
         width={597.256}
@@ -219,11 +219,11 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
         />
         <feGaussianBlur
           stdDeviation={62}
-          result="effect1_foregroundBlur_2993_4527"
+          result="effect1_foregroundBlur_2994_5167"
         />
       </filter>
       <linearGradient
-        id="paint0_linear_2993_4527"
+        id="paint0_linear_2994_5167"
         x1={842.499}
         y1={295.883}
         x2={983.863}
@@ -234,28 +234,28 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
         <stop offset={1} stopColor="#C4C4C4" />
       </linearGradient>
       <linearGradient
-        id="paint1_linear_2993_4527"
+        id="paint1_linear_2994_5167"
         x1={1003.97}
         y1={-19.295}
         x2={1210.37}
         y2={250.122}
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset={0.19461} stopColor="#E1FF8B" />
-        <stop offset={1} stopColor="#F0FFC4" />
+        <stop offset={0.19461} stopColor="#DCC4FF" />
+        <stop offset={1} stopColor="#ECDFFF" />
       </linearGradient>
       <linearGradient
-        id="paint2_linear_2993_4527"
+        id="paint2_linear_2994_5167"
         x1={108.554}
         y1={53.8137}
         x2={392.844}
         y2={332.803}
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset={0.19461} stopColor="#E1FF8B" />
-        <stop offset={1} stopColor="#F0FFC4" />
+        <stop offset={0.19461} stopColor="#DCC4FF" />
+        <stop offset={1} stopColor="#ECDFFF" />
       </linearGradient>
     </defs>
   </svg>
 );
-export default SvgCardYellowBg;
+export default SvgCardPinkBg;

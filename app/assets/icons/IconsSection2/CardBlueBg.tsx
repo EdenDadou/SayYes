@@ -31,7 +31,7 @@ const SvgCardBlueBg = (props: SVGProps<SVGSVGElement>) => (
       />
     </mask>
     <g mask="url(#mask0_2994_5312)">
-      <g opacity={0.2} filter="url(#filter1_f_2994_5312)">
+      {/* <g opacity={0.2} filter="url(#filter1_f_2994_5312)">
         <ellipse
           cx={1032.9}
           cy={111.596}
@@ -50,7 +50,7 @@ const SvgCardBlueBg = (props: SVGProps<SVGSVGElement>) => (
           transform="rotate(-29.9484 137.477 227.918)"
           fill="url(#paint2_linear_2994_5312)"
         />
-      </g>
+      </g> */}
       <g opacity={0.7}>
         <path
           d="M657.892 -161.541V814.487"
