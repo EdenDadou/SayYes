@@ -1,9 +1,8 @@
 import type { SVGProps } from "react";
 const SvgTextIntro = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={552}
-    height={247}
     fill="none"
+    viewBox="0 0 552 247"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >

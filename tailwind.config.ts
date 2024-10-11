@@ -26,6 +26,7 @@ export default {
         'blue-200': '#B0F5F0',
         'pink-100': '#DCD5FF',
         'pink-200': '#DCC4FF',
+        'gray-50': '#DEDEDE',
         'gray-100': '#C0C0C0',
         'gray-200': '#BABABA',
         'gray-400': '#1d1d1d',
@@ -47,6 +48,13 @@ export default {
       },
       filter: {
         'drop-shadow-custom': 'drop-shadow(0px 0px 30px rgba(0, 0, 0, 0.40))',
+      },
+      screens: {
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
       },
     },
   },

@@ -4,10 +4,9 @@ import "~/styles/index";
 const SvgBgGeometrie = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width={662}
-      height={663}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 662 663"
       {...props}
     >
       <g opacity={0.7}>

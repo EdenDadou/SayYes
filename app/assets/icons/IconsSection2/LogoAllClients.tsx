@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgLogoAllClients = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -6,6 +5,7 @@ const SvgLogoAllClients = (props: SVGProps<SVGSVGElement>) => (
     height={37}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 2180 37"
     {...props}
   >
     <path

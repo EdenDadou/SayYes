@@ -1,11 +1,9 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgCardYellowLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={140}
-    height={140}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 140 130"
     {...props}
   >
     <g filter="url(#filter0_i_3022_2907)">

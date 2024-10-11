@@ -7,7 +7,7 @@ const text =
 
 export default function Intro2() {
   return (
-    <div className="flex flex-row justify-between items-end gap-36 w-full px-40 mt-40">
+    <div className="flex flex-row justify-between items-end md:gap-36 2xl:gap-[8%] w-full md:px-40 2xl:px-[15%] md:mt-40 2xl:mt-[10%]">
       <div className="w-1/3 h-fit">
         <SvgSection2Intro />
       </div>

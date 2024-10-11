@@ -41,7 +41,10 @@ export default function AnimatedText({ text }: { text: string }) {
   };
 
   return (
-    <p ref={container} className="font-jakarta text-3xl font-bold pb-20">
+    <p
+      ref={container}
+      className="font-jakarta md:text-3xl 2xl:text-4xl font-bold pb-20"
+    >
       {text.split("").map((letter, index) => (
         <span
           key={index}

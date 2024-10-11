@@ -61,3 +61,14 @@
 .scroll-bottom {
   animation: translateYDown 80s linear infinite;
 }
+
+
+/* Ajouter cette règle dans ton fichier CSS global */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE et Edge */
+  scrollbar-width: none;     /* Firefox */
+}

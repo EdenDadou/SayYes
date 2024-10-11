@@ -1,13 +1,13 @@
-import SvgCreatif from "~/assets/icons/Section3/Creatif";
-import SvgCreatifHover from "~/assets/icons/Section3/CreatifHover";
-import SvgDigital from "~/assets/icons/Section3/Digital";
-import SvgDigitalHover from "~/assets/icons/Section3/DigitalHover";
-import SvgEvent from "~/assets/icons/Section3/Event";
-import SvgEventHover from "~/assets/icons/Section3/EventHover";
-import SvgPrint from "~/assets/icons/Section3/Print";
-import SvgPrintHover from "~/assets/icons/Section3/PrintHover";
-import SvgVideo from "~/assets/icons/Section3/Video";
-import SvgVideoHover from "~/assets/icons/Section3/VideoHover";
+import SvgCreatif from "~/assets/icons/IconsSection3/Creatif";
+import SvgCreatifHover from "~/assets/icons/IconsSection3/CreatifHover";
+import SvgDigital from "~/assets/icons/IconsSection3/Digital";
+import SvgDigitalHover from "~/assets/icons/IconsSection3/DigitalHover";
+import SvgEvent from "~/assets/icons/IconsSection3/Event";
+import SvgEventHover from "~/assets/icons/IconsSection3/EventHover";
+import SvgPrint from "~/assets/icons/IconsSection3/Print";
+import SvgPrintHover from "~/assets/icons/IconsSection3/PrintHover";
+import SvgVideo from "~/assets/icons/IconsSection3/Video";
+import SvgVideoHover from "~/assets/icons/IconsSection3/VideoHover";
 
 export const specialityList = [
   {

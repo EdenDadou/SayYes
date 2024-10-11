@@ -1,10 +1,9 @@
 import type { SVGProps } from "react";
 const SvgCardPinkBg = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={1183}
-    height={766}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1183 766"
     {...props}
   >
     <g filter="url(#filter0_di_2994_5167)">

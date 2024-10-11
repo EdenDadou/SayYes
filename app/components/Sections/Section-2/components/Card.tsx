@@ -62,7 +62,7 @@ export default function Card({
         style={{ scale, top: `calc(+ ${i * 40}px)` }}
       >
         {bg}
-        <div className="absolute right-10 top-28 w-3/5 h-fit">
+        <div className="absolute 2xl:right-[15%] md:right-[5%] 2xl:top-[20%] md:top-[15%] w-3/5 h-fit">
           <motion.div
             className="w-2/5 h-fit absolute right-32 top-40"
             style={{ scale: imageScale }}
@@ -70,10 +70,10 @@ export default function Card({
             <img src={image} alt="content" className="object-cover" />
           </motion.div>
         </div>
-        <div className="absolute flex flex-col justify-start gap-8 top-24 left-20 w-1/3 h-fit px-10 py-20">
+        <div className="absolute flex flex-col justify-start gap-8 2xl:top-[20%] md:top-[12%] 2xl:left-[10%] md:left-[5%] w-1/3 h-fit px-10 py-20">
           {logo}
           {title}
-          <p className="font-jakarta text-lg">{desc}</p>
+          <p className="font-jakarta md:text-lg 2xl:text-4xl">{desc}</p>
           {cta}
         </div>
       </motion.div>

@@ -2,8 +2,8 @@ import SvgSection3Bg from "~/assets/icons/Section3/Section3Bg";
 import "~/styles/index";
 import Intro3 from "./components/Intro3";
 import SpecialityLines from "./components/SpecialityLines";
-import SvgFooterSection3 from "~/assets/icons/Section3/FooterSection3";
 import { projetList } from "./components/projetList";
+import SvgFooterSection3 from "~/assets/icons/IconsSection3/FooterSection3";
 
 export default function Section3() {
   return (
@@ -21,7 +21,7 @@ export default function Section3() {
           <Intro3 />
           <SpecialityLines />
         </div>
-        {/* <div className="w-full relative overflow-hidden">
+        <div className="w-full relative overflow-hidden">
           <SvgFooterSection3 className="w-full h-auto z-10 top-0 right-0 overflow-hidden relative" />
           <div className="absolute top-0 -left-[90px] w-full h-full ">
             <div className="grid grid-cols-3 gap-4 w-[110%] h-full rotate-[15deg]">
@@ -46,7 +46,7 @@ export default function Section3() {
               ))}
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ import "~/styles/index";
 const cards = [
   {
     id: 1,
-    logo: <SvgCardYellowLogo />,
+    logo: <SvgCardYellowLogo className="w-[40%]" />,
     title: <SvgCardYellowTitle />,
     desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
     cta: <SvgCardYellowCta className="cursor-pointer" />,
@@ -30,7 +30,7 @@ const cards = [
   },
   {
     id: 2,
-    logo: <SvgCardPinkLogo />,
+    logo: <SvgCardPinkLogo className="w-[40%]" />,
     title: <SvgCardPinkTitle />,
     desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
     cta: <SvgCardPinkCta className="cursor-pointer" />,
@@ -39,7 +39,7 @@ const cards = [
   },
   {
     id: 3,
-    logo: <SvgCardBlueLogo />,
+    logo: <SvgCardBlueLogo className="w-[40%]" />,
     title: <SvgCardBlueTitle />,
     desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
     cta: <SvgCardBlueCta className="cursor-pointer" />,

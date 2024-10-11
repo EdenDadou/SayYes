@@ -35,9 +35,9 @@ export default function Section4() {
   return (
     <div className="w-screen h-full flex justify-center items-center relative z-10 py-36 ">
       {/* SVG de fond */}
-      <SvgSection4BgLt className="w-[38%] absolute z-[11] -top-20 left-0" />
-      <SvgSection4BgRt className="w-[38%] absolute z-[11] -top-20 right-0" />
-      <SvgSection4BgBase className="w-full absolute -top-20 left-0 right-0 overflow-hidden h-" />
+      <SvgSection4BgLt className="w-[38%] absolute z-[11] -top-20 left-0 line" />
+      <SvgSection4BgRt className="w-[38%] absolute z-[11] -top-20 right-0 line" />
+      <SvgSection4BgBase className="w-full absolute -top-20 left-0 right-0 overflow-hidden" />
 
       <div className="w-full flex-col overflow-hidden flex justify-center items-center gap-20">
         <Section4Intro />
@@ -52,7 +52,7 @@ export default function Section4() {
               >
                 {array.map((item, i) => (
                   <motion.div
-                    key={item}
+                    key={`${item}-${i}`}
                     initial={{ scale: 0.5 }}
                     transition={{ duration: 0.5, delay: index * 0.2 }}
                     whileInView={{ scale: 1 }}
