@@ -48,11 +48,11 @@ export default function Section4Intro() {
     requestAnimationFrame(raf);
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["50%", "-50%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["50%", "-60%"]);
 
   return (
     <section ref={container} className="relative h-[300vh]">
-      <div className="sticky top-0 h-screen overflow-hidden flex justify-center flex-col w-screen items-center">
+      <div className="sticky top-0 h-screen overflow-hidden flex justify-center flex-col w-full items-center">
         <div className="flex flex-col justify-center items-center max-w-[1200px] gap-6 mt-10 w-screen">
           <SvgSection4Intro />
           <p className="text-black text-2xl font-bold font-jakarta w-2/3 text-center">

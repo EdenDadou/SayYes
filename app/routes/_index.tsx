@@ -2,7 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 import LoaderIntro from "../components/LoaderIntro";
 import Header from "~/components/Header";
 import "../styles/index";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Section1 from "~/components/Sections/Section-1";
 import Section2 from "~/components/Sections/Section-2";
 import Section3 from "~/components/Sections/Section-3";
