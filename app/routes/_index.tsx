@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import Section1 from "~/components/Sections/Section-1";
 import Section2 from "~/components/Sections/Section-2";
 import Section3 from "~/components/Sections/Section-3";
-import SvgSection3Bg from "~/assets/icons/Section3/Section3Bg";
 import Section4 from "~/components/Sections/Section-4";
 import Section5 from "~/components/Sections/Section-5";
 import Lenis from "@studio-freight/lenis";
