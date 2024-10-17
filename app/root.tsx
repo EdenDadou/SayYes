@@ -10,7 +10,7 @@ import "./styles/index";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="no-scrollbar">
+    <html lang="en" className="no-scrollbar w-screen">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
