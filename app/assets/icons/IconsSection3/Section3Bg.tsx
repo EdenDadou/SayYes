@@ -1,11 +1,9 @@
 import type { SVGProps } from "react";
 const SvgSection3Bg = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={1505}
-    height={1129}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 980 1200"
+    viewBox="0 0 1505 1129"
     {...props}
   >
     <line

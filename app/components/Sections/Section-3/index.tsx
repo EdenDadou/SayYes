@@ -1,30 +1,30 @@
-import SvgSection3Bg from "~/assets/icons/Section3/Section3Bg";
 import "~/styles/index";
 import Intro3 from "./components/Intro3";
 import SpecialityLines from "./components/SpecialityLines";
 import { projetList } from "./components/projetList";
 import SvgFooterSection3 from "~/assets/icons/IconsSection3/FooterSection3";
+import SvgSection3Bg from "~/assets/icons/IconsSection3/Section3Bg";
 
 export default function Section3() {
   return (
     <div>
       <div className="w-screen flex justify-center items-center">
         {/* SVG de fond */}
-        {/* <SvgSection3Bg
-          className="w-full absolute z-10 -top-[300px] left-0 right-0 overflow-hidden bg-gray-600"
-          height={1400}
-          width={1900}
-        /> */}
+        <SvgSection3Bg className="w-full absolute -top-[300px] left-0 right-0" />
       </div>
-      <div className="w-full h-fit">
-        <div className="relative w-full h-fit z-10 flex flex-col justify-center items-center mb-32 ">
+      <div className="w-full h-fit relative">
+        <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32 ">
           <Intro3 />
           <SpecialityLines />
         </div>
-        <div className="w-full relative overflow-hidden">
-          <SvgFooterSection3 className="w-full h-auto z-10 top-0 right-0 overflow-hidden relative" />
-          <div className="absolute top-0 -left-[90px] w-full h-full ">
-            <div className="grid grid-cols-3 gap-4 w-[110%] h-full rotate-[15deg]">
+        <div className="w-screen relative overflow-hidden">
+          <SvgFooterSection3 className="w-full h-auto min-h-[800px] absolute z-20" />
+          {/* Application du clipPath à cette div */}
+          <div
+            id="section3ClipPath"
+            className="absolute top-0 left-0 w-full h-full z-10"
+          >
+            <div className="grid grid-cols-3 gap-4 w-[110%] h-full rotate-[15deg] relative left-[-90px]">
               {Array.from({ length: 3 }).map((_, colIndex) => (
                 <div
                   key={colIndex}

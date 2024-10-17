@@ -9,7 +9,6 @@ import Section3 from "~/components/Sections/Section-3";
 import SvgSection3Bg from "~/assets/icons/Section3/Section3Bg";
 import Section4 from "~/components/Sections/Section-4";
 import Section5 from "~/components/Sections/Section-5";
-import GradientMouseMove from "~/components/GradientMouse";
 import Lenis from "@studio-freight/lenis";
 import ModalParlonsDesign from "~/components/ModalParlonsDesign";
 
@@ -21,25 +20,25 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  // const [loading, setLoading] = useState(false);
-  // const [isIntroFinish, setIsIntroFinish] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [isIntroFinish, setIsIntroFinish] = useState(true);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isIntroFinish, setIsIntroFinish] = useState(false);
-  useEffect(() => {
-    const timeoutLoading = setTimeout(() => {
-      setLoading(false);
-    }, 6500);
+  // const [loading, setLoading] = useState(true);
+  // const [isIntroFinish, setIsIntroFinish] = useState(false);
+  // useEffect(() => {
+  //   const timeoutLoading = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 6500);
 
-    const timeoutLine = setTimeout(() => {
-      setIsIntroFinish(true);
-    }, 6300);
-    return () => {
-      clearTimeout(timeoutLoading);
-      clearTimeout(timeoutLine);
-    };
-  }, []);
+  //   const timeoutLine = setTimeout(() => {
+  //     setIsIntroFinish(true);
+  //   }, 6300);
+  //   return () => {
+  //     clearTimeout(timeoutLoading);
+  //     clearTimeout(timeoutLine);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const lenis = new Lenis();
@@ -52,26 +51,10 @@ export default function Index() {
 
     requestAnimationFrame(raf);
   });
-  useEffect(() => {
-    if (isOpen) {
-      // Empêcher le scroll
-      document.body.style.overflow = "hidden";
-      // document.body.style.position = "fixed";
-    }
-
-    if (!isOpen) {
-      document.body.style.overflow = "unset";
-    }
-
-    // Nettoyer lorsque le composant est démonté ou si `isOpen` change
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
 
   return (
     <div className="flex items-center justify-center w-full">
-      <LoaderIntro />
+      {/* <LoaderIntro /> */}
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
       {!loading ? (
         <div className="flex flex-col items-center justify-start w-full bg-gray-600 ">
