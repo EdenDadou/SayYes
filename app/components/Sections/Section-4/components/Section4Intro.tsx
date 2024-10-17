@@ -52,8 +52,8 @@ export default function Section4Intro() {
 
   return (
     <section ref={container} className="relative h-[300vh]">
-      <div className="sticky top-0 h-screen overflow-hidden flex justify-center flex-col w-full items-center">
-        <div className="flex flex-col justify-center items-center max-w-[1200px] gap-6 mt-10 w-full">
+      <div className="sticky top-0 h-screen overflow-hidden flex justify-center flex-col w-screen items-center">
+        <div className="flex flex-col justify-center items-center max-w-[1200px] gap-6 mt-10 w-screen">
           <SvgSection4Intro />
           <p className="text-black text-2xl font-bold font-jakarta w-2/3 text-center">
             Gardez la main sur le process de création tout en libérant votre
@@ -63,7 +63,7 @@ export default function Section4Intro() {
         <motion.div
           style={{ x }}
           ref={horizontalRef}
-          className="flex flex-row w-max h-fit mt-5"
+          className="flex flex-row w-screen h-fit mt-5"
         >
           {cards.map((item, index) => {
             return (

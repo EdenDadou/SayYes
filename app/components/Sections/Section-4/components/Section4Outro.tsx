@@ -1,7 +1,8 @@
 import SvgSection4Outro from "~/assets/icons/IconsSection4/Section4Outro";
 import "~/styles/index";
-import SvgCheck from "~/assets/icons/IconsSection4/Check";
 import { motion } from "framer-motion";
+import SvgCheckHolo from "~/assets/icons/IconsSection4/CheckHolo";
+import SvgCheck from "~/assets/icons/IconsSection4/Check";
 
 const engagementsL1 = [
   "Indépendant & agile",
@@ -32,11 +33,11 @@ export default function Section4Outro() {
     <div className="flex justify-center flex-col items-center gap-24 w-full px-10 z-20 bg-white">
       <SvgSection4Outro className="z-10" />
 
-      <div className="flex flex-col gap-6 w-[200%] justify-center items-center overflow-hidden h-max">
+      <div className="flex flex-col gap-4 w-[200%] justify-center items-center overflow-hidden h-max">
         {engagements.map((array, index) => (
           <div
             key={index}
-            className="flex flex-row justify-center gap-2 w-full bg-red-full"
+            className="flex flex-row justify-center gap-4 w-full bg-red-full mb-5"
           >
             {array.map((item, i) => (
               <motion.div
@@ -45,14 +46,26 @@ export default function Section4Outro() {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: false, margin: "100px" }}
-                className={`p-2 px-4 rounded-full flex flex-row items-start justify-center shadow-lg gap-2 ${
+                className={`p-3 px-5 rounded-full flex flex-row items-start justify-center shadow-lg gap-2 ${
                   [1, 2, 3].includes(i)
                     ? "bg-gradient-gray-400"
-                    : "bg-gradient-gray-200"
+                    : "bg-gradient-gray-200 border-custom"
                 }`}
               >
-                <SvgCheck className="w-[40px] h-[40px] flex justify-center items-center" />
-                <p className="text-gray-200 text-lg font-jakarta">{item}</p>
+                <div className="w-[40px] h-[35px] flex items-center justify-center">
+                  {[1, 2, 3].includes(i) ? (
+                    <SvgCheckHolo className="w-full" />
+                  ) : (
+                    <SvgCheck className="w-[28px] h-[28px]" />
+                  )}
+                </div>
+                <p
+                  className={`text-lg font-jakarta ${
+                    [1, 2, 3].includes(i) ? "holographic-text" : "text-gray-200"
+                  }`}
+                >
+                  {item}
+                </p>
               </motion.div>
             ))}
           </div>

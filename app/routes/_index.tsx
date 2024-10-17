@@ -11,6 +11,7 @@ import Section4 from "~/components/Sections/Section-4";
 import Section5 from "~/components/Sections/Section-5";
 import Lenis from "@studio-freight/lenis";
 import ModalParlonsDesign from "~/components/ModalParlonsDesign";
+import Footer from "~/components/Footer";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,25 +21,25 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  const [loading, setLoading] = useState(false);
-  const [isIntroFinish, setIsIntroFinish] = useState(true);
+  // const [loading, setLoading] = useState(false);
+  // const [isIntroFinish, setIsIntroFinish] = useState(true);
 
   const [isOpen, setIsOpen] = useState(false);
-  // const [loading, setLoading] = useState(true);
-  // const [isIntroFinish, setIsIntroFinish] = useState(false);
-  // useEffect(() => {
-  //   const timeoutLoading = setTimeout(() => {
-  //     setLoading(false);
-  //   }, 6500);
+  const [loading, setLoading] = useState(true);
+  const [isIntroFinish, setIsIntroFinish] = useState(false);
+  useEffect(() => {
+    const timeoutLoading = setTimeout(() => {
+      setLoading(false);
+    }, 6500);
 
-  //   const timeoutLine = setTimeout(() => {
-  //     setIsIntroFinish(true);
-  //   }, 6300);
-  //   return () => {
-  //     clearTimeout(timeoutLoading);
-  //     clearTimeout(timeoutLine);
-  //   };
-  // }, []);
+    const timeoutLine = setTimeout(() => {
+      setIsIntroFinish(true);
+    }, 6300);
+    return () => {
+      clearTimeout(timeoutLoading);
+      clearTimeout(timeoutLine);
+    };
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis();
@@ -53,17 +54,18 @@ export default function Index() {
   });
 
   return (
-    <div className="flex items-center justify-center w-full">
-      {/* <LoaderIntro /> */}
+    <div className="flex items-center justify-center w-screen">
+      <LoaderIntro />
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
       {!loading ? (
-        <div className="flex flex-col items-center justify-start w-full bg-gray-600 ">
+        <div className="flex flex-col items-center justify-start w-screen bg-gray-600 ">
           <Header setIsOpen={setIsOpen} />
           <Section1 isIntroFinish={isIntroFinish} />
           <Section2 />
           <Section3 />
           <Section4 />
           <Section5 setIsOpen={setIsOpen} />
+          <Footer />
         </div>
       ) : null}
     </div>

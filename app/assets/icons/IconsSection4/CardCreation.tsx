@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgCardCreation = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -43,7 +42,7 @@ const SvgCardCreation = (props: SVGProps<SVGSVGElement>) => (
           rx={65.0054}
           ry={150.274}
           transform="rotate(-29.9484 110.996 121.563)"
-          fill="url(#paint3_linear_2993_4167)"
+          fill="url(#holographicGradient)"
         />
       </g>
       <path
@@ -126,19 +125,19 @@ const SvgCardCreation = (props: SVGProps<SVGSVGElement>) => (
     <g filter="url(#filter3_ddi_2993_4167)">
       <path
         d="M137.702 143.895L115.725 123.401L134.032 103.771L138.565 108.003L133.039 118.801L143.423 112.517L151.799 120.313L147.956 131.888L160.564 119.406L138.09 98.5014C135.651 96.2339 131.657 96.5794 129.174 99.2357L110.889 118.888C108.407 121.544 108.363 125.561 110.803 127.85L133.19 148.754L137.702 143.917V143.895Z"
-        fill="url(#paint4_linear_2993_4167)"
+        fill="url(#holographicGradient)"
       />
       <path
         d="M219.197 174.15V174.194L196.81 153.311L184.872 166.138L196.206 161.798L204.582 169.594L199.055 180.391L209.439 174.107L214.275 178.621L195.99 198.272L174.035 177.778L169.523 182.616L191.91 203.499C194.349 205.766 198.343 205.421 200.826 202.764L219.111 183.112C221.593 180.435 221.637 176.418 219.197 174.15Z"
-        fill="url(#paint5_linear_2993_4167)"
+        fill="url(#holographicGradient)"
       />
       <path
         d="M211.706 130.031L216.693 124.74C217.815 119.535 214.426 111.848 207.755 105.563C201.106 99.279 193.205 96.342 188.089 97.7673L118.769 171.3C123.454 168.449 132.218 171.149 139.472 177.994C146.726 184.84 149.942 193.435 147.352 198.272L211.684 130.031H211.706Z"
-        fill="url(#paint6_linear_2993_4167)"
+        fill="url(#holographicGradient)"
       />
       <path
         d="M124.662 193.651C123.518 192.571 122.18 191.686 120.755 191.016C118.79 190.109 116.632 189.591 114.322 189.613C114.279 189.613 114.257 189.613 114.214 189.613C114.171 189.613 114.149 189.613 114.106 189.613L114.235 193.867L114.538 204.47L123.799 204.19L129.326 204.038C129.261 201.49 128.527 199.093 127.339 197.042C126.605 195.789 125.72 194.644 124.662 193.673V193.651Z"
-        fill="url(#paint7_linear_2993_4167)"
+        fill="url(#holographicGradient)"
       />
     </g>
     <g filter="url(#filter4_i_2993_4167)">
@@ -402,69 +401,6 @@ const SvgCardCreation = (props: SVGProps<SVGSVGElement>) => (
       >
         <stop stopColor="#131314" />
         <stop offset={1} stopColor="#333334" />
-      </linearGradient>
-      <linearGradient
-        id="paint3_linear_2993_4167"
-        x1={98.4897}
-        y1={-37.0653}
-        x2={289.616}
-        y2={80.5596}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#2E1A7E" />
-        <stop offset={0.179869} stopColor="#2E1A7E" />
-        <stop offset={0.368071} stopColor="#DCC4FF" />
-        <stop offset={0.536124} stopColor="#B3F1FF" />
-        <stop offset={0.706522} stopColor="#0073D5" />
-        <stop offset={1} stopColor="#002891" />
-      </linearGradient>
-      <linearGradient
-        id="paint4_linear_2993_4167"
-        x1={214.117}
-        y1={107.093}
-        x2={208.677}
-        y2={199.728}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
-      </linearGradient>
-      <linearGradient
-        id="paint5_linear_2993_4167"
-        x1={214.117}
-        y1={107.093}
-        x2={208.677}
-        y2={199.728}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
-      </linearGradient>
-      <linearGradient
-        id="paint6_linear_2993_4167"
-        x1={214.117}
-        y1={107.093}
-        x2={208.677}
-        y2={199.728}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
-      </linearGradient>
-      <linearGradient
-        id="paint7_linear_2993_4167"
-        x1={214.117}
-        y1={107.093}
-        x2={208.677}
-        y2={199.728}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
       </linearGradient>
     </defs>
   </svg>

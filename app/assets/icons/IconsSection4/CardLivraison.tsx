@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgCardLivraison = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -43,7 +42,7 @@ const SvgCardLivraison = (props: SVGProps<SVGSVGElement>) => (
           rx={65.0054}
           ry={150.274}
           transform="rotate(-29.9484 110.996 121.563)"
-          fill="url(#paint3_linear_2993_4209)"
+          fill="url(#holographicGradient)"
         />
       </g>
       <path
@@ -124,11 +123,11 @@ const SvgCardLivraison = (props: SVGProps<SVGSVGElement>) => (
     <g filter="url(#filter2_ddi_2993_4209)">
       <path
         d="M206.695 152.794L191.027 137.088V134.608C191.027 110.786 173.865 98.506 166.666 94.397C163.407 92.5343 159.466 92.5343 156.208 94.397C149.009 98.506 131.847 110.796 131.847 134.608V137.359L115.861 157.38C115.077 158.354 114.769 159.627 115.021 160.862L119.25 182.053C119.54 183.504 120.567 184.702 121.949 185.208C123.331 185.713 124.881 185.46 126.039 184.534L141.735 171.945C142.164 172.853 142.594 173.751 143.033 174.631C144.601 177.804 146.217 180.762 147.785 183.392C148.551 184.674 149.924 185.46 151.418 185.46H171.474C172.968 185.46 174.341 184.674 175.106 183.392C176.675 180.762 178.281 177.804 179.859 174.631C180.298 173.751 180.728 172.853 181.157 171.945L196.853 184.534C198.02 185.47 199.608 185.723 201.008 185.18C202.409 184.646 203.417 183.401 203.669 181.922L207.899 156.501C208.123 155.153 207.685 153.777 206.723 152.803L206.695 152.794ZM161.437 151.886C152.491 151.886 145.236 144.613 145.236 135.647C145.236 126.68 152.491 119.407 161.437 119.407C170.382 119.407 177.637 126.68 177.637 135.647C177.637 144.613 170.382 151.886 161.437 151.886Z"
-        fill="url(#paint4_linear_2993_4209)"
+        fill="url(#holographicGradient)"
       />
       <path
         d="M169.187 187.772C164.313 187.81 159.429 187.819 154.555 187.772C153.435 187.763 152.734 188.1 152.043 188.736C147.132 193.238 146.898 198.574 151.464 203.291C154.069 205.977 157.412 207.98 160.998 209.768C161.689 210.115 162.202 210.04 162.847 209.721C166.096 208.083 169.159 206.258 171.642 203.899C173.921 201.737 175.415 199.304 175.555 196.346C175.489 193.416 173.949 190.908 171.577 188.652C170.933 188.044 170.223 187.772 169.196 187.782L169.187 187.772Z"
-        fill="url(#paint5_linear_2993_4209)"
+        fill="url(#holographicGradient)"
       />
     </g>
     <g filter="url(#filter3_i_2993_4209)">
@@ -357,45 +356,6 @@ const SvgCardLivraison = (props: SVGProps<SVGSVGElement>) => (
       >
         <stop stopColor="#131314" />
         <stop offset={1} stopColor="#333334" />
-      </linearGradient>
-      <linearGradient
-        id="paint3_linear_2993_4209"
-        x1={98.4897}
-        y1={-37.0653}
-        x2={289.616}
-        y2={80.5596}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#2E1A7E" />
-        <stop offset={0.179869} stopColor="#2E1A7E" />
-        <stop offset={0.368071} stopColor="#DCC4FF" />
-        <stop offset={0.536124} stopColor="#B3F1FF" />
-        <stop offset={0.706522} stopColor="#0073D5" />
-        <stop offset={1} stopColor="#002891" />
-      </linearGradient>
-      <linearGradient
-        id="paint4_linear_2993_4209"
-        x1={202.24}
-        y1={103.934}
-        x2={194.573}
-        y2={204.043}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
-      </linearGradient>
-      <linearGradient
-        id="paint5_linear_2993_4209"
-        x1={202.24}
-        y1={103.934}
-        x2={194.573}
-        y2={204.043}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
       </linearGradient>
     </defs>
   </svg>

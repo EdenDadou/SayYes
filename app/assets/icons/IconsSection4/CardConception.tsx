@@ -1,4 +1,3 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgCardConception = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -43,7 +42,7 @@ const SvgCardConception = (props: SVGProps<SVGSVGElement>) => (
           rx={65.0054}
           ry={150.274}
           transform="rotate(-29.9484 110.996 121.563)"
-          fill="url(#paint3_linear_2993_4146)"
+          fill="url(#holographicGradient)"
         />
       </g>
       <path
@@ -126,7 +125,7 @@ const SvgCardConception = (props: SVGProps<SVGSVGElement>) => (
     <g filter="url(#filter3_ddi_2993_4146)">
       <path
         d="M161.736 97C134.105 97.0212 111.831 117.967 112.004 143.767C111.81 158.819 118.636 173.235 130.691 183.242C132.981 184.895 135.358 186.422 137.821 187.863V203H186.797V187.63C189.022 186.316 191.55 184.704 193.883 183.051C205.744 172.981 212.333 158.607 211.987 143.619C211.728 117.882 189.281 97.0848 161.736 97ZM165.971 121.02L166.079 140.29H186.775L158.02 175.164L157.912 155.788H137.216L165.971 121.02Z"
-        fill="url(#paint4_linear_2993_4146)"
+        fill="url(#holographicGradient)"
       />
     </g>
     <g filter="url(#filter4_i_2993_4146)">
@@ -390,33 +389,6 @@ const SvgCardConception = (props: SVGProps<SVGSVGElement>) => (
       >
         <stop stopColor="#131314" />
         <stop offset={1} stopColor="#333334" />
-      </linearGradient>
-      <linearGradient
-        id="paint3_linear_2993_4146"
-        x1={98.4897}
-        y1={-37.0653}
-        x2={289.616}
-        y2={80.5596}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#2E1A7E" />
-        <stop offset={0.179869} stopColor="#2E1A7E" />
-        <stop offset={0.368071} stopColor="#DCC4FF" />
-        <stop offset={0.536124} stopColor="#B3F1FF" />
-        <stop offset={0.706522} stopColor="#0073D5" />
-        <stop offset={1} stopColor="#002891" />
-      </linearGradient>
-      <linearGradient
-        id="paint4_linear_2993_4146"
-        x1={205.854}
-        y1={106.907}
-        x2={199.99}
-        y2={197.76}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
       </linearGradient>
     </defs>
   </svg>

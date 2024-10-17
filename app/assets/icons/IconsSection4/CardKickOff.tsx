@@ -42,7 +42,7 @@ const SvgCardKickOff = (props: SVGProps<SVGSVGElement>) => (
           rx={65.0054}
           ry={150.274}
           transform="rotate(-29.9484 110.996 121.563)"
-          fill="url(#paint3_linear_2993_4125)"
+          fill="url(#holographicGradient)"
         />
       </g>
       <path
@@ -115,11 +115,11 @@ const SvgCardKickOff = (props: SVGProps<SVGSVGElement>) => (
     <g filter="url(#filter2_ddi_2993_4125)">
       <path
         d="M220.725 147.143C215.056 132.253 206.61 119.715 196.312 110.895C185.707 101.804 173.494 97 160.998 97C148.502 97 136.29 101.804 125.696 110.895C115.399 119.715 106.953 132.253 101.284 147.143L99.998 150.5L101.284 153.857C106.953 168.747 115.399 181.285 125.696 190.105C136.302 199.196 148.502 204 160.998 204C173.494 204 185.707 199.196 196.3 190.105C206.597 181.273 215.043 168.747 220.712 153.857L221.998 150.5L220.712 147.143H220.725ZM160.998 195.4C136.354 195.4 116.299 175.255 116.299 150.5C116.299 125.745 136.354 105.6 160.998 105.6C185.642 105.6 205.697 125.745 205.697 150.5C205.697 175.255 185.642 195.4 160.998 195.4Z"
-        fill="url(#paint4_linear_2993_4125)"
+        fill="url(#holographicGradient)"
       />
       <path
         d="M160.998 121.419C159.957 121.419 158.915 121.484 157.9 121.587C160.124 124.454 161.474 128.057 161.474 131.969C161.474 141.306 153.94 148.873 144.646 148.873C140.031 148.873 135.852 147 132.806 143.979C132.33 146.071 132.073 148.24 132.073 150.487C132.073 166.513 145.057 179.555 161.011 179.555C176.965 179.555 189.949 166.513 189.949 150.487C189.949 134.462 176.965 121.419 161.011 121.419H160.998Z"
-        fill="url(#paint5_linear_2993_4125)"
+        fill="url(#holographicGradient)"
       />
     </g>
     <path
@@ -393,45 +393,6 @@ const SvgCardKickOff = (props: SVGProps<SVGSVGElement>) => (
       >
         <stop stopColor="#131314" />
         <stop offset={1} stopColor="#333334" />
-      </linearGradient>
-      <linearGradient
-        id="paint3_linear_2993_4125"
-        x1={98.4897}
-        y1={-37.0653}
-        x2={289.616}
-        y2={80.5596}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#2E1A7E" />
-        <stop offset={0.179869} stopColor="#2E1A7E" />
-        <stop offset={0.368071} stopColor="#DCC4FF" />
-        <stop offset={0.536124} stopColor="#B3F1FF" />
-        <stop offset={0.706522} stopColor="#0073D5" />
-        <stop offset={1} stopColor="#002891" />
-      </linearGradient>
-      <linearGradient
-        id="paint4_linear_2993_4125"
-        x1={214.5}
-        y1={107}
-        x2={209.596}
-        y2={198.831}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
-      </linearGradient>
-      <linearGradient
-        id="paint5_linear_2993_4125"
-        x1={214.5}
-        y1={107}
-        x2={209.596}
-        y2={198.831}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DFFE90" />
-        <stop offset={0.495} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#DCC4FF" />
       </linearGradient>
     </defs>
   </svg>
