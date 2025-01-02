@@ -2,7 +2,8 @@
   "name": "",
   "private": true,
   "sideEffects": false,
-  "type": "module",
+  "type": "commonjs",
+  "main": "./build/server/index.js",
   "scripts": {
     "icons": "node ./app/utils/scripts/generate-icons.js",
     "icons:watch": "npm-watch icons",
