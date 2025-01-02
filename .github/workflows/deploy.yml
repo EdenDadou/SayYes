@@ -1,0 +1,32 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main # Remplacez 'main' par la branche que vous souhaitez utiliser pour le déploiement
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout du code source
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Configuration de l'accès SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # 3. Déployer le projet
+      - name: Deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no user@your-server-ip << 'EOF'
+          cd /var/www/remix-app
+          git pull origin main # Remplacez 'main' par la branche appropriée
+          npm install
+          npm run build
+          pm2 restart remix-app
+          EOF
