@@ -1,8 +1,8 @@
-import SvgCard1 from "public/icons/IconsSection5/Card1";
-import SvgCard2 from "public/icons/IconsSection5/Card2";
-import SvgCard3 from "public/icons/IconsSection5/Card3";
-import SvgIntroSection5 from "public/icons/IconsSection5/IntroSection5";
-import SvgSection5IntroBg from "public/icons/IconsSection5/Section5IntroBg";
+import SvgCard1 from "~/components/Sections/Section-5/components/assets/Card1";
+import SvgCard2 from "~/components/Sections/Section-5/components/assets/Card2";
+import SvgCard3 from "~/components/Sections/Section-5/components/assets/Card3";
+import SvgIntroSection5 from "~/components/Sections/Section-5/components/assets/IntroSection5";
+import SvgSection5IntroBg from "~/components/Sections/Section-5/components/assets/Section5IntroBg";
 import "~/styles/index";
 
 export default function IntroSection5() {

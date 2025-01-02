@@ -2,8 +2,8 @@ import "~/styles/index";
 import Intro3 from "./components/Intro3";
 import SpecialityLines from "./components/SpecialityLines";
 import { projetList } from "./components/projetList";
-import SvgFooterSection3 from "public/icons/IconsSection3/FooterSection3";
-import SvgSection3Bg from "public/icons/IconsSection3/Section3Bg";
+import SvgFooterSection3 from "~/components/Sections/Section-3/components/assets/FooterSection3";
+import SvgSection3Bg from "~/components/Sections/Section-3/components/assets/Section3Bg";
 
 export default function Section3() {
   return (

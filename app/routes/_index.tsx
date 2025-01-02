@@ -11,6 +11,7 @@ import Section5 from "~/components/Sections/Section-5";
 import Lenis from "@studio-freight/lenis";
 import ModalParlonsDesign from "~/components/ModalParlonsDesign";
 import Footer from "~/components/Footer";
+import "~/styles/tailwind.css";
 
 export const meta: MetaFunction = () => {
   return [

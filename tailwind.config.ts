@@ -2,7 +2,9 @@ import type { Config } from "tailwindcss";
 import textShadow from 'tailwindcss-textshadow';
 
 export default {
-  content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
+  content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}", "./index.html", "./app/root.tsx", "./app/routes/_index.tsx",
+    "./src/**/*.{js,jsx,ts,tsx,vue}",],
+  safelist: ['*'],
   theme: {
     extend: {
       fontFamily: {

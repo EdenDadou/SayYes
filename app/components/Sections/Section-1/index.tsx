@@ -1,6 +1,6 @@
-import SvgBgGeometrie from "public/icons/IconsSection1/BgGeometrie";
-import SvgStars from "public/icons/IconsSection1/Stars";
-import SvgTexteIntro from "public/icons/IconsSection1/TexteIntro";
+import SvgBgGeometrie from "./components/BgGeometrie";
+import SvgStars from "./components/Stars";
+import SvgTexteIntro from "./components/TexteIntro";
 import { motion } from "framer-motion";
 import "~/styles/index";
 

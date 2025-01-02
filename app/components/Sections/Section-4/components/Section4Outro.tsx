@@ -1,8 +1,8 @@
-import SvgSection4Outro from "public/icons/IconsSection4/Section4Outro";
+import SvgSection4Outro from "~/components/Sections/Section-4/components/assets/Section4Outro";
 import "~/styles/index";
 import { motion } from "framer-motion";
-import SvgCheckHolo from "public/icons/IconsSection4/CheckHolo";
-import SvgCheck from "public/icons/IconsSection4/Check";
+import SvgCheckHolo from "~/components/Sections/Section-4/components/assets/CheckHolo";
+import SvgCheck from "~/components/Sections/Section-4/components/assets/Check";
 
 const engagementsL1 = [
   "Indépendant & agile",

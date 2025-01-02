@@ -1,13 +1,13 @@
-import SvgCreatif from "public/icons/IconsSection3/Creatif";
-import SvgCreatifHover from "public/icons/IconsSection3/CreatifHover";
-import SvgDigital from "public/icons/IconsSection3/Digital";
-import SvgDigitalHover from "public/icons/IconsSection3/DigitalHover";
-import SvgEvent from "public/icons/IconsSection3/Event";
-import SvgEventHover from "public/icons/IconsSection3/EventHover";
-import SvgPrint from "public/icons/IconsSection3/Print";
-import SvgPrintHover from "public/icons/IconsSection3/PrintHover";
-import SvgVideo from "public/icons/IconsSection3/Video";
-import SvgVideoHover from "public/icons/IconsSection3/VideoHover";
+import SvgCreatif from "~/components/Sections/Section-3/components/assets/Creatif";
+import SvgCreatifHover from "~/components/Sections/Section-3/components/assets/CreatifHover";
+import SvgDigital from "~/components/Sections/Section-3/components/assets/Digital";
+import SvgDigitalHover from "~/components/Sections/Section-3/components/assets/DigitalHover";
+import SvgEvent from "~/components/Sections/Section-3/components/assets/Event";
+import SvgEventHover from "~/components/Sections/Section-3/components/assets/EventHover";
+import SvgPrint from "~/components/Sections/Section-3/components/assets/Print";
+import SvgPrintHover from "~/components/Sections/Section-3/components/assets/PrintHover";
+import SvgVideo from "~/components/Sections/Section-3/components/assets/Video";
+import SvgVideoHover from "~/components/Sections/Section-3/components/assets/VideoHover";
 
 export const specialityList = [
   {
