@@ -2,7 +2,7 @@
   "name": "",
   "private": true,
   "sideEffects": false,
-  "type": "commonjs",
+  "type": "module",
   "main": "./build/server/index.js",
   "scripts": {
     "icons": "node ./app/utils/scripts/generate-icons.js",
