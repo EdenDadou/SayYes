@@ -7,6 +7,9 @@ import svgr from 'vite-plugin-svgr';
 import svgo from 'vite-plugin-svgo';
 
 export default defineConfig({
+  server: {
+    port: 4000
+  },
   // Inclure des fichiers spécifiques (par exemple, les polices)
   assetsInclude: ['**/*.ttf', '**/*.woff', '**/*.woff2', '**/*.svg'],
 

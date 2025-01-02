@@ -7,10 +7,10 @@
     "icons": "node ./app/utils/scripts/generate-icons.js",
     "icons:watch": "npm-watch icons",
     "dev:svg": "run-s icons icons:watch",
-    "build": "remix vite:build",
+    "build": "remix vite:build --mode production",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-    "start": "remix-serve ./build/server/index.js",
+    "start": "PORT=4000 remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -61,6 +61,6 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=18.0.0"
   }
 }
