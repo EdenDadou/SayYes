@@ -12,7 +12,7 @@ export default function LoaderIntro() {
           autoPlay
           muted
         >
-          <source src="app/assets/video/intro.mp4" type="video/mp4" />
+          <source src="./video/intro.mp4" type="video/mp4" />
         </motion.video>
       </div>
     </div>
