@@ -33,7 +33,7 @@ export default function Section1({ isIntroFinish }: Section1Props) {
           className="absolute left-0 top-20 h-full w-1/2 overflow-hidden"
           initial={{ translateX: "-100%" }}
           animate={{ translateX: "0%" }}
-          transition={{ duration: 5, ease: "easeInOut" }}
+          transition={{ duration: 5, ease: "easeInOut", delay: 5 }}
         >
           <div className="absolute right-[-60%] h-fit w-[200%]">
             <img src="./images/illuIntro.png" alt="deco" className="w-[40%]" />
@@ -45,7 +45,7 @@ export default function Section1({ isIntroFinish }: Section1Props) {
           className="relative flex flex-col justify-center items-center w-full h-full gap-8 py-36"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2, ease: "easeInOut", delay: 2 }}
+          transition={{ duration: 2, ease: "easeInOut", delay: 7.5 }}
         >
           <SvgTexteIntro className="w-1/3" />
           <div className="w-1/3 flex flex-col items-center justify-center gap-12">
@@ -73,7 +73,7 @@ export default function Section1({ isIntroFinish }: Section1Props) {
           className="absolute right-0 top-20 h-full w-1/2 overflow-hidden"
           initial={{ translateX: "100%" }}
           animate={{ translateX: "0%" }}
-          transition={{ duration: 5, ease: "easeInOut" }}
+          transition={{ duration: 5, ease: "easeInOut", delay: 5 }}
         >
           <div className="absolute left-[50%] h-fit w-[200%]">
             <img src="./images/illuIntro.png" alt="deco" className="w-[40%]" />

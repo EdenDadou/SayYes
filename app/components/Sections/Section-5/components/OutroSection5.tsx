@@ -14,13 +14,13 @@ export default function OutroSection5({ setIsOpen }: Section5Props) {
     <div className="relative w-full flex flex-col justify-center items-center gap-5">
       <SvgSection5Outro className="z-20" />
       <div className="relative flex flex-row w-full justify-between item-center h-full">
-        <SvgBtnFaq className="w-[6%] cursor-pointer" />
+        <SvgBtnFaq className="w-[6%] cursor-pointer z-20" />
         <SvgBtnSayYes
-          className="w-[35%] cursor-pointer"
+          className="w-[35%] cursor-pointer z-20"
           onClick={() => setIsOpen(true)}
         />
         <SvgBtnHautPage
-          className="w-[6%] cursor-pointer"
+          className="w-[6%] cursor-pointer z-20"
           onClick={() =>
             window.scrollTo({
               top: 0,

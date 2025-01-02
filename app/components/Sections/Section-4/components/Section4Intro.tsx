@@ -48,7 +48,7 @@ export default function Section4Intro() {
     requestAnimationFrame(raf);
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["50%", "-60%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["20%", "-30%"]);
 
   return (
     <section ref={container} className="relative h-[300vh]">

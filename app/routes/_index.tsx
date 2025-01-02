@@ -24,18 +24,12 @@ export default function Index() {
   // const [isIntroFinish, setIsIntroFinish] = useState(true);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [isIntroFinish, setIsIntroFinish] = useState(false);
   useEffect(() => {
-    const timeoutLoading = setTimeout(() => {
-      setLoading(false);
-    }, 6500);
-
     const timeoutLine = setTimeout(() => {
       setIsIntroFinish(true);
     }, 6300);
     return () => {
-      clearTimeout(timeoutLoading);
       clearTimeout(timeoutLine);
     };
   }, []);
@@ -56,17 +50,15 @@ export default function Index() {
     <div className="flex items-center justify-center w-screen">
       <LoaderIntro />
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
-      {!loading ? (
-        <div className="flex flex-col items-center justify-start w-screen bg-gray-600 ">
-          <Header setIsOpen={setIsOpen} />
-          <Section1 isIntroFinish={isIntroFinish} />
-          <Section2 />
-          <Section3 />
-          <Section4 />
-          <Section5 setIsOpen={setIsOpen} />
-          <Footer />
-        </div>
-      ) : null}
+      <div className="flex flex-col items-center justify-start w-screen bg-gray-600 ">
+        <Header setIsOpen={setIsOpen} />
+        <Section1 isIntroFinish={isIntroFinish} />
+        <Section2 />
+        <Section3 />
+        <Section4 />
+        <Section5 setIsOpen={setIsOpen} />
+        <Footer />
+      </div>
     </div>
   );
 }
