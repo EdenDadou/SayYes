@@ -1,9 +1,9 @@
-import SvgSection4Intro from "~/assets/icons/IconsSection4/Section4Intro";
-import SvgCardKickOff from "~/assets/icons/IconsSection4/CardKickOff";
-import SvgCardConception from "~/assets/icons/IconsSection4/CardConception";
-import SvgCardCreation from "~/assets/icons/IconsSection4/CardCreation";
-import SvgCardDeclinaison from "~/assets/icons/IconsSection4/CardDeclinaison";
-import SvgCardLivraison from "~/assets/icons/IconsSection4/CardLivraison";
+import SvgSection4Intro from "public/icons/IconsSection4/Section4Intro";
+import SvgCardKickOff from "public/icons/IconsSection4/CardKickOff";
+import SvgCardConception from "public/icons/IconsSection4/CardConception";
+import SvgCardCreation from "public/icons/IconsSection4/CardCreation";
+import SvgCardDeclinaison from "public/icons/IconsSection4/CardDeclinaison";
+import SvgCardLivraison from "public/icons/IconsSection4/CardLivraison";
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";

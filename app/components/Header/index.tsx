@@ -1,10 +1,10 @@
-import SvgLogo from "~/assets/icons/Header/Logo";
+import SvgLogo from "public/icons/Header/Logo";
 import Button from "../Button";
-import SvgFlamme from "~/assets/icons/Header/Flamme";
-import SvgCoeur from "~/assets/icons/Header/Coeur";
-import SvgSmile from "~/assets/icons/Header/Smile";
-import SvgLight from "~/assets/icons/Header/Light";
-import SvgCtaParlonsDesign from "~/assets/icons/Header/CtaParlonsDesign";
+import SvgFlamme from "public/icons/Header/Flamme";
+import SvgCoeur from "public/icons/Header/Coeur";
+import SvgSmile from "public/icons/Header/Smile";
+import SvgLight from "public/icons/Header/Light";
+import SvgCtaParlonsDesign from "public/icons/Header/CtaParlonsDesign";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 

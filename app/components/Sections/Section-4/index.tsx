@@ -1,10 +1,10 @@
-import SvgSection4BgBase from "~/assets/icons/IconsSection4/Section4BgBase";
-import SvgSection4BgLt from "~/assets/icons/IconsSection4/Section4BgLt";
-import SvgSection4BgRt from "~/assets/icons/IconsSection4/Section4BgRt";
+import SvgSection4BgBase from "public/icons/IconsSection4/Section4BgBase";
+import SvgSection4BgLt from "public/icons/IconsSection4/Section4BgLt";
+import SvgSection4BgRt from "public/icons/IconsSection4/Section4BgRt";
 import Section4Intro from "./components/Section4Intro";
 import Section4Outro from "./components/Section4Outro";
 import "~/styles/index";
-import SvgSection4BgBottom from "~/assets/icons/IconsSection4/Section4BgBottom";
+import SvgSection4BgBottom from "public/icons/IconsSection4/Section4BgBottom";
 
 export default function Section4() {
   return (

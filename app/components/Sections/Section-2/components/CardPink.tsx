@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from "react";
-import SvgCardPinkBg from "~/assets/icons/IconsSection2/CardPinkBg";
-import SvgCardPinkContent from "~/assets/icons/IconsSection2/CardPinkContent";
-import SvgCardPinkCta from "~/assets/icons/IconsSection2/CardPinkCta";
-import SvgCardPinkLogo from "~/assets/icons/IconsSection2/CardPinkLogo";
-import SvgCardPinkTitle from "~/assets/icons/IconsSection2/CardPinkTitle";
+import SvgCardPinkBg from "public/icons/IconsSection2/CardPinkBg";
+import SvgCardPinkContent from "public/icons/IconsSection2/CardPinkContent";
+import SvgCardPinkCta from "public/icons/IconsSection2/CardPinkCta";
+import SvgCardPinkLogo from "public/icons/IconsSection2/CardPinkLogo";
+import SvgCardPinkTitle from "public/icons/IconsSection2/CardPinkTitle";
 import "~/styles/index";
 
 export default function CardPink() {

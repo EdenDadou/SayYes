@@ -1,4 +1,4 @@
-import SvgSection3Intro from "~/assets/icons/IconsSection3/Section3Intro";
+import SvgSection3Intro from "public/icons/IconsSection3/Section3Intro";
 import AnimatedText from "~/components/AnimatedText";
 import "~/styles/index";
 

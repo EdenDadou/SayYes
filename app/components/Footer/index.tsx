@@ -1,9 +1,9 @@
-import SvgLogo from "~/assets/icons/Header/Logo";
+import SvgLogo from "public/icons/Header/Logo";
 import "~/styles/index";
 import Button from "../Button";
-import SvgBtnInstagram from "~/assets/icons/Footer/BtnInstagram";
-import SvgBtnLinkedin from "~/assets/icons/Footer/BtnLinkedin";
-import SvgBtnYoutube from "~/assets/icons/Footer/BtnYoutube";
+import SvgBtnInstagram from "public/icons/Footer/BtnInstagram";
+import SvgBtnLinkedin from "public/icons/Footer/BtnLinkedin";
+import SvgBtnYoutube from "public/icons/Footer/BtnYoutube";
 
 export default function Footer() {
   return (

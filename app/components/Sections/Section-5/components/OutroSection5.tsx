@@ -1,8 +1,8 @@
-import SvgBtnFaq from "~/assets/icons/IconsSection5/BtnFaq";
-import SvgBtnHautPage from "~/assets/icons/IconsSection5/BtnHautPage";
-import SvgBtnSayYes from "~/assets/icons/IconsSection5/BtnSayYes";
-import SvgSection5Bg from "~/assets/icons/IconsSection5/Section5Bg";
-import SvgSection5Outro from "~/assets/icons/IconsSection5/Section5Outro";
+import SvgBtnFaq from "public/icons/IconsSection5/BtnFaq";
+import SvgBtnHautPage from "public/icons/IconsSection5/BtnHautPage";
+import SvgBtnSayYes from "public/icons/IconsSection5/BtnSayYes";
+import SvgSection5Bg from "public/icons/IconsSection5/Section5Bg";
+import SvgSection5Outro from "public/icons/IconsSection5/Section5Outro";
 import "~/styles/index";
 
 interface Section5Props {
