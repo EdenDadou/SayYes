@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa"; // Si tu veux transformer ton app en PWA
 import viteImagemin from 'vite-plugin-imagemin'; // Compression des images
+import svgr from 'vite-plugin-svgr';
 import svgo from 'vite-plugin-svgo';
 
 export default defineConfig({
@@ -40,7 +41,7 @@ export default defineConfig({
     }),
     // Plugin pour gérer les chemins de tsconfig
     tsconfigPaths(),
-    // svgr(), // Ajout du plugin SVG
+    svgr(), // Ajout du plugin SVG
     svgo(),
 
 
