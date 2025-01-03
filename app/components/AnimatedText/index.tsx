@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "~/styles/index";
+import "~/styles/index.css";
 
 export default function AnimatedText({ text }: { text: string }) {
   const container = useRef<HTMLParagraphElement>(null);

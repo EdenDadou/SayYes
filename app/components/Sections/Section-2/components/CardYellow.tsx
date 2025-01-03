@@ -4,7 +4,7 @@ import SvgCardYellowContent from "~/components/Sections/Section-2/components/ass
 import SvgCardYellowLogo from "~/components/Sections/Section-2/components/assets/CardYellowLogo";
 import SvgCardYellowTitle from "~/components/Sections/Section-2/components/assets/CardYellowTitle";
 import SvgCardYellowCta from "~/components/Sections/Section-2/components/assets/CardYellowCta";
-import "~/styles/index";
+import "~/styles/index.css";
 
 export default function CardYellow() {
   const cardRef = useRef(null);

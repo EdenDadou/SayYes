@@ -1,7 +1,7 @@
 import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Lenis from "@studio-freight/lenis";
-import "~/styles/index";
+import "~/styles/index.css";
 
 interface CardProps {
   logo: JSX.Element;

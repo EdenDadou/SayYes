@@ -3,7 +3,7 @@ import SvgCard2 from "~/components/Sections/Section-5/components/assets/Card2";
 import SvgCard3 from "~/components/Sections/Section-5/components/assets/Card3";
 import SvgIntroSection5 from "~/components/Sections/Section-5/components/assets/IntroSection5";
 import SvgSection5IntroBg from "~/components/Sections/Section-5/components/assets/Section5IntroBg";
-import "~/styles/index";
+import "~/styles/index.css";
 
 export default function IntroSection5() {
   return (

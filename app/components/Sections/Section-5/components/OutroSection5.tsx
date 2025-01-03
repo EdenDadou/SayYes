@@ -3,7 +3,7 @@ import SvgBtnHautPage from "~/components/Sections/Section-5/components/assets/Bt
 import SvgBtnSayYes from "~/components/Sections/Section-5/components/assets/BtnSayYes";
 import SvgSection5Bg from "~/components/Sections/Section-5/components/assets/Section5Bg";
 import SvgSection5Outro from "~/components/Sections/Section-5/components/assets/Section5Outro";
-import "~/styles/index";
+import "~/styles/index.css";
 
 interface Section5Props {
   setIsOpen: (value: boolean) => void;

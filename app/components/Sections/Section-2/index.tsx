@@ -16,7 +16,7 @@ import SvgCardBlueCta from "~/components/Sections/Section-2/components/assets/Ca
 import SvgCardBlueBg from "~/components/Sections/Section-2/components/assets/CardBlueBg";
 import { useRef } from "react";
 import { useScroll } from "framer-motion";
-import "~/styles/index";
+import "~/styles/index.css";
 
 const cards = [
   {

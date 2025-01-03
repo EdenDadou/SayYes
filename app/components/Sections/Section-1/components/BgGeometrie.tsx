@@ -1,5 +1,5 @@
 import type { SVGProps } from "react";
-import "~/styles/index";
+import "~/styles/index.css";
 
 const SvgBgGeometrie = (props: SVGProps<SVGSVGElement>) => {
   return (

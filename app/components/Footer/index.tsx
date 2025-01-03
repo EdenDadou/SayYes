@@ -1,5 +1,5 @@
 import SvgLogo from "~/components/Header/components/Logo";
-import "~/styles/index";
+import "~/styles/index.css";
 import Button from "../Button";
 import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
