@@ -1,4 +1,4 @@
-import SvgBgGeometrie from "./components/BgGeometrie";
+import SvgBgGeometrie from "~/components/Sections/Section-1/components/BgGeometrie";
 import SvgStars from "./components/Stars";
 import SvgTexteIntro from "./components/TexteIntro";
 import { motion } from "framer-motion";
