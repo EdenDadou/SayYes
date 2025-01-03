@@ -12,4 +12,14 @@ withEsbuildOverride((option, { isServer }) => {
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
   ignoredRouteFiles: ["**/.*"],
+  plugins: [
+    svgrPlugin({
+      svgoConfig: {
+        plugins: [
+          { removeViewBox: false }, // Garde la viewBox
+          { cleanupIDs: false }, // Ne supprime pas les ID
+        ],
+      },
+    }),
+  ],
 };

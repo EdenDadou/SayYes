@@ -10,7 +10,7 @@ export default function Section3() {
     <div>
       <div className="w-screen flex justify-center items-center">
         {/* SVG de fond */}
-        <SvgSection3Bg className="w-full absolute -top-[300px] left-0 right-0" />
+        {/* <SvgSection3Bg className="w-full absolute -top-[300px] left-0 right-0" /> */}
       </div>
       <div className="w-full h-fit relative">
         <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32 ">
