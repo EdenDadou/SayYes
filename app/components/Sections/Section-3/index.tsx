@@ -1,4 +1,3 @@
-import "~/styles/index.css";
 import Intro3 from "./components/Intro3";
 import SpecialityLines from "./components/SpecialityLines";
 import { projetList } from "./components/projetList";

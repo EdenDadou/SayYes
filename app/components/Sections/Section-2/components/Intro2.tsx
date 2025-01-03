@@ -1,6 +1,5 @@
 import SvgSection2Intro from "~/components/Sections/Section-2/components/assets/Section2Intro";
 import AnimatedText from "~/components/AnimatedText";
-import "~/styles/index.css";
 
 const text =
   "Du (Re)branding au développement de votre communication visuelle, Say Yes vous accompagne sur tous vos projets";

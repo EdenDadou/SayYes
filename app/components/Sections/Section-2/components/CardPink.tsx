@@ -4,7 +4,6 @@ import SvgCardPinkContent from "~/components/Sections/Section-2/components/asset
 import SvgCardPinkCta from "~/components/Sections/Section-2/components/assets/CardPinkCta";
 import SvgCardPinkLogo from "~/components/Sections/Section-2/components/assets/CardPinkLogo";
 import SvgCardPinkTitle from "~/components/Sections/Section-2/components/assets/CardPinkTitle";
-import "~/styles/index.css";
 
 export default function CardPink() {
   const cardRef = useRef(null);

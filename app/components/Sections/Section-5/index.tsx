@@ -1,6 +1,5 @@
 import IntroSection5 from "./components/IntroSection5";
 import OutroSection5 from "./components/OutroSection5";
-import "~/styles/index.css";
 
 interface Section5Props {
   setIsOpen: (value: boolean) => void;

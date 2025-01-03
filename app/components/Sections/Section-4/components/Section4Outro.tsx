@@ -1,5 +1,5 @@
 import SvgSection4Outro from "~/components/Sections/Section-4/components/assets/Section4Outro";
-import "~/styles/index.css";
+
 import { motion } from "framer-motion";
 import SvgCheckHolo from "~/components/Sections/Section-4/components/assets/CheckHolo";
 import SvgCheck from "~/components/Sections/Section-4/components/assets/Check";

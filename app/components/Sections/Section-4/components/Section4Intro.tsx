@@ -8,7 +8,6 @@ import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
 import { AnimatedCard } from "./AnimatedCard";
-import "~/styles/index.css";
 
 const cards = [
   {

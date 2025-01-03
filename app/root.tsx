@@ -5,10 +5,10 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import indexStyles from "./styles/index.css";
+import * as styles from "./styles/index";
 
 export function links() {
-  return [{ rel: "stylesheet", href: indexStyles }];
+  return styles;
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import "~/styles/index.css";
+
 import { specialityList } from "./specialityList";
 
 export default function SpecialityLines() {

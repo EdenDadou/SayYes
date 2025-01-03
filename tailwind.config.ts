@@ -4,8 +4,7 @@ import textShadow from 'tailwindcss-textshadow';
 export default {
   purge: false,
   content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}", "./index.html", "./app/root.tsx", "./app/routes/_index.tsx",
-    "./src/**/*.{js,jsx,ts,tsx,vue}",],
-  safelist: ['line', "fill-current", "stroke-current", "*"],
+    "./src/**/*.{js,jsx,ts,tsx,vue}", "app/styles/*"],
   theme: {
     extend: {
       fontFamily: {

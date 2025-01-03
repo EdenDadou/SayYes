@@ -1,6 +1,5 @@
 import SvgSection3Intro from "~/components/Sections/Section-3/components/assets/Section3Intro";
 import AnimatedText from "~/components/AnimatedText";
-import "~/styles/index.css";
 
 const text =
   "Croissance, visibilité, marque employeur, nous avons tout pour développer votre notoriété à tous les niveaux !";

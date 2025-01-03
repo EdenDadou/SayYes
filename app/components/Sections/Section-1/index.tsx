@@ -2,7 +2,6 @@ import SvgBgGeometrie from "~/components/Sections/Section-1/components/BgGeometr
 import SvgStars from "./components/Stars";
 import SvgTexteIntro from "./components/TexteIntro";
 import { motion } from "framer-motion";
-import "~/styles/index.css";
 
 interface Section1Props {
   isIntroFinish: boolean;

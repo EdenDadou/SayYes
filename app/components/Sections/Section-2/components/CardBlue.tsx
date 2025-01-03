@@ -3,7 +3,7 @@ import SvgCardBlueLogo from "~/components/Sections/Section-2/components/assets/C
 import SvgCardBlueTitle from "~/components/Sections/Section-2/components/assets/CardBlueTitle";
 import SvgCardBlueCta from "~/components/Sections/Section-2/components/assets/CardBlueCta";
 import SvgCardBlueContent from "~/components/Sections/Section-2/components/assets/CardBlueContent";
-import "~/styles/index.css";
+
 import { useEffect, useRef, useState } from "react";
 
 export default function CardBlue() {

@@ -3,7 +3,7 @@ import SvgSection4BgLt from "~/components/Sections/Section-4/components/assets/S
 import SvgSection4BgRt from "~/components/Sections/Section-4/components/assets/Section4BgRt";
 import Section4Intro from "./components/Section4Intro";
 import Section4Outro from "./components/Section4Outro";
-import "~/styles/index.css";
+
 import SvgSection4BgBottom from "~/components/Sections/Section-4/components/assets/Section4BgBottom";
 
 export default function Section4() {
