@@ -4,7 +4,7 @@
     stroke-miterlimit: 10;
     stroke-dasharray: 2400; /* Une valeur suffisamment grande pour couvrir la longueur des lignes */
     stroke-dashoffset: 2400; /* Commence complètement masqué */
-    animation: draw 8s infinite; /* Durée de l'animation */
+    transition: stroke-dashoffset 8s linear;
   }
   
   @keyframes draw {
