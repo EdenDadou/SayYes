@@ -23,8 +23,8 @@ jobs:
       # 3. Déployer le projet
       - name: Deploy application
         run: |
-          ssh -o StrictHostKeyChecking=no user@your-server-ip << 'EOF'
-          cd /var/www/remix-app
+          ssh -o StrictHostKeyChecking=no debian@141.95.53.183 << 'EOF'
+          cd /var/www/remix
           git pull origin main # Remplacez 'main' par la branche appropriée
           npm install
           npm run build
