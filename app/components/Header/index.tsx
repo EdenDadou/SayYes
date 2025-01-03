@@ -57,7 +57,7 @@ const Header = ({ setIsOpen }: HeaderProps) => {
             leftIcon={<SvgFlamme className="text-shadow-lg shadow-black" />}
           />
           <Button label="Portfolio" leftIcon={<SvgCoeur />} />
-          <SvgLogo width={150} height={118} className="rotate-2" />
+          {/* <SvgLogo width={150} height={118} className="rotate-2" /> */}
           <Button label="L’agence" leftIcon={<SvgSmile />} />
           <Button label="Ressources" leftIcon={<SvgLight />} />
         </div>
