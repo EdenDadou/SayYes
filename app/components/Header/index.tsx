@@ -42,7 +42,7 @@ const Header = ({ setIsOpen }: HeaderProps) => {
       className={`sticky top-0 w-full  shadow-3xl z-50 shadow-custom-inset drop-shadow-custom`}
     >
       <div
-        className={`w-full bg-gray-400 h-24 flex flex-row items-center justify-between px-7 shadow-3xl shadow-custom-inset drop-shadow-custom
+        className={`w-full bg-gray-400 h-20 flex flex-row items-center justify-between px-7 shadow-3xl shadow-custom-inset drop-shadow-custom
               ${showHeader ? "translate-y-0" : "-translate-y-[120%]"} `}
       >
         {/* Titre principal */}
@@ -57,7 +57,7 @@ const Header = ({ setIsOpen }: HeaderProps) => {
             leftIcon={<SvgFlamme className="text-shadow-lg shadow-black" />}
           />
           <Button label="Portfolio" leftIcon={<SvgCoeur />} />
-          <SvgLogo width={150} height={118} className="rotate-2" />
+          <SvgLogo width={150} height={100} className="rotate-2" />
           <Button label="L’agence" leftIcon={<SvgSmile />} />
           <Button label="Ressources" leftIcon={<SvgLight />} />
         </div>
@@ -65,7 +65,7 @@ const Header = ({ setIsOpen }: HeaderProps) => {
         {/* Texte à droite */}
         <SvgCtaParlonsDesign
           onClick={() => setIsOpen(true)}
-          height={120}
+          height={80}
           className="absolute top-0 right-0 h-24 cursor-pointer"
         />
       </div>

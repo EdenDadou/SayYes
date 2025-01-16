@@ -1,10 +1,10 @@
 import type { SVGProps } from "react";
-const SvgStars = (props: SVGProps<SVGSVGElement>) => (
+const SvgStars = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
   <svg
-    width={114}
-    height={38}
+    viewBox="0 0 114 30"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
     {...props}
   >
     <path

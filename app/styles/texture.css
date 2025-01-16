@@ -5,14 +5,14 @@
   }
 
   .bg-gradient-gray-400 {
-    background: linear-gradient(180deg, #454545,#1B1B1B);
+    background: linear-gradient(90deg, rgba(27, 27, 27, 0.00) -3.01%, rgba(222, 254, 145, 0.04) 24.73%, rgba(181, 239, 255, 0.12) 49.8%, rgba(220, 196, 255, 0.12) 73.8%, rgba(27, 27, 27, 0.00) 102.68%);
+    background-color: #1b1b1b; 
   }
+
   
   .bg-gradient-gray-400-hover {
     background: linear-gradient(180deg, #515151 -60.84%, #202020 76.57%);
   }
-
-
 
   .text-gradient {
     background: linear-gradient(40deg, #474747 -1.05%, #929292 74.31%);
@@ -25,4 +25,55 @@ background-clip: text;
     border: 1px solid rgba(32, 32, 32, 0.50);
     background: linear-gradient(187deg, #FFF -15.61%, #C7C7C7 121.8%);
     box-shadow: 13.727px 13.727px 41.18px var(--sds-size-depth-400) rgba(0, 0, 0, 0.20), 0px 0.961px 1.373px 0px #FFF inset;
+}
+
+.halo-effect {
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  font-weight: bold;
+  font-size: 2rem;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.halo-effect::before {
+  content: "";
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 5px rgba(144, 238, 144, 0.6); /* Vert clair */
+  filter: blur(5px);
+  opacity: 0.7;
+  z-index: -1;
+  transition: all 0.3s ease-in-out;
+}
+
+.halo-effect:hover::before {
+  box-shadow: 0 0 30px 15px rgba(173, 216, 230, 0.9); /* Bleu clair */
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.neon-text {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #ff00ff,
+    0 0 40px #ff00ff,
+    0 0 80px #ff00ff;
+  transition: all 0.3s ease-in-out;
+}
+
+.neon-text:hover {
+  text-shadow:
+    0 0 10px #fff,
+    0 0 20px #00ffff,
+    0 0 40px #00ffff,
+    0 0 80px #00ffff;
 }

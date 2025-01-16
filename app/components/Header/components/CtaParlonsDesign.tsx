@@ -3,7 +3,7 @@ const SvgCtaParlonsDesign = (props: SVGProps<SVGSVGElement>) => (
   <svg
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 256 79"
+    viewBox="0 0 256 95"
     {...props}
   >
     <g filter="url(#filter0_di_2993_3885)">

@@ -1,5 +1,4 @@
 import SvgSection2Bg from "~/components/Sections/Section-2/components/assets/Section2Bg";
-import ScrollingBanner from "../Section-1/components/ScrollingBanner";
 import Intro2 from "./components/Intro2";
 import SvgCardYellowTitle from "~/components/Sections/Section-2/components/assets/CardYellowTitle";
 import SvgCardYellowLogo from "~/components/Sections/Section-2/components/assets/CardYellowLogo";
@@ -57,7 +56,6 @@ export default function Section2() {
 
   return (
     <div className="relative w-full h-full">
-      <ScrollingBanner />
       <SvgSection2Bg className="absolute top-40" />
       <Intro2 />
       <main className="pt-20 pb-10" ref={container}>
