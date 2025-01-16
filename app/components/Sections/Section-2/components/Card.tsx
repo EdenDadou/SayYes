@@ -1,6 +1,7 @@
 import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Lenis from "@studio-freight/lenis";
+import Halo from "~/components/Halo";
 
 interface CardProps {
   logo: JSX.Element;
@@ -54,16 +55,16 @@ export default function Card({
     <div
       ref={container}
       className="flex h-screen item-center justify-center sticky top-0 w-full"
-      style={{ top: `calc( ${i * 40}px)` }}
     >
       <motion.div
         className="relative transform-origin-top flex w-4/5 justify-center items-center h-full"
         style={{ scale, top: `calc(+ ${i * 40}px)` }}
       >
         {bg}
+
         <div className="absolute 2xl:right-[15%] md:right-[5%] 2xl:top-[20%] md:top-[15%] w-3/5 h-fit">
           <motion.div
-            className="w-2/5 h-fit absolute right-32 top-40"
+            className="w-[45%] h-fit absolute right-32 top-40 "
             style={{ scale: imageScale }}
           >
             <img src={image} alt="content" className="object-cover" />

@@ -15,6 +15,7 @@ import SvgCardBlueCta from "~/components/Sections/Section-2/components/assets/Ca
 import SvgCardBlueBg from "~/components/Sections/Section-2/components/assets/CardBlueBg";
 import { useRef } from "react";
 import { useScroll } from "framer-motion";
+import Halo from "~/components/Halo";
 
 const cards = [
   {
@@ -56,9 +57,13 @@ export default function Section2() {
 
   return (
     <div className="relative w-full h-full">
-      <SvgSection2Bg className="absolute top-40" />
+      <Halo size={700} rotation={30} style={{ top: "5%", left: "-10%" }} />
+      <Halo size={700} rotation={30} style={{ top: "10%", right: "-10%" }} />
+
+      <SvgSection2Bg className="absolute z-10" />
       <Intro2 />
-      <main className="pt-20 pb-10" ref={container}>
+
+      <main className="pb-10" ref={container}>
         {cards.map((item, index) => {
           const targetScale = 1 - (cards.length - index) * 0.05;
           return (

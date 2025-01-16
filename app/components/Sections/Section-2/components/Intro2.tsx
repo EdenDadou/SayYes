@@ -6,11 +6,9 @@ const text =
 
 export default function Intro2() {
   return (
-    <div className="flex flex-row justify-between items-end md:gap-36 2xl:gap-[8%] w-full md:px-40 2xl:px-[15%] md:mt-40 2xl:mt-[10%]">
-      <div className="w-1/3 h-fit">
-        <SvgSection2Intro />
-      </div>
-      <div className="w-3/5">
+    <div className="flex flex-row justify-between items-end md:gap-32 2xl:gap-[8%] w-full md:px-40 pt-[132px]">
+      <SvgSection2Intro className="w-2/5 h-full z-20" />
+      <div className="w-3/5 pb-6">
         <AnimatedText text={text} />
       </div>
     </div>
