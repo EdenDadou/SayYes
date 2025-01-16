@@ -20,20 +20,16 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  // const [loading, setLoading] = useState(false);
-  // const [isIntroFinish, setIsIntroFinish] = useState(true);
-
   const [isOpen, setIsOpen] = useState(false);
-  // const [isIntroFinish, setIsIntroFinish] = useState(false);
-  const [isIntroFinish, setIsIntroFinish] = useState(true);
-  // useEffect(() => {
-  //   const timeoutLine = setTimeout(() => {
-  //     setIsIntroFinish(true);
-  //   }, 6300);
-  //   return () => {
-  //     clearTimeout(timeoutLine);
-  //   };
-  // }, []);
+  const [isIntroFinish, setIsIntroFinish] = useState(false);
+  useEffect(() => {
+    const timeoutLine = setTimeout(() => {
+      setIsIntroFinish(true);
+    }, 6300);
+    return () => {
+      clearTimeout(timeoutLine);
+    };
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis();
@@ -49,7 +45,7 @@ export default function Index() {
 
   return (
     <div className="flex items-center justify-center w-screen">
-      {/* <LoaderIntro /> */}
+      <LoaderIntro />
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
       <div className="flex flex-col items-center justify-start w-screen bg-gray-600 ">
         <Header setIsOpen={setIsOpen} />

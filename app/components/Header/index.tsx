@@ -38,7 +38,7 @@ const Header = ({ setIsOpen }: HeaderProps) => {
     <motion.div
       initial={{ translateY: "-180%" }}
       animate={{ translateY: "0%" }}
-      transition={{ duration: 0.5, delay: 7.8 }}
+      transition={{ duration: 0.2, delay: 7 }}
       className={`sticky top-0 w-full  shadow-3xl z-50 shadow-custom-inset drop-shadow-custom`}
     >
       <div
