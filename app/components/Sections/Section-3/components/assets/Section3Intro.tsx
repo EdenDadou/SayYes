@@ -1,10 +1,13 @@
 import type { SVGProps } from "react";
-const SvgSection3Intro = (props: SVGProps<SVGSVGElement>) => (
+const SvgSection3Intro = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
   <svg
-    width={525}
-    height={237}
+    viewBox="0 0 525 237"
     fill="none"
+    width="100%"
+    height="100%"
+    overflow="visible"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
     {...props}
   >
     <g filter="url(#filter0_bd_2993_4460)">

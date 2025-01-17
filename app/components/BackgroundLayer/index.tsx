@@ -1,6 +1,7 @@
-import Halo from "../Halo";
-import SvgBgGrid from "../Sections/Section-1/components/BgGrid";
-import SvgSection2Bg from "../Sections/Section-2/components/assets/Section2Bg";
+import Halo from "./components/Halo";
+import SvgBgGrid from "./components/BgGrid";
+import SvgSection2Bg from "./components/Section2Bg";
+import SvgBgSection3 from "./components/BgSection3";
 
 interface BackgroundLayerProps {
   isIntroFinish: boolean;
@@ -22,8 +23,11 @@ export default function BackgroundLayer({
       <SvgSection2Bg className="absolute z-0 top-[110%]" />
       <Halo size={700} rotation={30} style={{ top: "105%", left: "-10%" }} />
       <Halo size={700} rotation={30} style={{ top: "110%", right: "-10%" }} />
+      <Halo size={700} rotation={30} style={{ top: "400%", right: "-10%" }} />
 
-      {/* Section - 2 */}
+      {/* Section - 3 */}
+      <SvgBgSection3 className="absolute z-0 top-[460%]" />
+      <Halo size={700} rotation={-30} style={{ top: "450%", left: "2%" }} />
     </>
   );
 }

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function AnimatedText({ text }: { text: string }) {
+export default function AnimatedText({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
   const container = useRef<HTMLParagraphElement>(null);
   const [visibleLetters, setVisibleLetters] = useState(0);
 
@@ -42,12 +48,14 @@ export default function AnimatedText({ text }: { text: string }) {
   return (
     <p
       ref={container}
-      className="font-jakarta md:text-3xl 2xl:text-4xl font-bold pb-20"
+      className={`font-jakarta md:text-3xl 2xl:text-4xl font-bold leading-10 ${className}`}
     >
       {text.split("").map((letter, index) => (
         <span
           key={index}
+          className="leading-10"
           style={{
+            lineHeight: 1.5,
             color: index < visibleLetters ? "#FFFFFF" : "#717171",
           }}
         >

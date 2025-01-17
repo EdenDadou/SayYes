@@ -9,7 +9,7 @@ export default function Intro2() {
     <div className="flex flex-row justify-between items-end md:gap-32 2xl:gap-[8%] w-full md:px-40 pt-[130px]">
       <SvgSection2Intro className="w-2/5 h-full z-20" />
       <div className="w-3/5 pb-6">
-        <AnimatedText text={text} />
+        <AnimatedText text={text} className="pb-16" />
       </div>
     </div>
   );
