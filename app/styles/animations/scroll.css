@@ -48,18 +48,18 @@
 
 @keyframes scrollTop {
   0% {
-    transform: translateY(0%);
+    transform: translateY(10%);
   }
   100% {
-    transform: translateY(-100%);
+    transform: translateY(-10%);
   }
 }
 
 .scroll-top {
-  animation: translateYUp 80s linear infinite;
+  animation: translateYUp 120s linear infinite;
 }
 .scroll-bottom {
-  animation: translateYDown 80s linear infinite;
+  animation: translateYDown 120s linear infinite;
 }
 
 

@@ -30,24 +30,41 @@ const SvgCardPinkBg = (props: SVGProps<SVGSVGElement>) => (
       />
     </mask>
     <g mask="url(#mask0_2994_5167)">
-      <g opacity={0.3} filter="url(#filter1_f_2994_5167)">
+      <g
+        opacity={0.3}
+        style={{
+          contain: "layout paint",
+          filter: "blur(62px)",
+          transform: "translateZ(0)",
+          willChange: "transform, opacity",
+        }}
+      >
         <ellipse
           cx={1032.9}
           cy={111.596}
           rx={158.761}
           ry={161.977}
           transform="rotate(-29.9484 1032.9 111.596)"
-          fill="url(#paint1_linear_2994_5167)"
+          fill="rgba(220, 196, 255, 1)" // Couleur modifiée
         />
       </g>
-      <g opacity={0.3} filter="url(#filter2_f_2994_5167)">
+      <g
+        opacity={0.3}
+        filter="url(#filter2_f_2994_5167)"
+        style={{
+          contain: "layout paint",
+          filter: "blur(62px)",
+          transform: "translateZ(0)",
+          willChange: "transform, opacity",
+        }}
+      >
         <ellipse
           cx={137.477}
           cy={227.918}
           rx={158.761}
           ry={215.453}
           transform="rotate(-29.9484 137.477 227.918)"
-          fill="url(#paint2_linear_2994_5167)"
+          fill="rgba(220, 196, 255, 1)" // Couleur modifiée
         />
       </g>
       <g opacity={0.7}>
@@ -143,7 +160,7 @@ const SvgCardPinkBg = (props: SVGProps<SVGSVGElement>) => (
           result="effect1_dropShadow_2994_5167"
         />
         <feOffset dx={5} dy={5} />
-        <feGaussianBlur stdDeviation={7.5} />
+        <feGaussianBlur stdDeviation={20} />
         <feComposite in2="hardAlpha" operator="out" />
         <feColorMatrix
           type="matrix"
@@ -196,7 +213,7 @@ const SvgCardPinkBg = (props: SVGProps<SVGSVGElement>) => (
           result="shape"
         />
         <feGaussianBlur
-          stdDeviation={62}
+          stdDeviation={30}
           result="effect1_foregroundBlur_2994_5167"
         />
       </filter>
@@ -217,7 +234,7 @@ const SvgCardPinkBg = (props: SVGProps<SVGSVGElement>) => (
           result="shape"
         />
         <feGaussianBlur
-          stdDeviation={62}
+          stdDeviation={30}
           result="effect1_foregroundBlur_2994_5167"
         />
       </filter>

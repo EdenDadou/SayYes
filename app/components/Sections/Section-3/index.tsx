@@ -31,15 +31,19 @@ export default function Section3() {
                     colIndex % 2 === 0 ? "scroll-top" : "scroll-bottom"
                   }`}
                 >
-                  <div className="gap-5 flex flex-col items-center justify-center">
-                    {[...projetList, ...projetList].map((item, index) => (
-                      <img
-                        key={index}
-                        src={item}
-                        alt={`Projet ${index + 1}`}
-                        className="w-full"
-                      />
-                    ))}
+                  <div className="gap-5 flex flex-col items-center justify-center overflow-hidden">
+                    {projetList[colIndex]
+                      .concat(projetList[colIndex])
+                      .concat(projetList[colIndex])
+                      .map((item, index) => (
+                        <img
+                          key={index}
+                          src={item}
+                          loading="lazy"
+                          alt={`Projet ${index + 1}`}
+                          className="w-full"
+                        />
+                      ))}
                   </div>
                 </div>
               ))}

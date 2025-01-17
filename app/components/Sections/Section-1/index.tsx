@@ -1,25 +1,10 @@
 import SvgTexteIntro from "./components/TexteIntro";
 import { motion } from "framer-motion";
 import ScrollingBanner from "./components/ScrollingBanner";
-import SvgBgGrid from "./components/BgGrid";
-import Halo from "~/components/Halo";
 
-interface Section1Props {
-  isIntroFinish: boolean;
-}
-
-export default function Section1({ isIntroFinish }: Section1Props) {
+export default function Section1() {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
-      {/* Bg Layer */}
-      <Halo size={700} rotation={-30} style={{ top: "-15%", right: "-20%" }} />
-      <Halo size={700} rotation={30} style={{ top: "-15%", left: "-20%" }} />
-
-      {isIntroFinish ? (
-        <div className="absolute w-screen -top-20">
-          <SvgBgGrid />
-        </div>
-      ) : null}
+    <div className="relative w-full min-h-screen overflow-hidden">
       {/* Front Layer */}
       <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row">
         {/* Contenu gauche*/}
@@ -27,7 +12,11 @@ export default function Section1({ isIntroFinish }: Section1Props) {
           className="absolute left-0 h-full w-1/2 overflow-hidden"
           initial={{ translateX: "-100%" }}
           animate={{ translateX: "0%" }}
-          transition={{ duration: 5, ease: "easeInOut", delay: 5 }}
+          transition={{
+            duration: 4,
+            ease: "easeInOut",
+            delay: 1,
+          }}
         >
           <div className="absolute right-[-70%] h-fit w-[200%]">
             <img src="./images/illuIntro.png" alt="deco" className="w-[40%]" />
@@ -39,7 +28,11 @@ export default function Section1({ isIntroFinish }: Section1Props) {
           className="relative flex flex-col justify-center items-center w-full h-full top-4 gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2, ease: "easeInOut", delay: 7.5 }}
+          transition={{
+            duration: 2,
+            ease: "easeInOut",
+            delay: 2,
+          }}
         >
           <SvgTexteIntro className="w-[42%]" />
           <div className="w-1/3 flex flex-col items-center justify-center gap-12">
@@ -55,7 +48,11 @@ export default function Section1({ isIntroFinish }: Section1Props) {
           className="absolute right-0 h-full w-1/2 overflow-hidden"
           initial={{ translateX: "100%" }}
           animate={{ translateX: "0%" }}
-          transition={{ duration: 5, ease: "easeInOut", delay: 5 }}
+          transition={{
+            duration: 4,
+            ease: "easeInOut",
+            delay: 1,
+          }}
         >
           <div className="absolute left-[50%] h-fit w-[200%]">
             <img src="./images/illuIntro.png" alt="deco" className="w-[40%]" />

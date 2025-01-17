@@ -1,9 +1,12 @@
 import type { SVGProps } from "react";
-const SvgCardPinkCta = (props: SVGProps<SVGSVGElement>) => (
+const SvgCardPinkCta = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
   <svg
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 274 141"
+    viewBox="29 29 203 70"
+    width="100%" // Prend toute la largeur
+    height="100%" // Prend toute la hauteur
+    className={className}
     {...props}
   >
     <g filter="url(#filter0_di_2994_5303)">

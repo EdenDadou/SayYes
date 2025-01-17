@@ -10,9 +10,10 @@ import { motion } from "framer-motion";
 
 interface HeaderProps {
   setIsOpen: (value: boolean) => void;
+  isIntroFinish: boolean;
 }
 
-const Header = ({ setIsOpen }: HeaderProps) => {
+const Header = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -34,11 +35,19 @@ const Header = ({ setIsOpen }: HeaderProps) => {
     };
   }, [lastScrollY]);
 
+  const variants = {
+    visible: { opacity: 1, x: 0 },
+    hidden: { opacity: 0, x: -100 },
+  };
+
   return (
     <motion.div
-      initial={{ translateY: "-180%" }}
-      animate={{ translateY: "0%" }}
-      transition={{ duration: 0.2, delay: 7 }}
+      initial={{
+        opacity: 0,
+        x: -100,
+      }}
+      variants={variants}
+      animate={isIntroFinish ? "visible" : "hidden"}
       className={`sticky top-0 w-full  shadow-3xl z-50 shadow-custom-inset drop-shadow-custom`}
     >
       <div
