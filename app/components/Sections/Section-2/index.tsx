@@ -29,7 +29,7 @@ const cards = [
     id: 2,
     logo: <SvgCardPinkLogo className="w-[45%]" />,
     title: <SvgCardPinkTitle />,
-    desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
+    desc: "Say Yes améliore votre visibilité et votre performance pour vous rendre incontournable !",
     cta: <SvgCardPinkCta className="cursor-pointer w-52 pt-2" />,
     bg: <SvgCardPinkBg className="relative" />,
     image: "./images/illustration_digital.png",
@@ -38,7 +38,7 @@ const cards = [
     id: 3,
     logo: <SvgCardBlueLogo className="w-[45%]" />,
     title: <SvgCardBlueTitle />,
-    desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
+    desc: "Say Yes interprète visuellement tous vos messages pour les rendre simples & accessibles !",
     cta: <SvgCardBlueCta className="cursor-pointer w-52 pt-2" />,
     bg: <SvgCardBlueBg className="relative" />,
     image: "./images/illustration_facilitation.png",
@@ -58,8 +58,6 @@ export default function Section2() {
   return (
     <div className="relative w-full h-full">
       <Intro2 />
-
-      {/* ✨ Animation appliquée au conteneur principal */}
       <motion.main
         className="pb-10"
         ref={container}

@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-
 import { specialityList } from "./specialityList";
 
 export default function SpecialityLines() {
@@ -19,8 +18,8 @@ export default function SpecialityLines() {
         <div
           ref={container}
           key={title}
-          className={`border-white/30 border-[0.35px] flex justify-center  ${
-            isHovered === title ? "bg-gradient-gray-400-hover" : "bg-gray-600"
+          className={`border-white/30 border-[0.35px] flex justify-center holographic-card ${
+            isHovered === title ? "bg-gradient-gray-400-hover " : "bg-gray-600"
           }`}
           onMouseEnter={() => handleMouseEnter(title)}
           onMouseLeave={() => handleMouseLeave(title)}
@@ -35,21 +34,11 @@ export default function SpecialityLines() {
                 >
                   {isHovered === title ? iconHover : icon}
                 </div>
-                <div
-                  className={`absolute transition-all duration-500 ${
-                    isHovered === title ? "icon-down" : "icon-up"
-                  }`}
-                >
+                <div className={`absolute transition-all duration-500`}>
                   {iconHover}
                 </div>
               </div>
-              <p
-                className={`font-jakarta-extra-bold text-xl font-bold ${
-                  isHovered === title
-                    ? "holographic-text icon-down"
-                    : "text-gradient"
-                }`}
-              >
+              <p className="font-jakarta-extra-bold text-xl font-bold text-gradient">
                 {title}
               </p>
             </div>

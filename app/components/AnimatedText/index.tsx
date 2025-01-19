@@ -11,57 +11,64 @@ export default function AnimatedText({
   const [visibleLetters, setVisibleLetters] = useState(0);
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (container.current) {
+        const rect = container.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        const startTrigger = windowHeight * (3 / 4);
+        const endTrigger = windowHeight * (1 / 4);
+
+        if (rect.top < startTrigger && rect.bottom > endTrigger) {
+          const maxVisible = text.replace(/\n/g, "").length; // Ignore les sauts de ligne
+          const scrollRange = startTrigger - endTrigger;
+          const progress = (startTrigger - rect.top) / scrollRange;
+          const lettersToShow = Math.floor(progress * maxVisible);
+          setVisibleLetters(lettersToShow);
+        } else if (rect.bottom <= endTrigger) {
+          setVisibleLetters(text.replace(/\n/g, "").length);
+        } else if (rect.top >= startTrigger) {
+          setVisibleLetters(0);
+        }
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [text]);
 
-  const handleScroll = () => {
-    if (container.current) {
-      const rect = container.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // Début du premier tiers bas et fin du dernier tiers haut
-      const startTrigger = windowHeight * (3 / 4);
-      const endTrigger = windowHeight * (1 / 4);
-
-      if (rect.top < startTrigger && rect.bottom > endTrigger) {
-        const maxVisible = text.length;
-        const scrollRange = startTrigger - endTrigger;
-
-        // Progression de la colorisation du texte en fonction du défilement
-        const progress = (startTrigger - rect.top) / scrollRange;
-
-        const lettersToShow = Math.floor(progress * maxVisible);
-        setVisibleLetters(lettersToShow);
-      } else if (rect.bottom <= endTrigger) {
-        // Si le texte est entièrement dans le dernier tiers haut, toutes les lettres sont colorisées
-        setVisibleLetters(text.length);
-      } else if (rect.top >= startTrigger) {
-        // Si le texte n'a pas encore atteint le premier tiers bas, aucune lettre n'est colorisée
-        setVisibleLetters(0);
-      }
+  // Découpe le texte en prenant en compte les sauts de ligne (\n)
+  const characters = text.split("").map((char, index) => {
+    if (char === "\n") {
+      return <br key={index} />;
     }
-  };
+
+    // Compte uniquement les lettres visibles (ignore les sauts de ligne)
+    const visibleIndex = text.slice(0, index).replace(/\n/g, "").length;
+
+    return (
+      <span
+        key={index}
+        style={{
+          color: visibleIndex < visibleLetters ? "#FFFFFF" : "#717171",
+          transition: "color 0.3s ease",
+          lineHeight: 1.4,
+          letterSpacing: 1.5,
+        }}
+      >
+        {char}
+      </span>
+    );
+  });
 
   return (
     <p
       ref={container}
       className={`font-jakarta md:text-3xl 2xl:text-4xl font-bold leading-10 ${className}`}
     >
-      {text.split("").map((letter, index) => (
-        <span
-          key={index}
-          className="leading-10"
-          style={{
-            lineHeight: 1.5,
-            color: index < visibleLetters ? "#FFFFFF" : "#717171",
-          }}
-        >
-          {letter}
-        </span>
-      ))}
+      {characters}
     </p>
   );
 }

@@ -184,11 +184,11 @@ const SvgCardYellowBg = (props: SVGProps<SVGSVGElement>) => (
           result="hardAlpha"
         />
         <feOffset dy={0.35} />
-        <feGaussianBlur stdDeviation={0.25} />
+        <feGaussianBlur stdDeviation={0.1} />
         <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
         <feColorMatrix
           type="matrix"
-          values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"
+          values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.3 0"
         />
         <feBlend
           mode="normal"

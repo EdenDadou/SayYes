@@ -7,7 +7,8 @@ const SvgSection3Intro = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
     height="100%"
     overflow="visible"
     xmlns="http://www.w3.org/2000/svg"
-    className={className}
+    preserveAspectRatio="none"
+    className={`block ${className}`}
     {...props}
   >
     <g filter="url(#filter0_bd_2993_4460)">
