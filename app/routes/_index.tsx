@@ -61,7 +61,7 @@ export default function Index() {
   return (
     <div className="flex items-center justify-center w-screen">
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
-      <div className="flex flex-col items-center justify-start w-screen bg-gray-600 ">
+      <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
         <Header setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
         {/* Bg Layer */}
         <BackgroundLayer isIntroFinish={isIntroFinish} />

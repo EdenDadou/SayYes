@@ -1,69 +1,69 @@
+import * as React from "react";
 import type { SVGProps } from "react";
-const SvgSection5IntroBg = ({ className, props }: SVGProps<SVGSVGElement>) => (
+const SvgBgSection3 = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    viewBox="0 0 985 1129" // Maintient les proportions
+    width={985}
+    height={1129}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`w-[75%] h-auto ${className}`} // Règle la taille via Tailwind/CSS
-    preserveAspectRatio="xMidYMid slice" // Ajuste sans déformation
     {...props}
   >
     <line
       x1={0.25}
-      y1={1.12182e-8}
-      x2={0.249949}
-      y2={1203}
+      y1={48}
+      x2={0.250045}
+      y2={1067}
       stroke="#454545"
       strokeWidth={0.5}
     />
     <line
       x1={164.25}
-      y1={1.12182e-8}
+      y1={3.19173e-8}
       x2={164.25}
-      y2={1215}
+      y2={1067}
       stroke="#454545"
       strokeWidth={0.5}
     />
     <line
       x1={328.25}
-      y1={1.12182e-8}
+      y1={3.19173e-8}
       x2={328.25}
-      y2={1180}
+      y2={1067}
       stroke="#454545"
       strokeWidth={0.5}
     />
     <line
-      x1={492.25}
-      y1={72}
-      x2={492.25}
-      y2={1180}
+      x1={494.25}
+      y1={3.19173e-8}
+      x2={494.25}
+      y2={1067}
       stroke="#454545"
       strokeWidth={0.5}
     />
     <line
       x1={656.25}
-      y1={72}
+      y1={3.19173e-8}
       x2={656.25}
-      y2={1181}
+      y2={1067}
       stroke="#454545"
       strokeWidth={0.5}
     />
     <line
       x1={820.25}
-      y1={72}
+      y1={3.19173e-8}
       x2={820.25}
-      y2={1219}
+      y2={1129}
       stroke="#454545"
       strokeWidth={0.5}
     />
     <line
       x1={984.25}
-      y1={72}
+      y1={3.19173e-8}
       x2={984.25}
-      y2={1200}
+      y2={1129}
       stroke="#454545"
       strokeWidth={0.5}
     />
   </svg>
 );
-export default SvgSection5IntroBg;
+export default SvgBgSection3;

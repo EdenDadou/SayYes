@@ -7,7 +7,7 @@ import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 
 export default function Footer() {
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-2">
+    <div className="relative w-full flex flex-col justify-center items-center gap-2 -top-40 -mb-36">
       <div className="bg-gradient-gray-400 filter drop-shadow-custom shadow-inset-custom w-full md:h-28  top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 px-20">
         <SvgLogo width={110} height={108} className="rotate-2" />
 

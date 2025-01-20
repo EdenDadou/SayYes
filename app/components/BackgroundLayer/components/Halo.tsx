@@ -21,7 +21,7 @@ const Halo: React.FC<HaloProps> = ({
         width: size,
         height: size,
         borderRadius: "650.508px",
-        opacity: 0.1,
+        opacity: 0.15,
         background:
           "linear-gradient(139deg, #202020 16.88%, #E1FF8B 29.27%, #B0F5FF 45.59%, #DCC4FF 56.18%, #202020 96.23%)",
         filter: "blur(62px)",

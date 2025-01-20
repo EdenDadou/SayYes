@@ -8,6 +8,11 @@ import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
 import { AnimatedCard } from "./AnimatedCard";
+import SvgSection4BgRt from "./assets/Section4BgRt";
+import SvgSection4BgLt from "./assets/Section4BgLt";
+import SvgAnnotation from "~/assets/icons/AnnotationSection4";
+import Halo from "~/components/BackgroundLayer/components/Halo";
+import SvgSection4BgBottom from "./assets/Section4BgBottom";
 
 const cards = [
   {
@@ -50,13 +55,24 @@ export default function Section4Intro() {
   const x = useTransform(scrollYProgress, [0, 1], ["20%", "-30%"]);
 
   return (
-    <section ref={container} className="relative h-[300vh]">
-      <div className="sticky top-0 h-screen overflow-hidden flex justify-center flex-col w-full items-center">
-        <div className="flex flex-col justify-center items-center max-w-[1200px] gap-6 mt-10 w-screen">
+    <section ref={container} className="relative h-[300vh] top-40 pb-32">
+      <div className="sticky -top-0 h-screen  flex justify-center flex-col w-full items-center">
+        <SvgAnnotation className="absolute z-50 top-[220px] left-56 w-auto" />
+        <Halo size={1000} rotation={-30} style={{ top: "0%", left: "-20%" }} />
+        <Halo
+          size={1000}
+          rotation={30}
+          style={{ top: "100%", right: "-20%" }}
+        />
+        <SvgSection4BgLt className="w-[35%] absolute z-50 -top-52 left-0 line" />
+        <SvgSection4BgRt className="w-[30%] absolute z-50 -top-40  right-0 line" />
+        <SvgSection4BgBottom className="w-full absolute top-[210px] left-0 line z-20" />
+
+        <div className="flex flex-col justify-center items-center max-w-[1200px] gap-2 w-screen pt-10">
           <SvgSection4Intro />
           <p className="text-black text-2xl font-bold font-jakarta w-2/3 text-center">
-            Gardez la main sur le process de création tout en libérant votre
-            inspiration.
+            Gardez la main sur le process de création <br /> tout en libérant
+            votre inspiration.
           </p>
         </div>
         <motion.div

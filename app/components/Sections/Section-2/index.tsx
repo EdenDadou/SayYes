@@ -47,7 +47,6 @@ const cards = [
 
 export default function Section2() {
   const container = useRef(null);
-
   const isInView = useInView(container, { once: true, margin: "-100px" });
 
   const { scrollYProgress } = useScroll({

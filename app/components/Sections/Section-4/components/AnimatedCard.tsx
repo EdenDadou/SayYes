@@ -1,4 +1,5 @@
-import { motion, MotionValue, useTransform } from "framer-motion";
+import { motion, MotionValue, useInView } from "framer-motion";
+import { useRef } from "react";
 
 interface AnimatedCardProps {
   card: JSX.Element;
@@ -6,23 +7,33 @@ interface AnimatedCardProps {
   progress: MotionValue<number>;
 }
 
-export const AnimatedCard = ({ card, i, progress }: AnimatedCardProps) => {
-  const minScale = 0.8;
-  const maxScale = 1.1;
+export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
+  const container = useRef(null);
+  const isInView = useInView(container, { once: false, margin: "100px" });
 
-  // Calculate start, middle, and end points for scaling based on index
-  const start = Math.max(0, (i - 1) / 5);
-  const middle = i / 5;
-  const end = Math.min(1, (i + 1) / 5);
-
-  const inputRange = [start, middle, end];
-  const outputRange = [minScale, maxScale, minScale];
-
-  const scale = useTransform(progress, inputRange, outputRange);
+  const variants = {
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.7,
+        delay: 0.3 * i,
+        ease: "easeOut",
+      },
+    },
+    hidden: { opacity: 0, x: (5 - i) * 100 },
+  };
   return (
     <motion.div
+      ref={container}
       key={i}
-      style={{ scale }}
+      // style={{ scale }}
+      initial={{
+        opacity: 0,
+        x: -100,
+      }}
+      variants={variants}
+      animate={isInView ? "visible" : "hidden"}
       className="flex-shrink-0 h-full flex justify-center items-center"
     >
       {card}

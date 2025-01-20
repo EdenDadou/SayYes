@@ -48,7 +48,7 @@ const Header = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
       }}
       variants={variants}
       animate={isIntroFinish ? "visible" : "hidden"}
-      className={`sticky top-0 w-full  shadow-3xl z-50 shadow-custom-inset drop-shadow-custom`}
+      className={`sticky top-0 w-full  shadow-3xl z-[100] shadow-custom-inset drop-shadow-custom`}
     >
       <div
         className={`w-full bg-gray-400 h-20 flex flex-row items-center justify-between px-7 shadow-3xl shadow-custom-inset drop-shadow-custom

@@ -33,7 +33,7 @@
     transform: translateY(0);
   }
   100% {
-    transform: translateY(-100%); /* Défilement de 100% pour permettre un défilement complet */
+    transform: translateY(-300%); /* Défilement de 100% pour permettre un défilement complet */
   }
 }
 
@@ -42,24 +42,16 @@
     transform: translateY(-50%);
   }
   100% {
-    transform: translateY(0%); /* Défilement vers le bas */
+    transform: translateY(300%); /* Défilement vers le bas */
   }
 }
 
-@keyframes scrollTop {
-  0% {
-    transform: translateY(10%);
-  }
-  100% {
-    transform: translateY(-10%);
-  }
-}
 
 .scroll-top {
-  animation: translateYUp 120s linear infinite;
+  animation: translateYUp 600s linear infinite;
 }
 .scroll-bottom {
-  animation: translateYDown 120s linear infinite;
+  animation: translateYDown 600s linear infinite;
 }
 
 
