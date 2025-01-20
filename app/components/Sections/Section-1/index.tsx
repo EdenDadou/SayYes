@@ -9,7 +9,7 @@ export default function Section1() {
       <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row">
         {/* Contenu gauche*/}
         <motion.div
-          className="absolute left-0 h-full w-1/2 overflow-hidden"
+          className="absolute left-0 h-full w-1/2 overflow-hidden top-4"
           initial={{ translateX: "-100%" }}
           animate={{ translateX: "0%" }}
           transition={{
@@ -45,7 +45,7 @@ export default function Section1() {
 
         {/* Contenu droite */}
         <motion.div
-          className="absolute right-0 h-full w-1/2 overflow-hidden"
+          className="absolute right-0 h-full w-1/2 overflow-hidden top-4"
           initial={{ translateX: "100%" }}
           animate={{ translateX: "0%" }}
           transition={{
