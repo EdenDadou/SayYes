@@ -9,7 +9,7 @@ interface AnimatedCardProps {
 
 export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
   const container = useRef(null);
-  const isInView = useInView(container, { once: false, margin: "100px" });
+  const isInView = useInView(container, { once: true, margin: "100px" });
 
   const variants = {
     visible: {

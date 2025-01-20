@@ -8,8 +8,8 @@ import Halo from "~/components/BackgroundLayer/components/Halo";
 export default function IntroSection5() {
   return (
     <div className="relative flex flex-col justify-center items-center gap-14 w-full">
-      <SvgIntroSection5 className="z-[20]" />
-      <SvgSection5IntroBg className="absolute bottom-40" />
+      <SvgIntroSection5 className="z-[20] w-[76%] mz-[12%]" />
+      <SvgSection5IntroBg className="absolute -top-22" />
       <Halo size={700} rotation={30} style={{ top: "-20%", right: "-10%" }} />
       <Halo size={700} rotation={-30} style={{ top: "5%", left: "-5%" }} />
 

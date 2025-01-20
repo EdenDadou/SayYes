@@ -8,7 +8,7 @@ interface Section5Props {
 export default function Section5({ setIsOpen }: Section5Props) {
   return (
     <div
-      className="w-screen h-full flex flex-col justify-center items-center relative z-10 pt-36 gap-20 overflow-hidden -top-40  bg-gray-500"
+      className="w-screen h-full flex flex-col justify-center items-center relative z-10 pt-24 gap-20 overflow-hidden -top-40  bg-gray-500"
       id="section5ClipPath"
     >
       <IntroSection5 />

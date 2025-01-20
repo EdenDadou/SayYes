@@ -11,7 +11,7 @@ interface Section5Props {
 export default function OutroSection5({ setIsOpen }: Section5Props) {
   return (
     <div className="relative w-full flex flex-col justify-center items-center gap-5">
-      <SvgSection5Outro className="z-20" />
+      <SvgSection5Outro className="z-20 w-[70%] mx-[15%]" />
       <div className="relative flex flex-row w-full justify-between item-center h-full">
         <SvgBtnFaq className="w-[6%] cursor-pointer z-20" />
         <SvgBtnSayYes
@@ -28,7 +28,7 @@ export default function OutroSection5({ setIsOpen }: Section5Props) {
           }
         />
       </div>
-      <SvgSection5Bg className="absolute w-full h-full -bottom-5 z-0" />
+      <SvgSection5Bg className="absolute w-full h-full z-10" />
     </div>
   );
 }
