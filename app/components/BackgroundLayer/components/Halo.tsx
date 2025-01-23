@@ -5,6 +5,8 @@ interface HaloProps {
   rotation?: number; // Angle de rotation
   style?: React.CSSProperties; // Styles supplémentaires
   className?: string; // Classe CSS supplémentaire
+  opacity?: number; // Opacité du halo
+  color?: string;
 }
 
 const Halo: React.FC<HaloProps> = ({
@@ -12,6 +14,8 @@ const Halo: React.FC<HaloProps> = ({
   rotation = 0,
   style,
   className,
+  opacity = 0.15,
+  color = "linear-gradient(139deg, #202020 16.88%, #E1FF8B 29.27%, #B0F5FF 45.59%, #DCC4FF 56.18%, #202020 96.23%)",
 }) => {
   return (
     <div
@@ -21,9 +25,8 @@ const Halo: React.FC<HaloProps> = ({
         width: size,
         height: size,
         borderRadius: "650.508px",
-        opacity: 0.15,
-        background:
-          "linear-gradient(139deg, #202020 16.88%, #E1FF8B 29.27%, #B0F5FF 45.59%, #DCC4FF 56.18%, #202020 96.23%)",
+        opacity: opacity,
+        background: color,
         filter: "blur(62px)",
         transform: `rotate(${rotation}deg)`,
         pointerEvents: "none", // Évite les interactions

@@ -1,10 +1,11 @@
 import type { SVGProps } from "react";
 const SvgIntroSection5 = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={1068}
-    height={370}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    style={{ display: "block", width: "100%", height: "auto" }}
+    preserveAspectRatio="none"
+    viewBox="0 0 1068 370"
     {...props}
   >
     <g filter="url(#filter0_di_2993_4234)">

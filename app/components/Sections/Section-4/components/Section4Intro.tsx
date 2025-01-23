@@ -5,7 +5,7 @@ import SvgCardCreation from "~/components/Sections/Section-4/components/assets/C
 import SvgCardDeclinaison from "~/components/Sections/Section-4/components/assets/CardDeclinaison";
 import SvgCardLivraison from "~/components/Sections/Section-4/components/assets/CardLivraison";
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
 import { AnimatedCard } from "./AnimatedCard";
 import SvgSection4BgRt from "./assets/Section4BgRt";
@@ -32,8 +32,22 @@ const cards = [
   },
 ];
 
+const variants = {
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 1.2,
+      delay: 0.2,
+      ease: "easeOut",
+    },
+  },
+  hidden: { opacity: 0, x: -100 },
+};
+
 export default function Section4Intro() {
   const container = useRef(null);
+  const containerIntro = useRef(null);
   const horizontalRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -52,7 +66,8 @@ export default function Section4Intro() {
     requestAnimationFrame(raf);
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["20%", "-30%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["5%", "-20%"]);
+  const isInView = useInView(containerIntro, { once: true, margin: "-100px" });
 
   return (
     <section ref={container} className="relative h-[300vh] top-40 pb-32">
@@ -68,8 +83,20 @@ export default function Section4Intro() {
         <SvgSection4BgRt className="w-[30%] absolute z-50 -top-40  right-0 line" />
         <SvgSection4BgBottom className="w-full absolute top-[210px] left-0 line z-20" />
 
-        <div className="flex flex-col justify-center items-center max-w-[1200px] gap-2 w-screen pt-10">
-          <SvgSection4Intro />
+        <div
+          className="flex flex-col justify-center items-center max-w-[1200px] gap-2 w-screen pt-10"
+          ref={containerIntro}
+        >
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: -100,
+            }}
+            variants={variants}
+            animate={isInView ? "visible" : "hidden"}
+          >
+            <SvgSection4Intro />
+          </motion.div>
           <p className="text-black text-2xl font-bold font-jakarta w-2/3 text-center">
             Gardez la main sur le process de création <br /> tout en libérant
             votre inspiration.
