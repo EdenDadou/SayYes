@@ -1,16 +1,20 @@
 import type { MetaFunction } from "@remix-run/node";
 import Header from "~/components/Header";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Section1 from "~/components/Sections/Section-1";
 import Section2 from "~/components/Sections/Section-2";
 import Section3 from "~/components/Sections/Section-3";
 import Section4 from "~/components/Sections/Section-4";
 import Section5 from "~/components/Sections/Section-5";
-import Lenis from "@studio-freight/lenis";
 import ModalParlonsDesign from "~/components/ModalParlonsDesign";
 import BackgroundLayer from "~/components/BackgroundLayer";
 import Footer from "~/components/Footer";
 import "~/styles/tailwind.css";
+import LoaderIntro from "~/components/LoaderIntro";
+import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
+import useIntroTimer from "~/utils/hooks/useIntroTimer";
+
+export const VIDEO_DURATION = 4.5;
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,58 +25,29 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isIntroFinish, setIsIntroFinish] = useState(false);
-  const [shouldPlayIntro, setShouldPlayIntro] = useState(false);
+  const { isIntroFinish, shouldPlayIntro } = useIntroTimer();
 
-  useEffect(() => {
-    const lastPlayedDate = localStorage.getItem("introPlayedDate");
-    const today = new Date().toLocaleDateString();
-    if (lastPlayedDate !== today) {
-      localStorage.setItem("introPlayedDate", today);
-      setShouldPlayIntro(true);
-    } else {
-      setShouldPlayIntro(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (shouldPlayIntro && !isIntroFinish) {
-      const timeoutLine = setTimeout(() => {
-        setIsIntroFinish(true);
-      }, 6300);
-
-      return () => {
-        clearTimeout(timeoutLine);
-      };
-    } else {
-      setIsIntroFinish(true);
-    }
-  }, [shouldPlayIntro]);
-
-  useEffect(() => {
-    const lenis = new Lenis();
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-  }, []);
+  useSmoothScroll();
 
   return (
     <div className="flex items-center justify-center w-screen">
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
-      <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
-        <Header setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
-        {/* Bg Layer */}
-        <BackgroundLayer isIntroFinish={isIntroFinish} />
-        {/* Rendu des sections */}
-        <Section1 />
-        <Section2 />
-        <Section3 />
-        <Section4 />
-        <Section5 setIsOpen={setIsOpen} />
-        <Footer />
-      </div>
+      {shouldPlayIntro ? (
+        <LoaderIntro />
+      ) : (
+        <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
+          <Header setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
+          {/* Bg Layer */}
+          <BackgroundLayer isIntroFinish={isIntroFinish} />
+          {/* Rendu des sections */}
+          <Section1 />
+          <Section2 />
+          <Section3 />
+          <Section4 />
+          <Section5 setIsOpen={setIsOpen} />
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }
