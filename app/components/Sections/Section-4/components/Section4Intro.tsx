@@ -66,7 +66,7 @@ export default function Section4Intro() {
     requestAnimationFrame(raf);
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["5%", "-20%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["5%", "-40%"]);
   const isInView = useInView(containerIntro, { once: true, margin: "-100px" });
 
   return (

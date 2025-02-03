@@ -13,7 +13,7 @@ export default function Section1() {
           initial={{ translateX: "-100%" }}
           animate={{ translateX: "0%" }}
           transition={{
-            duration: 4,
+            duration: 2,
             ease: "easeInOut",
             delay: 1,
           }}
@@ -31,7 +31,7 @@ export default function Section1() {
           transition={{
             duration: 2,
             ease: "easeInOut",
-            delay: 2,
+            delay: 1,
           }}
         >
           <SvgTexteIntro className="w-[42%]" />
@@ -49,7 +49,7 @@ export default function Section1() {
           initial={{ translateX: "100%" }}
           animate={{ translateX: "0%" }}
           transition={{
-            duration: 4,
+            duration: 2,
             ease: "easeInOut",
             delay: 1,
           }}
