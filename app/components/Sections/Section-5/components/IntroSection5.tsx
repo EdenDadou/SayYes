@@ -6,6 +6,14 @@ import { useEffect, useRef } from "react";
 import SvgNext from "./assets/Next";
 import SvgPrevious from "./assets/Previous";
 
+const cards = [
+  { src: "./images/section5/card1.png" },
+  { src: "./images/section5/card1.png" },
+  { src: "./images/section5/card2.png" },
+  { src: "./images/section5/card3.png" },
+  { src: "./images/section5/card3.png" },
+];
+
 const variants = {
   visible: {
     opacity: 1,
@@ -44,7 +52,7 @@ export default function IntroSection5() {
   const handleScroll = (direction: string) => {
     if (!swiperContainerRef.current) return;
 
-    const scrollAmount = 100; // Ajustez la distance de défilement
+    const scrollAmount = 20; // Ajustez la distance de défilement
     if (direction === "left") {
       swiperContainerRef.current.scrollBy({
         left: -scrollAmount,
@@ -71,14 +79,14 @@ export default function IntroSection5() {
       <Halo
         size={800}
         rotation={0}
-        style={{ top: "35%", right: "-40%", zIndex: 10 }}
+        style={{ top: "35%", right: "-50%", zIndex: 10 }}
         opacity={0.5}
         color="rgba(27,27,27,1)"
       />
       <Halo
         size={800}
         rotation={0}
-        style={{ top: "35%", left: "-20%", zIndex: 10 }}
+        style={{ top: "35%", left: "-30%", zIndex: 10 }}
         opacity={0.5}
         color="rgba(27,27,27,1)"
       />
@@ -103,43 +111,26 @@ export default function IntroSection5() {
         {/* Conteneur des éléments défilants */}
         <div
           ref={swiperContainerRef}
-          className="flex gap-0 overflow-x-auto scroll-smooth snap-x snap-mandatory w-full no-scrollbar"
+          className="flex gap-0 overflow-x-auto scroll-smooth snap-mandatory w-full no-scrollbar"
         >
-          <div className="snap-start flex-shrink-0 w-[30%] flex items-center justify-center">
-            <img
-              src="./images/section5/card1.png"
-              alt="card1"
-              className="cursor-pointer w-full"
-            />
-          </div>
-          <div className="snap-start flex-shrink-0 w-[30%] flex items-center justify-center">
-            <img
-              src="./images/section5/card1.png"
-              alt="card1"
-              className="cursor-pointer w-full"
-            />
-          </div>
-          <div className="snap-start flex-shrink-0 w-[30%] flex items-center justify-center">
-            <img
-              src="./images/section5/card2.png"
-              alt="card1"
-              className="cursor-pointer w-full"
-            />
-          </div>
-          <div className="snap-start flex-shrink-0 w-[30%] flex items-center justify-center">
-            <img
-              src="./images/section5/card3.png"
-              alt="card1"
-              className="cursor-pointer w-full"
-            />
-          </div>
-          <div className="snap-start flex-shrink-0 w-[30%] flex items-center justify-center">
-            <img
-              src="./images/section5/card3.png"
-              alt="card1"
-              className="cursor-pointer w-full"
-            />
-          </div>
+          {cards.map((c, i) => (
+            <div
+              className="snap-start flex-shrink-0 w-[28%] flex items-center justify-center holographic-speciality"
+              key={`card-${c.src}-${i}`}
+              style={{
+                maskImage: `url(${c.src})`,
+                WebkitMaskImage: `url(${c.src})`,
+                maskRepeat: "no-repeat",
+                WebkitMaskRepeat: "no-repeat",
+                maskSize: "contain",
+                WebkitMaskSize: "contain",
+                maskPosition: "center",
+                WebkitMaskPosition: "center",
+              }}
+            >
+              <img src={c.src} alt="card1" className="cursor-pointer w-full" />
+            </div>
+          ))}
         </div>
         <SvgNext
           className="absolute right-0 top-60 z-20"

@@ -1,6 +1,7 @@
 import type { SVGProps } from "react";
 const SvgCardConception = (props: SVGProps<SVGSVGElement>) => (
   <svg
+    className="holographic-mask"
     width={338}
     height={417}
     fill="none"

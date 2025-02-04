@@ -88,6 +88,8 @@ background-clip: text;
   overflow: hidden;
   background-color: #1f1f1f;
   transition: transform 1s ease, box-shadow 1s ease;
+  mask: url(#svg-mask);
+  -webkit-mask: url(#mask0_2993_4146);
 }
 
 .holographic-card::before {
@@ -117,6 +119,45 @@ background-clip: text;
 }
 
 .holographic-card:hover {
+  transform: scale(1.03);
+}
+
+
+
+.holographic-speciality {
+  position: relative;
+  overflow: hidden;
+  background-color: #1f1f1f;
+  transition: transform 1s ease, box-shadow 1s ease;
+}
+
+.holographic-speciality::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -150%;
+  left: 0;
+  width: 100%;
+  height: 150%;
+  background: linear-gradient(
+    90deg,
+    rgba(225, 255, 139, 0) 0%,
+    rgba(220, 196, 255, 0.5) 25%,
+    rgba(176, 245, 255, 0.5) 50%,
+    rgba(225, 255, 139, 0.5) 75%,
+    rgba(225, 255, 139, 0) 100%
+  );
+  opacity: 0;
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+.holographic-speciality:hover::before {
+  animation: holographic-move 1s ease forwards;
+  opacity: 1;
+}
+
+.holographic-speciality:hover {
   transform: scale(1.03);
 }
 

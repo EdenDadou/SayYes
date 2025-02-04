@@ -18,7 +18,7 @@ export default function SpecialityLines() {
         <div
           ref={container}
           key={title}
-          className={`border-white/30 border-[0.35px] flex justify-center holographic-card ${
+          className={`border-white/30 border-[0.35px] flex justify-center holographic-speciality ${
             isHovered === title ? "bg-gradient-gray-400-hover" : "bg-gray-600"
           }`}
           onMouseEnter={() => handleMouseEnter(title)}

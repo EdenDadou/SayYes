@@ -20,11 +20,11 @@ const engagementsL2 = [
   "+15 d’XP en design",
 ];
 const engagementsL3 = [
-  "Rapide & réactif",
-  "Rapide & réactif",
+  "Équipe réactive",
+  "Équipe réactive",
   "Coaching des collaborateurs",
   "Gestion de projet",
-  "Rapide & réactif",
+  "Équipe réactive",
 ];
 
 const engagements = [engagementsL1, engagementsL2, engagementsL3];
@@ -58,7 +58,7 @@ export default function Section4Outro() {
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
       >
-        <SvgSection4Outro className="-ml-[8%] z-50" />
+        <SvgSection4Outro className="-ml-[5%] z-50" />
       </motion.div>
       <Halo
         size={700}
@@ -78,9 +78,9 @@ export default function Section4Outro() {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: false, margin: "100px" }}
-                className={`p-3 px-20 rounded-full flex flex-row items-start justify-center shadow-lg gap-2 relative ${
+                className={`p-3 px-20 rounded-full flex flex-row items-start justify-center shadow-lg gap-2 relative cursor-default ${
                   [1, 2, 3].includes(i)
-                    ? "bg-gradient-gray-500"
+                    ? "bg-gradient-gray-500 holographic-speciality"
                     : "bg-gradient-gray-200 border-custom"
                 }`}
               >

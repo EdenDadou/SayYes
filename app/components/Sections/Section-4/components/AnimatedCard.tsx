@@ -9,15 +9,19 @@ interface AnimatedCardProps {
 
 export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
   const container = useRef(null);
-  const isInView = useInView(container, { once: true, margin: "-180px" });
+  const isInView = useInView(container, {
+    once: true,
+    amount: "some",
+    margin: "-100px",
+  });
 
   const variants = {
     visible: {
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.7,
-        delay: 0.1 * i,
+        duration: 1,
+        delay: 0.2 * i,
         ease: "easeOut",
       },
     },
@@ -27,7 +31,6 @@ export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
     <motion.div
       ref={container}
       key={i}
-      // style={{ scale }}
       initial={{
         opacity: 0,
         x: -100,
@@ -36,7 +39,7 @@ export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
       animate={isInView ? "visible" : "hidden"}
       className="flex-shrink-0 h-full flex justify-center items-center"
     >
-      {card}
+      <div className="holographic-card">{card}</div>
     </motion.div>
   );
 };
