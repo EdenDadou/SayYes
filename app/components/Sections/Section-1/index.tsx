@@ -6,10 +6,10 @@ export default function Section1() {
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
       {/* Front Layer */}
-      <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row">
+      <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row items-center">
         {/* Contenu gauche*/}
         <motion.div
-          className="absolute left-0 h-full w-1/2 overflow-hidden top-4"
+          className="absolute left-0 h-full w-1/2 flex items-center justify-end overflow-hidden"
           initial={{ translateX: "-100%" }}
           animate={{ translateX: "0%" }}
           transition={{
@@ -25,7 +25,7 @@ export default function Section1() {
 
         {/* Contenu central */}
         <motion.div
-          className="relative flex flex-col justify-center items-center w-full h-full top-4 gap-2"
+          className="relative flex flex-col justify-center items-center w-full h-full top-5 gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
@@ -45,7 +45,7 @@ export default function Section1() {
 
         {/* Contenu droite */}
         <motion.div
-          className="absolute right-0 h-full w-1/2 overflow-hidden top-4"
+          className="absolute right-0 h-full w-1/2 flex items-center justify-end overflow-hidden"
           initial={{ translateX: "100%" }}
           animate={{ translateX: "0%" }}
           transition={{

@@ -7,6 +7,7 @@ import SvgLight from "~/components/Header/components/Light";
 import SvgCtaParlonsDesign from "~/components/Header/components/CtaParlonsDesign";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { redirect } from "@remix-run/react";
 
 interface HeaderProps {
   setIsOpen: (value: boolean) => void;
@@ -66,7 +67,12 @@ const Header = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
             leftIcon={<SvgFlamme className="text-shadow-lg shadow-black" />}
           />
           <Button label="Portfolio" leftIcon={<SvgCoeur />} />
-          <SvgLogo width={150} height={100} className="rotate-2" />
+          <SvgLogo
+            width={150}
+            height={100}
+            className="rotate-2 cursor-pointer"
+            onClick={() => redirect("/")}
+          />
           <Button label="L’agence" leftIcon={<SvgSmile />} />
           <Button label="Ressources" leftIcon={<SvgLight />} />
         </div>

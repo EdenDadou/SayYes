@@ -8,7 +8,10 @@ const text =
 
 export default function Intro2() {
   const container = useRef(null);
-  const isInView = useInView(container, { once: true, margin: "-100px" });
+  const isInView = useInView(container, {
+    once: true,
+    amount: "all",
+  });
 
   const variants = {
     visible: {

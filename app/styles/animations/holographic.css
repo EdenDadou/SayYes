@@ -1,12 +1,12 @@
 @keyframes moveGradient {
   0% {
-    background-position: 0% 50%;
+    background-position: 0% 33%;
   }
   50% {
-    background-position: 100% 50%;
+    background-position: 33% 66%;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: 66% 100%;
   }
 }
 
@@ -22,7 +22,7 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation:moveGradient 6s ease infinite;
+  animation:moveGradient 3s ease infinite;
 }
 
 .holographic-border {

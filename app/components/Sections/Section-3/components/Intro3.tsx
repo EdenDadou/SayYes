@@ -21,7 +21,7 @@ const variants = {
 
 export default function Intro3() {
   const container = useRef(null);
-  const isInView = useInView(container, { once: true, margin: "-100px" });
+  const isInView = useInView(container, { once: true, amount: "all" });
 
   return (
     <div

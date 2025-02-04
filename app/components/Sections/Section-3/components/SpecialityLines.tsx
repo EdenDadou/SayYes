@@ -19,26 +19,23 @@ export default function SpecialityLines() {
           ref={container}
           key={title}
           className={`border-white/30 border-[0.35px] flex justify-center holographic-card ${
-            isHovered === title ? "bg-gradient-gray-400-hover " : "bg-gray-600"
+            isHovered === title ? "bg-gradient-gray-400-hover" : "bg-gray-600"
           }`}
           onMouseEnter={() => handleMouseEnter(title)}
           onMouseLeave={() => handleMouseLeave(title)}
         >
-          <div className="relative overflow-hidden grid grid-cols-7 w-full items-center h-[100px] max-w-[1200px]">
-            <div className="flex flex-row items-center justify-start col-span-2">
-              <div className="w-[28%] flex items-center justify-center">
-                <div
-                  className={`absolute transition-all duration-500${
-                    isHovered === title ? "icon-up" : "icon-down"
-                  }`}
-                >
+          <div className="relative overflow-hidden grid grid-cols-6 w-full items-center h-[100px] max-w-[1200px]">
+            <div className="flex flex-row items-center justify-start col-span-1 ">
+              <div className="w-[30%] flex items-center justify-center">
+                <div className={`absolute`}>
                   {isHovered === title ? iconHover : icon}
                 </div>
-                <div className={`absolute transition-all duration-500`}>
-                  {iconHover}
-                </div>
               </div>
-              <p className="font-jakarta-extra-bold text-xl font-bold text-gradient">
+              <p
+                className={`font-jakarta-extra-bold text-xl font-bold ${
+                  isHovered === title ? "holographic-text" : "text-gradient"
+                }`}
+              >
                 {title}
               </p>
             </div>
