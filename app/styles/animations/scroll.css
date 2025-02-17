@@ -30,28 +30,28 @@
 /* Animation pour chaque colonne */
 @keyframes translateYUp {
   0% {
-    transform: translateY(0);
+    transform: translateY(-10%);
   }
   100% {
-    transform: translateY(-300%); /* Défilement de 100% pour permettre un défilement complet */
+    transform: translateY(-90%); /* Défilement de 100% pour permettre un défilement complet */
   }
 }
 
 @keyframes translateYDown {
   0% {
-    transform: translateY(-50%);
+    transform: translateY(-90%);
   }
   100% {
-    transform: translateY(300%); /* Défilement vers le bas */
+    transform: translateY(-10%); /* Défilement vers le bas */
   }
 }
 
 
 .scroll-top {
-  animation: translateYUp 600s linear infinite;
+  animation: translateYUp 40s linear infinite;
 }
 .scroll-bottom {
-  animation: translateYDown 600s linear infinite;
+  animation: translateYDown 50s linear infinite;
 }
 
 

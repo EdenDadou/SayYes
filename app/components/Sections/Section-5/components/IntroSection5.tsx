@@ -2,16 +2,16 @@ import SvgIntroSection5 from "~/components/Sections/Section-5/components/assets/
 import SvgSection5IntroBg from "./assets/Section5IntroBg";
 import Halo from "~/components/BackgroundLayer/components/Halo";
 import { useInView, motion } from "framer-motion";
-import { useEffect, useRef } from "react";
-import SvgNext from "./assets/Next";
-import SvgPrevious from "./assets/Previous";
+import Svg100Entreprises from "./assets/100Entreprises";
+import Svg240Projets from "./assets/240Projets";
+import Svg999Supports from "./assets/999Supports";
+import InfiniteCarousel from "./infiniteCarrousel";
+import { useRef } from "react";
 
-const cards = [
-  { src: "./images/section5/card1.png" },
-  { src: "./images/section5/card1.png" },
-  { src: "./images/section5/card2.png" },
-  { src: "./images/section5/card3.png" },
-  { src: "./images/section5/card3.png" },
+const keyNumber = [
+  { item: Svg100Entreprises, className: "absolute top-[24%] right-[60%] z-0" },
+  { item: Svg999Supports, className: "absolute top-[20%] right-[20%]  z-0" },
+  { item: Svg240Projets, className: "absolute top-[60%] right-[40%] z-0" },
 ];
 
 const variants = {
@@ -26,45 +26,26 @@ const variants = {
   },
   hidden: { opacity: 0, x: -100 },
 };
+const variantsKey = (i: number) => ({
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 600,
+      damping: 14,
+      duration: 0.6,
+      delay: 0.6 + 0.3 * i,
+      ease: "easeInOut",
+    },
+  },
+  hidden: { opacity: 0, y: -40 },
+});
 
 export default function IntroSection5() {
   const container = useRef(null);
-  const isInView = useInView(container, { once: true, margin: "-100px" });
-  const swiperContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (swiperContainerRef.current) {
-      const children = swiperContainerRef.current.children;
-      if (children.length >= 3) {
-        const targetCard = children[2] as HTMLElement; // La 3ème carte
-        const containerWidth = swiperContainerRef.current.offsetWidth;
-
-        // Calculer le scroll pour centrer la carte
-        const targetCardOffsetLeft = targetCard.offsetLeft;
-        const targetCardWidth = targetCard.offsetWidth;
-
-        swiperContainerRef.current.scrollLeft =
-          targetCardOffsetLeft - (containerWidth - targetCardWidth) / 2;
-      }
-    }
-  }, []);
-
-  const handleScroll = (direction: string) => {
-    if (!swiperContainerRef.current) return;
-
-    const scrollAmount = 20; // Ajustez la distance de défilement
-    if (direction === "left") {
-      swiperContainerRef.current.scrollBy({
-        left: -scrollAmount,
-        behavior: "smooth",
-      });
-    } else {
-      swiperContainerRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  const containerIntro = useRef(null);
+  const isInView = useInView(containerIntro, { once: true, amount: "all" });
 
   return (
     <div
@@ -75,7 +56,6 @@ export default function IntroSection5() {
       <SvgSection5IntroBg className="absolute -top-22 z-0" />
       <Halo size={700} rotation={30} style={{ top: "-20%", right: "-10%" }} />
       <Halo size={700} rotation={-30} style={{ top: "5%", left: "-5%" }} />
-      {/* Overlay sombre card */}
       <Halo
         size={800}
         rotation={0}
@@ -91,52 +71,36 @@ export default function IntroSection5() {
         color="rgba(27,27,27,1)"
       />
       {/* Section content */}
-      <motion.div
-        initial={{
-          opacity: 0,
-          x: -100,
-        }}
-        variants={variants}
-        animate={isInView ? "visible" : "hidden"}
-        className=" w-full px-40 z-10 ml-6"
-      >
-        <SvgIntroSection5 className="w-full" />
-      </motion.div>
-      <div className="relative w-full overflow-hidden">
-        {/* Bouton pour défiler vers la gauche */}
-        <SvgPrevious
-          className="absolute left-0 top-60 z-20"
-          onClick={() => handleScroll("left")}
-        />
-        {/* Conteneur des éléments défilants */}
-        <div
-          ref={swiperContainerRef}
-          className="flex gap-0 overflow-x-auto scroll-smooth snap-mandatory w-full no-scrollbar"
+      <div className="w-full flex flex-row" ref={containerIntro}>
+        <motion.div
+          initial={{
+            opacity: 0,
+            x: -100,
+          }}
+          variants={variants}
+          animate={isInView ? "visible" : "hidden"}
+          className="w-3/5 pl-40 z-10 ml-6"
         >
-          {cards.map((c, i) => (
-            <div
-              className="snap-start flex-shrink-0 w-[28%] flex items-center justify-center holographic-speciality"
-              key={`card-${c.src}-${i}`}
-              style={{
-                maskImage: `url(${c.src})`,
-                WebkitMaskImage: `url(${c.src})`,
-                maskRepeat: "no-repeat",
-                WebkitMaskRepeat: "no-repeat",
-                maskSize: "contain",
-                WebkitMaskSize: "contain",
-                maskPosition: "center",
-                WebkitMaskPosition: "center",
+          <SvgIntroSection5 className="w-full" />
+        </motion.div>
+        <div className="w-2/5 relative">
+          {keyNumber.map((key, i) => (
+            <motion.div
+              key={i}
+              initial={{
+                opacity: 0,
+                x: 0,
               }}
+              variants={variantsKey(i)}
+              animate={isInView ? "visible" : "hidden"}
+              className={key.className}
             >
-              <img src={c.src} alt="card1" className="cursor-pointer w-full" />
-            </div>
+              {key.item({ className: key.className })}
+            </motion.div>
           ))}
         </div>
-        <SvgNext
-          className="absolute right-0 top-60 z-20"
-          onClick={() => handleScroll("right")}
-        />
       </div>
+      <InfiniteCarousel />
     </div>
   );
 }

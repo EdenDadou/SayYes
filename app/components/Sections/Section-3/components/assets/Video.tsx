@@ -1,9 +1,8 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 const SvgVideo = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width={100}
-    height={88}
+    height={80}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}

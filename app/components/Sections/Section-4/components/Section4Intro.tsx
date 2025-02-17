@@ -12,7 +12,7 @@ import SvgSection4BgLt from "./assets/Section4BgLt";
 import Halo from "~/components/BackgroundLayer/components/Halo";
 import SvgSection4BgBottom from "./assets/Section4BgBottom";
 import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
-import SvgAnnotation from "./assets/AnnotationSection4";
+import SvgAnnotation from "./assets/Annotation";
 
 const cards = [
   {
@@ -55,13 +55,13 @@ export default function Section4Intro() {
     target: container,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["5%", "-30%"]);
+  const x = useTransform(scrollYProgress, [0, 0.8], ["5%", "-20%"]);
   const isInView = useInView(containerIntro, { once: true, amount: "all" });
 
   return (
     <section ref={container} className="relative h-[300vh] top-40 pb-32">
       <div className="sticky -top-0 h-screen  flex justify-center flex-col w-full items-center">
-        <SvgAnnotation className="absolute z-50 top-[220px] left-56 w-auto" />
+        <SvgAnnotation className="absolute z-50 top-[5%] right-[27%] w-auto" />
         <Halo size={1000} rotation={-30} style={{ top: "0%", left: "-20%" }} />
         <Halo
           size={1000}

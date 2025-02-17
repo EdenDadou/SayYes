@@ -88,7 +88,7 @@ export default function Section4Outro() {
                   {[1, 2, 3].includes(i) ? (
                     <SvgCheckHolo className="w-full" />
                   ) : (
-                    <SvgCheck className="w-[28px] h-[28px]" />
+                    <SvgCheck className="w-[24px] h-[24px] mb-2 -ml-3" />
                   )}
                 </div>
                 <p

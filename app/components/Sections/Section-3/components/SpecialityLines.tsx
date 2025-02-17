@@ -26,10 +26,8 @@ export default function SpecialityLines() {
         >
           <div className="relative overflow-hidden grid grid-cols-6 w-full items-center h-[100px] max-w-[1200px]">
             <div className="flex flex-row items-center justify-start col-span-1 ">
-              <div className="w-[30%] flex items-center justify-center">
-                <div className={`absolute`}>
-                  {isHovered === title ? iconHover : icon}
-                </div>
+              <div className="w-[30%] h-fit flex items-center justify-center">
+                <div>{isHovered === title ? iconHover : icon}</div>
               </div>
               <p
                 className={`font-jakarta-extra-bold text-xl font-bold ${

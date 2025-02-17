@@ -2,13 +2,13 @@ export const projetList = [
   [
     "./images/caroussel/say_yes_eulidia.png",
     "./images/caroussel/say_yes_harfanglab-1.png",
-    "./images/caroussel/say_yes_societe_generale.png",
+    "./images/caroussel/say_yes_societe_generale1.png",
     "./images/caroussel/say_yes_coreoz.png",
     "./images/caroussel/say_yes_codeworks.png",
     "./images/caroussel/say_yes_publicis-1.png",
   ],
   [
-    "./images/caroussel/say_yes_ubisoft.png",
+    "./images/caroussel/say_yes_ubisoft1.png",
     "./images/caroussel/say_yes_fcen.png",
     "./images/caroussel/say_yes_caisse_epargne.png",
     "./images/caroussel/say_yes_harfanglab-2.png",
@@ -18,8 +18,8 @@ export const projetList = [
   [
     "./images/caroussel/say_yes_orchestra.png",
     "./images/caroussel/say_yes_ca.png",
-    "./images/caroussel/say_yes_harfanglab.png",
-    "./images/caroussel/say_yes_samsung.png",
+    "./images/caroussel/say_yes_harfanglab1.png",
+    "./images/caroussel/say_yes_samsung1.png",
     "./images/caroussel/say_yes_pokawa.png",
     "./images/caroussel/say_yes_sonos.png",
   ],

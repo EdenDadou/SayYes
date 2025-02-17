@@ -28,7 +28,7 @@ export default function Intro2() {
 
   return (
     <div
-      className="flex flex-row justify-between items-center md:px-40 gap-[7%] pt-[8%]"
+      className="flex flex-row justify-between items-center md:px-40 gap-[7%] pt-[8.2%]"
       ref={container}
     >
       <motion.div

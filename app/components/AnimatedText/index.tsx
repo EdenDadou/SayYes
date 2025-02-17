@@ -16,7 +16,7 @@ export default function AnimatedText({
         const rect = container.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
 
-        const startTrigger = windowHeight * (3 / 4);
+        const startTrigger = windowHeight * (2 / 4);
         const endTrigger = windowHeight * (1 / 4);
 
         if (rect.top < startTrigger && rect.bottom > endTrigger) {

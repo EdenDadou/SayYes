@@ -25,7 +25,7 @@ export default function Section1() {
 
         {/* Contenu central */}
         <motion.div
-          className="relative flex flex-col justify-center items-center w-full h-full top-5 gap-2"
+          className="relative flex flex-col justify-center items-center w-full h-full top-6 gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
@@ -35,7 +35,7 @@ export default function Section1() {
           }}
         >
           <SvgTexteIntro className="w-[42%]" />
-          <div className="w-1/3 flex flex-col items-center justify-center gap-12">
+          <div className="w-1/3 flex flex-col items-center justify-center">
             <p className="font-jakarta md:text-2xl 2xl:text-4xl text-center text-gray-50">
               Nous imaginons des solutions visuelles pour rendre votre marque
               mémorable
