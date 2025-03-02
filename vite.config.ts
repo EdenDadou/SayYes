@@ -76,6 +76,9 @@ export default defineConfig({
       devOptions: {
         enabled: true,  // Active en mode dev pour tester la PWA
       },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // Augmente la limite à 5 Mo
+      },
       manifest: {
         name: 'Mon App Remix',
         short_name: 'App Remix',
