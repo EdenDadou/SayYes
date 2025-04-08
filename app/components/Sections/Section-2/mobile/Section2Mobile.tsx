@@ -1,23 +1,23 @@
-import SvgCardYellowTitle from "~/components/Sections/Section-2/components/assets/CardYellowTitle";
 import SvgCardYellowLogo from "~/components/Sections/Section-2/components/assets/CardYellowLogo";
 import SvgCardYellowCta from "~/components/Sections/Section-2/components/assets/CardYellowCta";
 import SvgCardPinkLogo from "~/components/Sections/Section-2/components/assets/CardPinkLogo";
-import SvgCardPinkTitle from "~/components/Sections/Section-2/components/assets/CardPinkTitle";
 import SvgCardPinkCta from "~/components/Sections/Section-2/components/assets/CardPinkCta";
 import SvgCardBlueLogo from "~/components/Sections/Section-2/components/assets/CardBlueLogo";
-import SvgCardBlueTitle from "~/components/Sections/Section-2/components/assets/CardBlueTitle";
 import SvgCardBlueCta from "~/components/Sections/Section-2/components/assets/CardBlueCta";
 import { useRef } from "react";
 import { motion, useInView, useScroll } from "framer-motion";
 import Intro2Mobile from "./components/Intro2Mobile";
 import SvgCardBgMobile from "./components/CardBgMobile";
 import CardMobile from "./components/CardsMobile";
+import SvgTitleCardYellowMobile from "./components/TitleCardYellowMobile";
+import SvgTitleCardPinkMobile from "./components/TitleCardPinkMobile";
+import SvgTitleCardBlueMobile from "./components/TitleCardBlueMobile";
 
 const cards = [
   {
     id: 1,
-    logo: <SvgCardYellowLogo className="w-[35%]" />,
-    title: <SvgCardYellowTitle />,
+    logo: <SvgCardYellowLogo className="w-[25%]" />,
+    title: <SvgTitleCardYellowMobile />,
     desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
     cta: <SvgCardYellowCta className="cursor-pointer w-64 pt-2" />,
     bg: <SvgCardBgMobile className="relative" />,
@@ -25,8 +25,8 @@ const cards = [
   },
   {
     id: 2,
-    logo: <SvgCardPinkLogo className="w-[45%]" />,
-    title: <SvgCardPinkTitle />,
+    logo: <SvgCardPinkLogo className="w-[25%]" />,
+    title: <SvgTitleCardPinkMobile />,
     desc: "Say Yes améliore votre visibilité et votre performance pour vous rendre incontournable !",
     cta: <SvgCardPinkCta className="cursor-pointer w-64 pt-2" />,
     bg: <SvgCardBgMobile className="relative" />,
@@ -34,8 +34,8 @@ const cards = [
   },
   {
     id: 3,
-    logo: <SvgCardBlueLogo className="w-[45%]" />,
-    title: <SvgCardBlueTitle />,
+    logo: <SvgCardBlueLogo className="w-[25%]" />,
+    title: <SvgTitleCardBlueMobile />,
     desc: "Say Yes interprète visuellement tous vos messages pour les rendre simples & accessibles !",
     cta: <SvgCardBlueCta className="cursor-pointer w-64 pt-2" />,
     bg: <SvgCardBgMobile className="relative" />,
@@ -58,7 +58,7 @@ export default function Section2Mobile() {
       <motion.main
         className="pb-10"
         ref={container}
-        initial={{ y: 100, opacity: 0 }}
+        initial={{ y: 0, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : {}}
         transition={{ duration: 1, ease: "easeOut" }}
       >

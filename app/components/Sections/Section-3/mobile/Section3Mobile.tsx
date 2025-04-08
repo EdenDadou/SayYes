@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import SpecialityLines from "./../components/SpecialityLines";
 import { projetList } from "./../components/projetList";
 import { useInView } from "framer-motion";
 import Intro3Mobile from "./components/Intro3Mobile";
+import SpecialityLinesMobile from "./components/SpecialityLineMobile";
 
 export default function Section3Mobile() {
   const containerCarroussel = useRef(null);
@@ -14,7 +14,7 @@ export default function Section3Mobile() {
     <div className="w-full relative z-10">
       <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32 ">
         <Intro3Mobile />
-        <SpecialityLines />
+        <SpecialityLinesMobile />
       </div>
       <div
         id="section3Wrapper"
@@ -26,11 +26,11 @@ export default function Section3Mobile() {
            [background:linear-gradient(to bottom,#1B1B1B 15%,transparent 40%,transparent 60%,#1B1B1B 85%)] pointer-events-none"
         />
         <div id="section3ClipPath">
-          <div className="grid grid-cols-3 gap-4 w-[110%] h-full rotate-[15deg] -ml-[5%]">
-            {Array.from({ length: 3 }).map((_, colIndex) => (
+          <div className="grid grid-cols-2 gap-4 w-[110%] h-full rotate-[15deg] -ml-[5%]">
+            {Array.from({ length: 2 }).map((_, colIndex) => (
               <div
                 key={colIndex}
-                className={`inline-flex whitespace-nowrap w-[35vw] ${
+                className={`inline-flex whitespace-nowrap w-1/2 ${
                   !isInView
                     ? ""
                     : colIndex % 2 === 0

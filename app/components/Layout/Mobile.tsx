@@ -9,6 +9,8 @@ import HeaderMobile from "../Header/mobile/HeaderMobile";
 import Section1Mobile from "../Sections/Section-1/mobile/Section1Mobile";
 import Section2Mobile from "../Sections/Section-2/mobile/Section2Mobile";
 import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
+import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
+import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -32,9 +34,9 @@ export default function Mobile() {
           <Section1Mobile />
           <Section2Mobile />
           <Section3Mobile />
-          {/*<Section4 />
-          <Section5 setIsOpen={setIsOpen} />
-          <Footer /> */}
+          <Section4Mobile />
+          <Section5Mobile setIsOpen={setIsOpen} />
+          {/*<Footer /> */}
         </div>
       )}
     </div>
