@@ -19,13 +19,13 @@ const variants = {
   hidden: { opacity: 0, x: -100 },
 };
 
-export default function Intro3() {
+export default function Intro3Mobile() {
   const container = useRef(null);
   const isInView = useInView(container, { once: true, amount: "all" });
 
   return (
     <div
-      className="flex flex-row justify-between items-end gap-[10%] w-full pb-10 md:px-32 z-20"
+      className="flex flex-col justify-between items-end gap-[10%] w-full pb-10 md:px-32 z-20"
       ref={container}
     >
       <motion.div
@@ -35,11 +35,11 @@ export default function Intro3() {
         }}
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
-        className="w-1/2"
+        className="w-full px-10"
       >
         <SvgSection3Intro className="w-full" />
       </motion.div>
-      <AnimatedText text={text} className="w-1/2 pb-4 leading-10" />
+      <AnimatedText text={text} className="w-full px-10 pb-4" />
     </div>
   );
 }

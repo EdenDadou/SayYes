@@ -118,6 +118,39 @@ const SvgTextIntro = (props: SVGProps<SVGSVGElement>) => (
         <stop offset={0.505} stopColor="#B7B7B7" />
         <stop offset={1} stopColor="#666666" />
       </linearGradient>
+
+      <linearGradient
+        id="holographicGradient"
+        x1="0%"
+        y1="0%"
+        x2="100%"
+        y2="20%"
+      >
+        <stop offset="0%" stopColor="#DCC4FF">
+          <animate
+            attributeName="stop-color"
+            values="#DCC4FF; #B0F5FF; #E1FF8B; #DCC4FF"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </stop>
+        <stop offset="33%" stopColor="#B0F5FF">
+          <animate
+            attributeName="stop-color"
+            values="#B0F5FF; #E1FF8B; #DCC4FF; #B0F5FF"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </stop>
+        <stop offset="100%" stopColor="#E1FF8B">
+          <animate
+            attributeName="stop-color"
+            values="#E1FF8B; #DCC4FF;  #DCC4FF; #B0F5FF; #E1FF8B"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </stop>
+      </linearGradient>
     </defs>
   </svg>
 );

@@ -66,7 +66,7 @@ export default function AnimatedText({
   return (
     <p
       ref={container}
-      className={`font-jakarta md:text-3xl 2xl:text-4xl font-bold leading-10 ${className}`}
+      className={`font-jakarta md:text-3xl 2xl:text-4xl font-bold ${className}`}
     >
       {characters}
     </p>

@@ -77,7 +77,7 @@ export default function Section4Outro() {
                 initial={{ scale: 0.5 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 whileInView={{ scale: 1 }}
-                viewport={{ once: false, margin: "100px" }}
+                viewport={{ once: true, margin: "100px" }}
                 className={`p-3 px-20 rounded-full flex flex-row items-start justify-center shadow-lg gap-2 relative cursor-default ${
                   [1, 2, 3].includes(i)
                     ? "bg-gradient-gray-500 holographic-speciality"

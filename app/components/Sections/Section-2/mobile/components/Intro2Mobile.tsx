@@ -6,7 +6,7 @@ import { useRef } from "react";
 const text =
   "“Du Branding au développement de \n votre communication visuelle, Say Yes \n vous accompagne sur tous vos projets”";
 
-export default function Intro2() {
+export default function Intro2Mobile() {
   const container = useRef(null);
   const isInView = useInView(container, {
     once: true,
@@ -28,7 +28,7 @@ export default function Intro2() {
 
   return (
     <div
-      className="flex flex-row justify-between items-center md:px-40 gap-[7%] pt-[8.2%]"
+      className="flex flex-col justify-between items-center md:px-40 gap-[7%] pt-[8.2%]"
       ref={container}
     >
       <motion.div
@@ -38,11 +38,11 @@ export default function Intro2() {
         }}
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
-        className="w-[42%] h-full z-20"
+        className="w-full h-full z-20 px-10"
       >
         <SvgSection2Intro className="w-full" />
       </motion.div>
-      <AnimatedText text={text} className="w-3/5 pt-10 leading-10" />
+      <AnimatedText text={text} className="w-3/5 text-center pt-10" />
     </div>
   );
 }
