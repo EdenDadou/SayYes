@@ -16,7 +16,7 @@ export default function Section3Mobile() {
         <Intro3Mobile />
         <SpecialityLinesMobile />
       </div>
-      <div
+      {/* <div
         id="section3Wrapper"
         className="relative  overflow-hidden"
         ref={containerCarroussel}
@@ -57,7 +57,7 @@ export default function Section3Mobile() {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

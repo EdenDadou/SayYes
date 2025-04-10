@@ -5,7 +5,7 @@ import ScrollingBannerMobile from "./components/ScrollingBannerMobile";
 export default function Section1Mobile() {
   return (
     <div
-      className="relative w-full min-h-screen h-auto overflow-visible"
+      className="relative w-full min-h-screen h-auto"
       style={{
         backgroundImage: 'url("images/section1/bg.png")',
         backgroundSize: "cover",
@@ -23,7 +23,6 @@ export default function Section1Mobile() {
           transition={{
             duration: 2,
             ease: "easeInOut",
-            delay: 1,
           }}
         >
           {/* <SvgTexteIntro className="w-[65%]" /> */}
@@ -52,9 +51,9 @@ export default function Section1Mobile() {
           initial={{ translateY: "100%" }}
           animate={{ translateY: "40%" }}
           transition={{
-            duration: 2,
+            duration: 1.2,
             ease: "easeInOut",
-            delay: 1,
+            delay: 0.1,
           }}
         >
           <img
