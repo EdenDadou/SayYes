@@ -56,7 +56,15 @@
 html,
 body {
   height: max-content;
+  width: 100vw;           /* Largeur exactement égale à celle de l’écran */
+  max-width: 100%;        /* Empêche tout débordement horizontal */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
 
+  *, *::before, *::after {
+    box-sizing: inherit; /* Hérite box-sizing pour tous les éléments enfants */
+  }
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;

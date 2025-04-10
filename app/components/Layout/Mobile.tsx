@@ -22,8 +22,8 @@ export default function Mobile() {
   useSmoothScroll();
 
   return (
-    <div className="flex items-center justify-center w-screen h-max">
-      <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
+    <div className=" h-max">
+      {/* <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} /> */}
       {/* {shouldPlayIntro ? (
         <LoaderIntro />
       ) : ( */}
