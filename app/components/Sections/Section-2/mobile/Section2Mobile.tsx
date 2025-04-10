@@ -53,7 +53,7 @@ export default function Section2Mobile() {
 
   return (
     <div
-      className="relative w-full h-full"
+      className="relative w-full h-auto"
       style={{
         backgroundImage: 'url("images/section2/bg.png")',
         backgroundSize: "contain",
@@ -63,7 +63,7 @@ export default function Section2Mobile() {
     >
       <Intro2Mobile />
       <motion.main
-        className="pb-10"
+        className="pb-10 min-h-screen"
         ref={container}
         initial={{ y: 0, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : {}}

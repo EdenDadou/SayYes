@@ -5,7 +5,7 @@ import ScrollingBannerMobile from "./components/ScrollingBannerMobile";
 export default function Section1Mobile() {
   return (
     <div
-      className="relative w-full min-h-screen overflow-hidden sm:h-screen"
+      className="relative w-full min-h-screen h-auto overflow-visible"
       style={{
         backgroundImage: 'url("images/section1/bg.png")',
         backgroundSize: "cover",
