@@ -25,7 +25,7 @@ export default function Intro3Mobile() {
 
   return (
     <div
-      className="flex flex-col justify-between items-end gap-[10%] w-full pb-10 md:px-32 z-20"
+      className="flex flex-col justify-between items-end gap-[10%] w-full pb-10 z-20"
       ref={container}
     >
       <motion.div

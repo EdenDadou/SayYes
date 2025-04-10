@@ -35,7 +35,7 @@ export default function Mobile() {
         {/* Rendu des sections */}
         <Section1Mobile />
         <Section2Mobile />
-        <Section3Mobile />
+        {/* <Section3Mobile /> */}
         {/* <Section4Mobile />
         <Section5Mobile setIsOpen={setIsOpen} /> */}
         {/*<Footer /> */}
