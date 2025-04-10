@@ -2,8 +2,6 @@ import SvgLogo from "~/components/Header/components/Logo";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { redirect } from "@remix-run/react";
-import SvgContactMobile from "./components/ContactMobile";
-import SvgMenuMobile from "./components/MenuMobile";
 
 interface HeaderProps {
   setIsOpen: (value: boolean) => void;
@@ -48,7 +46,7 @@ const HeaderMobile = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
       className={`sticky top-0 w-full shadow-3xl z-[100] shadow-custom-inset drop-shadow-custom`}
     >
       <div
-        className={`w-full bg-gray-400 h-16 flex flex-row items-center justify-between px-7 shadow-3xl shadow-custom-inset drop-shadow-custom
+        className={`w-full bg-gray-400 h-12 flex flex-row items-center justify-between px-7 shadow-3xl shadow-custom-inset drop-shadow-custom
               ${showHeader ? "translate-y-0" : "-translate-y-[120%]"} `}
       >
         {/* Navigation avec boutons et logo */}
@@ -58,8 +56,7 @@ const HeaderMobile = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
         </div>
         <div className="absolute -top-1 left-1/2 -translate-x-1/2 flex flex-row gap-10 items-center">
           <SvgLogo
-            width={150}
-            height={80}
+            height={60}
             className="rotate-2 cursor-pointer"
             onClick={() => redirect("/")}
           />
@@ -69,7 +66,7 @@ const HeaderMobile = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
           onClick={() => setIsOpen(true)}
           aria-label="Open contact menu"
         >
-          <img src="images/header/contact.png" alt="" className="w-20" />
+          <img src="images/header/contact.png" alt="" className="h-full " />
         </button>
       </div>
     </motion.div>
