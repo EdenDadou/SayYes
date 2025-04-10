@@ -26,4 +26,20 @@
     font-display: swap;
     src: url(/fonts/Jakarta/PlusJakartaSans-Bold.ttf) format('ttf');
   }
+
+  @font-face {
+    font-family: 'MADE Soulmaze Brush';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(/fonts/MADE-Soulmaze-Brush.otf) format("otf");
+  }
+  @font-face {
+    font-family: 'MADE';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(/fonts/MADE-Soulmaze-Brush.otf) format('otf');
+  }
+  
   

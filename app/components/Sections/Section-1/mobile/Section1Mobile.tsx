@@ -1,5 +1,4 @@
 import SvgStars from "../components/Stars";
-import SvgTexteIntro from "./../components/TexteIntro";
 import { motion } from "framer-motion";
 
 export default function Section1Mobile() {
@@ -18,10 +17,8 @@ export default function Section1Mobile() {
             delay: 1,
           }}
         >
-          <div className="holographic-text font-jakarta-bold text-lg">
-            Communication visuelle*
-          </div>
-          <SvgTexteIntro className="w-[65%]" />
+          {/* <SvgTexteIntro className="w-[65%]" /> */}
+          <img src="images/section1/Intro1.png" alt="" className="w-3/4" />
           <div className="w-full flex flex-col items-center justify-center text-gray-50 font-jakarta">
             <span>Nous imaginons des solutions</span>
             <span>visuelles pour rendre votre</span>

@@ -20,7 +20,7 @@ const cards = [
     title: <SvgTitleCardYellowMobile />,
     desc: "Say Yes conçoit & coordonne votre identité pour faire rayonner votre marque durablement !",
     cta: <SvgCardYellowCta className="cursor-pointer w-64 pt-2" />,
-    bg: <SvgCardBgMobile className="relative" />,
+    bg: <img src="images/section2/cardBg.png" alt="bg" className="relative" />,
     image: "./images/illustration_identity.png",
   },
   {
@@ -29,7 +29,7 @@ const cards = [
     title: <SvgTitleCardPinkMobile />,
     desc: "Say Yes améliore votre visibilité et votre performance pour vous rendre incontournable !",
     cta: <SvgCardPinkCta className="cursor-pointer w-64 pt-2" />,
-    bg: <SvgCardBgMobile className="relative" />,
+    bg: <img src="images/section2/cardBg.png" alt="bg" className="relative" />,
     image: "./images/illustration_digital.png",
   },
   {
@@ -38,7 +38,7 @@ const cards = [
     title: <SvgTitleCardBlueMobile />,
     desc: "Say Yes interprète visuellement tous vos messages pour les rendre simples & accessibles !",
     cta: <SvgCardBlueCta className="cursor-pointer w-64 pt-2" />,
-    bg: <SvgCardBgMobile className="relative" />,
+    bg: <img src="images/section2/cardBg.png" alt="bg" className="relative" />,
     image: "./images/illustration_facilitation.png",
   },
 ];
