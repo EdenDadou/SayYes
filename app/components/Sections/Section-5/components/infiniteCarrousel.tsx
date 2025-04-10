@@ -49,13 +49,13 @@ const InfiniteCarousel = () => {
 
     const scrollAmount = window.innerWidth * 0.28; // taille d'une carte
     if (direction === "left") {
-      moveElement({ fromIndex: cardsArray.length - 1, toIndex: 0 });
+      //   moveElement({ fromIndex: cardsArray.length - 1, toIndex: 0 });
       swiperContainerRef.current.scrollBy({
         left: -scrollAmount,
         behavior: "smooth",
       });
     } else {
-      moveElement({ fromIndex: 0, toIndex: cardsArray.length - 1 });
+      //   moveElement({ fromIndex: 0, toIndex: cardsArray.length - 1 });
       swiperContainerRef.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",

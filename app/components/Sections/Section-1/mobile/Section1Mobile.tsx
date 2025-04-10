@@ -1,3 +1,4 @@
+import SvgStars from "../components/Stars";
 import SvgTexteIntro from "./../components/TexteIntro";
 import { motion } from "framer-motion";
 
@@ -8,7 +9,7 @@ export default function Section1Mobile() {
       <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row items-center">
         {/* Contenu central */}
         <motion.div
-          className="relative flex flex-col justify-start items-center w-full h-full top-20 gap-3"
+          className="relative flex flex-col justify-start items-center w-full h-full top-10 gap-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
@@ -20,12 +21,22 @@ export default function Section1Mobile() {
           <div className="holographic-text font-jakarta-bold text-lg">
             Communication visuelle*
           </div>
-          <SvgTexteIntro className="w-4/5" />
-          <div className="w-2/3 flex flex-col items-center justify-center">
-            <p className="font-jakarta md:text-2xl 2xl:text-4xl text-center text-gray-50">
-              Nous imaginons des solutions visuelles pour rendre votre marque
-              mémorable
+          <SvgTexteIntro className="w-[65%]" />
+          <div className="w-full flex flex-col items-center justify-center text-gray-50 font-jakarta">
+            <span>Nous imaginons des solutions</span>
+            <span>visuelles pour rendre votre</span>
+            <span> marque mémorable</span>
+          </div>
+
+          <div className="w-full flex flex-col items-center">
+            <p className="font-jakarta-bold pl-1 text-lg">
+              4.9 <span className="font-jakarta font-extralight">I</span> 5
+              Shortlist
             </p>
+            <div className="flex flex-row items-center justify-center">
+              <SvgStars className="w-12" />
+              <p className="font-jakarta text-xs">Clients conquis</p>
+            </div>
           </div>
         </motion.div>
 

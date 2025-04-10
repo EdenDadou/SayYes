@@ -1,7 +1,5 @@
 import { useState } from "react";
 import ModalParlonsDesign from "~/components/ModalParlonsDesign";
-import BackgroundLayer from "~/components/BackgroundLayer";
-import "~/styles/tailwind.css";
 import LoaderIntro from "~/components/LoaderIntro";
 import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
@@ -11,6 +9,8 @@ import Section2Mobile from "../Sections/Section-2/mobile/Section2Mobile";
 import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
 import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
 import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
+import BackgroundLayerMobile from "../BackgroundLayer/mobile/BackgroundLayerMobile";
+import "~/styles/tailwind.css";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -21,7 +21,7 @@ export default function Mobile() {
   useSmoothScroll();
 
   return (
-    <div className="flex items-center justify-center w-screen">
+    <div className="flex items-center justify-center w-screen bg-blue-400">
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
       {shouldPlayIntro ? (
         <LoaderIntro />
@@ -29,7 +29,7 @@ export default function Mobile() {
         <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
           <HeaderMobile setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
           {/* Bg Layer */}
-          {/* <BackgroundLayer isIntroFinish={isIntroFinish} /> */}
+          <BackgroundLayerMobile isIntroFinish={isIntroFinish} />
           {/* Rendu des sections */}
           <Section1Mobile />
           <Section2Mobile />
