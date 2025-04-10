@@ -10,6 +10,7 @@ import Section2Mobile from "../Sections/Section-2/mobile/Section2Mobile";
 // import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 // import BackgroundLayerMobile from "../BackgroundLayer/mobile/BackgroundLayerMobile";
 import "~/styles/tailwind.css";
+import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 // import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 
 export const VIDEO_DURATION = 4.5;
@@ -18,10 +19,10 @@ export default function Mobile() {
   const [isOpen, setIsOpen] = useState(false);
   const { isIntroFinish, shouldPlayIntro } = useIntroTimer();
 
-  // useSmoothScroll();
+  useSmoothScroll();
 
   return (
-    <div className="flex items-center justify-center w-screen bg-blue-400">
+    <div className="flex items-center justify-center w-screen h-max overflow-x-hidden">
       <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
       {/* {shouldPlayIntro ? (
         <LoaderIntro />
