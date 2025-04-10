@@ -1,13 +1,14 @@
 import SvgStars from "../components/Stars";
 import { motion } from "framer-motion";
-import SvgBgSection1Mobile from "./BgSection1Mobile";
 
 export default function Section1Mobile() {
   return (
-    <div className="relative w-full min-h-screen overflow-hidden sm:h-screen">
-      <SvgBgSection1Mobile className="z-0 absolute top-0 left-0 w-full h-full" />
+    <div
+      className="relative w-full min-h-screen overflow-hidden sm:h-screen"
+      style={{ backgroundImage: 'url("images/section1/bg.png")' }}
+    >
       {/* Front Layer */}
-      <div className="relative w-full h-[calc(100vh-192px)] flex flex-row items-center z-[100]">
+      <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row items-center">
         {/* Contenu central */}
         <motion.div
           className="relative flex flex-col justify-start items-center w-full h-full top-10 gap-3"
