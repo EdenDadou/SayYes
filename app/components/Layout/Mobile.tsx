@@ -19,7 +19,7 @@ export default function Mobile() {
   const [isOpen, setIsOpen] = useState(false);
   const { isIntroFinish, shouldPlayIntro } = useIntroTimer();
 
-  useSmoothScroll();
+  // useSmoothScroll();
 
   return (
     <div className="flex items-center justify-center w-screen h-max overflow-x-hidden">

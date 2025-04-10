@@ -1,10 +1,9 @@
-import SvgSection2Intro from "~/components/Sections/Section-2/components/assets/Section2Intro";
 import AnimatedText from "~/components/AnimatedText";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const text =
-  "“Du Branding au développement de \n votre communication visuelle, Say Yes \n vous accompagne sur tous vos projets”";
+  "“Du Branding au\n développement de votre\n communication visuelle,\n Say Yes vous accompagne\n sur tous vos projets”";
 
 export default function Intro2Mobile() {
   const container = useRef(null);
@@ -28,7 +27,7 @@ export default function Intro2Mobile() {
 
   return (
     <div
-      className="flex flex-col justify-between items-center md:px-40 gap-[7%] pt-[8.2%]"
+      className="flex flex-col justify-center items-center mt-28"
       ref={container}
     >
       <motion.div
@@ -38,11 +37,15 @@ export default function Intro2Mobile() {
         }}
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
-        className="w-full h-full z-20 px-10"
+        className="w-full h-full z-20 flex justify-center items-center"
       >
-        <SvgSection2Intro className="w-full" />
+        <img
+          src="images/section2/Intro2.png"
+          className="w-3/4"
+          alt="Vous êtes unique, votre com doit l'être aussi !"
+        />
       </motion.div>
-      <AnimatedText text={text} className="w-3/5 text-center pt-10" />
+      <AnimatedText text={text} className="w-full text-center pt-10" />
     </div>
   );
 }

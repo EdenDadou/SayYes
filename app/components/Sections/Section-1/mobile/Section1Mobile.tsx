@@ -1,11 +1,17 @@
 import SvgStars from "../components/Stars";
 import { motion } from "framer-motion";
+import ScrollingBannerMobile from "./components/ScrollingBannerMobile";
 
 export default function Section1Mobile() {
   return (
     <div
       className="relative w-full min-h-screen overflow-hidden sm:h-screen"
-      style={{ backgroundImage: 'url("images/section1/bg.png")' }}
+      style={{
+        backgroundImage: 'url("images/section1/bg.png")',
+        backgroundSize: "cover",
+        backgroundPositionY: "-70px",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       {/* Front Layer */}
       <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row items-center">
@@ -58,7 +64,7 @@ export default function Section1Mobile() {
           />
         </motion.div>
       </div>
-      {/* <ScrollingBanner /> */}
+      <ScrollingBannerMobile />
     </div>
   );
 }

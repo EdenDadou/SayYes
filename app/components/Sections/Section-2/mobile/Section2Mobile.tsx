@@ -7,7 +7,6 @@ import SvgCardBlueCta from "~/components/Sections/Section-2/components/assets/Ca
 import { useRef } from "react";
 import { motion, useInView, useScroll } from "framer-motion";
 import Intro2Mobile from "./components/Intro2Mobile";
-import SvgCardBgMobile from "./components/CardBgMobile";
 import CardMobile from "./components/CardsMobile";
 import SvgTitleCardYellowMobile from "./components/TitleCardYellowMobile";
 import SvgTitleCardPinkMobile from "./components/TitleCardPinkMobile";
@@ -53,7 +52,15 @@ export default function Section2Mobile() {
   });
 
   return (
-    <div className="relative w-full h-full">
+    <div
+      className="relative w-full h-full"
+      style={{
+        backgroundImage: 'url("images/section2/bg.png")',
+        backgroundSize: "contain",
+        backgroundPositionY: "-20px",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <Intro2Mobile />
       <motion.main
         className="pb-10"
