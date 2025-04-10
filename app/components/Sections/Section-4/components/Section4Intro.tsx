@@ -11,7 +11,6 @@ import SvgSection4BgRt from "./assets/Section4BgRt";
 import SvgSection4BgLt from "./assets/Section4BgLt";
 import Halo from "~/components/BackgroundLayer/components/Halo";
 import SvgSection4BgBottom from "./assets/Section4BgBottom";
-import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import SvgAnnotation from "./assets/Annotation";
 
 const cards = [
@@ -46,7 +45,7 @@ const variants = {
 };
 
 export default function Section4Intro() {
-  useSmoothScroll();
+  //useSmoothScroll();
   const container = useRef(null);
   const containerIntro = useRef(null);
   const horizontalRef = useRef(null);

@@ -7,7 +7,6 @@ import SvgCardLivraison from "~/components/Sections/Section-4/components/assets/
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Halo from "~/components/BackgroundLayer/components/Halo";
-import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import { AnimatedCardMobile } from "./AnimatedCardMobile";
 import SvgAnnotation from "../../components/assets/Annotation";
 import SvgSection4BgLt from "../../components/assets/Section4BgLt";
@@ -46,7 +45,7 @@ const variants = {
 };
 
 export default function Section4IntroMobile() {
-  useSmoothScroll();
+  //useSmoothScroll();
   const container = useRef(null);
   const containerIntro = useRef(null);
   const horizontalRef = useRef(null);

@@ -10,41 +10,41 @@ const SvgTextIntro = (props: SVGProps<SVGSVGElement>) => (
       <path
         d="M129.357 20.2315H526.894V87.7685H129.357V20.2315Z"
         stroke="white"
-        strokeWidth={0.462984}
+        strokeWidth={0.5}
       />
       <g filter="url(#filter1_di_2993_4489)">
         <rect
-          x={522.126}
+          x={522}
           y={14}
-          width={9.45475}
-          height={9.45475}
+          width={9}
+          height={9}
           fill="url(#paint0_linear_2993_4489)"
         />
       </g>
       <g filter="url(#filter2_di_2993_4489)">
         <rect
-          x={124.126}
+          x={124}
           y={15}
-          width={9.45475}
-          height={9.45475}
+          width={9}
+          height={9}
           fill="url(#paint1_linear_2993_4489)"
         />
       </g>
       <g filter="url(#filter3_di_2993_4489)">
         <rect
-          x={522.126}
+          x={522}
           y={83}
-          width={9.45475}
-          height={9.45475}
+          width={9}
+          height={9}
           fill="url(#paint2_linear_2993_4489)"
         />
       </g>
       <g filter="url(#filter4_di_2993_4489)">
         <rect
-          x={124.126}
+          x={124}
           y={83}
-          width={9.45475}
-          height={9.45475}
+          width={9}
+          height={9}
           fill="url(#paint3_linear_2993_4489)"
         />
       </g>

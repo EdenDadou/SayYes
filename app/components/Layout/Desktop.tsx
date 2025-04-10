@@ -11,7 +11,6 @@ import BackgroundLayer from "~/components/BackgroundLayer";
 import Footer from "~/components/Footer";
 import "~/styles/tailwind.css";
 import LoaderIntro from "~/components/LoaderIntro";
-import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
 
 export const VIDEO_DURATION = 4.5;
@@ -27,7 +26,7 @@ export default function Desktop() {
   const [isOpen, setIsOpen] = useState(false);
   const { isIntroFinish, shouldPlayIntro } = useIntroTimer();
 
-  useSmoothScroll();
+  //useSmoothScroll();
 
   return (
     <div className="flex items-center justify-center w-screen">
