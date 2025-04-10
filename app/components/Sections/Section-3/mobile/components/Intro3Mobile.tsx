@@ -1,10 +1,9 @@
-import SvgSection3Intro from "~/components/Sections/Section-3/components/assets/Section3Intro";
 import AnimatedText from "~/components/AnimatedText";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const text =
-  "Conduite du changement,\n communication interne &\n externe, dotez-vous de\n supports stratégiques !";
+  "Croissance, visibilité, marque\n employeur, nous avons tout pour\n développer votre notoriété à\n tous les niveaux !";
 
 const variants = {
   visible: {
@@ -25,7 +24,7 @@ export default function Intro3Mobile() {
 
   return (
     <div
-      className="flex flex-col justify-between items-end gap-[10%] w-full pb-10 z-20"
+      className="flex flex-col justify-between items-end w-full pb-10 z-20"
       ref={container}
     >
       <motion.div
@@ -35,11 +34,18 @@ export default function Intro3Mobile() {
         }}
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
-        className="w-full px-10"
+        className="w-full px-8"
       >
-        <SvgSection3Intro className="w-full" />
+        <img
+          src="images/section3/Intro3.png"
+          className="w-full"
+          alt="Un besoin? Decouvrez nos solutions !"
+        />
       </motion.div>
-      <AnimatedText text={text} className="w-full px-10 pb-4" />
+      <AnimatedText
+        text={text}
+        className="w-full px-10 pb-4 text-center -mt-10"
+      />
     </div>
   );
 }

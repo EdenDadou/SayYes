@@ -23,7 +23,7 @@ export default function Mobile() {
   useSmoothScroll();
 
   return (
-    <div className=" h-max">
+    <div className="flex items-center justify-center w-screen h-max">
       {/* <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} /> */}
       {/* {shouldPlayIntro ? (
         <LoaderIntro />
@@ -35,7 +35,7 @@ export default function Mobile() {
         {/* Rendu des sections */}
         <Section1Mobile />
         <Section2Mobile />
-        {/* <Section3Mobile /> */}
+        <Section3Mobile />
         {/* <Section4Mobile />
         <Section5Mobile setIsOpen={setIsOpen} /> */}
         {/*<Footer /> */}
