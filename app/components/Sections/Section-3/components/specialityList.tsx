@@ -14,6 +14,7 @@ export const specialityList = [
     title: "DIGITAL",
     icon: <SvgDigital />,
     iconHover: <SvgDigitalHover />,
+    image: "images/section3/digital.png",
     list: [
       "Site Web & mobile",
       "Landing page",
@@ -26,18 +27,21 @@ export const specialityList = [
     title: "PRINT",
     icon: <SvgPrint />,
     iconHover: <SvgPrintHover />,
+    image: "images/section3/print.png",
     list: ["Support de vente", "Brand Book", "Affiche", "Kakémono", "Magazine"],
   },
   {
     title: "VIDÉO",
     icon: <SvgVideo />,
     iconHover: <SvgVideoHover />,
+    image: "images/section3/video.png",
     list: ["Corporate", "Motion Design", "Publicité", "Showreel", "Storyboard"],
   },
   {
     title: "EVENT",
     icon: <SvgEvent />,
     iconHover: <SvgEventHover />,
+    image: "images/section3/event.png",
     list: [
       "Live Sketching",
       "Identité & Logo",
@@ -50,6 +54,7 @@ export const specialityList = [
     title: "CRÉATIF",
     icon: <SvgCreatif />,
     iconHover: <SvgCreatifHover />,
+    image: "images/section3/creatif.png",
     list: [
       "Atelier & coaching",
       "Infographie",
