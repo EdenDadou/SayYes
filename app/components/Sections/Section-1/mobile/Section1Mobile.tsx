@@ -1,11 +1,13 @@
 import SvgStars from "../components/Stars";
 import { motion } from "framer-motion";
+import SvgBgSection1Mobile from "./BgSection1Mobile";
 
 export default function Section1Mobile() {
   return (
-    <div className="relative w-full min-h-screen overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden sm:h-screen">
+      <SvgBgSection1Mobile className="z-0 absolute top-0 left-0 w-full h-full" />
       {/* Front Layer */}
-      <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row items-center">
+      <div className="relative w-full h-[calc(100vh-192px)] flex flex-row items-center z-[100]">
         {/* Contenu central */}
         <motion.div
           className="relative flex flex-col justify-start items-center w-full h-full top-10 gap-3"
@@ -39,18 +41,20 @@ export default function Section1Mobile() {
 
         {/* Contenu bas */}
         <motion.div
-          className="absolute bottom-0 h-full w-full flex items-center justify-end overflow-hidden"
+          className="absolute bottom-0 h-screen w-full flex items-center justify-end overflow-hidden"
           initial={{ translateY: "100%" }}
-          animate={{ translateY: "0%" }}
+          animate={{ translateY: "40%" }}
           transition={{
             duration: 2,
             ease: "easeInOut",
             delay: 1,
           }}
         >
-          <div className="absolute left-10 bottom-0 h-fit w-[200%]">
-            <img src="./images/illuIntro.png" alt="deco" className="w-[40%]" />
-          </div>
+          <img
+            src="./images/illuIntro.png"
+            alt="deco"
+            className="w-full px-10"
+          />
         </motion.div>
       </div>
       {/* <ScrollingBanner /> */}
