@@ -21,7 +21,6 @@ export default function Mobile() {
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">
-      <ModalParlonsDesignMobile isOpen={isOpen} />
       {/* {shouldPlayIntro ? (
         <LoaderIntro />
       ) : ( */}
@@ -36,7 +35,6 @@ export default function Mobile() {
         <Section1Mobile />
         <Section2Mobile />
         <Section3Mobile />
-        <Section4Mobile />
         {/*<Section5Mobile setIsOpen={setIsOpen} />
         <Footer /> */}
       </div>
