@@ -37,8 +37,8 @@ export default function Mobile() {
         <Section2Mobile />
         <Section3Mobile />
         <Section4Mobile />
-        <Section5Mobile setIsOpen={setIsOpen} />
-        {/*<Footer /> */}
+        {/*<Section5Mobile setIsOpen={setIsOpen} />
+        <Footer /> */}
       </div>
       {/* )} */}
     </div>
