@@ -12,17 +12,20 @@ export default function Section3Mobile() {
   });
   return (
     <div className="w-full relative z-10">
-      <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32 ">
+      <div
+        className="relative w-full h-fit flex flex-col justify-center items-center mb-32"
+        ref={containerCarroussel}
+      >
         <Intro3Mobile />
         <SpecialityLinesMobile />
       </div>
-      <div id="section3Wrapper" className="relative" ref={containerCarroussel}>
+      <div id="section3Wrapper" className="relative w-screen overflow-x-hidden">
         <div
           className="absolute top-0 left-0 bottom-0 w-full h-full z-10 bg-gradient-to-b from-[#1B1B1B]/80 via-transparent to-[#1B1B1B]/80 
            [background:linear-gradient(to bottom,#1B1B1B 15%,transparent 40%,transparent 60%,#1B1B1B 85%)] pointer-events-none"
         />
         <div id="section3ClipPath">
-          <div className="grid grid-cols-2 gap-4 w-[110%] h-full rotate-[7deg] -ml-8">
+          <div className="grid grid-cols-2 gap-3 w-[110%] h-full rotate-[7deg] -ml-6">
             {Array.from({ length: 2 }).map((_, colIndex) => (
               <div
                 key={colIndex}
@@ -34,7 +37,7 @@ export default function Section3Mobile() {
                     : "scroll-bottom"
                 }`}
               >
-                <div className="gap-4 flex flex-col items-center justify-center">
+                <div className="gap-3 flex flex-col items-center justify-center">
                   {projetList[colIndex]
                     .concat(projetList[colIndex])
                     .concat(projetList[colIndex])

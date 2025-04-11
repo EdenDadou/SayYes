@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import textShadow from 'tailwindcss-textshadow';
+import scrollbarHide from 'tailwind-scrollbar-hide'
 
 export default {
   purge: false,
@@ -62,7 +63,5 @@ export default {
       },
     },
   },
-  plugins: [textShadow,
-    require('tailwind-scrollbar-hide')
-  ],
+  plugins: [textShadow, scrollbarHide],
 } satisfies Config;

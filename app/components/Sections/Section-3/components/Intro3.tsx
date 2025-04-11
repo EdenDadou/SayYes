@@ -24,10 +24,7 @@ export default function Intro3() {
   const isInView = useInView(container, { once: true, amount: "all" });
 
   return (
-    <div
-      className="flex flex-row justify-between items-end gap-[10%] w-full pb-10 md:px-32 z-20"
-      ref={container}
-    >
+    <div className="flex flex-row justify-between items-end gap-[10%] w-full pb-10 md:px-32 z-20">
       <motion.div
         initial={{
           opacity: 0,
@@ -35,6 +32,7 @@ export default function Intro3() {
         }}
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
+        ref={container}
         className="w-1/2"
       >
         <SvgSection3Intro className="w-full" />

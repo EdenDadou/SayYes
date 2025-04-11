@@ -14,6 +14,8 @@ import SvgCardBlueCta from "~/components/Sections/Section-2/components/assets/Ca
 import SvgCardBlueBg from "~/components/Sections/Section-2/components/assets/CardBlueBg";
 import { useRef } from "react";
 import { motion, useInView, useScroll } from "framer-motion";
+import SvgSection2Bg from "~/components/BackgroundLayer/components/Section2Bg";
+import Halo from "~/components/BackgroundLayer/components/Halo";
 
 const cards = [
   {
@@ -47,7 +49,7 @@ const cards = [
 
 export default function Section2() {
   const container = useRef(null);
-  const isInView = useInView(container, { once: true, margin: "-100px" });
+  const isInView = useInView(container, { once: true });
 
   const { scrollYProgress } = useScroll({
     target: container,
@@ -55,7 +57,25 @@ export default function Section2() {
   });
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-screen h-full">
+      <SvgSection2Bg className="absolute top-0 z-0" />
+
+      <Halo
+        size={700}
+        rotation={30}
+        style={{ top: "20%", left: "-10%", position: "absolute" }}
+      />
+      <Halo
+        size={700}
+        rotation={30}
+        style={{ top: "50%", right: "-10%", position: "absolute" }}
+      />
+      <Halo
+        size={700}
+        rotation={30}
+        style={{ top: "300%", right: "-10%", position: "absolute" }}
+      />
+
       <Intro2 />
       <motion.main
         className="pb-10"

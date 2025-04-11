@@ -1,10 +1,30 @@
 import SvgTexteIntro from "./components/TexteIntro";
 import { motion } from "framer-motion";
 import ScrollingBanner from "./components/ScrollingBanner";
+import SvgBgGrid from "~/components/BackgroundLayer/components/BgGrid";
+import Halo from "~/components/BackgroundLayer/components/Halo";
 
-export default function Section1() {
+interface propsSection1 {
+  isIntroFinish: boolean;
+}
+
+export default function Section1({ isIntroFinish }: propsSection1) {
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
+      {isIntroFinish ? (
+        <SvgBgGrid className="absolute w-screen top-0 h-[calc(100vh-192px)]" />
+      ) : null}
+      <Halo
+        size={700}
+        rotation={-30}
+        style={{ top: "-15%", right: "-20%", position: "absolute" }}
+      />
+      <Halo
+        size={700}
+        rotation={30}
+        style={{ top: "-15%", left: "-20%", position: "absolute" }}
+      />
+
       {/* Front Layer */}
       <div className="relative w-full z-10 h-[calc(100vh-192px)] flex flex-row items-center">
         {/* Contenu gauche*/}

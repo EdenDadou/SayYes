@@ -27,18 +27,16 @@ export default function Intro2() {
   };
 
   return (
-    <div
-      className="flex flex-row justify-between items-center md:px-40 gap-[7%] pt-[8.2%]"
-      ref={container}
-    >
+    <div className="flex flex-row justify-between items-center md:px-40 gap-[7%] pt-[8.2%]">
       <motion.div
         initial={{
           opacity: 0,
           x: -100,
         }}
+        ref={container}
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
-        className="w-[42%] h-full z-20"
+        className="w-[42%] h-full z-[2000]"
       >
         <SvgSection2Intro className="w-full" />
       </motion.div>

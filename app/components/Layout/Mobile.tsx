@@ -13,6 +13,7 @@ import "~/styles/tailwind.css";
 import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
 import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
+import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 // import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 
 export const VIDEO_DURATION = 4.5;
@@ -31,14 +32,13 @@ export default function Mobile() {
       ) : ( */}
       <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
         <HeaderMobile setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
-        {/* Bg Layer */}
-        {/* <BackgroundLayerMobile isIntroFinish={isIntroFinish} /> */}
+
         {/* Rendu des sections */}
         <Section1Mobile />
         <Section2Mobile />
         <Section3Mobile />
         <Section4Mobile />
-        {/*  <Section5Mobile setIsOpen={setIsOpen} /> */}
+        <Section5Mobile setIsOpen={setIsOpen} />
         {/*<Footer /> */}
       </div>
       {/* )} */}

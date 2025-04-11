@@ -2,15 +2,14 @@ import { motion, MotionValue, useInView } from "framer-motion";
 import { useRef } from "react";
 
 interface AnimatedCardProps {
-  card: JSX.Element;
+  card: string;
   i: number;
   progress: MotionValue<number>;
 }
 
 export const AnimatedCardMobile = ({ card, i }: AnimatedCardProps) => {
   const container = useRef(null);
-  const margin = i !== 4 ? "-100px" : "40px";
-  const delay = i !== 4 ? 0.2 * i : 0.4;
+  const margin = "20px";
   const isInView = useInView(container, {
     once: true,
     amount: "some",
@@ -22,8 +21,7 @@ export const AnimatedCardMobile = ({ card, i }: AnimatedCardProps) => {
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.8,
-        delay: delay,
+        duration: 0.2,
         ease: "easeOut",
       },
     },
@@ -39,9 +37,9 @@ export const AnimatedCardMobile = ({ card, i }: AnimatedCardProps) => {
       }}
       variants={variants}
       animate={isInView ? "visible" : "hidden"}
-      className="flex-shrink-0 h-full flex justify-center items-center"
+      className="w-[80vw] mb-20"
     >
-      <div className="holographic-card">{card}</div>
+      <img src={card} alt="cards" className="w-screen" />
     </motion.div>
   );
 };

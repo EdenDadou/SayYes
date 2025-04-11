@@ -3,6 +3,8 @@ import Intro3 from "./components/Intro3";
 import SpecialityLines from "./components/SpecialityLines";
 import { projetList } from "./components/projetList";
 import { useInView } from "framer-motion";
+import SvgBgSection3 from "~/components/BackgroundLayer/components/BgSection3";
+import Halo from "~/components/BackgroundLayer/components/Halo";
 
 export default function Section3() {
   const containerCarroussel = useRef(null);
@@ -12,6 +14,8 @@ export default function Section3() {
   });
   return (
     <div className="w-full relative z-10">
+      <SvgBgSection3 className="absolute -top-40" />
+      <Halo size={700} rotation={-30} style={{ top: "450%", left: "2%" }} />
       <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32 ">
         <Intro3 />
         <SpecialityLines />

@@ -18,21 +18,22 @@ const Halo: React.FC<HaloProps> = ({
   color = "linear-gradient(139deg, #202020 16.88%, #E1FF8B 29.27%, #B0F5FF 45.59%, #DCC4FF 56.18%, #202020 96.23%)",
 }) => {
   return (
-    <div
-      className={className}
-      style={{
-        position: "absolute",
-        width: size,
-        height: size,
-        borderRadius: "650.508px",
-        opacity: opacity,
-        background: color,
-        filter: "blur(62px)",
-        transform: `rotate(${rotation}deg)`,
-        pointerEvents: "none", // Évite les interactions
-        ...style,
-      }}
-    />
+    <div className="w-screen overflow-hidden h-full absolute top-0 left-0">
+      <div
+        className={className}
+        style={{
+          width: size,
+          height: size,
+          borderRadius: "650.508px",
+          opacity: opacity,
+          background: color,
+          filter: "blur(62px)",
+          transform: `rotate(${rotation}deg)`,
+          pointerEvents: "none", // Évite les interactions
+          ...style,
+        }}
+      />
+    </div>
   );
 };
 
