@@ -13,23 +13,23 @@ import SvgSection4BgLt from "../../components/assets/Section4BgLt";
 import SvgSection4BgBottom from "../../components/assets/Section4BgBottom";
 import SvgSection4BgRt from "../../components/assets/Section4BgRt";
 
-const cards = [
-  {
-    svg: <SvgCardKickOff />,
-  },
-  {
-    svg: <SvgCardConception />,
-  },
-  {
-    svg: <SvgCardCreation />,
-  },
-  {
-    svg: <SvgCardDeclinaison />,
-  },
-  {
-    svg: <SvgCardLivraison />,
-  },
-];
+// const cards = [
+//   {
+//     svg: <SvgCardKickOff />,
+//   },
+//   {
+//     svg: <SvgCardConception />,
+//   },
+//   {
+//     svg: <SvgCardCreation />,
+//   },
+//   {
+//     svg: <SvgCardDeclinaison />,
+//   },
+//   {
+//     svg: <SvgCardLivraison />,
+//   },
+// ];
 
 const variants = {
   visible: {
@@ -45,7 +45,6 @@ const variants = {
 };
 
 export default function Section4IntroMobile() {
-  //useSmoothScroll();
   const container = useRef(null);
   const containerIntro = useRef(null);
   const horizontalRef = useRef(null);
@@ -54,13 +53,13 @@ export default function Section4IntroMobile() {
     target: container,
   });
 
-  const x = useTransform(scrollYProgress, [0, 0.8], ["5%", "-340%"]);
+  const x = useTransform(scrollYProgress, [0, 0.8], ["5%", "-440%"]);
   const isInView = useInView(containerIntro, { once: true, amount: "all" });
 
   return (
     <section ref={container} className="relative h-[300vh] top-40 pb-32">
       <div className="sticky -top-0 h-screen  flex justify-center flex-col w-full items-center">
-        <SvgAnnotation className="absolute z-50 top-[5%] right-[27%] w-auto" />
+        {/* <SvgAnnotation className="absolute z-50 top-[5%] right-[27%] w-auto" />
         <Halo size={1000} rotation={-30} style={{ top: "0%", left: "-20%" }} />
         <Halo
           size={1000}
@@ -81,7 +80,7 @@ export default function Section4IntroMobile() {
           className={`w-full absolute top-[210px] left-0 z-20 ${
             isInView ? "line" : "hidden"
           }`}
-        />
+        /> */}
 
         <div
           className="flex flex-col justify-center items-center  gap-2 w-screen pt-10 px-10"
@@ -95,14 +94,15 @@ export default function Section4IntroMobile() {
             variants={variants}
             animate={isInView ? "visible" : "hidden"}
           >
-            <SvgSection4Intro />
+            {/* <SvgSection4Intro className="w-full" /> */}
           </motion.div>
-          <p className="text-black text-2xl font-bold font-jakarta w-2/3 text-center">
-            Gardez la main sur le process de création <br /> tout en libérant
-            votre inspiration.
+          <p className="text-black text-md font-bold font-jakarta w-full text-center">
+            Gardez la main sur le process de
+            <br /> création tout en libérant votre
+            <br /> inspiration.
           </p>
         </div>
-        <motion.div
+        {/* <motion.div
           style={{ x }}
           ref={horizontalRef}
           className="flex flex-row w-screen h-fit mt-5 z-20"
@@ -117,7 +117,7 @@ export default function Section4IntroMobile() {
               />
             );
           })}
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );

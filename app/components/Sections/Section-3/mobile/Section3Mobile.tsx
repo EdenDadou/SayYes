@@ -16,21 +16,17 @@ export default function Section3Mobile() {
         <Intro3Mobile />
         <SpecialityLinesMobile />
       </div>
-      {/* <div
-        id="section3Wrapper"
-        className="relative  overflow-hidden"
-        ref={containerCarroussel}
-      >
+      <div id="section3Wrapper" className="relative" ref={containerCarroussel}>
         <div
           className="absolute top-0 left-0 bottom-0 w-full h-full z-10 bg-gradient-to-b from-[#1B1B1B]/80 via-transparent to-[#1B1B1B]/80 
            [background:linear-gradient(to bottom,#1B1B1B 15%,transparent 40%,transparent 60%,#1B1B1B 85%)] pointer-events-none"
         />
         <div id="section3ClipPath">
-          <div className="grid grid-cols-2 gap-4 w-[110%] h-full rotate-[15deg] -ml-[5%]">
+          <div className="grid grid-cols-2 gap-4 w-[110%] h-full rotate-[7deg] -ml-8">
             {Array.from({ length: 2 }).map((_, colIndex) => (
               <div
                 key={colIndex}
-                className={`inline-flex whitespace-nowrap w-1/2 ${
+                className={`inline-flex whitespace-nowrap ${
                   !isInView
                     ? ""
                     : colIndex % 2 === 0
@@ -38,7 +34,7 @@ export default function Section3Mobile() {
                     : "scroll-bottom"
                 }`}
               >
-                <div className="gap-5 flex flex-col items-center justify-center overflow-hidden">
+                <div className="gap-4 flex flex-col items-center justify-center">
                   {projetList[colIndex]
                     .concat(projetList[colIndex])
                     .concat(projetList[colIndex])
@@ -57,7 +53,7 @@ export default function Section3Mobile() {
             ))}
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

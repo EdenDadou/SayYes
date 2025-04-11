@@ -12,6 +12,7 @@ import Section2Mobile from "../Sections/Section-2/mobile/Section2Mobile";
 import "~/styles/tailwind.css";
 import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
+import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
 // import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 
 export const VIDEO_DURATION = 4.5;
@@ -36,8 +37,8 @@ export default function Mobile() {
         <Section1Mobile />
         <Section2Mobile />
         <Section3Mobile />
-        {/* <Section4Mobile />
-        <Section5Mobile setIsOpen={setIsOpen} /> */}
+        <Section4Mobile />
+        {/*  <Section5Mobile setIsOpen={setIsOpen} /> */}
         {/*<Footer /> */}
       </div>
       {/* )} */}

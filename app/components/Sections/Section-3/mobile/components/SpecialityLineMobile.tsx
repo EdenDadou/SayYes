@@ -13,7 +13,7 @@ export default function SpecialityLinesMobile() {
           key={title}
           role="button"
           tabIndex={0}
-          className="border-white/30 border-[0.35px] holographic-speciality bg-gradient-gray-400-hover flex flex-col items-start justify-start px-6 h-fit pt-4"
+          className="border-white/30 border-[0.35px] holographic-speciality bg-gradient-gray-400-hover flex flex-col items-start justify-start px-6 h-fit"
           onClick={() => setIsSelected(title)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -21,8 +21,8 @@ export default function SpecialityLinesMobile() {
             }
           }}
         >
-          <div className="h-20">
-            <img src={image} alt="speciality" className="w-" />
+          <div className="py-5">
+            <img src={image} alt="speciality" />
           </div>
 
           {title === isSelected ? (

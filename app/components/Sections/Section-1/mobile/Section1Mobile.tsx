@@ -23,6 +23,7 @@ export default function Section1Mobile() {
           transition={{
             duration: 2,
             ease: "easeInOut",
+            delay: 0.5,
           }}
         >
           {/* <SvgTexteIntro className="w-[65%]" /> */}
@@ -51,9 +52,9 @@ export default function Section1Mobile() {
           initial={{ translateY: "100%" }}
           animate={{ translateY: "40%" }}
           transition={{
-            duration: 1.2,
+            duration: 1.5,
             ease: "easeInOut",
-            delay: 0.1,
+            delay: 0.5,
           }}
         >
           <img

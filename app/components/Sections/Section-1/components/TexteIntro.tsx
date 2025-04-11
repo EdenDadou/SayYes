@@ -69,56 +69,6 @@ const SvgTextIntro = (props: SVGProps<SVGSVGElement>) => (
         />
       </g>
     </g>
-    <defs>
-      <linearGradient
-        id="paint0_linear_2993_4489"
-        x1={529.217}
-        y1={13.7072}
-        x2={532.787}
-        y2={21.6531}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="white" />
-        <stop offset={0.505} stopColor="#B7B7B7" />
-        <stop offset={1} stopColor="#666666" />
-      </linearGradient>
-      <linearGradient
-        id="paint1_linear_2993_4489"
-        x1={131.217}
-        y1={14.7072}
-        x2={134.787}
-        y2={22.6531}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="white" />
-        <stop offset={0.505} stopColor="#B7B7B7" />
-        <stop offset={1} stopColor="#666666" />
-      </linearGradient>
-      <linearGradient
-        id="paint2_linear_2993_4489"
-        x1={529.217}
-        y1={82.7072}
-        x2={532.787}
-        y2={90.6531}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="white" />
-        <stop offset={0.505} stopColor="#B7B7B7" />
-        <stop offset={1} stopColor="#666666" />
-      </linearGradient>
-      <linearGradient
-        id="paint3_linear_2993_4489"
-        x1={131.217}
-        y1={82.7072}
-        x2={134.787}
-        y2={90.6531}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="white" />
-        <stop offset={0.505} stopColor="#B7B7B7" />
-        <stop offset={1} stopColor="#666666" />
-      </linearGradient>
-    </defs>
   </svg>
 );
 export default SvgTextIntro;

@@ -44,7 +44,7 @@ const cards = [
 
 export default function Section2Mobile() {
   const container = useRef(null);
-  const isInView = useInView(container, { once: true, margin: "-100px" });
+  const isInView = useInView(container, { once: true });
 
   const { scrollYProgress } = useScroll({
     target: container,
