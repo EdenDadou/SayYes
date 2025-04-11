@@ -34,7 +34,11 @@ export default function Desktop() {
       {shouldPlayIntro ? (
         <LoaderIntro />
       ) : (
-        <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
+        <div
+          className={`flex flex-col items-center justify-start w-screen bg-gray-600 ${
+            isOpen ? "fixed top-0" : ""
+          }`}
+        >
           <Header setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
           <Section1 isIntroFinish={isIntroFinish} />
           <Section2 />

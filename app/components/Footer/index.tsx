@@ -9,7 +9,7 @@ import SvgBtnTiktok from "./components/BtnTiktok";
 
 export default function Footer() {
   return (
-    <div className="relative w-full flex flex-col justify-center items-center -top-40 -mb-40 filter bg-gray-500 drop-shadow-custom shadow-top">
+    <div className="relative w-full flex flex-col justify-center items-center filter bg-gray-500 drop-shadow-custom shadow-top">
       <div className="flex flex-col w-screen px-20 bg-gradient-gray-600 drop-shadow-custom">
         <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
           <div className="flex flex-row items-center gap-8 ">

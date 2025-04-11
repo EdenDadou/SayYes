@@ -13,7 +13,7 @@ export default function Section3() {
     amount: "some",
   });
   return (
-    <div className="w-full relative">
+    <div className="w-full relative z-20">
       <SvgBgSection3 className="absolute -top-40 left-0 w-full" />
       <Halo
         size={700}

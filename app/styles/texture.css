@@ -37,6 +37,7 @@ background-clip: text;
     box-shadow: 13.727px 13.727px 41.18px var(--sds-size-depth-400) rgba(0, 0, 0, 0.20), 0px 0.961px 1.373px 0px #FFF inset;
 }
 
+
 .shadow-top {
   position: relative;
 }
@@ -52,7 +53,21 @@ background-clip: text;
   z-index: 10;
   pointer-events: none;
 }
+.shadow-left {
+  position: relative;
+}
 
+.shadow-left::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%; /* hauteur de l’ombre */
+  box-shadow: -10px 0px 30px rgba(0, 0, 0, 0.3); /* ombre vers le bas */
+  z-index: 10;
+  pointer-events: none;
+}
 .halo-effect {
   position: relative;
   display: inline-block;

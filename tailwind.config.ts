@@ -34,6 +34,7 @@ export default {
         'gray-50': '#DEDEDE',
         'gray-100': '#C0C0C0',
         'gray-200': '#BABABA',
+        'gray-300': '#787878',
         'gray-400': '#1d1d1d',
         'gray-500': '#1B1B1B',
         'gray-600': '#121212',
