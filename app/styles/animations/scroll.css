@@ -64,3 +64,12 @@
   -ms-overflow-style: none;  /* IE et Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
+@keyframes scrollInfinite {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-scrollInfinite {
+  animation: scrollInfinite 20s linear infinite;
+}

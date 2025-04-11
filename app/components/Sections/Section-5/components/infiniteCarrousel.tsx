@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import SvgNext from "./assets/Next";
 import SvgPrevious from "./assets/Previous";
 const cards = [
@@ -11,27 +11,13 @@ const cards = [
 
 const InfiniteCarousel = () => {
   const swiperContainerRef = useRef<HTMLDivElement>(null);
-  const duplicatedCards = [...cards, ...cards, ...cards];
-  const [cardsArray, setCardsArray] = useState(duplicatedCards);
-
-  const moveElement = ({
-    fromIndex,
-    toIndex,
-  }: {
-    fromIndex: number;
-    toIndex: number;
-  }) => {
-    const newArray = [...cardsArray]; // Cloner le tableau pour éviter de modifier l'original
-    const [movedItem] = newArray.splice(fromIndex, 1); // Supprime l'élément
-    newArray.splice(toIndex, 0, movedItem); // Insère à la nouvelle position
-    setCardsArray(newArray);
-  };
+  const duplicatedCards = [...cards, ...cards, ...cards, ...cards, ...cards];
 
   useEffect(() => {
     if (swiperContainerRef.current) {
       const children = swiperContainerRef.current.children;
       if (children.length >= 3) {
-        const targetCard = children[7] as HTMLElement; // La 3ème carte
+        const targetCard = children[12] as HTMLElement; // La 3ème carte
         const containerWidth = swiperContainerRef.current.offsetWidth;
 
         // Calculer le scroll pour centrer la carte
@@ -46,21 +32,12 @@ const InfiniteCarousel = () => {
 
   const handleScroll = (direction: string) => {
     if (!swiperContainerRef.current) return;
-
     const scrollAmount = window.innerWidth * 0.28; // taille d'une carte
-    if (direction === "left") {
-      //   moveElement({ fromIndex: cardsArray.length - 1, toIndex: 0 });
-      swiperContainerRef.current.scrollBy({
-        left: -scrollAmount,
-        behavior: "smooth",
-      });
-    } else {
-      //   moveElement({ fromIndex: 0, toIndex: cardsArray.length - 1 });
-      swiperContainerRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: "smooth",
-      });
-    }
+
+    swiperContainerRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -75,7 +52,7 @@ const InfiniteCarousel = () => {
         ref={swiperContainerRef}
         className="flex gap-0 overflow-x-auto scroll-smooth snap-mandatory w-full no-scrollbar"
       >
-        {cardsArray.map((c, i) => (
+        {duplicatedCards.map((c, i) => (
           <div
             className="snap-start flex-shrink-0 w-[28%] flex items-center justify-center holographic-speciality"
             key={`card-${c.src}-${i}`}

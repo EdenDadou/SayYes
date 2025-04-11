@@ -49,29 +49,37 @@ export default function IntroSection5() {
 
   return (
     <div
-      className="relative flex flex-col justify-center items-center gap-14 w-full z-10"
+      className="relative flex flex-col justify-center items-center gap-14 w-full z-10 -top-20"
       ref={container}
     >
       {/* Background */}
       <SvgSection5IntroBg className="absolute -top-22 z-0" />
-      <Halo size={700} rotation={30} style={{ top: "-20%", right: "-10%" }} />
-      <Halo size={700} rotation={-30} style={{ top: "5%", left: "-5%" }} />
+      <Halo
+        size={700}
+        rotation={30}
+        style={{ top: "-20%", right: "-10%", position: "absolute" }}
+      />
+      <Halo
+        size={700}
+        rotation={-30}
+        style={{ top: "5%", left: "-5%", position: "absolute" }}
+      />
       <Halo
         size={800}
         rotation={0}
-        style={{ top: "35%", right: "-50%", zIndex: 10 }}
+        style={{ top: "35%", right: "-50%", zIndex: 10, position: "absolute" }}
         opacity={0.5}
         color="rgba(27,27,27,1)"
       />
       <Halo
         size={800}
         rotation={0}
-        style={{ top: "35%", left: "-30%", zIndex: 10 }}
+        style={{ top: "35%", left: "-30%", zIndex: 10, position: "absolute" }}
         opacity={0.5}
         color="rgba(27,27,27,1)"
       />
       {/* Section content */}
-      <div className="w-full flex flex-row" ref={containerIntro}>
+      <div className="w-full flex flex-row mt-20" ref={containerIntro}>
         <motion.div
           initial={{
             opacity: 0,

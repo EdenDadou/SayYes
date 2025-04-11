@@ -40,7 +40,7 @@ export default function Card({
   return (
     <div
       ref={container}
-      className={`flex h-screen item-center justify-center sticky top-0 w-full`}
+      className="flex h-screen item-center justify-center sticky top-0 w-full"
       style={{ zIndex: i * 4 }}
     >
       <motion.div

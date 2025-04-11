@@ -13,9 +13,13 @@ export default function Section3() {
     amount: "some",
   });
   return (
-    <div className="w-full relative z-10">
-      <SvgBgSection3 className="absolute -top-40" />
-      <Halo size={700} rotation={-30} style={{ top: "450%", left: "2%" }} />
+    <div className="w-full relative">
+      <SvgBgSection3 className="absolute -top-40 left-0 w-full" />
+      <Halo
+        size={700}
+        rotation={-30}
+        style={{ top: "150%", left: "2%", position: "absolute" }}
+      />
       <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32 ">
         <Intro3 />
         <SpecialityLines />

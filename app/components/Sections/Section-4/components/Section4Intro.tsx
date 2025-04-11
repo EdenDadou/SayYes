@@ -61,11 +61,15 @@ export default function Section4Intro() {
     <section ref={container} className="relative h-[300vh] top-40 pb-32">
       <div className="sticky -top-0 h-screen  flex justify-center flex-col w-full items-center">
         <SvgAnnotation className="absolute z-50 top-[5%] right-[27%] w-auto" />
-        <Halo size={1000} rotation={-30} style={{ top: "0%", left: "-20%" }} />
+        <Halo
+          size={1000}
+          rotation={-30}
+          style={{ top: "0%", left: "-20%", position: "absolute" }}
+        />
         <Halo
           size={1000}
           rotation={30}
-          style={{ top: "100%", right: "-20%" }}
+          style={{ top: "100%", right: "-20%", position: "absolute" }}
         />
         <SvgSection4BgLt
           className={`w-[35%] absolute z-50 -top-52 left-0 ${

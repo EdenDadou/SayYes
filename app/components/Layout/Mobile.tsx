@@ -15,7 +15,7 @@ export const VIDEO_DURATION = 4.5;
 
 export default function Mobile() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isIntroFinish, shouldPlayIntro } = useIntroTimer();
+  const { isIntroFinish } = useIntroTimer();
 
   useSmoothScroll();
 

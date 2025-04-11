@@ -36,14 +36,12 @@ export default function Desktop() {
       ) : (
         <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
           <Header setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
-          {/* Bg Layer */}
-          {/* Rendu des sections */}
           <Section1 isIntroFinish={isIntroFinish} />
           <Section2 />
-          {/* <Section3 /> */}
-          {/* <Section4 /> */}
-          {/* <Section5 setIsOpen={setIsOpen} /> */}
-          {/* <Footer /> */}
+          <Section3 />
+          <Section4 />
+          <Section5 setIsOpen={setIsOpen} />
+          <Footer />
         </div>
       )}
     </div>
