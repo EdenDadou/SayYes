@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ModalParlonsDesign from "~/components/ModalParlonsDesign";
 // import LoaderIntro from "~/components/LoaderIntro";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
 import HeaderMobile from "../Header/mobile/HeaderMobile";
@@ -10,6 +9,7 @@ import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
 import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
 import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 import "~/styles/tailwind.css";
+import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -20,13 +20,17 @@ export default function Mobile() {
   useSmoothScroll();
 
   return (
-    <div className="flex items-center justify-center w-screen h-max">
-      <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
+    <div className="flex items-center justify-center w-screen h-max relative">
+      <ModalParlonsDesignMobile isOpen={isOpen} />
       {/* {shouldPlayIntro ? (
         <LoaderIntro />
       ) : ( */}
       <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
-        <HeaderMobile setIsOpen={setIsOpen} isIntroFinish={isIntroFinish} />
+        <HeaderMobile
+          setIsOpen={setIsOpen}
+          isIntroFinish={isIntroFinish}
+          isOpen={isOpen}
+        />
 
         {/* Rendu des sections */}
         <Section1Mobile />

@@ -45,7 +45,7 @@ const variantsKey = (i: number) => ({
 export default function IntroSection5() {
   const container = useRef(null);
   const containerIntro = useRef(null);
-  const isInView = useInView(containerIntro, { once: true, amount: "all" });
+  const isInView = useInView(containerIntro, { once: true, amount: "some" });
 
   return (
     <div

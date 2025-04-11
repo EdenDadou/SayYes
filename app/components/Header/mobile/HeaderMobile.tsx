@@ -6,9 +6,10 @@ import { redirect } from "@remix-run/react";
 interface HeaderProps {
   setIsOpen: (value: boolean) => void;
   isIntroFinish: boolean;
+  isOpen: boolean;
 }
 
-const HeaderMobile = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
+const HeaderMobile = ({ setIsOpen, isOpen, isIntroFinish }: HeaderProps) => {
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -43,10 +44,10 @@ const HeaderMobile = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
       }}
       variants={variants}
       animate={isIntroFinish ? "visible" : "hidden"}
-      className="sticky top-0 w-screen left-0 right-0 shadow-3xl z-[100] shadow-custom-inset drop-shadow-custom overflow-hidden"
+      className="sticky top-0 w-screen left-0 right-0 shadow-3xl z-[100] shadow-custom-inset drop-shadow-custom overflow-hidden "
     >
       <div
-        className={`w-full bg-gray-400 h-12 flex flex-row items-center justify-between px-7 shadow-3xl shadow-custom-inset drop-shadow-custom
+        className={`w-full bg-gray-400 h-14 flex flex-row items-center justify-between px-7 shadow-3xl shadow-custom-inset drop-shadow-custom
               ${showHeader ? "translate-x-0" : "-translate-x-[120%]"} `}
       >
         {/* Navigation avec boutons et logo */}
@@ -56,7 +57,7 @@ const HeaderMobile = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
         </div>
         <div className="absolute -top-1 left-1/2 -translate-x-1/2 flex flex-row gap-10 items-center">
           <SvgLogo
-            height={60}
+            height={70}
             width={200}
             className="rotate-2 cursor-pointer w-fit"
             onClick={() => redirect("/")}
@@ -64,7 +65,7 @@ const HeaderMobile = ({ setIsOpen, isIntroFinish }: HeaderProps) => {
         </div>
         <button
           className="absolute top-0 right-0 h-full w-auto"
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen(!isOpen)}
           aria-label="Open contact menu"
         >
           <img src="images/header/contact.png" alt="" className="h-full " />

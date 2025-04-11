@@ -1,12 +1,11 @@
 import type { SVGProps } from "react";
-const SvgSection5IntroBg = ({ className, props }: SVGProps<SVGSVGElement>) => (
+const SvgSection5IntroBg = ({ className }: SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 985 1129" // Maintient les proportions
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={`w-[75%] h-auto ${className}`} // Règle la taille via Tailwind/CSS
     preserveAspectRatio="xMidYMid slice" // Ajuste sans déformation
-    {...props}
   >
     <line
       x1={0.25}
