@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main # Remplacez 'main' par la branche que vous souhaitez utiliser pour le déploiement
+      - main
 
 jobs:
   deploy:
@@ -20,15 +20,29 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PRIVATEKEY }}
 
+      # 3. Ajouter le VPS aux hôtes connus (évite les blocages avec StrictHostKeyChecking)
       - name: Add VPS to known hosts
         run: ssh-keyscan -p 49999 141.95.53.183 >> ~/.ssh/known_hosts
-      # 3. Déployer le projet
+
+      # 4. Déploiement de l'application
       - name: Deploy application
         run: |
           ssh -o StrictHostKeyChecking=no debian@141.95.53.183 -p 49999 << 'EOF'
-          cd /var/www/remix
-          git pull origin main
-          npm install
-          npm run build
-          pm2 restart remix-app
+          set -e
+          echo "🛰️ Connexion SSH réussie."
+          cd /var/www/remix || { echo "❌ Échec : dossier introuvable"; exit 1; }
+
+          echo "📦 Pull du dépôt..."
+          git pull origin main || { echo "❌ Échec git pull"; exit 1; }
+
+          echo "📦 Installation des dépendances..."
+          npm install || { echo "❌ Échec npm install"; exit 1; }
+
+          echo "🏗️ Build de l'application..."
+          npm run build || { echo "❌ Échec npm build"; exit 1; }
+
+          echo "🚀 Redémarrage de l'application via PM2..."
+          pm2 restart remix-app || { echo "❌ Échec PM2 restart"; exit 1; }
+
+          echo "✅ Déploiement terminé avec succès."
           EOF
