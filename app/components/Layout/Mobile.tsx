@@ -6,10 +6,10 @@ import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import Section1Mobile from "../Sections/Section-1/mobile/Section1Mobile";
 import Section2Mobile from "../Sections/Section-2/mobile/Section2Mobile";
 import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
-//import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
-//import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
+import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
+import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 import "~/styles/tailwind.css";
-//import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
+import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -21,6 +21,7 @@ export default function Mobile() {
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">
+      <ModalParlonsDesignMobile isOpen={isOpen} />
       {/* {shouldPlayIntro ? (
         <LoaderIntro />
       ) : ( */}
@@ -35,8 +36,9 @@ export default function Mobile() {
         <Section1Mobile />
         <Section2Mobile />
         <Section3Mobile />
-        {/*<Section5Mobile setIsOpen={setIsOpen} />
-        <Footer /> */}
+        <Section4Mobile />
+        <Section5Mobile setIsOpen={setIsOpen} />
+        {/*<Footer /> */}
       </div>
       {/* )} */}
     </div>
