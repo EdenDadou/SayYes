@@ -20,13 +20,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PRIVATEKEY }}
 
+      - name: Add VPS to known hosts
+        run: ssh-keyscan -p 49999 141.95.53.183 >> ~/.ssh/known_hosts
       # 3. Déployer le projet
       - name: Deploy application
-        run: |
-          ssh -o StrictHostKeyChecking=no debian@141.95.53.183 -p 49999 << 'EOF'
+        run: cd /var/www/remix
+          set -e
           cd /var/www/remix
-          git pull origin main # Remplacez 'main' par la branche appropriée
-          npm install
+          git pull origin main
+          npm install --production
           npm run build
-          pm2 restart remix-app
+          pm2 restart remix-app || pm2 start build/index.js --name remix-app
           EOF
