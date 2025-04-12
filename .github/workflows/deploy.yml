@@ -25,10 +25,8 @@ jobs:
       # 3. Déployer le projet
       - name: Deploy application
         run: cd /var/www/remix
-          set -e
-          cd /var/www/remix
           git pull origin main
-          npm install --production
+          npm install
           npm run build
-          pm2 restart remix-app || pm2 start build/index.js --name remix-app
+          pm2 restart remix-app
           EOF
