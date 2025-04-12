@@ -24,7 +24,9 @@ jobs:
         run: ssh-keyscan -p 49999 141.95.53.183 >> ~/.ssh/known_hosts
       # 3. Déployer le projet
       - name: Deploy application
-        run: cd /var/www/remix
+        run: |
+          ssh -o StrictHostKeyChecking=no debian@141.95.53.183 -p 49999 << 'EOF'
+          cd /var/www/remix
           git pull origin main
           npm install
           npm run build
