@@ -2,7 +2,6 @@ import React, { Suspense, useState } from "react";
 // import LoaderIntro from "~/components/LoaderIntro";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
 import HeaderMobile from "../Header/mobile/HeaderMobile";
-import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
 import "~/styles/tailwind.css";
 
 const Section1Mobile = React.lazy(
@@ -26,8 +25,6 @@ export const VIDEO_DURATION = 4.5;
 export default function Mobile() {
   const [isOpen, setIsOpen] = useState(false);
   const { isIntroFinish } = useIntroTimer();
-
-  // useSmoothScroll();
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">

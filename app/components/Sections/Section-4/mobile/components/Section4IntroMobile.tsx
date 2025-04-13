@@ -33,12 +33,12 @@ export default function Section4IntroMobile() {
   const { scrollYProgress } = useScroll({ target: containerRef });
 
   // Lissage du scroll avec useSpring
-  const rawX = useTransform(scrollYProgress, [0.05, 1], ["0%", "-330%"]);
-  const x = useSpring(rawX, {
-    stiffness: 70,
-    damping: 20,
-    mass: 1,
-  });
+  const x = useTransform(scrollYProgress, [0.1, 1], ["42%", "-42%"]);
+  // const x = useSpring(rawX, {
+  //   stiffness: 100, // plus réactif (répond vite au scroll)
+  //   damping: 10, // bien amorti, sans rebond
+  //   mass: 1,
+  // });
 
   const isInView = useInView(introRef, { once: true, amount: "all" });
 
@@ -92,7 +92,7 @@ export default function Section4IntroMobile() {
 
         {/* Défilement horizontal animé */}
         <motion.div
-          className="flex flex-row gap-5 mt-5 w-max px-5 no-scrollbar"
+          className="flex flex-row justify-start gap-5 mt-5 w-max px-5 no-scrollbar"
           style={{
             x,
             willChange: "transform",
