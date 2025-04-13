@@ -22,6 +22,7 @@ export default function Page404Mobile() {
         >
           <div className="w-full relative">
             <img
+              loading="lazy"
               src="images/404/bgMobile.png"
               alt="404"
               className="w-full h-screen"
@@ -31,7 +32,7 @@ export default function Page404Mobile() {
               replace
               className="w-48 absolute bottom-[5%] right-[3%]"
             >
-              <img src="images/404/ctaSend.png" alt="404" />
+              <img loading="lazy" src="images/404/ctaSend.png" alt="404" />
             </Link>
           </div>
         </div>

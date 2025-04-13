@@ -63,6 +63,7 @@ export default function IntroSection5Mobile() {
           className="w-screen flex justify-center items-center"
         >
           <img
+            loading="lazy"
             src="images/section5/Intro5.png"
             alt="intro"
             className="w-screen"

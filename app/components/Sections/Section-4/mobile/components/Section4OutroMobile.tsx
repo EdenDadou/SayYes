@@ -46,6 +46,7 @@ export default function Section4OutroMobile() {
         animate={isInView ? "visible" : "hidden"}
       >
         <img
+          loading="lazy"
           src="images/section4/Outro4.png"
           alt="L'agence qui met tout le monde d'accord !"
           className="w-full"

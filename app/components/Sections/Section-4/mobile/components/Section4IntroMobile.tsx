@@ -48,7 +48,7 @@ export default function Section4IntroMobile() {
   return (
     <section
       ref={container}
-      className="relative top-0 h-[500vh] w-screen"
+      className="relative top-0 h-[600vh] w-screen no-scrollbar"
       style={{
         backgroundImage: 'url("images/section4/bg.png")',
         backgroundSize: "contain",
@@ -81,6 +81,7 @@ export default function Section4IntroMobile() {
             animate={isInView ? "visible" : "hidden"}
           >
             <img
+              loading="lazy"
               src="images/section4/Intro.png"
               alt="vous pilotez nous creons !"
               className="w-full"
@@ -95,7 +96,7 @@ export default function Section4IntroMobile() {
         <motion.div
           style={{ x }}
           ref={horizontalRef}
-          className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5  overflow-x-hidden"
+          className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5  overflow-x-hidden no-scrollbar"
         >
           {cards.map((item, index) => {
             return (

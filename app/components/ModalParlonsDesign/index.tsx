@@ -26,7 +26,12 @@ export default function ModalParlonsDesign({
           className="absolute top-3 right-3 text-black cursor-pointer z-20"
           onClick={close}
         >
-          <img src="/images/modal/ctaClose.png" alt="close" width={20} />
+          <img
+            loading="lazy"
+            src="/images/modal/ctaClose.png"
+            alt="close"
+            width={20}
+          />
         </button>
         <form className=" w-1/2 h-[78vh] drop-shadow-custom shadow-left p-8 py-10 flex flex-col gap-8">
           <label className="block">

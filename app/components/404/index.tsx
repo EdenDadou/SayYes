@@ -22,9 +22,14 @@ export default function Page404() {
           }}
         >
           <div className="w-full relative">
-            <img src="images/404/bg.png" alt="404" className="w-full" />
+            <img
+              loading="lazy"
+              src="images/404/bg.png"
+              alt="404"
+              className="w-full"
+            />
             <Link to="/" replace className="w-60 absolute top-[60%] left-[52%]">
-              <img src="images/404/ctaSend.png" alt="404" />
+              <img loading="lazy" src="images/404/ctaSend.png" alt="404" />
             </Link>
           </div>
         </div>

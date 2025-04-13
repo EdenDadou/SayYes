@@ -1,4 +1,4 @@
-import { motion, MotionValue, useInView } from "framer-motion";
+import { motion, MotionValue } from "framer-motion";
 import { useRef } from "react";
 
 interface AnimatedCardProps {
@@ -33,7 +33,7 @@ export const AnimatedCardMobile = ({ card, i }: AnimatedCardProps) => {
       animate={"visible"}
       className="w-[80vw] mb-20"
     >
-      <img src={card} alt="cards" className="w-screen" />
+      <img loading="lazy" src={card} alt="cards" className="w-screen" />
     </motion.div>
   );
 };

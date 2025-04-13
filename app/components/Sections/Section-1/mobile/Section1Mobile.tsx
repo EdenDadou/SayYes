@@ -27,7 +27,12 @@ export default function Section1Mobile() {
           }}
         >
           {/* <SvgTexteIntro className="w-[65%]" /> */}
-          <img src="images/section1/Intro1.png" alt="" className="w-3/4" />
+          <img
+            loading="lazy"
+            src="images/section1/Intro1.png"
+            alt=""
+            className="w-3/4"
+          />
           <div className="w-full flex flex-col items-center justify-center text-gray-50 font-jakarta">
             <span>Nous imaginons des solutions</span>
             <span>visuelles pour rendre votre</span>
@@ -58,6 +63,7 @@ export default function Section1Mobile() {
           }}
         >
           <img
+            loading="lazy"
             src="./images/illuIntro.png"
             alt="deco"
             className="w-full px-10"

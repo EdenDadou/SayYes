@@ -67,7 +67,12 @@ const InfiniteCarousel = () => {
               WebkitMaskPosition: "center",
             }}
           >
-            <img src={c.src} alt="card1" className="cursor-pointer w-full" />
+            <img
+              loading="lazy"
+              src={c.src}
+              alt="card1"
+              className="cursor-pointer w-full"
+            />
           </div>
         ))}
       </div>

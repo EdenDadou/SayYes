@@ -26,6 +26,7 @@ export default function ModalParlonsDesignMobile({
         }}
       >
         <img
+          loading="lazy"
           src="/images/modal/IntroModal.png"
           alt="Intro Parlons design"
           className="w-full"

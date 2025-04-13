@@ -1,13 +1,23 @@
-import { useState } from "react";
+import React, { useState } from "react";
 // import LoaderIntro from "~/components/LoaderIntro";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
 import HeaderMobile from "../Header/mobile/HeaderMobile";
 import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
-import Section1Mobile from "../Sections/Section-1/mobile/Section1Mobile";
-import Section2Mobile from "../Sections/Section-2/mobile/Section2Mobile";
-import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
-import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
-//import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
+
+const Section1Mobile = React.lazy(
+  () => import("../Sections/Section-1/mobile/Section1Mobile")
+);
+const Section2Mobile = React.lazy(
+  () => import("../Sections/Section-2/mobile/Section2Mobile")
+);
+const Section3Mobile = React.lazy(
+  () => import("../Sections/Section-3/mobile/Section3Mobile")
+);
+const Section4Mobile = React.lazy(
+  () => import("../Sections/Section-4/mobile/Section4Mobile")
+);
+// const Section5Mobile = React.lazy(() => import("../Sections/Section-5/mobile/Section5Mobile"));
+
 import "~/styles/tailwind.css";
 // import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 //import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";

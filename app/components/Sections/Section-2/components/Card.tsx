@@ -59,7 +59,12 @@ export default function Card({
             className="w-[42%] h-fit absolute right-36 top-32"
             style={{ scale: imageScale }}
           >
-            <img src={image} alt="content" className="object-cover" />
+            <img
+              loading="lazy"
+              src={image}
+              alt="content"
+              className="object-cover"
+            />
           </motion.div>
         </div>
       </motion.div>

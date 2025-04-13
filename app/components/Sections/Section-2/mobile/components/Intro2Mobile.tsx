@@ -40,6 +40,7 @@ export default function Intro2Mobile() {
         className="w-full h-full z-20 flex justify-center items-center"
       >
         <img
+          loading="lazy"
           src="images/section2/Intro2.png"
           className="w-3/4"
           alt="Vous êtes unique, votre com doit l'être aussi !"

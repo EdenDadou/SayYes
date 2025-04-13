@@ -44,6 +44,7 @@ export default function OutroSection5Mobile({ setIsOpen }: Section5Props) {
       >
         {/* <SvgSection5Outro className="z-20 mx-[15%]" /> */}
         <img
+          loading="lazy"
           src="images/section5/Outro5.png"
           alt="outro"
           className="w-screen"

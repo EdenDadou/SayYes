@@ -22,7 +22,7 @@ export default function SpecialityLinesMobile() {
           }}
         >
           <div className="py-5">
-            <img src={image} alt="speciality" />
+            <img loading="lazy" src={image} alt="speciality" />
           </div>
 
           {title === isSelected ? (

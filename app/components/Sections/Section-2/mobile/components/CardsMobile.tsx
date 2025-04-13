@@ -57,7 +57,12 @@ export default function CardMobile({
               className="w-1/3 h-auto my-10"
               style={{ scale: imageScale }}
             >
-              <img src={image} alt="content" className="object-cover" />
+              <img
+                loading="lazy"
+                src={image}
+                alt="content"
+                className="object-cover"
+              />
             </motion.div>
             <div className="pl-8">{cta}</div>
           </div>

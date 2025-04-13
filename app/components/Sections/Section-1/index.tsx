@@ -39,7 +39,12 @@ export default function Section1({ isIntroFinish }: propsSection1) {
           }}
         >
           <div className="absolute right-[-70%] h-fit w-[200%]">
-            <img src="./images/illuIntro.png" alt="deco" className="w-[40%]" />
+            <img
+              loading="lazy"
+              src="./images/illuIntro.png"
+              alt="deco"
+              className="w-[40%]"
+            />
           </div>
         </motion.div>
 
@@ -75,7 +80,12 @@ export default function Section1({ isIntroFinish }: propsSection1) {
           }}
         >
           <div className="absolute left-[50%] h-fit w-[200%]">
-            <img src="./images/illuIntro.png" alt="deco" className="w-[40%]" />
+            <img
+              loading="lazy"
+              src="./images/illuIntro.png"
+              alt="deco"
+              className="w-[40%]"
+            />
           </div>
         </motion.div>
       </div>

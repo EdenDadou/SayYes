@@ -52,7 +52,12 @@ const HeaderMobile = ({ setIsOpen, isOpen, isIntroFinish }: HeaderProps) => {
       >
         {/* Navigation avec boutons et logo */}
         <div className="absolute top-0 left-0 bottom-0 h-full w-auto">
-          <img src="images/header/menu.png" alt="" className="h-full" />
+          <img
+            loading="lazy"
+            src="images/header/menu.png"
+            alt=""
+            className="h-full"
+          />
           {/* <SvgMenuMobile /> */}
         </div>
         <div className="absolute -top-1 left-1/2 -translate-x-1/2 flex flex-row gap-10 items-center">
@@ -68,7 +73,12 @@ const HeaderMobile = ({ setIsOpen, isOpen, isIntroFinish }: HeaderProps) => {
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Open contact menu"
         >
-          <img src="images/header/contact.png" alt="" className="h-full " />
+          <img
+            loading="lazy"
+            src="images/header/contact.png"
+            alt=""
+            className="h-full "
+          />
         </button>
       </div>
     </motion.div>

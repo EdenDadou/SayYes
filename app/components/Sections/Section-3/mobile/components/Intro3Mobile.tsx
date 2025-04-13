@@ -37,6 +37,7 @@ export default function Intro3Mobile() {
         className="w-full px-8"
       >
         <img
+          loading="lazy"
           src="images/section3/Intro3.png"
           className="w-full"
           alt="Un besoin? Decouvrez nos solutions !"
