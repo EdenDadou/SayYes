@@ -97,16 +97,14 @@ export default function Section4IntroMobile() {
           ref={horizontalRef}
           className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5  overflow-x-hidden"
         >
-          {cards.map((item, index) => {
-            return (
-              <AnimatedCardMobile
-                i={index}
-                key={`p_${index}`}
-                card={item.img}
-                progress={scrollYProgress}
-              />
-            );
-          })}
+          {cards.map((item, index) => (
+            <img
+              key={`p_${index}`}
+              src={item.img}
+              alt="cards"
+              className="w-screen"
+            />
+          ))}
         </motion.div>
       </div>
     </section>
