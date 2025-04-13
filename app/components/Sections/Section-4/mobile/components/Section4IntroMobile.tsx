@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Halo from "~/components/BackgroundLayer/components/Halo";
+import { AnimatedCardMobile } from "./AnimatedCardMobile";
 const cards = [
   {
     img: "/images/section4/card_kick_off.png",
@@ -41,15 +42,13 @@ export default function Section4IntroMobile() {
     target: container,
   });
 
-  const x = useTransform(scrollYProgress, [0.6, 2], ["40%", "-420%"]);
+  const x = useTransform(scrollYProgress, [0.1, 3], ["40%", "-220%"]);
   const isInView = useInView(containerIntro, { once: true, amount: "all" });
-
-  console.log("isInView", x);
 
   return (
     <section
       ref={container}
-      className="relative top-0 h-[800vh] w-screen"
+      className="relative top-0 h-[500vh] w-screen"
       style={{
         backgroundImage: 'url("images/section4/bg.png")',
         backgroundSize: "contain",
@@ -94,18 +93,20 @@ export default function Section4IntroMobile() {
           </p>
         </div>
         <motion.div
-          ref={horizontalRef}
           style={{ x }}
-          className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5"
+          ref={horizontalRef}
+          className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5  overflow-x-hidden"
         >
-          {cards.map((item, index) => (
-            <img
-              key={`p_${index}`}
-              src={item.img}
-              alt="cards"
-              className="w-screen"
-            />
-          ))}
+          {cards.map((item, index) => {
+            return (
+              <AnimatedCardMobile
+                i={index}
+                key={`p_${index}`}
+                card={item.img}
+                progress={scrollYProgress}
+              />
+            );
+          })}
         </motion.div>
       </div>
     </section>

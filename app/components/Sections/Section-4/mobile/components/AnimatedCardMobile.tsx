@@ -9,12 +9,6 @@ interface AnimatedCardProps {
 
 export const AnimatedCardMobile = ({ card, i }: AnimatedCardProps) => {
   const container = useRef(null);
-  const margin = "20px";
-  const isInView = useInView(container, {
-    once: true,
-    amount: "some",
-    margin: margin,
-  });
 
   const variants = {
     visible: {
@@ -36,7 +30,7 @@ export const AnimatedCardMobile = ({ card, i }: AnimatedCardProps) => {
         x: -100,
       }}
       variants={variants}
-      animate={isInView ? "visible" : "hidden"}
+      animate={"visible"}
       className="w-[80vw] mb-20"
     >
       <img src={card} alt="cards" className="w-screen" />
