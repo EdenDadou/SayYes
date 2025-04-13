@@ -22,6 +22,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <link rel="preload" as="image" href="/images/modal/bg.png" />
+        <link rel="preload" as="image" href="/images/404/404.gif" />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/section4/card_conception.png"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/section4/card_creation.png"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/section4/card_declinaison.png"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/section4/card_kick_off.png"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/section4/card_livraison.png"
+        />
         <Links />
       </head>
       <body>

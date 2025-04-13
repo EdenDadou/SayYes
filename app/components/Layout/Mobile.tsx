@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 // import LoaderIntro from "~/components/LoaderIntro";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
 import HeaderMobile from "../Header/mobile/HeaderMobile";
 import useSmoothScroll from "~/utils/hooks/useSmoothScroll";
+import "~/styles/tailwind.css";
 
 const Section1Mobile = React.lazy(
   () => import("../Sections/Section-1/mobile/Section1Mobile")
@@ -18,8 +19,6 @@ const Section4Mobile = React.lazy(
 );
 // const Section5Mobile = React.lazy(() => import("../Sections/Section-5/mobile/Section5Mobile"));
 
-import "~/styles/tailwind.css";
-// import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 //import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 export const VIDEO_DURATION = 4.5;
@@ -28,7 +27,7 @@ export default function Mobile() {
   const [isOpen, setIsOpen] = useState(false);
   const { isIntroFinish } = useIntroTimer();
 
-  useSmoothScroll();
+  // useSmoothScroll();
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">
@@ -37,19 +36,21 @@ export default function Mobile() {
         <LoaderIntro />
       ) : ( */}
       <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
-        <HeaderMobile
-          setIsOpen={setIsOpen}
-          isIntroFinish={isIntroFinish}
-          isOpen={isOpen}
-        />
+        <Suspense fallback={<div>Chargement...</div>}>
+          <HeaderMobile
+            setIsOpen={setIsOpen}
+            isIntroFinish={isIntroFinish}
+            isOpen={isOpen}
+          />
 
-        {/* Rendu des sections */}
-        <Section1Mobile />
-        <Section2Mobile />
-        <Section3Mobile />
-        <Section4Mobile />
-        {/* <Section5Mobile setIsOpen={setIsOpen} /> */}
-        {/*<Footer /> */}
+          {/* Rendu des sections */}
+          <Section1Mobile />
+          <Section2Mobile />
+          <Section3Mobile />
+          <Section4Mobile />
+          {/* <Section5Mobile setIsOpen={setIsOpen} /> */}
+          {/*<Footer /> */}
+        </Suspense>
       </div>
       {/* )} */}
     </div>

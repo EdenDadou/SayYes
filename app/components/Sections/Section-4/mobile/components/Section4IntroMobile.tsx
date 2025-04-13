@@ -1,5 +1,11 @@
 import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import Halo from "~/components/BackgroundLayer/components/Halo";
 import { AnimatedCardMobile } from "./AnimatedCardMobile";
 const cards = [
@@ -42,7 +48,11 @@ export default function Section4IntroMobile() {
     target: container,
   });
 
-  const x = useTransform(scrollYProgress, [0.1, 3], ["40%", "-220%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["50%", "-40%"]);
+  // const x = useSpring(rawX, {
+  //   stiffness: 80, // plus bas = plus smooth
+  //   damping: 20,
+  // });
   const isInView = useInView(containerIntro, { once: true, amount: "all" });
 
   return (
@@ -96,7 +106,7 @@ export default function Section4IntroMobile() {
         <motion.div
           style={{ x }}
           ref={horizontalRef}
-          className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5  overflow-x-hidden no-scrollbar"
+          className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5 overflow-x-hidden no-scrollbar"
         >
           {cards.map((item, index) => {
             return (
