@@ -9,6 +9,7 @@ import Section3Mobile from "../Sections/Section-3/mobile/Section3Mobile";
 import Section4Mobile from "../Sections/Section-4/mobile/Section4Mobile";
 //import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 import "~/styles/tailwind.css";
+import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 //import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 export const VIDEO_DURATION = 4.5;
@@ -37,8 +38,8 @@ export default function Mobile() {
         <Section2Mobile />
         <Section3Mobile />
         <Section4Mobile />
-        {/*<Section5Mobile setIsOpen={setIsOpen} />
-        <Footer /> */}
+        <Section5Mobile setIsOpen={setIsOpen} />
+        {/*<Footer /> */}
       </div>
       {/* )} */}
     </div>

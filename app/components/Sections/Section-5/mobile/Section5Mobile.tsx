@@ -18,7 +18,7 @@ export default function Section5Mobile({ setIsOpen }: Section5Props) {
       }}
     >
       <IntroSection5Mobile />
-      <OutroSection5Mobile setIsOpen={setIsOpen} />
+      {/* <OutroSection5Mobile setIsOpen={setIsOpen} /> */}
     </div>
   );
 }
