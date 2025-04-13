@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useInView,
@@ -29,24 +29,49 @@ const variants = {
 export default function Section4IntroMobile() {
   const containerRef = useRef(null);
   const introRef = useRef(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [sliderWidth, setSliderWidth] = useState(0);
+  const [scrollHeight, setScrollHeight] = useState(0);
 
   const { scrollYProgress } = useScroll({ target: containerRef });
+  // Mesure du slider
+  useEffect(() => {
+    const update = () => {
+      if (sliderRef.current) {
+        const totalWidth = sliderRef.current.scrollWidth;
+        const windowHeight = window.innerHeight;
+        const scrollDistance = totalWidth; // ou ajoute un padding si tu veux un peu plus de marge
+        setSliderWidth(totalWidth - window.innerWidth);
+        setScrollHeight(scrollDistance + windowHeight); // on ajoute une hauteur pour que le sticky tienne
+      }
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  console.log(sliderWidth);
 
   // Lissage du scroll avec useSpring
-  const x = useTransform(scrollYProgress, [0.1, 1], ["42%", "-42%"]);
-  // const x = useSpring(rawX, {
-  //   stiffness: 100, // plus réactif (répond vite au scroll)
-  //   damping: 10, // bien amorti, sans rebond
-  //   mass: 1,
-  // });
+  const rawX = useTransform(
+    scrollYProgress,
+    [0.1, 0.9],
+    [750, -(sliderWidth - 600)]
+  );
+  const x = useSpring(rawX, {
+    stiffness: 50, // plus réactif (répond vite au scroll)
+    damping: 60, // bien amorti, sans rebond
+    mass: 0.6,
+  });
 
   const isInView = useInView(introRef, { once: true, amount: "all" });
 
   return (
     <section
       ref={containerRef}
-      className="relative h-[600vh] w-screen"
+      className="relative w-screen"
       style={{
+        height: `${scrollHeight}px`,
         backgroundImage: 'url("/images/section4/bg.png")',
         backgroundSize: "contain",
         backgroundPositionY: "-100px",
@@ -92,6 +117,7 @@ export default function Section4IntroMobile() {
 
         {/* Défilement horizontal animé */}
         <motion.div
+          ref={sliderRef}
           className="flex flex-row justify-start gap-5 mt-5 w-max px-5 no-scrollbar"
           style={{
             x,
