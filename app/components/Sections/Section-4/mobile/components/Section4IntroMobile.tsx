@@ -7,66 +7,54 @@ import {
   useTransform,
 } from "framer-motion";
 import Halo from "~/components/BackgroundLayer/components/Halo";
-import { AnimatedCardMobile } from "./AnimatedCardMobile";
+import { MemoCard } from "./AnimatedCardMobile";
+
 const cards = [
-  {
-    img: "/images/section4/card_kick_off.png",
-  },
-  {
-    img: "/images/section4/card_conception.png",
-  },
-  {
-    img: "/images/section4/card_creation.png",
-  },
-  {
-    img: "/images/section4/card_declinaison.png",
-  },
-  {
-    img: "/images/section4/card_livraison.png",
-  },
+  { img: "/images/section4/card_kick_off.png" },
+  { img: "/images/section4/card_conception.png" },
+  { img: "/images/section4/card_creation.png" },
+  { img: "/images/section4/card_declinaison.png" },
+  { img: "/images/section4/card_livraison.png" },
 ];
 
 const variants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: {
-      duration: 1.2,
-      delay: 0.2,
-      ease: "easeOut",
-    },
+    transition: { duration: 1.2, delay: 0.2, ease: "easeOut" },
   },
   hidden: { opacity: 0, x: -100 },
 };
 
 export default function Section4IntroMobile() {
-  const container = useRef(null);
-  const containerIntro = useRef(null);
-  const horizontalRef = useRef(null);
+  const containerRef = useRef(null);
+  const introRef = useRef(null);
 
-  const { scrollYProgress } = useScroll({
-    target: container,
+  const { scrollYProgress } = useScroll({ target: containerRef });
+
+  // Lissage du scroll avec useSpring
+  const rawX = useTransform(scrollYProgress, [0.05, 1], ["0%", "-330%"]);
+  const x = useSpring(rawX, {
+    stiffness: 70,
+    damping: 20,
+    mass: 1,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["50%", "-40%"]);
-  // const x = useSpring(rawX, {
-  //   stiffness: 80, // plus bas = plus smooth
-  //   damping: 20,
-  // });
-  const isInView = useInView(containerIntro, { once: true, amount: "all" });
+  const isInView = useInView(introRef, { once: true, amount: "all" });
 
   return (
     <section
-      ref={container}
-      className="relative top-0 h-[600vh] w-screen no-scrollbar"
+      ref={containerRef}
+      className="relative h-[600vh] w-screen"
       style={{
-        backgroundImage: 'url("images/section4/bg.png")',
+        backgroundImage: 'url("/images/section4/bg.png")',
         backgroundSize: "contain",
         backgroundPositionY: "-100px",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="sticky h-screen top-0 flex justify-start flex-col w-full items-center mt-80 overflow-y-scroll">
+      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-start mt-80 overflow-hidden">
+        {/* Halos */}
         <Halo
           size={1000}
           rotation={-30}
@@ -78,21 +66,19 @@ export default function Section4IntroMobile() {
           style={{ top: "100%", right: "-20%", position: "absolute" }}
         />
 
+        {/* Intro */}
         <div
-          className="flex flex-col justify-center items-center  gap-2 w-screen py-8 px-10"
-          ref={containerIntro}
+          ref={introRef}
+          className="flex flex-col justify-center items-center gap-2 w-screen py-8 px-10"
         >
           <motion.div
-            initial={{
-              opacity: 0,
-              x: -100,
-            }}
-            variants={variants}
+            initial="hidden"
             animate={isInView ? "visible" : "hidden"}
+            variants={variants}
           >
             <img
               loading="lazy"
-              src="images/section4/Intro.png"
+              src="/images/section4/Intro.png"
               alt="vous pilotez nous creons !"
               className="w-full"
             />
@@ -103,21 +89,19 @@ export default function Section4IntroMobile() {
             <br /> inspiration.
           </p>
         </div>
+
+        {/* Défilement horizontal animé */}
         <motion.div
-          style={{ x }}
-          ref={horizontalRef}
-          className="flex flex-row justify-start items-start gap-5 mt-5 w-auto px-5 overflow-x-hidden no-scrollbar"
+          className="flex flex-row gap-5 mt-5 w-max px-5 no-scrollbar"
+          style={{
+            x,
+            willChange: "transform",
+            transform: "translateZ(0)",
+          }}
         >
-          {cards.map((item, index) => {
-            return (
-              <AnimatedCardMobile
-                i={index}
-                key={`p_${index}`}
-                card={item.img}
-                progress={scrollYProgress}
-              />
-            );
-          })}
+          {cards.map((card, index) => (
+            <MemoCard key={index} src={card.img} />
+          ))}
         </motion.div>
       </div>
     </section>
