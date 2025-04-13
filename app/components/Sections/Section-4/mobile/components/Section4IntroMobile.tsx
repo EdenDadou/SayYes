@@ -30,19 +30,19 @@ export default function Section4IntroMobile() {
   const containerRef = useRef(null);
   const introRef = useRef(null);
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [sliderWidth, setSliderWidth] = useState(0);
-  const [scrollHeight, setScrollHeight] = useState(0);
 
   const { scrollYProgress } = useScroll({ target: containerRef });
-  // Mesure du slider
+  const [totalWidth, setTotalWidth] = useState(0);
+
   useEffect(() => {
     const update = () => {
       if (sliderRef.current) {
-        const totalWidth = sliderRef.current.scrollWidth;
-        const windowHeight = window.innerHeight;
-        const scrollDistance = totalWidth; // ou ajoute un padding si tu veux un peu plus de marge
-        setSliderWidth(totalWidth - window.innerWidth);
-        setScrollHeight(scrollDistance + windowHeight); // on ajoute une hauteur pour que le sticky tienne
+        const cardWidth = window.innerWidth * 0.8;
+        const totalCardsWidth = cards.length * cardWidth;
+        const totalGap = (cards.length - 1) * 20; // 20px gap
+        const totalScrollWidth = totalCardsWidth + totalGap;
+        const extraPadding = window.innerHeight; // pour que sticky reste visible
+        setTotalWidth(totalScrollWidth + extraPadding);
       }
     };
     update();
@@ -50,14 +50,7 @@ export default function Section4IntroMobile() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  console.log(sliderWidth);
-
-  // Lissage du scroll avec useSpring
-  const rawX = useTransform(
-    scrollYProgress,
-    [0.1, 0.9],
-    [750, -(sliderWidth - 600)]
-  );
+  const rawX = useTransform(scrollYProgress, [0.2, 1], [900, -900]);
   const x = useSpring(rawX, {
     stiffness: 50, // plus réactif (répond vite au scroll)
     damping: 60, // bien amorti, sans rebond
@@ -69,9 +62,9 @@ export default function Section4IntroMobile() {
   return (
     <section
       ref={containerRef}
-      className="relative w-screen"
+      className={`relative w-screen `}
       style={{
-        height: `${scrollHeight}px`,
+        height: `${totalWidth}px`,
         backgroundImage: 'url("/images/section4/bg.png")',
         backgroundSize: "contain",
         backgroundPositionY: "-100px",
