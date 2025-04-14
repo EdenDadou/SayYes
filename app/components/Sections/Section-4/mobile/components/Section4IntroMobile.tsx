@@ -46,11 +46,15 @@ export default function Section4IntroMobile() {
       }
     };
     update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    // window.addEventListener("resize", update);
+    // return () => window.removeEventListener("resize", update);
   }, []);
 
-  const rawX = useTransform(scrollYProgress, [0.2, 1], [900, -900]);
+  const rawX = useTransform(
+    scrollYProgress,
+    [0.2, 1],
+    [0, -totalWidth + window.innerWidth]
+  );
   const x = useSpring(rawX, {
     stiffness: 50, // plus réactif (répond vite au scroll)
     damping: 60, // bien amorti, sans rebond
@@ -71,24 +75,21 @@ export default function Section4IntroMobile() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-start mt-80 overflow-hidden">
+      <Halo
+        size={1000}
+        rotation={-30}
+        style={{ top: "0%", left: "-20%", position: "absolute" }}
+      />
+      <Halo
+        size={1000}
+        rotation={30}
+        style={{ top: "100%", right: "-20%", position: "absolute" }}
+      />
+      <div className="sticky top-0 h-screen w-full flex flex-col items-start justify-start mt-80 overflow-hidden">
         {/* Halos */}
-        <Halo
-          size={1000}
-          rotation={-30}
-          style={{ top: "0%", left: "-20%", position: "absolute" }}
-        />
-        <Halo
-          size={1000}
-          rotation={30}
-          style={{ top: "100%", right: "-20%", position: "absolute" }}
-        />
 
         {/* Intro */}
-        <div
-          ref={introRef}
-          className="flex flex-col justify-center items-center gap-2 w-screen py-8 px-10"
-        >
+        <div ref={introRef} className="flex flex-col gap-2 w-screen py-8 px-10">
           <motion.div
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
