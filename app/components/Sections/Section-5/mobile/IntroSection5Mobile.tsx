@@ -3,8 +3,7 @@ import { useRef } from "react";
 import Svg100Entreprises from "../components/assets/100Entreprises";
 import Svg240Projets from "../components/assets/240Projets";
 import Svg999Supports from "../components/assets/999Supports";
-import InfiniteCarousel from "../components/infiniteCarrousel";
-
+import InfiniteCarouselMobile from "./InfiniteCarousselMobile";
 const keyNumber = [
   <Svg100Entreprises key="1" width={130} />,
   <Svg999Supports key="2" width={130} />,
@@ -85,7 +84,7 @@ export default function IntroSection5Mobile() {
           ))}
         </div>
       </div>
-      <InfiniteCarousel />
+      <InfiniteCarouselMobile />
     </div>
   );
 }

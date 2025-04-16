@@ -30,9 +30,6 @@ export default function OutroSection5Mobile({ setIsOpen }: Section5Props) {
       className="relative w-full flex flex-col justify-center items-center gap-5"
       ref={container}
     >
-      {/* Background */}
-      {/* <SvgSection5Bg className="absolute w-full h-full z-10" /> */}
-      {/* Section content */}
       <motion.div
         initial={{
           opacity: 0,
@@ -40,9 +37,8 @@ export default function OutroSection5Mobile({ setIsOpen }: Section5Props) {
         }}
         variants={variants}
         animate={isInView ? "visible" : "hidden"}
-        className="w-full z-20 pl-20"
+        className="w-full z-20"
       >
-        {/* <SvgSection5Outro className="z-20 mx-[15%]" /> */}
         <img
           loading="lazy"
           src="images/section5/Outro5.png"

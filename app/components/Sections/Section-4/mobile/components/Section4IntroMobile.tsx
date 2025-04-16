@@ -39,21 +39,18 @@ export default function Section4IntroMobile() {
       if (sliderRef.current) {
         const cardWidth = window.innerWidth * 0.8;
         const totalCardsWidth = cards.length * cardWidth;
-        const totalGap = (cards.length - 1) * 20; // 20px gap
-        const totalScrollWidth = totalCardsWidth + totalGap;
+        const totalScrollWidth = totalCardsWidth;
         const extraPadding = window.innerHeight; // pour que sticky reste visible
         setTotalWidth(totalScrollWidth + extraPadding);
       }
     };
     update();
-    // window.addEventListener("resize", update);
-    // return () => window.removeEventListener("resize", update);
   }, []);
 
   const rawX = useTransform(
     scrollYProgress,
-    [0.2, 1],
-    [0, -totalWidth + window.innerWidth]
+    [0.3, 1],
+    [0, -totalWidth + window.innerWidth + 200]
   );
   const x = useSpring(rawX, {
     stiffness: 50, // plus réactif (répond vite au scroll)

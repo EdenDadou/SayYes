@@ -3,6 +3,8 @@ import React, { Suspense, useState } from "react";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
 import HeaderMobile from "../Header/mobile/HeaderMobile";
 import "~/styles/tailwind.css";
+import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
+import FooterMobile from "../Footer/mobile/FooterMobile";
 
 const Section1Mobile = React.lazy(
   () => import("../Sections/Section-1/mobile/Section1Mobile")
@@ -45,8 +47,8 @@ export default function Mobile() {
           <Section2Mobile />
           <Section3Mobile />
           <Section4Mobile />
-          {/* <Section5Mobile setIsOpen={setIsOpen} /> */}
-          {/*<Footer /> */}
+          <Section5Mobile setIsOpen={setIsOpen} />
+          <FooterMobile />
         </Suspense>
       </div>
       {/* )} */}

@@ -10,6 +10,7 @@ export default function Intro2Mobile() {
   const isInView = useInView(container, {
     once: true,
     amount: "all",
+    margin: "0px 100px",
   });
 
   const variants = {

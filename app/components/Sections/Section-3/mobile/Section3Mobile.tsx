@@ -12,10 +12,7 @@ export default function Section3Mobile() {
   });
   return (
     <div className="w-full relative z-10">
-      <div
-        className="relative w-full h-fit flex flex-col justify-center items-center mb-32"
-        ref={containerCarroussel}
-      >
+      <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32">
         <Intro3Mobile />
         <SpecialityLinesMobile />
       </div>
@@ -23,8 +20,9 @@ export default function Section3Mobile() {
         <div
           className="absolute top-0 left-0 bottom-0 w-full h-full z-10 bg-gradient-to-b from-[#1B1B1B]/80 via-transparent to-[#1B1B1B]/80 
            [background:linear-gradient(to bottom,#1B1B1B 15%,transparent 40%,transparent 60%,#1B1B1B 85%)] pointer-events-none"
+          ref={containerCarroussel}
         />
-        <div id="section3ClipPath">
+        <div id="section3ClipPath" className="overflow-y-hidden">
           <div className="grid grid-cols-2 gap-3 w-[110%] h-full rotate-[7deg] -ml-6">
             {Array.from({ length: 2 }).map((_, colIndex) => (
               <div
