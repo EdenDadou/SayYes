@@ -63,7 +63,7 @@ export default function Section4IntroMobile() {
   return (
     <section
       ref={containerRef}
-      className={`relative w-screen `}
+      className="relative w-screen"
       style={{
         height: `${totalWidth}px`,
         backgroundImage: 'url("/images/section4/bg.png")',

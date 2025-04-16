@@ -47,7 +47,7 @@ export default function Intro2Mobile() {
           alt="Vous êtes unique, votre com doit l'être aussi !"
         />
       </motion.div>
-      <AnimatedText text={text} className="w-full text-center pt-10" />
+      <AnimatedText text={text} className="w-full text-center pt-10" isMobile />
     </div>
   );
 }

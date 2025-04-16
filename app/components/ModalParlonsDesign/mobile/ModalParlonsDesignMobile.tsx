@@ -13,7 +13,7 @@ export default function ModalParlonsDesignMobile({
 }: ModalParlonsDesignProps) {
   return (
     <div
-      className={`absolute top-0 left-0 z-[100] flex flex-col items-center justify-start w-full h-fit bg-gray-400 ${
+      className={`absolute top-0 left-0 z-[100] flex flex-col items-center justify-start w-full h-max bg-gray-400 ${
         isOpen ? "block" : "hidden"
       }`}
     >

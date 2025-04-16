@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 export default function AnimatedText({
   text,
   className,
+  isMobile,
 }: {
   text: string;
   className?: string;
+  isMobile?: boolean;
 }) {
   const container = useRef<HTMLParagraphElement>(null);
   const [visibleLetters, setVisibleLetters] = useState(0);
@@ -16,7 +18,9 @@ export default function AnimatedText({
         const rect = container.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
 
-        const startTrigger = windowHeight * (2 / 4);
+        const startTrigger = isMobile
+          ? windowHeight * (2 / 3)
+          : windowHeight * (1 / 2);
         const endTrigger = windowHeight * (1 / 4);
 
         if (rect.top < startTrigger && rect.bottom > endTrigger) {

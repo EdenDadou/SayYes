@@ -45,8 +45,32 @@
     transform: translateY(-10%); /* Défilement vers le bas */
   }
 }
+/* Animation pour chaque colonne */
+@keyframes translateYUpMobile {
+  0% {
+    transform: translateY(-30%);
+  }
+  100% {
+    transform: translateY(-90%); /* Défilement de 100% pour permettre un défilement complet */
+  }
+}
+
+@keyframes translateYDownMobile {
+  0% {
+    transform: translateY(-90%);
+  }
+  100% {
+    transform: translateY(-30%); /* Défilement vers le bas */
+  }
+}
 
 
+.scroll-top-mobile {
+  animation: translateYUpMobile 40s linear infinite;
+}
+.scroll-bottom-mobile {
+  animation: translateYDownMobile 50s linear infinite;
+}
 .scroll-top {
   animation: translateYUp 40s linear infinite;
 }

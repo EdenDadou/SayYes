@@ -11,7 +11,16 @@ export default function Section3Mobile() {
     amount: "some",
   });
   return (
-    <div className="w-full relative z-10">
+    <div
+      className="w-full relative z-10"
+      style={{
+        backgroundImage: 'url("images/section3/bg.png")',
+        backgroundSize: "110% 90%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundPositionY: "-30px",
+      }}
+    >
       <div className="relative w-full h-fit flex flex-col justify-center items-center mb-32">
         <Intro3Mobile />
         <SpecialityLinesMobile />
@@ -31,8 +40,8 @@ export default function Section3Mobile() {
                   !isInView
                     ? ""
                     : colIndex % 2 === 0
-                    ? "scroll-top"
-                    : "scroll-bottom"
+                    ? "scroll-top-mobile"
+                    : "scroll-bottom-mobile"
                 }`}
               >
                 <div className="gap-3 flex flex-col items-center justify-center">

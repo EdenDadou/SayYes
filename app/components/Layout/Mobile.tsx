@@ -5,6 +5,7 @@ import HeaderMobile from "../Header/mobile/HeaderMobile";
 import "~/styles/tailwind.css";
 import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 import FooterMobile from "../Footer/mobile/FooterMobile";
+import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 const Section1Mobile = React.lazy(
   () => import("../Sections/Section-1/mobile/Section1Mobile")
@@ -30,8 +31,8 @@ export default function Mobile() {
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">
-      {/*<ModalParlonsDesignMobile isOpen={isOpen} />
-       {shouldPlayIntro ? (
+      <ModalParlonsDesignMobile isOpen={isOpen} />
+      {/*{shouldPlayIntro ? (
         <LoaderIntro />
       ) : ( */}
       <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
