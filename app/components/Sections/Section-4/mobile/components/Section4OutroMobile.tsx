@@ -62,7 +62,7 @@ export default function Section4OutroMobile() {
           <motion.div
             key={index}
             initial={{ scale: 0.5 }}
-            transition={{ duration: 0.5, delay: index * 0.2 }}
+            transition={{ duration: 0.2, delay: index * 0.01 }}
             whileInView={{ scale: 1 }}
             viewport={{ once: true, margin: "100px" }}
             className="p-2 px-3 rounded-full flex flex-row items-center justify-start shadow-lg gap-2 relative cursor-default bg-gradient-gray-500 holographic-speciality w-full"

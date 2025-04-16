@@ -31,7 +31,7 @@ export default function Mobile() {
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">
-      <ModalParlonsDesignMobile isOpen={isOpen} />
+      {/* <ModalParlonsDesignMobile isOpen={isOpen} /> */}
       {/*{shouldPlayIntro ? (
         <LoaderIntro />
       ) : ( */}

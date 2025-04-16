@@ -77,14 +77,8 @@ export default function Section4IntroMobile() {
         rotation={-30}
         style={{ top: "0%", left: "-20%", position: "absolute" }}
       />
-      <Halo
-        size={1000}
-        rotation={30}
-        style={{ top: "100%", right: "-20%", position: "absolute" }}
-      />
-      <div className="sticky top-0 h-screen w-full flex flex-col items-start justify-start mt-80 overflow-hidden">
-        {/* Halos */}
 
+      <div className="sticky top-0 h-screen w-full flex flex-col items-start justify-start mt-80 overflow-hidden">
         {/* Intro */}
         <div ref={introRef} className="flex flex-col gap-2 w-screen py-8 px-10">
           <motion.div
