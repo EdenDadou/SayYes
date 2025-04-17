@@ -8,8 +8,8 @@ interface Section5Props {
 export default function Section5Mobile({ setIsOpen }: Section5Props) {
   return (
     <div
-      className="w-screen h-full flex flex-col justify-center items-center relative z-10 pt-24 gap-20 overflow-hidden  bg-gray-500"
-      id="section5ClipPath"
+      className="w-screen h-full flex flex-col justify-center items-center relative z-10 pt-24 gap-20 overflow-hidden bg-gray-500 -mt-40"
+      id="section5ClipPathMobile"
       style={{
         backgroundImage: 'url("images/section5/bg.png")',
         backgroundSize: "cover",

@@ -30,11 +30,11 @@ const variants = {
 
 export default function Section4OutroMobile() {
   const container = useRef(null);
-  const isInView = useInView(container, { once: true, margin: "-100px" });
+  const isInView = useInView(container, { once: true });
 
   return (
     <div
-      className="flex justify-center flex-col items-center gap-12 w-full px-10 mb-40"
+      className="flex justify-center flex-col items-center gap-12 w-full px-10 mb-40 "
       ref={container}
     >
       <motion.div

@@ -34,26 +34,22 @@ export default function Section4IntroMobile() {
   const { scrollYProgress } = useScroll({ target: containerRef });
   const [totalWidth, setTotalWidth] = useState(0);
 
+  console.log(totalWidth);
+
   useEffect(() => {
     const update = () => {
       if (sliderRef.current) {
         const cardWidth = window.innerWidth * 0.8;
         const totalCardsWidth = cards.length * cardWidth;
-        const totalScrollWidth = totalCardsWidth;
-        const extraPadding = window.innerHeight; // pour que sticky reste visible
-        setTotalWidth(totalScrollWidth + extraPadding);
+        setTotalWidth(totalCardsWidth);
       }
     };
     update();
   }, []);
 
-  const rawX = useTransform(
-    scrollYProgress,
-    [0.3, 1],
-    [0, -totalWidth + window.innerWidth + 200]
-  );
+  const rawX = useTransform(scrollYProgress, [0.3, 1], [0, -totalWidth]);
   const x = useSpring(rawX, {
-    stiffness: 50, // plus réactif (répond vite au scroll)
+    stiffness: 150, // plus réactif (répond vite au scroll)
     damping: 60, // bien amorti, sans rebond
     mass: 0.6,
   });
@@ -65,7 +61,7 @@ export default function Section4IntroMobile() {
       ref={containerRef}
       className="relative w-screen"
       style={{
-        height: `${totalWidth}px`,
+        height: "300vh",
         backgroundImage: 'url("/images/section4/bg.png")',
         backgroundSize: "contain",
         backgroundPositionY: "-100px",
