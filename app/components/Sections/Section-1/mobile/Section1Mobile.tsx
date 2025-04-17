@@ -50,26 +50,25 @@ export default function Section1Mobile() {
             </div>
           </div>
         </motion.div>
-
-        {/* Contenu bas */}
-        <motion.div
-          className="absolute bottom-0 h-screen w-full flex items-center justify-end overflow-hidden"
-          initial={{ translateY: "100%" }}
-          animate={{ translateY: "40%" }}
-          transition={{
-            duration: 1.5,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-        >
-          <img
-            loading="lazy"
-            src="./images/illuIntro.png"
-            alt="deco"
-            className="w-full px-10"
-          />
-        </motion.div>
       </div>
+      {/* Contenu bas */}
+      <motion.div
+        className="absolute bottom-40 h-fit w-full flex items-center justify-end overflow-hidden"
+        initial={{ scale: "40%", opacity: 0 }}
+        animate={{ scale: "100%", opacity: 1 }}
+        transition={{
+          duration: 0.5,
+          ease: "easeInOut",
+          delay: 0.5,
+        }}
+      >
+        <img
+          loading="lazy"
+          src="./images/illuIntro.png"
+          alt="deco"
+          className="w-full px-10"
+        />
+      </motion.div>
       <ScrollingBannerMobile />
     </div>
   );

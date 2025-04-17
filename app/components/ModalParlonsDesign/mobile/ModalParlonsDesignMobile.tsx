@@ -4,19 +4,9 @@ import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
 import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 
-interface ModalParlonsDesignProps {
-  isOpen: boolean;
-}
-
-export default function ModalParlonsDesignMobile({
-  isOpen,
-}: ModalParlonsDesignProps) {
+export default function ModalParlonsDesignMobile() {
   return (
-    <div
-      className={`absolute top-0 left-0 z-[100] flex flex-col items-center justify-start w-full h-max bg-gray-400 ${
-        isOpen ? "block" : "hidden"
-      }`}
-    >
+    <div className="flex flex-col items-center justify-start w-full h-max bg-gray-400">
       <div
         className="w-full h-full flex flex-col items-center py-28 gap-8 px-5"
         style={{

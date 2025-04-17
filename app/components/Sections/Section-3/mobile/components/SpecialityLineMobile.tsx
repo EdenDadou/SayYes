@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { specialityList } from "../../components/specialityList";
 
 export default function SpecialityLinesMobile() {
@@ -13,11 +14,11 @@ export default function SpecialityLinesMobile() {
           key={title}
           role="button"
           tabIndex={0}
-          className="border-white/30 border-[0.35px] holographic-speciality bg-gradient-gray-400-hover flex flex-col items-start justify-start px-6 h-fit"
-          onClick={() => setIsSelected(title)}
+          className="border-white/30 border-[0.35px] holographic-speciality bg-gradient-gray-400-hover flex flex-col items-start justify-start px-6 h-fit shadow-xl"
+          onClick={() => setIsSelected(isSelected === title ? "" : title)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
-              setIsSelected(title);
+              setIsSelected(isSelected === title ? "" : title);
             }
           }}
         >
@@ -25,20 +26,29 @@ export default function SpecialityLinesMobile() {
             <img loading="lazy" src={image} alt="speciality" />
           </div>
 
-          {title === isSelected ? (
-            <div className="flex flex-wrap gap-x-2 gap-y-5 pb-8">
-              {list.map((item, i) => (
-                <div
-                  key={i}
-                  className="col-span-1 w-[48%] bg-gradient-gray-400-hover  box-shadow-custom flex justify-center items-center p-2 border-[0.5px] shadow-[0px_0.35px_0.5px_0px_#FFFFFF_inset] rounded-full holographic-border"
-                >
-                  <p className="text-center leading-[140%] tracking-[-0.28px] text-base font-jakarta holographic-text">
-                    {item}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ) : null}
+          <AnimatePresence initial={false}>
+            {title === isSelected && (
+              <motion.div
+                key="list"
+                className="flex flex-wrap flex-row gap-x-4 gap-y-3 pb-8 items-center justify-center"
+                initial={{ opacity: 0, height: 0, scale: 0.7 }}
+                animate={{ opacity: 1, height: 200, scale: 1 }}
+                exit={{ opacity: 0, height: 0, scale: 0.7 }} // Pas d'animation à la fermeture
+                transition={{ duration: 0.3, ease: "easeIn" }}
+              >
+                {list.map((item, i) => (
+                  <div
+                    key={i}
+                    className="w-[45%] bg-gradient-gray-400-hover px-4 py-2 flex justify-center items-center rounded-full holographic-border shadow-2xl"
+                  >
+                    <span className="text-center leading-[140%] tracking-[-0.28px] text-sm font-jakarta holographic-text">
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       ))}
     </div>

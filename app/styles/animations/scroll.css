@@ -57,7 +57,7 @@
 
 @keyframes translateYDownMobile {
   0% {
-    transform: translateY(-90%);
+    transform: translateY(-70%);
   }
   100% {
     transform: translateY(-30%); /* Défilement vers le bas */

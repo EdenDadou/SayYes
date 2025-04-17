@@ -38,7 +38,7 @@ export default function SpecialityLines() {
               </p>
             </div>
 
-            {list.map((item, i) => (
+            {list.slice(0, 5).map((item, i) => (
               <div
                 key={i}
                 className={`col-span-1 w-[90%] bg-gradient-gray-400 box-shadow-custom flex justify-center items-center p-2 border-[0.5px] shadow-[0px_0.35px_0.5px_0px_#FFFFFF_inset] rounded-full ${

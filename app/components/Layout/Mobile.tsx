@@ -6,6 +6,7 @@ import "~/styles/tailwind.css";
 import Section5Mobile from "../Sections/Section-5/mobile/Section5Mobile";
 import FooterMobile from "../Footer/mobile/FooterMobile";
 import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
+// import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 const Section1Mobile = React.lazy(
   () => import("../Sections/Section-1/mobile/Section1Mobile")
@@ -31,28 +32,37 @@ export default function Mobile() {
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">
-      {/* <ModalParlonsDesignMobile isOpen={isOpen} /> */}
       {/*{shouldPlayIntro ? (
         <LoaderIntro />
       ) : ( */}
-      <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
-        <Suspense fallback={<div>Chargement...</div>}>
+      {isOpen ? (
+        <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
           <HeaderMobile
             setIsOpen={setIsOpen}
             isIntroFinish={isIntroFinish}
             isOpen={isOpen}
           />
+          <ModalParlonsDesignMobile />
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
+          <Suspense fallback={<div>Chargement...</div>}>
+            <HeaderMobile
+              setIsOpen={setIsOpen}
+              isIntroFinish={isIntroFinish}
+              isOpen={isOpen}
+            />
 
-          {/* Rendu des sections */}
-          <Section1Mobile />
-          <Section2Mobile />
-          <Section3Mobile />
-          <Section4Mobile />
-          <Section5Mobile setIsOpen={setIsOpen} />
-          <FooterMobile />
-        </Suspense>
-      </div>
-      {/* )} */}
+            {/* Rendu des sections */}
+            <Section1Mobile />
+            <Section2Mobile />
+            <Section3Mobile />
+            <Section4Mobile />
+            <Section5Mobile setIsOpen={setIsOpen} />
+            <FooterMobile />
+          </Suspense>
+        </div>
+      )}
     </div>
   );
 }
