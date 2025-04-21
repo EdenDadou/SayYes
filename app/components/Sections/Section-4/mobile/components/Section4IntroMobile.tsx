@@ -34,8 +34,6 @@ export default function Section4IntroMobile() {
   const { scrollYProgress } = useScroll({ target: containerRef });
   const [totalWidth, setTotalWidth] = useState(0);
 
-  console.log(totalWidth);
-
   useEffect(() => {
     const update = () => {
       if (sliderRef.current) {
