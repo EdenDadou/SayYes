@@ -34,9 +34,18 @@ export default function Section4OutroMobile() {
 
   return (
     <div
-      className="flex justify-center flex-col items-center gap-12 w-full px-10 mb-40 "
+      className="relative flex justify-center flex-col items-center gap-12 w-full px-10 pb-40 "
       ref={container}
     >
+      <div
+        className="absolute top-[-100px] left-0 right-0 h-[100vh] bg-cover bg-center"
+        style={{
+          backgroundImage: 'url("/images/section4/bg2.png")',
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPositionY: "-200px",
+        }}
+      />
       <motion.div
         initial={{
           opacity: 0,

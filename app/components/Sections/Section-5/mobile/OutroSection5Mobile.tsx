@@ -27,7 +27,7 @@ export default function OutroSection5Mobile({ setIsOpen }: Section5Props) {
 
   return (
     <div
-      className="relative w-full flex flex-col justify-center items-center gap-5"
+      className="relative w-full flex flex-col justify-center items-center gap-5 mt-20"
       ref={container}
     >
       <motion.div

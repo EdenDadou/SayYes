@@ -1,13 +1,10 @@
 import { useInView, motion } from "framer-motion";
 import { useRef } from "react";
-import Svg100Entreprises from "../components/assets/100Entreprises";
-import Svg240Projets from "../components/assets/240Projets";
-import Svg999Supports from "../components/assets/999Supports";
 import InfiniteCarouselMobile from "./InfiniteCarousselMobile";
 const keyNumber = [
-  <Svg100Entreprises key="1" width={130} />,
-  <Svg999Supports key="2" width={130} />,
-  <Svg240Projets key="3" width={130} />,
+  <img key={1} loading="lazy" src="images/section5/puce1.png" alt="intro" />,
+  <img key={2} loading="lazy" src="images/section5/puce2.png" alt="intro" />,
+  <img key={3} loading="lazy" src="images/section5/puce3.png" alt="intro" />,
 ];
 
 const variants = {
@@ -41,7 +38,7 @@ const variantsKey = (i: number) => ({
 export default function IntroSection5Mobile() {
   const container = useRef(null);
   const containerIntro = useRef(null);
-  const isInView = useInView(containerIntro, { once: true, amount: "all" });
+  const isInView = useInView(containerIntro, { once: true, amount: "some" });
 
   return (
     <div
@@ -65,10 +62,10 @@ export default function IntroSection5Mobile() {
             loading="lazy"
             src="images/section5/Intro5.png"
             alt="intro"
-            className="w-screen"
+            className="w-[90vw]"
           />
         </motion.div>
-        <div className="w-screen flex flex-row h-48 relative px-2 pt-5">
+        <div className="w-screen flex flex-row relative px-2 pt-5">
           {keyNumber.map((key, i) => (
             <motion.div
               key={i}

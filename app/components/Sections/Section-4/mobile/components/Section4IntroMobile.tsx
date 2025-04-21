@@ -49,9 +49,9 @@ export default function Section4IntroMobile() {
 
   const rawX = useTransform(scrollYProgress, [0.3, 1], [0, -totalWidth]);
   const x = useSpring(rawX, {
-    stiffness: 150, // plus réactif (répond vite au scroll)
+    stiffness: 30, // plus réactif (répond vite au scroll)
     damping: 60, // bien amorti, sans rebond
-    mass: 0.6,
+    mass: 0.4,
   });
 
   const isInView = useInView(introRef, { once: true, amount: "all" });

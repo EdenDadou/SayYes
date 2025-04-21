@@ -54,7 +54,6 @@ export default function Section3() {
                     .concat(projetList[colIndex])
                     .map((item, index) => (
                       <img
-                        loading="lazy"
                         key={index}
                         src={item}
                         alt={`Projet ${index + 1}`}

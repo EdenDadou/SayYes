@@ -25,14 +25,14 @@ const InfiniteCarouselMobile = () => {
         const targetCardWidth = targetCard.offsetWidth;
 
         swiperContainerRef.current.scrollLeft =
-          targetCardOffsetLeft - (containerWidth - targetCardWidth) / 2;
+          targetCardOffsetLeft - (containerWidth - targetCardWidth) / 1.7;
       }
     }
   }, []);
 
   const handleScroll = (direction: string) => {
     if (!swiperContainerRef.current) return;
-    const scrollAmount = window.innerWidth * 0.28; // taille d'une carte
+    const scrollAmount = window.innerWidth * 0.7;
 
     swiperContainerRef.current.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
@@ -44,7 +44,7 @@ const InfiniteCarouselMobile = () => {
     <div className="relative w-full overflow-hidden">
       {/* Bouton pour défiler vers la gauche */}
       <SvgPrevious
-        className="absolute left-0 top-60 z-20"
+        className="absolute -left-5 top-40 z-20"
         onClick={() => handleScroll("left")}
       />
       {/* Conteneur des éléments défilants */}
@@ -54,7 +54,7 @@ const InfiniteCarouselMobile = () => {
       >
         {duplicatedCards.map((c, i) => (
           <div
-            className="snap-start flex-shrink-0 w-[80%] flex items-center justify-center holographic-speciality"
+            className="snap-start flex-shrink-0 w-[70%] flex items-center justify-center holographic-speciality"
             key={`card-${c.src}-${i}`}
             style={{
               maskImage: `url(${c.src})`,
@@ -77,7 +77,7 @@ const InfiniteCarouselMobile = () => {
         ))}
       </div>
       <SvgNext
-        className="absolute right-0 top-60 z-20"
+        className="absolute -right-5 top-40 z-20"
         onClick={() => handleScroll("right")}
       />
     </div>
