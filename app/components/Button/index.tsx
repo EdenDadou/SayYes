@@ -1,15 +1,32 @@
 interface IButtonProps {
   leftIcon?: React.ReactNode;
   label: string;
+  type?: "plain" | "transparent";
 }
 
-const Button = ({ leftIcon, label }: IButtonProps) => {
+const Button = ({ leftIcon, label, type = "transparent" }: IButtonProps) => {
   return (
-    <button className="flex flex-row w-fit h-fit items-top cursor-pointer">
-      {leftIcon ? leftIcon : null}
-      <span className="text-gray text-shadow-base shadow-black cursor-pointer">
-        {label}
-      </span>
+    <button
+      className={`w-fit cursor-pointer p-2 bg-transparent rounded-full ${
+        type === "plain" ? "border-2 border-grey h-[74px]" : ""
+      }`}
+    >
+      <div
+        className={`flex flex-row  items-top cursor-pointer justify-center items-center ${
+          type === "transparent" ? "bg-transparent" : "bg-white rounded-full"
+        }`}
+      >
+        {leftIcon ? leftIcon : null}
+        <span
+          className={`${
+            type === "transparent"
+              ? "text-white text-shadow-base shadow-black font-jakarta"
+              : "text-black font-jakarta-bold px-3 py-4"
+          }`}
+        >
+          {label}
+        </span>
+      </div>
     </button>
   );
 };

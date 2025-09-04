@@ -62,6 +62,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box; 
+  background-color:  black;
 
   *, *::before, *::after {
     box-sizing: inherit; /* Hérite box-sizing pour tous les éléments enfants */
@@ -87,4 +88,15 @@ body::-webkit-scrollbar {
 
 .no-scroll {
   overflow: hidden;
+}
+
+/* Header personnalisé */
+.header-custom {
+  border-radius: 78px;
+  border: 0.894px solid rgba(255, 255, 255, 0.80);
+  background: linear-gradient(157deg, rgba(255, 255, 255, 0.1) -14.12%, rgba(78, 78, 78, 0.3) 101.01%);
+  backdrop-filter: blur(31.280344009399414px);
+  -webkit-backdrop-filter: blur(31.280344009399414px);
+  position: relative;
+  z-index: 10;
 }

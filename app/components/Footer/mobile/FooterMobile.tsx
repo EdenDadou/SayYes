@@ -1,4 +1,4 @@
-import SvgLogo from "~/components/Header/components/Logo";
+import SvgLogo from "~/components/OldHeader/components/Logo";
 
 import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";

@@ -1,4 +1,4 @@
-import SvgLogo from "~/components/Header/components/Logo";
+import SvgLogo from "~/components/OldHeader/components/Logo";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { redirect } from "@remix-run/react";
