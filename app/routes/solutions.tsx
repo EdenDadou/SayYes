@@ -1,24 +1,26 @@
-import type { MetaFunction } from "@remix-run/node";
-import "~/styles/tailwind.css";
-import { useViewport } from "~/utils/hooks/useViewport";
 import Header from "~/components/Header";
-
-export const VIDEO_DURATION = 4.5;
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Say Yes !" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
+import Footer from "~/components/Footer";
+import SolutionTitle from "~/components/Solutions/components/SolutionTitle";
+import "~/styles/tailwind.css";
+import Card from "~/components/Card";
 
 export default function Solutions() {
   //   const isMobile = useViewport();
 
   return (
-    <div>
-      <Header />
-      {/* <Footer /> */}
+    <div className="w-screen h-fit relative overflow-hidden">
+      {/* Contenu par-dessus */}
+      <div className="relative z-10">
+        <Header />
+        <section className="px-40 flex flex-col gap-8">
+          <SolutionTitle />
+          <Card imageUrl="/images/solutions/Card2.png" />
+          <Card imageUrl="/images/solutions/Card3.png" />
+          <Card imageUrl="/images/solutions/Card4.png" />
+          <Card imageUrl="/images/solutions/Card5.png" />
+        </section>
+        <Footer />
+      </div>
     </div>
   );
 }

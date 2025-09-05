@@ -31,11 +31,7 @@ background-clip: text;
 -webkit-text-fill-color: transparent;
   }
 
-  .border-custom {
-    border: 1px solid rgba(32, 32, 32, 0.50);
-    background: linear-gradient(187deg, #FFF -15.61%, #C7C7C7 121.8%);
-    box-shadow: 13.727px 13.727px 41.18px var(--sds-size-depth-400) rgba(0, 0, 0, 0.20), 0px 0.961px 1.373px 0px #FFF inset;
-}
+ 
 
 
 .shadow-top {

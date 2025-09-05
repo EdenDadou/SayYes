@@ -8,12 +8,14 @@ const Button = ({ leftIcon, label, type = "transparent" }: IButtonProps) => {
   return (
     <button
       className={`w-fit cursor-pointer p-2 bg-transparent rounded-full ${
-        type === "plain" ? "border-2 border-grey h-[74px]" : ""
+        type === "plain" ? "border-custom h-[74px]" : ""
       }`}
     >
       <div
-        className={`flex flex-row  items-top cursor-pointer justify-center items-center ${
-          type === "transparent" ? "bg-transparent" : "bg-white rounded-full"
+        className={`flex flex-row items-center cursor-pointer justify-center gap-2 ${
+          type === "transparent"
+            ? "bg-transparent"
+            : "bg-white rounded-full px-3"
         }`}
       >
         {leftIcon ? leftIcon : null}
@@ -21,7 +23,7 @@ const Button = ({ leftIcon, label, type = "transparent" }: IButtonProps) => {
           className={`${
             type === "transparent"
               ? "text-white text-shadow-base shadow-black font-jakarta"
-              : "text-black font-jakarta-bold px-3 py-4"
+              : "text-black font-jakarta-bold py-4 text-md"
           }`}
         >
           {label}

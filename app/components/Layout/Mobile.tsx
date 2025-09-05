@@ -3,7 +3,7 @@ import React, { Suspense, useState } from "react";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
 import HeaderMobile from "../Header/mobile/HeaderMobile";
 import "~/styles/tailwind.css";
-import FooterMobile from "../Footer/mobile/FooterMobile";
+import FooterMobile from "../OldFooter/mobile/FooterMobile";
 import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 const Section1Mobile = React.lazy(

@@ -7,7 +7,7 @@ import Section3 from "~/components/Sections/Section-3";
 import Section4 from "~/components/Sections/Section-4";
 import Section5 from "~/components/Sections/Section-5";
 import ModalParlonsDesign from "~/components/ModalParlonsDesign";
-import Footer from "~/components/Footer";
+import Footer from "~/components/OldFooter";
 import "~/styles/tailwind.css";
 import LoaderIntro from "~/components/LoaderIntro";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";

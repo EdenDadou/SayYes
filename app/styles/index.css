@@ -4,5 +4,7 @@
 @import "./animations/scroll.css";
 @import "./animations/gradient.css";
 @import "./texture.css";
+@import "./border.css";
+@import "./footer.css";
 @import "./tailwind.css";
 @config "../../tailwind.config.ts";

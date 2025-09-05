@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import Footer from "../Footer";
+import Footer from "../OldFooter";
 import Header from "../Header";
 import ModalParlonsDesign from "../ModalParlonsDesign";
 import { useState } from "react";

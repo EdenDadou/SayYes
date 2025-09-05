@@ -6,17 +6,11 @@ import SvgBtnLinkedin from "~/components/OldFooter/components/BtnLinkedin";
 import SvgBtnYoutube from "~/components/OldFooter/components/BtnYoutube";
 import SvgBtnFacebook from "./components/BtnFacebook";
 import SvgBtnTiktok from "./components/BtnTiktok";
-import SayYesFooter from "./components/SayYes";
 
 export default function Footer() {
   return (
-    <div className="relative w-full flex flex-col justify-center items-center filter">
-      <span className="font-jakarta text-[60px] leading-[60px] -mb-10">
-        Ça vous inspire ? <br />
-        <span className="holographic-text">Parlons design !</span>
-      </span>
-      <SayYesFooter />
-      <div className="flex flex-col w-screen px-20 footer">
+    <div className="absolute footer bottom-0 w-full flex flex-col justify-center items-center filter">
+      <div className="flex flex-col w-screen px-20">
         <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
           <div className="flex flex-row items-center gap-8 ">
             <SvgLogo width={110} height={108} className="rotate-2" />
@@ -66,7 +60,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="flex flex-row justify-between w-screen px-20 py-3 bg-black">
+      <div className="flex flex-row justify-between w-screen px-20 py-3">
         <p className="text-gray-200 text-sm py-2">Mentions Légales</p>
         <p className="text-gray-200 text-sm py-2">
           Say Yes ©2024. Tous droits réservés.
