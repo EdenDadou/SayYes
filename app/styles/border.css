@@ -4,16 +4,95 @@
     backdrop-filter: blur(31.280344009399414px)
   }
 
-  .media-object {
-    --border-width: 0.5px;
+  .light-border {
+    --border-width: 2px;
     --radius: 24px;
   
     position: relative;
     border-radius: var(--radius);
     border: var(--border-width) solid transparent;
   }
+
+  .card-hover {
+    --border-width: 2px;
+    --radius: 24px;
   
-  .media-object::before {
+    position: relative;
+    border-radius: var(--radius);
+    border: var(--border-width) solid transparent;
+  }
+
+  .card-hover .card-image {
+    overflow: hidden;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+  }
+
+  .card-hover:hover .card-image {
+    transform: scale(1.05);
+  }
+
+  .card-hover:hover::before {
+    content: " ";
+    position: absolute;
+    inset: calc(var(--border-width) * -1);
+    z-index: -1;
+    border: inherit;
+    border-radius: inherit;
+    background-image: conic-gradient(from var(--angle), 
+      transparent 0%, 
+      transparent 25%, 
+      rgba(220, 196, 255, 0) 25%, 
+      rgba(220, 196, 255, 0.2) 30%, 
+      rgba(220, 196, 255, 0.4) 35%, 
+      rgba(220, 196, 255, 0.6) 40%, 
+      rgba(220, 196, 255, 0.8) 45%, 
+      #DCC4FF 50%, 
+      #E1FF8B 55%, 
+      #B3F1FF 60%, 
+      rgba(179, 241, 255, 0.8) 65%, 
+      rgba(179, 241, 255, 0.6) 70%, 
+      rgba(179, 241, 255, 0.4) 75%, 
+      rgba(179, 241, 255, 0.2) 80%, 
+      rgba(179, 241, 255, 0) 85%, 
+      transparent 100%);
+    background-origin: border-box;
+    -webkit-mask:
+      linear-gradient(black, black) content-box,
+      linear-gradient(black, black);  
+    mask: linear-gradient(black, black),
+          linear-gradient(black, black);
+    -webkit-mask-clip: content-box, border-box;  
+    mask-clip: content-box, border-box;
+    -webkit-mask-composite: xor;  
+    mask-composite: exclude;
+    animation: spin 10s linear infinite;
+  }
+
+  @supports not (background: paint(something)) {
+    .card-hover:hover::before {
+      background-image: conic-gradient(
+        transparent 0%, 
+        transparent 25%, 
+        rgba(220, 196, 255, 0) 25%, 
+        rgba(220, 196, 255, 0.2) 30%, 
+        rgba(220, 196, 255, 0.4) 35%, 
+        rgba(220, 196, 255, 0.6) 40%, 
+        rgba(220, 196, 255, 0.8) 45%, 
+        #DCC4FF 50%, 
+        #E1FF8B 55%, 
+        #B3F1FF 60%, 
+        rgba(179, 241, 255, 0.8) 65%, 
+        rgba(179, 241, 255, 0.6) 70%, 
+        rgba(179, 241, 255, 0.4) 75%, 
+        rgba(179, 241, 255, 0.2) 80%, 
+        rgba(179, 241, 255, 0) 85%, 
+        transparent 100%);    
+    }
+  }
+  
+  
+  .light-border::before {
     content: " ";
     position: absolute;
     inset: calc(var(--border-width) * -1);
@@ -51,7 +130,7 @@
   }
   
   @supports not (background: paint(something)) {
-    .media-object::before {
+    .light-border::before {
   background-image: conic-gradient(
     transparent 0%, 
     transparent 25%, 

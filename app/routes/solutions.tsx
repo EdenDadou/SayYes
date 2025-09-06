@@ -3,6 +3,7 @@ import Footer from "~/components/Footer";
 import SolutionTitle from "~/components/Solutions/components/SolutionTitle";
 import "~/styles/tailwind.css";
 import Card from "~/components/Card";
+import { solutionsCards } from "~/components/Solutions/data";
 
 export default function Solutions() {
   //   const isMobile = useViewport();
@@ -12,12 +13,17 @@ export default function Solutions() {
       {/* Contenu par-dessus */}
       <div className="relative z-10">
         <Header />
-        <section className="px-40 flex flex-col gap-8">
+        <section className="px-36 flex flex-col gap-8">
           <SolutionTitle />
-          <Card imageUrl="/images/solutions/Card2.png" />
-          <Card imageUrl="/images/solutions/Card3.png" />
-          <Card imageUrl="/images/solutions/Card4.png" />
-          <Card imageUrl="/images/solutions/Card5.png" />
+          {solutionsCards.map((card) => (
+            <Card
+              key={card.imageUrl}
+              imageUrl={card.imageUrl}
+              height={card.height}
+              content={card.content}
+              borderClass={card.borderClass}
+            />
+          ))}
         </section>
         <Footer />
       </div>

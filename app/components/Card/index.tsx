@@ -1,18 +1,37 @@
 import "~/styles/tailwind.css";
-import Masque from "./components/Masque";
+import { cn } from "~/utils/ui/ui";
 
 interface CardProps {
   imageUrl: string;
-  content?: any;
+  height: string;
+  content?: React.ReactNode;
+  borderClass?: string;
+  imagesClass?: string;
 }
 
-export default function Card({ imageUrl, content }: CardProps) {
+export default function Card({
+  imageUrl,
+  content,
+  height,
+  borderClass,
+  imagesClass,
+}: CardProps) {
   //   const isMobile = useViewport();
 
+  const containerClasses = cn(
+    "border-custom w-full rounded-[25px] p-4 card-hover",
+    borderClass
+  );
+
+  const imageClasses = cn(
+    "h-full flex items-center justify-center rounded-[15px] card-image",
+    imagesClass
+  );
+
   return (
-    <div className="border-custom media-object h-[560px] w-full rounded-[25px] p-4">
+    <div className={containerClasses} style={{ height }}>
       <div
-        className="h-full flex items-center justify-center rounded-[15px]"
+        className={imageClasses}
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
@@ -20,7 +39,7 @@ export default function Card({ imageUrl, content }: CardProps) {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <Masque className="w-full h-full object-contain rounded-xl" />
+        {content}
       </div>
     </div>
   );
