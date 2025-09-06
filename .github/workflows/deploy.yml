@@ -33,7 +33,11 @@ jobs:
           cd /var/www/remix || { echo "❌ Échec : dossier introuvable"; exit 1; }
 
           echo "📦 Pull du dépôt..."
-          git pull origin main || { echo "❌ Échec git pull"; exit 1; }
+          # Sauvegarder les changements locaux s'il y en a
+          git stash push -m "Auto-stash before deployment $(date)" || true
+          # Forcer le pull en cas de conflit
+          git fetch origin main
+          git reset --hard origin/main || { echo "❌ Échec git reset"; exit 1; }
 
           echo "📦 Installation des dépendances..."
           npm install || { echo "❌ Échec npm install"; exit 1; }
