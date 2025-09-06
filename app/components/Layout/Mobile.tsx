@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from "react";
 // import LoaderIntro from "~/components/LoaderIntro";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
-import HeaderMobile from "../Header/mobile/HeaderMobile";
+import HeaderMobile from "../OldHeader/mobile/HeaderMobile";
 import "~/styles/tailwind.css";
 import FooterMobile from "../OldFooter/mobile/FooterMobile";
 import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
