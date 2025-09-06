@@ -19,12 +19,12 @@ export default function Card({
   //   const isMobile = useViewport();
 
   const containerClasses = cn(
-    "border-custom w-full rounded-[25px] p-4 card-hover",
+    "border-custom w-full rounded-[25px] p-4",
     borderClass
   );
 
   const imageClasses = cn(
-    "h-full flex items-center justify-center rounded-[15px] card-image",
+    "h-full flex items-center justify-center rounded-[15px]",
     imagesClass
   );
 
