@@ -6,26 +6,35 @@ import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import SvgBtnFacebook from "./components/BtnFacebook";
 import SvgBtnTiktok from "./components/BtnTiktok";
 import SayYesFooter from "./components/SayYes";
-import HaloFooter from "./components/HaloFooter";
-import HaloFooterBottom from "./components/HaloFooterBottom";
+import { motion } from "framer-motion";
+import { useFooterMotion } from "~/utils/hooks/useFooterMotion";
 
 export default function Footer() {
+  const { footerRef, opacity, opacitySecondary } = useFooterMotion();
+
   return (
-    <div className="relative w-full flex flex-col justify-center items-center filter mt-20">
+    <div
+      ref={footerRef}
+      className="relative w-full flex flex-col justify-center items-center filter mt-20"
+    >
       <span className="font-jakarta text-[60px] leading-[60px]">
         Ça vous inspire ? <br />
         <span className="holographic-text">Parlons design !</span>
       </span>
-      <div className="w-full h-64 relative">
-        <div className="relative z-10 w-full h-full">
-          <SayYesFooter className="w-full h-full" />
-        </div>
-        <div className="absolute inset-0 w-full h-full z-20">
-          <HaloFooter className="w-full h-full" />
-        </div>
-        <div className="absolute inset-0 w-full h-full z-30">
-          <HaloFooterBottom className="w-full h-full" />
-        </div>
+      <div className="relative z-10 w-full h-full">
+        <SayYesFooter className="w-full h-full" />
+        <motion.img
+          src="./images/footer/Halo.png"
+          alt="footer"
+          className="w-full h-full absolute top-0 left-0"
+          style={{ opacity }}
+        />
+        <motion.img
+          src="./images/footer/HaloBottom.png"
+          alt="footer"
+          className="w-full h-full absolute bottom-0 left-0"
+          style={{ opacity: opacitySecondary }}
+        />
       </div>
       <div className="flex flex-col w-screen px-20 footer">
         <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
