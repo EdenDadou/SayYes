@@ -2,7 +2,8 @@ import "~/styles/tailwind.css";
 import { cn } from "~/utils/ui/ui";
 
 interface CardProps {
-  imageUrl: string;
+  imageUrl?: string;
+  videoUrl?: string;
   height: string;
   content?: React.ReactNode;
   borderClass?: string;
@@ -11,6 +12,7 @@ interface CardProps {
 
 export default function Card({
   imageUrl,
+  videoUrl,
   content,
   height,
   borderClass,
@@ -24,7 +26,7 @@ export default function Card({
   );
 
   const imageClasses = cn(
-    "h-full flex items-center justify-center rounded-[15px]",
+    "h-full flex items-center justify-center rounded-[15px] relative",
     imagesClass
   );
 
@@ -33,13 +35,23 @@ export default function Card({
       <div
         className={imageClasses}
         style={{
-          backgroundImage: `url(${imageUrl})`,
+          backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
           backgroundSize: "cover",
-          backgroundPosition: "right",
+          backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
       >
-        {content}
+        {videoUrl ? (
+          <video
+            src={videoUrl}
+            autoPlay
+            muted
+            loop
+            className="absolute inset-0 w-full h-full object-cover rounded-[15px] z-0"
+          />
+        ) : null}
+
+        <div className="size-full relative">{content}</div>
       </div>
     </div>
   );

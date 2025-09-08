@@ -43,8 +43,8 @@ export default function Section3Mobile() {
                   !isInView
                     ? ""
                     : colIndex % 2 === 0
-                    ? "scroll-top-mobile"
-                    : "scroll-bottom-mobile"
+                      ? "scroll-top-mobile"
+                      : "scroll-bottom-mobile"
                 }`}
               >
                 <div className="gap-3 flex flex-col items-center justify-center">

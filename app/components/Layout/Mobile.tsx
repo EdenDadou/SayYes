@@ -1,9 +1,8 @@
 import React, { Suspense, useState } from "react";
-// import LoaderIntro from "~/components/LoaderIntro";
 import useIntroTimer from "~/utils/hooks/useIntroTimer";
-import HeaderMobile from "../OldHeader/mobile/HeaderMobile";
+import HeaderMobile from "../Header/mobile/HeaderMobile";
 import "~/styles/tailwind.css";
-import FooterMobile from "../OldFooter/mobile/FooterMobile";
+import FooterMobile from "../Footer/mobile/FooterMobile";
 import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
 
 const Section1Mobile = React.lazy(
@@ -30,9 +29,6 @@ export default function Mobile() {
 
   return (
     <div className="flex items-center justify-center w-screen h-max relative">
-      {/*{shouldPlayIntro ? (
-        <LoaderIntro />
-      ) : ( */}
       {isOpen ? (
         <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
           <HeaderMobile

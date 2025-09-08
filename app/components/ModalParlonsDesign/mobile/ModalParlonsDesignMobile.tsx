@@ -1,8 +1,8 @@
-import SvgBtnFacebook from "~/components/OldFooter/components/BtnFacebook";
-import SvgBtnInstagram from "~/components/OldFooter/components/BtnInstagram";
-import SvgBtnLinkedin from "~/components/OldFooter/components/BtnLinkedin";
-import SvgBtnTiktok from "~/components/OldFooter/components/BtnTiktok";
-import SvgBtnYoutube from "~/components/OldFooter/components/BtnYoutube";
+import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
+import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
+import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
+import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
+import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 
 export default function ModalParlonsDesignMobile() {
   return (

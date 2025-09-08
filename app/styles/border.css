@@ -1,179 +1,182 @@
 .border-custom {
-    border: 0.894px solid rgba(255, 255, 255, 0.80);
-    background: linear-gradient(157deg, rgba(255, 255, 255, 0.01) -14.12%, rgba(78, 78, 78, 0.14) 101.01%);
-    backdrop-filter: blur(31.280344009399414px)
-  }
+  border: 0.894px solid rgba(255, 255, 255, 0.8);
+  background: linear-gradient(
+    157deg,
+    rgba(255, 255, 255, 0.01) -14.12%,
+    rgba(78, 78, 78, 0.14) 101.01%
+  );
+  backdrop-filter: blur(31.280344009399414px);
+}
 
-  .light-border {
-    --border-width: 2px;
-    --radius: 24px;
-  
-    position: relative;
-    border-radius: var(--radius);
-    border: var(--border-width) solid transparent;
-  }
+.light-border {
+  --border-width: 2px;
+  --radius: 24px;
 
-  .card-hover {
-    --border-width: 2px;
-    --radius: 24px;
-  
-    position: relative;
-    border-radius: var(--radius);
-    border: var(--border-width) solid transparent;
-  }
+  position: relative;
+  border-radius: var(--radius);
+  border: var(--border-width) solid transparent;
+}
 
-  .card-hover .card-image {
-    overflow: hidden;
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-  }
+.card-hover {
+  --border-width: 2px;
+  --radius: 24px;
 
-  .card-hover:hover .card-image {
-    transform: scale(1.05);
-  }
+  position: relative;
+  border-radius: var(--radius);
+  border: var(--border-width) solid transparent;
+}
 
-  .card-hover:hover::before {
-    content: " ";
-    position: absolute;
-    inset: calc(var(--border-width) * -1);
-    z-index: -1;
-    border: inherit;
-    border-radius: inherit;
-    background-image: conic-gradient(from var(--angle), 
-      transparent 0%, 
-      transparent 25%, 
-      rgba(220, 196, 255, 0) 25%, 
-      rgba(220, 196, 255, 0.2) 30%, 
-      rgba(220, 196, 255, 0.4) 35%, 
-      rgba(220, 196, 255, 0.6) 40%, 
-      rgba(220, 196, 255, 0.8) 45%, 
-      #DCC4FF 50%, 
-      #E1FF8B 55%, 
-      #B3F1FF 60%, 
-      rgba(179, 241, 255, 0.8) 65%, 
-      rgba(179, 241, 255, 0.6) 70%, 
-      rgba(179, 241, 255, 0.4) 75%, 
-      rgba(179, 241, 255, 0.2) 80%, 
-      rgba(179, 241, 255, 0) 85%, 
-      transparent 100%);
-    background-origin: border-box;
-    -webkit-mask:
-      linear-gradient(black, black) content-box,
-      linear-gradient(black, black);  
-    mask: linear-gradient(black, black),
-          linear-gradient(black, black);
-    -webkit-mask-clip: content-box, border-box;  
-    mask-clip: content-box, border-box;
-    -webkit-mask-composite: xor;  
-    mask-composite: exclude;
-    animation: spin 10s linear infinite;
-  }
+.card-hover .card-image {
+  overflow: hidden;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
 
-  @supports not (background: paint(something)) {
-    .card-hover:hover::before {
-      background-image: conic-gradient(
-        transparent 0%, 
-        transparent 25%, 
-        rgba(220, 196, 255, 0) 25%, 
-        rgba(220, 196, 255, 0.2) 30%, 
-        rgba(220, 196, 255, 0.4) 35%, 
-        rgba(220, 196, 255, 0.6) 40%, 
-        rgba(220, 196, 255, 0.8) 45%, 
-        #DCC4FF 50%, 
-        #E1FF8B 55%, 
-        #B3F1FF 60%, 
-        rgba(179, 241, 255, 0.8) 65%, 
-        rgba(179, 241, 255, 0.6) 70%, 
-        rgba(179, 241, 255, 0.4) 75%, 
-        rgba(179, 241, 255, 0.2) 80%, 
-        rgba(179, 241, 255, 0) 85%, 
-        transparent 100%);    
-    }
-  }
-  
-  
-  .light-border::before {
-    content: " ";
-    position: absolute;
-    inset: calc(var(--border-width) * -1);
-    z-index: -1;
-    border: inherit;
-    border-radius: inherit;
-    background-image: conic-gradient(from var(--angle), 
-      transparent 0%, 
-      transparent 25%, 
-      rgba(220, 196, 255, 0) 25%, 
-      rgba(220, 196, 255, 0.2) 30%, 
-      rgba(220, 196, 255, 0.4) 35%, 
-      rgba(220, 196, 255, 0.6) 40%, 
-      rgba(220, 196, 255, 0.8) 45%, 
-      #DCC4FF 50%, 
-      #E1FF8B 55%, 
-      #B3F1FF 60%, 
-      rgba(179, 241, 255, 0.8) 65%, 
-      rgba(179, 241, 255, 0.6) 70%, 
-      rgba(179, 241, 255, 0.4) 75%, 
-      rgba(179, 241, 255, 0.2) 80%, 
-      rgba(179, 241, 255, 0) 85%, 
-      transparent 100%);
-    background-origin: border-box;
-    -webkit-mask:
-      linear-gradient(black, black) content-box,
-      linear-gradient(black, black);  
-    mask: linear-gradient(black, black),
-          linear-gradient(black, black);
-    -webkit-mask-clip: content-box, border-box;  
-    mask-clip: content-box, border-box;
-    -webkit-mask-composite: xor;  
-    mask-composite: exclude;
-    animation: spin 10s linear infinite;
-  }
-  
-  @supports not (background: paint(something)) {
-    .light-border::before {
+.card-hover:hover .card-image {
+  transform: scale(1.05);
+}
+
+.card-hover:hover::before {
+  content: " ";
+  position: absolute;
+  inset: calc(var(--border-width) * -1);
+  z-index: -1;
+  border: inherit;
+  border-radius: inherit;
   background-image: conic-gradient(
-    transparent 0%, 
-    transparent 25%, 
-    rgba(220, 196, 255, 0) 25%, 
-    rgba(220, 196, 255, 0.2) 30%, 
-    rgba(220, 196, 255, 0.4) 35%, 
-    rgba(220, 196, 255, 0.6) 40%, 
-    rgba(220, 196, 255, 0.8) 45%, 
-    #DCC4FF 50%, 
-    #E1FF8B 55%, 
-    #B3F1FF 60%, 
-    rgba(179, 241, 255, 0.8) 65%, 
-    rgba(179, 241, 255, 0.6) 70%, 
-    rgba(179, 241, 255, 0.4) 75%, 
-    rgba(179, 241, 255, 0.2) 80%, 
-    rgba(179, 241, 255, 0) 85%, 
-    transparent 100%);    
-    }
-  }
-  
+    from var(--angle),
+    transparent 0%,
+    transparent 25%,
+    rgba(220, 196, 255, 0) 25%,
+    rgba(220, 196, 255, 0.2) 30%,
+    rgba(220, 196, 255, 0.4) 35%,
+    rgba(220, 196, 255, 0.6) 40%,
+    rgba(220, 196, 255, 0.8) 45%,
+    #dcc4ff 50%,
+    #e1ff8b 55%,
+    #b3f1ff 60%,
+    rgba(179, 241, 255, 0.8) 65%,
+    rgba(179, 241, 255, 0.6) 70%,
+    rgba(179, 241, 255, 0.4) 75%,
+    rgba(179, 241, 255, 0.2) 80%,
+    rgba(179, 241, 255, 0) 85%,
+    transparent 100%
+  );
+  background-origin: border-box;
+  -webkit-mask:
+    linear-gradient(black, black) content-box,
+    linear-gradient(black, black);
+  mask: linear-gradient(black, black), linear-gradient(black, black);
+  -webkit-mask-clip: content-box, border-box;
+  mask-clip: content-box, border-box;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin 10s linear infinite;
+}
 
-  
-  @property --angle {
-    syntax: "<angle>";
-    inherits: true;
-    initial-value: 0turn;
+@supports not (background: paint(something)) {
+  .card-hover:hover::before {
+    background-image: conic-gradient(
+      transparent 0%,
+      transparent 25%,
+      rgba(220, 196, 255, 0) 25%,
+      rgba(220, 196, 255, 0.2) 30%,
+      rgba(220, 196, 255, 0.4) 35%,
+      rgba(220, 196, 255, 0.6) 40%,
+      rgba(220, 196, 255, 0.8) 45%,
+      #dcc4ff 50%,
+      #e1ff8b 55%,
+      #b3f1ff 60%,
+      rgba(179, 241, 255, 0.8) 65%,
+      rgba(179, 241, 255, 0.6) 70%,
+      rgba(179, 241, 255, 0.4) 75%,
+      rgba(179, 241, 255, 0.2) 80%,
+      rgba(179, 241, 255, 0) 85%,
+      transparent 100%
+    );
   }
-  
-  @keyframes spin {
-    to {
-      --angle: 1turn;
-    }
+}
+
+.light-border::before {
+  content: " ";
+  position: absolute;
+  inset: calc(var(--border-width) * -1);
+  z-index: -1;
+  border: inherit;
+  border-radius: inherit;
+  background-image: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    transparent 25%,
+    rgba(220, 196, 255, 0) 25%,
+    rgba(220, 196, 255, 0.2) 30%,
+    rgba(220, 196, 255, 0.4) 35%,
+    rgba(220, 196, 255, 0.6) 40%,
+    rgba(220, 196, 255, 0.8) 45%,
+    #dcc4ff 50%,
+    #e1ff8b 55%,
+    #b3f1ff 60%,
+    rgba(179, 241, 255, 0.8) 65%,
+    rgba(179, 241, 255, 0.6) 70%,
+    rgba(179, 241, 255, 0.4) 75%,
+    rgba(179, 241, 255, 0.2) 80%,
+    rgba(179, 241, 255, 0) 85%,
+    transparent 100%
+  );
+  background-origin: border-box;
+  -webkit-mask:
+    linear-gradient(black, black) content-box,
+    linear-gradient(black, black);
+  mask: linear-gradient(black, black), linear-gradient(black, black);
+  -webkit-mask-clip: content-box, border-box;
+  mask-clip: content-box, border-box;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin 10s linear infinite;
+}
+
+@supports not (background: paint(something)) {
+  .light-border::before {
+    background-image: conic-gradient(
+      transparent 0%,
+      transparent 25%,
+      rgba(220, 196, 255, 0) 25%,
+      rgba(220, 196, 255, 0.2) 30%,
+      rgba(220, 196, 255, 0.4) 35%,
+      rgba(220, 196, 255, 0.6) 40%,
+      rgba(220, 196, 255, 0.8) 45%,
+      #dcc4ff 50%,
+      #e1ff8b 55%,
+      #b3f1ff 60%,
+      rgba(179, 241, 255, 0.8) 65%,
+      rgba(179, 241, 255, 0.6) 70%,
+      rgba(179, 241, 255, 0.4) 75%,
+      rgba(179, 241, 255, 0.2) 80%,
+      rgba(179, 241, 255, 0) 85%,
+      transparent 100%
+    );
   }
-  
-  
+}
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
+
+@keyframes spin {
+  to {
+    --angle: 1turn;
+  }
+}
+
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion) {
   html {
-    box-sizing: border-box;
-    scroll-behavior: smooth;
+    scroll-behavior: none;
   }
-  
-  @media (prefers-reduced-motion) {
-    html {
-      scroll-behavior: none;
-    }
-  }
-  
+}

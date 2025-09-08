@@ -2,16 +2,16 @@ import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa"; // Si tu veux transformer ton app en PWA
-import viteImagemin from 'vite-plugin-imagemin'; // Compression des images
-import svgr from 'vite-plugin-svgr';
-import svgo from 'vite-plugin-svgo';
+// import viteImagemin from 'vite-plugin-imagemin'; // Compression des images - disabled due to macOS compilation issues
+import svgr from "vite-plugin-svgr";
+import svgo from "vite-plugin-svgo";
 
 export default defineConfig({
   server: {
-    port: 4000
+    port: 4000,
   },
   // Inclure des fichiers spécifiques (par exemple, les polices)
-  assetsInclude: ['**/*.ttf', '**/*.woff', '**/*.woff2', '**/*.svg'],
+  assetsInclude: ["**/*.ttf", "**/*.woff", "**/*.woff2", "**/*.svg"],
 
   // Configuration pour optimiser le bundling et le cache
   build: {
@@ -22,9 +22,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Cache-busting pour les fichiers JS/CSS
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash][extname]',
+        entryFileNames: "assets/[name].[hash].js",
+        chunkFileNames: "assets/[name].[hash].js",
+        assetFileNames: "assets/[name].[hash][extname]",
       },
     },
   },
@@ -44,56 +44,49 @@ export default defineConfig({
     svgr(), // Ajout du plugin SVG
     svgo(),
 
-
-    // Plugin pour compresser les images en production
-    viteImagemin({
-      gifsicle: {
-        optimizationLevel: 3,
-        interlaced: false,
-      },
-      optipng: {
-        optimizationLevel: 7,
-      },
-      mozjpeg: {
-        quality: 75,
-      },
-      pngquant: {
-        quality: [0.65, 0.9],
-        speed: 4,
-      },
-      svgo: {
-        plugins: [
-          {
-            removeViewBox: false,
-          },
-        ],
-      },
-    }),
+    // Plugin pour compresser les images en production - disabled due to macOS compilation issues
+    // You can enable this later with alternative image optimization solutions
+    // viteImagemin({
+    //   mozjpeg: {
+    //     quality: 75,
+    //   },
+    //   pngquant: {
+    //     quality: [0.65, 0.9],
+    //     speed: 4,
+    //   },
+    //   svgo: {
+    //     plugins: [
+    //       {
+    //         removeViewBox: false,
+    //       },
+    //     ],
+    //   },
+    // }),
 
     // Si tu veux ajouter une PWA (Progressive Web App)
     VitePWA({
-      registerType: 'autoUpdate',  // Auto mise à jour de la PWA
+      registerType: "autoUpdate", // Auto mise à jour de la PWA
       devOptions: {
-        enabled: true,  // Active en mode dev pour tester la PWA
+        enabled: true, // Active en mode dev pour tester la PWA
       },
       workbox: {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // Augmente la limite à 5 Mo
       },
       manifest: {
-        name: 'Mon App Remix',
-        short_name: 'App Remix',
-        description: 'Mon application Remix avec Tailwind CSS',
-        theme_color: '#ffffff',
+        name: "Mon App Remix",
+        short_name: "App Remix",
+        description: "Mon application Remix avec Tailwind CSS",
+        theme_color: "#ffffff",
         icons: [
           {
-            src: '/icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: "/icons/icon-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
           },
           {
-            src: '/icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: "/icons/icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
           },
         ],
       },
@@ -102,6 +95,6 @@ export default defineConfig({
 
   // Optimisation des dépendances pour les temps de démarrage
   optimizeDeps: {
-    include: ['@remix-run/react', 'react', 'react-dom'], // Liste des dépendances essentielles
+    include: ["@remix-run/react", "react", "react-dom"], // Liste des dépendances essentielles
   },
 });

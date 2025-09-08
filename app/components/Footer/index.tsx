@@ -1,25 +1,36 @@
-import SvgLogo from "~/components/OldHeader/components/Logo";
-
+import LogoSayYes from "~/components/Header/components/LogoSayYes";
 import Button from "../Button";
-import SvgBtnInstagram from "~/components/OldFooter/components/BtnInstagram";
-import SvgBtnLinkedin from "~/components/OldFooter/components/BtnLinkedin";
-import SvgBtnYoutube from "~/components/OldFooter/components/BtnYoutube";
+import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
+import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
+import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import SvgBtnFacebook from "./components/BtnFacebook";
 import SvgBtnTiktok from "./components/BtnTiktok";
 import SayYesFooter from "./components/SayYes";
+import HaloFooter from "./components/HaloFooter";
+import HaloFooterBottom from "./components/HaloFooterBottom";
 
 export default function Footer() {
   return (
-    <div className="relative w-full flex flex-col justify-center items-center filter">
-      <span className="font-jakarta text-[60px] leading-[60px] -mb-10">
+    <div className="relative w-full flex flex-col justify-center items-center filter mt-20">
+      <span className="font-jakarta text-[60px] leading-[60px]">
         Ça vous inspire ? <br />
         <span className="holographic-text">Parlons design !</span>
       </span>
-      <SayYesFooter />
+      <div className="w-full h-64 relative">
+        <div className="relative z-10 w-full h-full">
+          <SayYesFooter className="w-full h-full" />
+        </div>
+        <div className="absolute inset-0 w-full h-full z-20">
+          <HaloFooter className="w-full h-full" />
+        </div>
+        <div className="absolute inset-0 w-full h-full z-30">
+          <HaloFooterBottom className="w-full h-full" />
+        </div>
+      </div>
       <div className="flex flex-col w-screen px-20 footer">
         <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
           <div className="flex flex-row items-center gap-8 ">
-            <SvgLogo width={110} height={108} className="rotate-2" />
+            <LogoSayYes width={110} height={108} className="rotate-2" />
 
             <div className="holographic-text font-jakarta-bold text-xl">
               Communication visuelle*

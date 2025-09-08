@@ -42,8 +42,8 @@ export default function Section3() {
                   !isInView
                     ? ""
                     : colIndex % 2 === 0
-                    ? "scroll-top"
-                    : "scroll-bottom"
+                      ? "scroll-top"
+                      : "scroll-bottom"
                 }`}
               >
                 <div className="gap-5 flex flex-col items-center justify-center overflow-hidden">

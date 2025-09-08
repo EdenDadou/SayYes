@@ -2,14 +2,21 @@ interface IButtonProps {
   leftIcon?: React.ReactNode;
   label: string;
   type?: "plain" | "transparent";
+  onClick?: () => void;
 }
 
-const Button = ({ leftIcon, label, type = "transparent" }: IButtonProps) => {
+const Button = ({
+  leftIcon,
+  label,
+  type = "transparent",
+  onClick,
+}: IButtonProps) => {
   return (
     <button
       className={`w-fit cursor-pointer p-2 bg-transparent rounded-full ${
         type === "plain" ? "border-custom h-[74px]" : ""
       }`}
+      onClick={onClick}
     >
       <div
         className={`flex flex-row items-center cursor-pointer justify-center gap-2 ${

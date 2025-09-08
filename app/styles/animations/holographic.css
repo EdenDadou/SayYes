@@ -15,39 +15,54 @@
   background-size: 400% 400%;
 }
 
-
 .holographic-text {
-  background: linear-gradient(150deg, #E1FF8B, #DCD5FF, #DCC4FF, #B0F5FF, #B0F5F0,  #E1FF8B);
+  background: linear-gradient(
+    150deg,
+    #e1ff8b,
+    #dcd5ff,
+    #dcc4ff,
+    #b0f5ff,
+    #b0f5f0,
+    #e1ff8b
+  );
   background-size: 100%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation:moveGradient 1s ease infinite;
+  animation: moveGradient 1s ease infinite;
 }
 .holographic-bloc {
-  background:
-  linear-gradient(270deg, #E1FF8B, #DCD5FF, #DCC4FF, #B0F5FF, #B0F5F0,  #E1FF8B);
-  box-shadow: 0 0 10px #DCC4FF, 0 0 20px #B0F5FF, 0 0 30px #E1FF8B;
+  background: linear-gradient(
+    270deg,
+    #e1ff8b,
+    #dcd5ff,
+    #dcc4ff,
+    #b0f5ff,
+    #b0f5f0,
+    #e1ff8b
+  );
+  box-shadow:
+    0 0 10px #dcc4ff,
+    0 0 20px #b0f5ff,
+    0 0 30px #e1ff8b;
   filter: blur(0.5px);
 }
 
 .holographic-border {
-  position: relative; 
+  position: relative;
 }
 
 /* Pseudo-élément pour créer l'effet holographique */
 .holographic-border::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: -1; /* Met le pseudo-élément derrière le contenu */
-  background: linear-gradient(270deg, #E1FF8B, #DCD5FF, #B0F5FF);
+  background: linear-gradient(270deg, #e1ff8b, #dcd5ff, #b0f5ff);
   animation: moveGradient 5s ease infinite; /* Animation du dégradé */
-  border-radius:90px; /* Pour que le flou soit arrondi également */
+  border-radius: 90px; /* Pour que le flou soit arrondi également */
   filter: blur(2px); /* Ajoute un flou à l'effet holographique */
 }
-
-

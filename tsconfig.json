@@ -5,8 +5,9 @@
     "**/.server/**/*.ts",
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
-    "**/.client/**/*.tsx"
-, "app/utils/scripts/generate-icons.js"  ],
+    "**/.client/**/*.tsx",
+    "app/utils/scripts/generate-icons.js"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": ["@remix-run/node", "vite/client"],

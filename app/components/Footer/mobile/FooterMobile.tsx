@@ -1,8 +1,8 @@
-import SvgLogo from "~/components/OldHeader/components/Logo";
+import SvgLogo from "~/components/Header/components/Logo";
 
-import SvgBtnInstagram from "~/components/OldFooter/components/BtnInstagram";
-import SvgBtnLinkedin from "~/components/OldFooter/components/BtnLinkedin";
-import SvgBtnYoutube from "~/components/OldFooter/components/BtnYoutube";
+import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
+import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
+import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import SvgBtnFacebook from "../components/BtnFacebook";
 import SvgBtnTiktok from "../components/BtnTiktok";
 import Button from "~/components/Button";

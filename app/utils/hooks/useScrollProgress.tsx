@@ -4,6 +4,7 @@ export const useScrollProgress = () => {
   const [scrollY, setScrollY] = useState(0);
   const [isImageFixed, setIsImageFixed] = useState(false);
   const [imageOpacity, setImageOpacity] = useState(1);
+  const [imageScale, setImageScale] = useState(1);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,19 +23,23 @@ export const useScrollProgress = () => {
       if (currentScrollY > imageTriggerPoint) {
         setIsImageFixed(true);
 
-        // Commencer le fade progressif
+        // Commencer le fade progressif et le dézoom
         if (currentScrollY > fadeStartPoint) {
           const fadeProgress = Math.min(
             (currentScrollY - fadeStartPoint) / (fadeEndPoint - fadeStartPoint),
             1
           );
           setImageOpacity(1 - fadeProgress);
+          // Dézoom de 1 (100%) à 0.8 (80%) pendant que l'opacité diminue
+          setImageScale(1 - fadeProgress * 0.14);
         } else {
           setImageOpacity(1);
+          setImageScale(1);
         }
       } else {
         setIsImageFixed(false);
         setImageOpacity(1);
+        setImageScale(1);
       }
     };
 
@@ -42,7 +47,7 @@ export const useScrollProgress = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  return { scrollY, isImageFixed, imageOpacity };
+  return { scrollY, isImageFixed, imageOpacity, imageScale };
 };
 
 export default useScrollProgress;

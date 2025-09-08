@@ -12,10 +12,13 @@ export default function useIntroTimer() {
       if (lastPlayedDate !== today) {
         localStorage.setItem("introPlayedDate", today);
         setShouldPlayIntro(true);
-        const timeoutLine = setTimeout(() => {
-          setIsIntroFinish(true);
-          setShouldPlayIntro(false);
-        }, VIDEO_DURATION * 1000 + 500);
+        const timeoutLine = setTimeout(
+          () => {
+            setIsIntroFinish(true);
+            setShouldPlayIntro(false);
+          },
+          VIDEO_DURATION * 1000 + 500
+        );
 
         return () => {
           clearTimeout(timeoutLine);

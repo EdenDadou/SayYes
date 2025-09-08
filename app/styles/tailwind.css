@@ -3,77 +3,74 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Jakarta';
+  font-family: "Jakarta";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(/fonts/PlusJakartaSans-Regular.ttf) format('truetype');
+  src: url(/fonts/PlusJakartaSans-Regular.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'Jakarta Medium';
+  font-family: "Jakarta Medium";
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/fonts/PlusJakartaSans-Medium.ttf) format('truetype');
+  src: url(/fonts/PlusJakartaSans-Medium.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'Jakarta Semi Bold';
+  font-family: "Jakarta Semi Bold";
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(/fonts/PlusJakartaSans-SemiBold.ttf) format('truetype');
+  src: url(/fonts/PlusJakartaSans-SemiBold.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'Jakarta Bold';
+  font-family: "Jakarta Bold";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(/fonts/PlusJakartaSans-Bold.ttf) format('truetype');
+  src: url(/fonts/PlusJakartaSans-Bold.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'Jakarta Extra Bold';
+  font-family: "Jakarta Extra Bold";
   font-style: normal;
   font-weight: 900;
   font-display: swap;
-  src: url(/fonts/PlusJakartaSans-ExtraBold.ttf) format('truetype');
+  src: url(/fonts/PlusJakartaSans-ExtraBold.ttf) format("truetype");
 }
 @font-face {
-  font-family: 'MADE Soulmaze Brush';
+  font-family: "MADE Soulmaze Brush";
   font-style: normal;
   font-weight: 900;
   font-display: swap;
   src: url(/fonts/MADE-Soulmaze-Brush.otf) format("otf");
 }
 @font-face {
-  font-family: 'MADE Soulmaze';
+  font-family: "MADE Soulmaze";
   font-style: normal;
   font-weight: 900;
   font-display: swap;
-  src: url(/fonts/MADE-Soulmaze-Brush.otf) format('otf');
+  src: url(/fonts/MADE-Soulmaze-Brush.otf) format("otf");
 }
-
-
 
 html,
 body {
   height: max-content;
-  width: 100vw;           /* Largeur exactement égale à celle de l’écran */
-  max-width: 100%;        /* Empêche tout débordement horizontal */
+  width: 100vw; /* Largeur exactement égale à celle de l’écran */
+  max-width: 100%; /* Empêche tout débordement horizontal */
   margin: 0;
   padding: 0;
-  box-sizing: border-box; 
-  background-color:  black;
+  box-sizing: border-box;
+  background-color: black;
 
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: inherit; /* Hérite box-sizing pour tous les éléments enfants */
   }
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
-
-
-
 }
 
 /* Cacher la scrollbar pour toute la page */
@@ -97,4 +94,3 @@ body::-webkit-scrollbar {
   position: relative;
   z-index: 10;
 }
-

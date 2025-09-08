@@ -1,6 +1,11 @@
-
-
 .footer {
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.00) 0%, rgba(222, 254, 145, 0.09) 31.37%, rgba(181, 239, 255, 0.12) 50.07%, rgba(220, 196, 255, 0.12) 69.86%, rgba(0, 0, 0, 0.00) 99.07%);
-  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.40));
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(222, 254, 145, 0.09) 31.37%,
+    rgba(181, 239, 255, 0.12) 50.07%,
+    rgba(220, 196, 255, 0.12) 69.86%,
+    rgba(0, 0, 0, 0) 99.07%
+  );
+  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.4));
 }

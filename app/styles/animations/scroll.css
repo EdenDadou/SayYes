@@ -1,18 +1,20 @@
 @keyframes scrollRight {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
+  0% {
+    transform: translateX(0%);
   }
-  
-  .scroll-right {
-    animation: scrollRight 20s linear infinite;
+  100% {
+    transform: translateX(-50%);
   }
+}
+
+.scroll-right {
+  animation: scrollRight 20s linear infinite;
+}
 
 .icon {
-  transition: transform 0.3s ease, opacity 0.3s ease; /* Transition pour le mouvement et l'opacité */
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease; /* Transition pour le mouvement et l'opacité */
   position: absolute; /* Permet de superposer les icônes */
   bottom: 0; /* Alignement à la base du conteneur */
   opacity: 1; /* Opacité par défaut */
@@ -33,7 +35,9 @@
     transform: translateY(-10%);
   }
   100% {
-    transform: translateY(-90%); /* Défilement de 100% pour permettre un défilement complet */
+    transform: translateY(
+      -90%
+    ); /* Défilement de 100% pour permettre un défilement complet */
   }
 }
 
@@ -51,7 +55,9 @@
     transform: translateY(-30%);
   }
   100% {
-    transform: translateY(-90%); /* Défilement de 100% pour permettre un défilement complet */
+    transform: translateY(
+      -90%
+    ); /* Défilement de 100% pour permettre un défilement complet */
   }
 }
 
@@ -63,7 +69,6 @@
     transform: translateY(-30%); /* Défilement vers le bas */
   }
 }
-
 
 .scroll-top-mobile {
   animation: translateYUpMobile 40s linear infinite;
@@ -78,20 +83,23 @@
   animation: translateYDown 50s linear infinite;
 }
 
-
 /* Ajouter cette règle dans ton fichier CSS global */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE et Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE et Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 @keyframes scrollInfinite {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-scrollInfinite {

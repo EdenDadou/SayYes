@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import ModalParlonsDesign from "../../ModalParlonsDesign";
 import { useState } from "react";
-import HeaderMobile from "~/components/OldHeader/mobile/HeaderMobile";
+import HeaderMobile from "~/components/Header/mobile/HeaderMobile";
 
 export default function Page404Mobile() {
   const [isOpen, setIsOpen] = useState(false);
