@@ -1,8 +1,9 @@
 import type { SVGProps } from "react";
 const LogoSayYes = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={120}
-    height={95}
+    width={props.width}
+    height={props.height}
+    viewBox="0 0 121 96"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}

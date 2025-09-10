@@ -1,5 +1,7 @@
 import "~/styles/tailwind.css";
 import { cn } from "~/utils/ui/ui";
+import Masque from "~/components/Card/components/Masque";
+import { useViewport } from "~/utils/hooks/useViewport";
 
 interface CardProps {
   imageUrl?: string;
@@ -18,10 +20,10 @@ export default function Card({
   borderClass,
   imagesClass,
 }: CardProps) {
-  //   const isMobile = useViewport();
+  const isMobile = useViewport();
 
   const containerClasses = cn(
-    "border-custom w-full rounded-[25px] p-4",
+    "border-custom w-full rounded-[25px] md:p-4 p-2",
     borderClass
   );
 
@@ -51,6 +53,9 @@ export default function Card({
           />
         ) : null}
 
+        {!isMobile ? (
+          <Masque className="absolute inset-0 w-full h-full object-contain rounded-xl z-0" />
+        ) : null}
         <div className="size-full relative">{content}</div>
       </div>
     </div>

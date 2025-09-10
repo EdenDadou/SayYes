@@ -91,6 +91,9 @@ body::-webkit-scrollbar {
 .header-custom {
   border-radius: 78px;
   -webkit-backdrop-filter: blur(31.280344009399414px);
-  position: relative;
-  z-index: 10;
+  z-index: 50;
+  position: sticky;
+  top: 35px;
+  left: 0;
+  right: 0;
 }

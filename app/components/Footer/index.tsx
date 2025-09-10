@@ -1,18 +1,23 @@
-import LogoSayYes from "~/components/Header/components/LogoSayYes";
 import Button from "../Button";
+import { motion } from "framer-motion";
+import { useFooterMotion } from "~/utils/hooks/useFooterMotion";
+import { useViewport } from "~/utils/hooks/useViewport";
 import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import SvgBtnFacebook from "./components/BtnFacebook";
 import SvgBtnTiktok from "./components/BtnTiktok";
 import SayYesFooter from "./components/SayYes";
-import { motion } from "framer-motion";
-import { useFooterMotion } from "~/utils/hooks/useFooterMotion";
+import LogoSayYes from "~/components/Header/components/LogoSayYes";
+import FooterMobile from "./mobile/FooterMobile";
 
 export default function Footer() {
+  const isMobile = useViewport();
   const { footerRef, opacity, opacitySecondary } = useFooterMotion();
 
-  return (
+  return isMobile ? (
+    <FooterMobile />
+  ) : (
     <div
       ref={footerRef}
       className="relative w-full flex flex-col justify-center items-center filter mt-20"

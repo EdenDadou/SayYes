@@ -1,7 +1,7 @@
 interface IButtonProps {
   leftIcon?: React.ReactNode;
-  label: string;
-  type?: "plain" | "transparent";
+  label?: string;
+  type?: "plain" | "transparent" | "mobile";
   onClick?: () => void;
 }
 
@@ -13,8 +13,8 @@ const Button = ({
 }: IButtonProps) => {
   return (
     <button
-      className={`w-fit cursor-pointer p-2 bg-transparent rounded-full ${
-        type === "plain" ? "border-custom h-[74px]" : ""
+      className={`w-fit cursor-pointerbg-transparent rounded-full ${
+        type === "plain" ? "border-custom h-[74px] p-2 " : ""
       }`}
       onClick={onClick}
     >
@@ -22,19 +22,23 @@ const Button = ({
         className={`flex flex-row items-center cursor-pointer justify-center gap-2 ${
           type === "transparent"
             ? "bg-transparent"
-            : "bg-white rounded-full px-3"
+            : type === "mobile"
+              ? "bg-white rounded-full p-3"
+              : "bg-white rounded-full px-3"
         }`}
       >
         {leftIcon ? leftIcon : null}
-        <span
-          className={`${
-            type === "transparent"
-              ? "text-white text-shadow-base shadow-black font-jakarta"
-              : "text-black font-jakarta-bold py-4 text-md"
-          }`}
-        >
-          {label}
-        </span>
+        {label ? (
+          <span
+            className={`${
+              type === "transparent"
+                ? "text-white text-shadow-base shadow-black font-jakarta"
+                : "text-black font-jakarta-bold py-4 text-md"
+            }`}
+          >
+            {label}
+          </span>
+        ) : null}
       </div>
     </button>
   );

@@ -1,7 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
-import { redirect, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { useState } from "react";
 import Button from "../Button";
 import LogoSayYes from "~/components/Header/components/LogoSayYes";
+import { useViewport } from "~/utils/hooks/useViewport";
+import HeaderMobile from "./mobile/HeaderMobile";
 import ChatBuble from "./components/ChatBuble";
 import Flamme from "./components/Flamme";
 import Coeur from "./components/Coeur";
@@ -10,26 +13,36 @@ import Idea from "./components/Idea";
 
 const Header = () => {
   const navigate = useNavigate();
+  const isMobile = useViewport();
+  const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const { scrollY } = useScroll();
 
-  // const controlHeader = useCallback(() => {
-  //   const currentScrollY = window.scrollY;
-  //   if (currentScrollY > lastScrollY && currentScrollY > 50) {
-  //     setLastScrollY(currentScrollY);
-  //   } else if (lastScrollY - currentScrollY > 200 || currentScrollY < 100) {
-  //     setLastScrollY(currentScrollY);
-  //   }
-  // }, [lastScrollY]);
+  // Listen to scroll changes
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const direction = latest > lastScrollY ? "down" : "up";
+    if (latest > 50 && direction === "down") {
+      setIsVisible(false);
+    } else if (direction === "up" || latest < 100) {
+      setIsVisible(true);
+    }
+    setLastScrollY(latest);
+  });
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", controlHeader);
-  //   return () => {
-  //     window.removeEventListener("scroll", controlHeader);
-  //   };
-  // }, [controlHeader]);
-
-  return (
-    <div className="header-custom border-custom flex flex-row justify-between items-center relative m-10 mx-16 h-[74px]">
+  return isMobile ? (
+    <HeaderMobile />
+  ) : (
+    <motion.div
+      className="header-custom border-custom flex flex-row justify-between items-center m-12 mx-24 h-[74px]"
+      initial={{ y: 0 }}
+      animate={{ y: isVisible ? 0 : -130 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+        mass: 0.5,
+      }}
+    >
       {/* Section gauche */}
       <div className="flex flex-row items-center gap-8 flex-1 pl-8">
         <div className="font-jakarta text-lg">Communication visuelle*</div>
@@ -49,6 +62,8 @@ const Header = () => {
       <LogoSayYes
         className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[5px]"
         onClick={() => navigate("/")}
+        width={120}
+        height={95}
       />
 
       {/* Section droite */}
@@ -69,7 +84,7 @@ const Header = () => {
           type="plain"
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 
