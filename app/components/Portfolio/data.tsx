@@ -38,7 +38,7 @@ export const portfolioTopCards = [
     imagesClass:
       "hover:scale-110 transition-all duration-[800ms] ease-in-out card-image",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />
@@ -53,7 +53,7 @@ export const portfolioTopCards = [
     imagesClass:
       "hover:scale-110 transition-all duration-[800ms] ease-in-out card-image",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />
@@ -67,7 +67,7 @@ export const portfolioTopCards = [
     borderClass: "card-hover",
     imagesClass: "hover:scale-110 transition-all duration-[800ms] ease-in-out",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />
@@ -82,7 +82,7 @@ export const portfolioTopCards = [
     imagesClass:
       "hover:scale-110 transition-all duration-[800ms] ease-in-out card-image",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />
@@ -100,7 +100,7 @@ export const portfolioBottomCards = [
     imagesClass:
       "hover:scale-110 transition-all duration-[800ms] ease-in-out card-image",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />
@@ -114,7 +114,7 @@ export const portfolioBottomCards = [
     borderClass: "card-hover",
     imagesClass: "hover:scale-110 transition-all duration-[800ms] ease-in-out",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />
@@ -129,7 +129,7 @@ export const portfolioBottomCards = [
     imagesClass:
       "hover:scale-110 transition-all duration-[800ms] ease-in-out card-image",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />
@@ -144,7 +144,7 @@ export const portfolioBottomCards = [
     imagesClass:
       "hover:scale-110 transition-all duration-[800ms] ease-in-out card-image",
     content: (
-      <div className="flex flex-col items-center justify-end w-full h-full p-4 ">
+      <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
         <div className="flex flex-row items-center justify-between w-full">
           <TitleCard1 />
           <Arrow />

@@ -10,6 +10,7 @@ import SvgBtnTiktok from "./components/BtnTiktok";
 import SayYesFooter from "./components/SayYes";
 import LogoSayYes from "~/components/Header/components/LogoSayYes";
 import FooterMobile from "./mobile/FooterMobile";
+import LogoSayYesHolo from "./components/LogoSayYesHolo";
 
 export default function Footer() {
   const isMobile = useViewport();
@@ -44,7 +45,7 @@ export default function Footer() {
       <div className="flex flex-col w-screen px-20 footer">
         <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
           <div className="flex flex-row items-center gap-8 ">
-            <LogoSayYes width={110} height={108} className="rotate-2" />
+            <LogoSayYesHolo width={110} height={108} className="rotate-2" />
 
             <div className="holographic-text font-jakarta-bold text-xl">
               Communication visuelle*

@@ -20,8 +20,6 @@ export default function Card({
   borderClass,
   imagesClass,
 }: CardProps) {
-  const isMobile = useViewport();
-
   const containerClasses = cn(
     "border-custom w-full rounded-[25px] md:p-4 p-2",
     borderClass
@@ -53,9 +51,6 @@ export default function Card({
           />
         ) : null}
 
-        {!isMobile ? (
-          <Masque className="absolute inset-0 w-full h-full object-contain rounded-xl z-0" />
-        ) : null}
         <div className="size-full relative">{content}</div>
       </div>
     </div>

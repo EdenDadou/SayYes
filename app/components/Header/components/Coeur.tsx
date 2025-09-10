@@ -19,26 +19,42 @@ const Coeur = (props: SVGProps<SVGSVGElement>) => (
         x2="100%"
         y2="20%"
       >
-        <stop offset="0%" stopColor="#DCC4FF">
+        <stop offset="0%" stopColor="#4FFFF5">
           <animate
             attributeName="stop-color"
-            values="#DCC4FF; #B0F5FF; #E1FF8B; #DCC4FF"
+            values="#FE77B7; #FEAB71; #E6FF9C; #B7EEEF; #4FFFF5; #FE77B7"
             dur="3s"
             repeatCount="indefinite"
           />
         </stop>
-        <stop offset="33%" stopColor="#B0F5FF">
+        <stop offset="25%" stopColor="#B7EEEF">
           <animate
             attributeName="stop-color"
-            values="#B0F5FF; #E1FF8B; #DCC4FF; #B0F5FF"
+            values="#4FFFF5; #FE77B7; #FEAB71; #E6FF9C; #B7EEEF; #4FFFF5"
             dur="3s"
             repeatCount="indefinite"
           />
         </stop>
-        <stop offset="100%" stopColor="#E1FF8B">
+        <stop offset="50%" stopColor="#E6FF9C">
           <animate
             attributeName="stop-color"
-            values="#E1FF8B; #DCC4FF;  #DCC4FF; #B0F5FF; #E1FF8B"
+            values="#B7EEEF; #4FFFF5; #FE77B7; #FEAB71; #E6FF9C; #B7EEEF"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </stop>
+        <stop offset="75%" stopColor="#FEAB71">
+          <animate
+            attributeName="stop-color"
+            values="#E6FF9C; #B7EEEF; #4FFFF5; #FE77B7; #FEAB71; #E6FF9C"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </stop>
+        <stop offset="100%" stopColor="#FE77B7">
+          <animate
+            attributeName="stop-color"
+            values="#FEAB71; #E6FF9C; #B7EEEF; #4FFFF5; #FE77B7; #FEAB71"
             dur="3s"
             repeatCount="indefinite"
           />

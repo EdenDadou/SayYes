@@ -20,10 +20,19 @@ export default function Content({
 }: PropsContent) {
   const isMobile = useViewport();
 
+  const backgroundMobile = isMobile
+    ? "bg-gradient-to-b from-transparent via-black/70 to-black/90"
+    : "";
+
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-transparent via-black/70 to-black/90">
+    <div
+      className={`relative w-full h-full flex flex-col items-center justify-center ${backgroundMobile}`}
+    >
+      {!isMobile ? (
+        <Masque className="absolute inset-0 w-full h-full object-contain rounded-xl z-0" />
+      ) : null}
       {/* Contenu au premier plan */}
-      <div className="relative z-10 flex flex-col items-start md:justify-center justify-end pb-5 size-full px-4 md:px-20 gap-4">
+      <div className="relative z-10 flex flex-col items-start md:justify-center justify-end size-full px-4 md:px-20 gap-4">
         <div className="flex flex-row items-center justify-center gap-2 ">
           <Star className="w-4 h-4" />
           <h2 className="text-lg">{subtitle}</h2>
@@ -35,7 +44,7 @@ export default function Content({
             {title2}
           </span>
         </span>
-        <div className="flex flex-col items-start justify-center gap-2 font-jakarta text-[12px]">
+        <div className="flex flex-col items-start justify-center gap-2 font-jakarta text-[12px] md:text-[16px] md:mt-6">
           {bulletPoints.map((bullet) => (
             <span className="flex flex-row items-center justify-center gap-2">
               <Coche />

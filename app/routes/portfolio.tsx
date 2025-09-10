@@ -10,23 +10,31 @@ import {
 import { useScrollProgress } from "~/utils/hooks/useScrollProgress";
 import Background from "~/components/Solutions/components/Background";
 import Filter from "~/components/Portfolio/components/Filter";
+import { useViewport } from "~/utils/hooks/useViewport";
 
 export default function Portfolio() {
-  //   const isMobile = useViewport();
+  const isMobile = useViewport();
   const { isImageFixed, imageOpacity, imageScale } = useScrollProgress();
+
+  const imageMobile = isMobile
+    ? "/images/portfolio/ClientsWallMobile.png"
+    : "/images/portfolio/ClientsWall.png";
 
   return (
     <div className="w-screen h-fit relative">
       {/* Background SVG - seulement sur la partie haute */}
       {/* <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" /> */}
-
+      {/* <img
+        src="./images/BACKGROUND.png"
+        alt="halo"
+        className="w-full fixed top-0 left-0"
+      /> */}
       <Header />
-
       {/* Section des cartes du haut - scroll normal */}
-      <section className="relative z-10 px-36 flex flex-col gap-8 py-8">
+      <section className="relative z-10 md:px-36 px-4 flex flex-col gap-8 py-8">
         <PortfolioTitle />
         <Filter />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           {portfolioTopCards.map((card) => (
             <Card
               key={card.imageUrl}
@@ -49,7 +57,7 @@ export default function Portfolio() {
           }`}
         >
           <img
-            src="/images/portfolio/ClientsWall.png"
+            src={imageMobile}
             alt="Clients Wall"
             className="w-full h-full object-cover transition-all duration-500"
             style={{
@@ -62,11 +70,11 @@ export default function Portfolio() {
           />
         </div>
 
-        {/* Cartes du bas qui passent par-dessus pendant le fade */}
+        {/* Cartes du bas */}
         <div className="relative z-10 bg-transparent min-h-screen">
           <div className="pt-32 pb-32">
-            <section className="px-36 flex flex-col gap-8">
-              <div className="grid grid-cols-2 gap-4">
+            <section className="md:px-36 px-4 flex flex-col gap-8">
+              <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                 {portfolioBottomCards.map((card) => (
                   <Card
                     key={card.imageUrl}
