@@ -40,10 +40,10 @@ jobs:
           git reset --hard origin/main || { echo "❌ Échec git reset"; exit 1; }
 
           echo "📦 Installation des dépendances..."
-          # Nettoyer le cache npm et les node_modules
-          rm -rf node_modules package-lock.json
+          # Nettoyer complètement l'environnement
+          rm -rf node_modules package-lock.json yarn.lock
           npm cache clean --force
-          # Installation avec --legacy-peer-deps pour résoudre les conflits
+          # Régénérer le package-lock.json avec les nouvelles versions
           npm install --legacy-peer-deps || { echo "❌ Échec npm install"; exit 1; }
 
           echo "🗄️ Configuration de la base de données..."
