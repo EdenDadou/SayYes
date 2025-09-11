@@ -24,7 +24,7 @@ const Button = ({
             ? "bg-transparent"
             : type === "mobile"
               ? "bg-white rounded-full p-3"
-              : "bg-white rounded-full px-3"
+              : "bg-white rounded-full px-3 holographic-bg-hover"
         }`}
       >
         {leftIcon ? leftIcon : null}

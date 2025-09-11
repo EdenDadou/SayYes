@@ -42,7 +42,7 @@ export default function FooterMobile() {
           Communication visuelle*
         </div>
 
-        <div className="h-[1px] w-2/3 holographic-bloc" />
+        <div className="h-[1px] w-2/3 holographic-bg" />
         <p className="text-md font-jakarta-bold">
           L’agence de communication visuelle <br /> qui qui met tout le monde
           d’accord !

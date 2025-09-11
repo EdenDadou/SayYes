@@ -44,21 +44,6 @@
   -webkit-text-fill-color: transparent;
   animation: moveGradient 6s linear infinite;
 }
-.holographic-bloc {
-  background: linear-gradient(
-    270deg,
-    #4ffff5,
-    #fe77b7,
-    #feab71,
-    #e6ff9c,
-    #b7eeef
-  );
-  box-shadow:
-    0 0 10px #dcc4ff,
-    0 0 20px #b0f5ff,
-    0 0 30px #e1ff8b;
-  filter: blur(0.5px);
-}
 
 .holographic-border {
   position: relative;
@@ -77,4 +62,40 @@
   animation: moveGradient 5s ease infinite; /* Animation du dégradé */
   border-radius: 90px; /* Pour que le flou soit arrondi également */
   filter: blur(2px); /* Ajoute un flou à l'effet holographique */
+}
+
+/* Background holographique simple au hover */
+.holographic-bg-hover:hover {
+  background: linear-gradient(
+    150deg,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef
+  );
+  background-size: 500% 500%;
+  animation: moveGradient 6s linear infinite;
+}
+.holographic-bg {
+  background: linear-gradient(
+    150deg,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef
+  );
+  background-size: 500% 500%;
+  animation: moveGradient 6s linear infinite;
 }

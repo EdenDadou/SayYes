@@ -57,7 +57,7 @@ export default function Footer() {
           </p>
         </div>
 
-        <div className="h-[1px] w-full mb-12 holographic-bloc" />
+        <div className="h-[1px] w-full mb-12 holographic-bg" />
         <div className="flex flex-row justfy-between w-full pb-8">
           <div className="flex flex-col gap-4 w-1/3">
             <p className="text-md font-jakarta-bold">

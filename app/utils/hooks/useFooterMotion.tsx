@@ -14,7 +14,7 @@ export const useFooterMotion = () => {
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   // Opacité réduite pour la deuxième image (20% de l'opacité principale)
-  const opacitySecondary = useTransform(scrollYProgress, [0, 1], [0, 0.01]);
+  const opacitySecondary = useTransform(scrollYProgress, [0, 1], [0, 0.2]);
 
   return { footerRef, opacity, opacitySecondary };
 };

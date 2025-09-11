@@ -23,7 +23,7 @@ export default function Portfolio() {
   return (
     <div className="w-screen h-fit relative">
       {/* Background SVG - seulement sur la partie haute */}
-      {/* <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" /> */}
+      <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
       {/* <img
         src="./images/BACKGROUND.png"
         alt="halo"
