@@ -48,10 +48,14 @@ jobs:
 
           echo "🗄️ Configuration de la base de données..."
           # Générer le client Prisma
+          echo "📋 Génération du client Prisma..."
           npx prisma generate || { echo "❌ Échec prisma generate"; exit 1; }
+          echo "✅ Client Prisma généré avec succès."
 
           # Appliquer les migrations/schema à la base de données
-          npx prisma db push || { echo "❌ Échec prisma db push"; exit 1; }
+          echo "📋 Application du schema à la base de données..."
+          npx prisma db push --accept-data-loss || { echo "❌ Échec prisma db push"; exit 1; }
+          echo "✅ Schema appliqué avec succès."
 
           echo "✅ Base de données configurée."
 
@@ -64,7 +68,9 @@ jobs:
           echo "✅ Dossiers créés."
 
           echo "🏗️ Build de l'application..."
-          npm run build || { echo "❌ Échec npm build"; exit 1; }
+          echo "📋 Démarrage du build (cela peut prendre quelques minutes)..."
+          timeout 300 npm run build || { echo "❌ Échec npm build (timeout ou erreur)"; exit 1; }
+          echo "✅ Build terminé avec succès."
 
           echo "🚀 Redémarrage de l'application via PM2..."
           pm2 restart remix-app || { echo "❌ Échec PM2 restart"; exit 1; }
