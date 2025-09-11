@@ -5,7 +5,7 @@ const SvgPortfolioTitle = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     fill="none"
-    viewBox="18 40 988 200"
+    viewBox="15 40 988 190"
     preserveAspectRatio="none"
     {...props}
   >

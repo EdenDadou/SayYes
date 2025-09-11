@@ -4,7 +4,7 @@ const SolutionTitle = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     fill="none"
-    viewBox="0 40 988 180"
+    viewBox="0 30 988 200"
     preserveAspectRatio="none"
     aria-hidden="true"
     {...props}

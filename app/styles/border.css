@@ -26,13 +26,13 @@
   border: var(--border-width) solid transparent;
 }
 
-.card-hover .card-image {
+.card-image {
   overflow: hidden;
   border-radius: 15px;
   transition: transform 0.3s ease;
 }
 
-.card-hover:hover .card-image {
+.card-image:hover {
   transform: scale(1.05);
 }
 
