@@ -47,6 +47,13 @@ jobs:
           npm install --legacy-peer-deps || { echo "❌ Échec npm install"; exit 1; }
 
           echo "🗄️ Configuration de la base de données..."
+          # Créer le fichier .env avec DATABASE_URL
+          echo "DATABASE_URL=file:./prisma/dev.db" > .env
+          echo "📋 Fichier .env créé avec DATABASE_URL"
+          # Configurer aussi pour le script actuel
+          export DATABASE_URL="file:./prisma/dev.db"
+          echo "📋 DATABASE_URL configuré: $DATABASE_URL"
+          
           # Générer le client Prisma
           echo "📋 Génération du client Prisma..."
           npx prisma generate || { echo "❌ Échec prisma generate"; exit 1; }
@@ -69,6 +76,8 @@ jobs:
 
           echo "🏗️ Build de l'application..."
           echo "📋 Démarrage du build (cela peut prendre quelques minutes)..."
+          # S'assurer que DATABASE_URL est disponible pour le build
+          export DATABASE_URL="file:./prisma/dev.db"
           timeout 300 npm run build || { echo "❌ Échec npm build (timeout ou erreur)"; exit 1; }
           echo "✅ Build terminé avec succès."
 
