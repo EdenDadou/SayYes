@@ -22,12 +22,12 @@ export default function Portfolio() {
 
   return (
     <div className="w-screen h-fit relative">
-      {/* Background SVG - seulement sur la partie haute */}
       <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
-      {/* Section des cartes du haut - scroll normal */}
+      {/* Contenu par-dessus */}
       <Header />
-      <section className="relative z-10 md:px-36 px-4 flex flex-col gap-8 py-8">
-        <PortfolioTitle />
+      <section className="relative z-10 px-4 md:px-36 flex flex-col gap-8">
+        <div className="h-[3px] w-28 holographic-bg my-6" />
+        <PortfolioTitle className="ml-0" />
         <Filter />
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           {portfolioTopCards.map((card) => (

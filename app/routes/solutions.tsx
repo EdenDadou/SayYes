@@ -7,6 +7,7 @@ import { solutionsCards } from "~/components/Solutions/data";
 import { useViewport } from "~/utils/hooks/useViewport";
 import SolutionTitleMobile from "~/components/Solutions/components/SolutionTitleMobile";
 import Background from "~/assets/icons/Background";
+import Star from "~/assets/icons/Star";
 
 export default function Solutions() {
   const isMobile = useViewport();
@@ -21,8 +22,11 @@ export default function Solutions() {
         {isMobile ? (
           <SolutionTitleMobile className="px-8" />
         ) : (
-          <SolutionTitle className="pb-8" />
+          <SolutionTitle />
         )}
+        <h2 className="flex flex-row items-center justify-start gap-2 text-xl font-jakarta pb-6">
+          <Star className="w-4 h-4" />5 étapes pour un branding impeccable :
+        </h2>
         {solutionsCards.map((card) => (
           <Card
             key={card.imageUrl}
