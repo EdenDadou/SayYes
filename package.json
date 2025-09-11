@@ -26,9 +26,9 @@
   },
   "dependencies": {
     "@prisma/client": "^6.16.1",
-    "@remix-run/node": "^2.12.1",
-    "@remix-run/react": "^2.12.1",
-    "@remix-run/serve": "^2.12.1",
+    "@remix-run/node": "^2.14.0",
+    "@remix-run/react": "^2.14.0",
+    "@remix-run/serve": "^2.14.0",
     "@smakss/react-scroll-direction": "^4.2.0",
     "@studio-freight/lenis": "^1.0.42",
     "clsx": "^2.1.1",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@react-router/remix-routes-option-adapter": "^7.8.2",
-    "@remix-run/dev": "^2.12.1",
+    "@remix-run/dev": "^2.14.0",
     "@svgr/cli": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/plugin-prettier": "^8.1.0",
