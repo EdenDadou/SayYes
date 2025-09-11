@@ -53,7 +53,7 @@ jobs:
           # Configurer aussi pour le script actuel
           export DATABASE_URL="file:./prisma/dev.db"
           echo "📋 DATABASE_URL configuré: $DATABASE_URL"
-          
+
           # Générer le client Prisma
           echo "📋 Génération du client Prisma..."
           npx prisma generate || { echo "❌ Échec prisma generate"; exit 1; }
