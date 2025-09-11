@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Coche from "../../../assets/icons/Coche";
-
+import { useViewport } from "~/utils/hooks/useViewport";
 const filterList = [
   { value: "all", label: "Tous" },
   { value: "visual identity", label: "Identité visuelle" },
@@ -12,8 +12,27 @@ const filterList = [
 ];
 const Filter = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  return (
-    <div className="flex flex-row justify-between py-4">
+  const isMobile = useViewport();
+
+  return isMobile ? (
+    <div className="w-screen pr-8">
+      <div className="flex flex-row justify-between py-4 overflow-x-scroll gap-4 scrollbar-hide">
+        {filterList.map((filter) => (
+          <button
+            key={filter.value}
+            className={`group flex flex-row gap-3 items-center font-jakarta text-sm py-3 px-4 rounded-full border-custom border-[0.5px] transition-all duration-200 hover:bg-white hover:text-black whitespace-nowrap ${selectedFilter === filter.value ? "bg-white text-black" : "text-white"}`}
+            onClick={() => setSelectedFilter(filter.value)}
+          >
+            <Coche
+              className={`transition-all duration-200 ${selectedFilter === filter.value ? "text-black" : "text-white group-hover:text-black"}`}
+            />
+            {filter.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-row justify-between py-4 gap-4">
       {filterList.map((filter) => (
         <button
           key={filter.value}

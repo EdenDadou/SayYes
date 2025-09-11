@@ -28,7 +28,7 @@ const BackgroundMobile = (props: SVGProps<SVGSVGElement>) => (
       </g>
       <g filter="url(#h)">
         <path
-          fill="currentColor"
+          fill="black"
           d="M1154.97 672.382c-699.909 0-830.097-46.183-1226.632-119.837v379.018H1166.33z"
         />
       </g>
