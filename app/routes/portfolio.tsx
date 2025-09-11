@@ -8,9 +8,9 @@ import {
   portfolioBottomCards,
 } from "~/components/Portfolio/data";
 import { useScrollProgress } from "~/utils/hooks/useScrollProgress";
-import Background from "~/components/Solutions/components/Background";
 import Filter from "~/components/Portfolio/components/Filter";
 import { useViewport } from "~/utils/hooks/useViewport";
+import Background from "~/assets/icons/Background";
 
 export default function Portfolio() {
   const isMobile = useViewport();
@@ -24,13 +24,8 @@ export default function Portfolio() {
     <div className="w-screen h-fit relative">
       {/* Background SVG - seulement sur la partie haute */}
       <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
-      {/* <img
-        src="./images/BACKGROUND.png"
-        alt="halo"
-        className="w-full fixed top-0 left-0"
-      /> */}
-      <Header />
       {/* Section des cartes du haut - scroll normal */}
+      <Header />
       <section className="relative z-10 md:px-36 px-4 flex flex-col gap-8 py-8">
         <PortfolioTitle />
         <Filter />

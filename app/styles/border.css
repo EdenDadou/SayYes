@@ -46,20 +46,12 @@
   background-image: conic-gradient(
     from var(--angle),
     transparent 0%,
-    transparent 25%,
-    rgba(220, 196, 255, 0) 25%,
-    rgba(220, 196, 255, 0.2) 30%,
-    rgba(220, 196, 255, 0.4) 35%,
-    rgba(220, 196, 255, 0.6) 40%,
-    rgba(220, 196, 255, 0.8) 45%,
-    #dcc4ff 50%,
-    #e1ff8b 55%,
-    #b3f1ff 60%,
-    rgba(179, 241, 255, 0.8) 65%,
-    rgba(179, 241, 255, 0.6) 70%,
-    rgba(179, 241, 255, 0.4) 75%,
-    rgba(179, 241, 255, 0.2) 80%,
-    rgba(179, 241, 255, 0) 85%,
+    #4ffff5 5%,
+    #fe77b7 10%,
+    #feab71 20%,
+    #e6ff9c 30%,
+    #b7eeef 35%,
+    #000000 50%,
     transparent 100%
   );
   background-origin: border-box;
@@ -78,20 +70,12 @@
   .card-hover:hover::before {
     background-image: conic-gradient(
       transparent 0%,
-      transparent 25%,
-      rgba(220, 196, 255, 0) 25%,
-      rgba(220, 196, 255, 0.2) 30%,
-      rgba(220, 196, 255, 0.4) 35%,
-      rgba(220, 196, 255, 0.6) 40%,
-      rgba(220, 196, 255, 0.8) 45%,
-      #dcc4ff 50%,
-      #e1ff8b 55%,
-      #b3f1ff 60%,
-      rgba(179, 241, 255, 0.8) 65%,
-      rgba(179, 241, 255, 0.6) 70%,
-      rgba(179, 241, 255, 0.4) 75%,
-      rgba(179, 241, 255, 0.2) 80%,
-      rgba(179, 241, 255, 0) 85%,
+      #4ffff5 5%,
+      #fe77b7 10%,
+      #feab71 20%,
+      #e6ff9c 30%,
+      #b7eeef 35%,
+      #000000 50%,
       transparent 100%
     );
   }
@@ -107,20 +91,12 @@
   background-image: conic-gradient(
     from var(--angle),
     transparent 0%,
-    transparent 25%,
-    rgba(220, 196, 255, 0) 25%,
-    rgba(220, 196, 255, 0.2) 30%,
-    rgba(220, 196, 255, 0.4) 35%,
-    rgba(220, 196, 255, 0.6) 40%,
-    rgba(220, 196, 255, 0.8) 45%,
-    #dcc4ff 50%,
-    #e1ff8b 55%,
-    #b3f1ff 60%,
-    rgba(179, 241, 255, 0.8) 65%,
-    rgba(179, 241, 255, 0.6) 70%,
-    rgba(179, 241, 255, 0.4) 75%,
-    rgba(179, 241, 255, 0.2) 80%,
-    rgba(179, 241, 255, 0) 85%,
+    #4ffff5 5%,
+    #fe77b7 10%,
+    #feab71 20%,
+    #e6ff9c 30%,
+    #b7eeef 35%,
+    #000000 50%,
     transparent 100%
   );
   background-origin: border-box;
@@ -139,20 +115,12 @@
   .light-border::before {
     background-image: conic-gradient(
       transparent 0%,
-      transparent 25%,
-      rgba(220, 196, 255, 0) 25%,
-      rgba(220, 196, 255, 0.2) 30%,
-      rgba(220, 196, 255, 0.4) 35%,
-      rgba(220, 196, 255, 0.6) 40%,
-      rgba(220, 196, 255, 0.8) 45%,
-      #dcc4ff 50%,
-      #e1ff8b 55%,
-      #b3f1ff 60%,
-      rgba(179, 241, 255, 0.8) 65%,
-      rgba(179, 241, 255, 0.6) 70%,
-      rgba(179, 241, 255, 0.4) 75%,
-      rgba(179, 241, 255, 0.2) 80%,
-      rgba(179, 241, 255, 0) 85%,
+      #4ffff5 5%,
+      #fe77b7 10%,
+      #feab71 20%,
+      #e6ff9c 30%,
+      #b7eeef 35%,
+      #000000 50%,
       transparent 100%
     );
   }

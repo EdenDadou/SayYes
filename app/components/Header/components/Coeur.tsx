@@ -17,7 +17,7 @@ const Coeur = (props: SVGProps<SVGSVGElement>) => (
         x1="0%"
         y1="0%"
         x2="100%"
-        y2="20%"
+        y2="50%"
       >
         <stop offset="0%" stopColor="#4FFFF5">
           <animate

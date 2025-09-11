@@ -4,7 +4,7 @@ import Content from "../Card/components/Content";
 export const solutionsCards = [
   {
     imageUrl: "/images/solutions/Card1.png",
-    videoUrl: "/video/phare.mp4",
+    videoUrl: "/video/bureau.mov",
     height: "560px",
     content: (
       <Content
