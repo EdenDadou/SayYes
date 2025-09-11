@@ -42,6 +42,23 @@ jobs:
           echo "📦 Installation des dépendances..."
           npm install || { echo "❌ Échec npm install"; exit 1; }
 
+          echo "🗄️ Configuration de la base de données..."
+          # Générer le client Prisma
+          npx prisma generate || { echo "❌ Échec prisma generate"; exit 1; }
+
+          # Appliquer les migrations/schema à la base de données
+          npx prisma db push || { echo "❌ Échec prisma db push"; exit 1; }
+
+          echo "✅ Base de données configurée."
+
+          echo "📁 Création des dossiers nécessaires..."
+          # Créer le dossier uploads pour les médias
+          mkdir -p public/uploads/portfolio
+          mkdir -p public/uploads/portfolio/bento
+          chmod 755 public/uploads -R || true
+
+          echo "✅ Dossiers créés."
+
           echo "🏗️ Build de l'application..."
           npm run build || { echo "❌ Échec npm build"; exit 1; }
 

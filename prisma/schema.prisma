@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Modèle pour les portfolios
+model Portfolio {
+  id               String   @id @default(cuid())
+  titre            String
+  photoCouverture  String
+  description      String
+  kicker           String
+  sousTitre        String
+  livrable         String   // JSON array stocké comme string
+  bento            String   // JSON object stocké comme string
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  // Relations avec les médias
+  medias           Media[]
+  
+  @@map("portfolios")
+}
+
+// Modèle pour les médias (images, vidéos, etc.)
+model Media {
+  id           String      @id @default(cuid())
+  filename     String
+  originalName String
+  mimetype     String
+  size         Int
+  path         String      // Chemin relatif depuis public/
+  url          String      // URL publique
+  type         MediaType
+  createdAt    DateTime    @default(now())
+  
+  // Relations
+  portfolioId  String?
+  portfolio    Portfolio?  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  
+  @@map("medias")
+}
+
+// Enum pour les types de médias
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+// Modèle pour les solutions (si vous en avez besoin)
+model Solution {
+  id          String   @id @default(cuid())
+  titre       String
+  description String
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("solutions")
+}

@@ -5,7 +5,7 @@ import { VitePWA } from "vite-plugin-pwa"; // Si tu veux transformer ton app en 
 // import viteImagemin from 'vite-plugin-imagemin'; // Compression des images - disabled due to macOS compilation issues
 import svgr from "vite-plugin-svgr";
 import svgo from "vite-plugin-svgo";
-
+import { flatRoutes } from "remix-flat-routes";
 export default defineConfig({
   server: {
     port: 4000,
@@ -37,6 +37,11 @@ export default defineConfig({
         v3_fetcherPersist: true,
         v3_relativeSplatPath: true,
         v3_throwAbortReason: true,
+      },
+      routes(defineRoutes) {
+        return flatRoutes("routes", defineRoutes, {
+          ignoredRouteFiles: ["**/.*"], // Ignore dot files (like .DS_Store)
+        });
       },
     }),
     // Plugin pour gérer les chemins de tsconfig
