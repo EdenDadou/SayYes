@@ -32,8 +32,8 @@
   transition: transform 0.3s ease;
 }
 
-.card-image:hover {
-  transform: scale(1.05);
+.card-hover:hover .card-image {
+  transform: scale(1.1);
 }
 
 .card-hover:hover::before {

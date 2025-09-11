@@ -1,13 +1,12 @@
-import Masque from "../Card/components/Masque";
-import Content from "../Card/components/Content";
+import ContentSolution from "../Card/components/ContentSolution";
 
 export const solutionsCards = [
   {
-    imageUrl: "/images/solutions/Card1.png",
-    videoUrl: "/video/bureau.mov",
     height: "560px",
     content: (
-      <Content
+      <ContentSolution
+        imageUrl="/images/solutions/Card1.png"
+        videoUrl="/video/bureau.mov"
         subtitle="Étape N°1"
         title1="Définir vos"
         title2="objectifs"
@@ -24,10 +23,10 @@ export const solutionsCards = [
     borderClass: "light-border",
   },
   {
-    imageUrl: "/images/solutions/Card2.png",
     height: "560px",
     content: (
-      <Content
+      <ContentSolution
+        imageUrl="/images/solutions/Card2.png"
         subtitle="Étape N°2"
         title1="Créer votre"
         title2="identité visuelle"
@@ -44,10 +43,10 @@ export const solutionsCards = [
     borderClass: "light-border",
   },
   {
-    imageUrl: "/images/solutions/Card3.png",
     height: "560px",
     content: (
-      <Content
+      <ContentSolution
+        imageUrl="/images/solutions/Card3.png"
         subtitle="Étape N°3"
         title1="Décliner sur tous"
         title2="vos supports"
@@ -66,10 +65,10 @@ export const solutionsCards = [
     borderClass: "light-border",
   },
   {
-    imageUrl: "/images/solutions/Card4.png",
     height: "560px",
     content: (
-      <Content
+      <ContentSolution
+        imageUrl="/images/solutions/Card4.png"
         subtitle="Étape N°4"
         title1="Pour tous"
         title2="vos canaux"
@@ -85,12 +84,11 @@ export const solutionsCards = [
     ),
     borderClass: "light-border",
   },
-
   {
-    imageUrl: "/images/solutions/Card5.png",
     height: "560px",
     content: (
-      <Content
+      <ContentSolution
+        imageUrl="/images/solutions/Card5.png"
         subtitle="Mission accomplie !"
         title1="Votre branding"
         title2="est impeccable"
