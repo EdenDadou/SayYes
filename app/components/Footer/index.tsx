@@ -30,13 +30,13 @@ export default function Footer() {
       <div className="relative z-10 w-full h-full">
         <SayYesFooter className="w-full h-full" />
         <motion.img
-          src="./images/footer/Halo.png"
+          src="/images/footer/Halo.png"
           alt="footer"
           className="w-full h-full absolute top-0 left-0"
           style={{ opacity }}
         />
         <motion.img
-          src="./images/footer/HaloBottom.png"
+          src="/images/footer/HaloBottom.png"
           alt="footer"
           className="w-full h-full absolute bottom-0 left-0"
           style={{ opacity: opacitySecondary }}

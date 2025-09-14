@@ -8,15 +8,6 @@
   backdrop-filter: blur(31.280344009399414px);
 }
 
-.light-border {
-  --border-width: 2px;
-  --radius: 24px;
-
-  position: relative;
-  border-radius: var(--radius);
-  border: var(--border-width) solid transparent;
-}
-
 .card-hover {
   --border-width: 2px;
   --radius: 24px;
@@ -63,7 +54,7 @@
   mask-clip: content-box, border-box;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  animation: spin 10s linear infinite;
+  animation: spinBorder 10s linear infinite;
 }
 
 @supports not (background: paint(something)) {
@@ -79,6 +70,15 @@
       transparent 100%
     );
   }
+}
+
+.light-border {
+  --border-width: 2px;
+  --radius: 24px;
+
+  position: relative;
+  border-radius: var(--radius);
+  border: var(--border-width) solid transparent;
 }
 
 .light-border::before {
@@ -108,7 +108,7 @@
   mask-clip: content-box, border-box;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  animation: spin 10s linear infinite;
+  animation: spinBorder 10s linear infinite;
 }
 
 @supports not (background: paint(something)) {
@@ -132,7 +132,7 @@
   initial-value: 0turn;
 }
 
-@keyframes spin {
+@keyframes spinBorder {
   to {
     --angle: 1turn;
   }

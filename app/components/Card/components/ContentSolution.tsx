@@ -77,7 +77,10 @@ export default function ContentSolution({
               </span>
               <div className="flex flex-col items-start justify-center gap-2 font-jakarta text-[12px] md:text-[16px] md:mt-6">
                 {bulletPoints.map((bullet) => (
-                  <span className="flex flex-row items-center justify-center gap-2">
+                  <span
+                    className="flex flex-row items-center justify-center gap-2"
+                    key={bullet}
+                  >
                     <Coche />
                     {bullet}
                   </span>
