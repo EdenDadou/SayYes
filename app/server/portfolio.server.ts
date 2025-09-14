@@ -13,6 +13,7 @@ export interface BentoItem {
 
 export interface PortfolioData {
   titre: string;
+  slug: string;
   photoCouverture: string;
   description: string;
   kicker: string;
@@ -24,6 +25,7 @@ export interface PortfolioData {
 export interface PortfolioWithMedia {
   id: string;
   titre: string;
+  slug: string;
   photoCouverture: string;
   description: string;
   kicker: string;
@@ -46,6 +48,7 @@ export async function createPortfolio(data: PortfolioData): Promise<string> {
   const portfolio = await prisma.portfolio.create({
     data: {
       titre: data.titre,
+      slug: data.slug,
       photoCouverture: data.photoCouverture,
       description: data.description,
       kicker: data.kicker,
@@ -101,10 +104,59 @@ export async function getPortfolio(
 
   if (!portfolio) return null;
 
+  // Fonction helper pour parser les données JSON de manière sécurisée
+  const safeParse = (data: string, fallback: any = []) => {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.warn("Erreur parsing JSON:", e, "data:", data);
+      return fallback;
+    }
+  };
+
   return {
     ...portfolio,
-    livrable: JSON.parse(portfolio.livrable),
-    bento: JSON.parse(portfolio.bento),
+    livrable: safeParse(portfolio.livrable, []),
+    bento: safeParse(portfolio.bento, []),
+  };
+}
+
+// Récupérer un portfolio par slug
+export async function getPortfolioBySlug(
+  slug: string
+): Promise<PortfolioWithMedia | null> {
+  const portfolio = await prisma.portfolio.findUnique({
+    where: { slug },
+    include: {
+      medias: {
+        select: {
+          id: true,
+          filename: true,
+          originalName: true,
+          url: true,
+          type: true,
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
+
+  if (!portfolio) return null;
+
+  // Fonction helper pour parser les données JSON de manière sécurisée
+  const safeParse = (data: string, fallback: any = []) => {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.warn("Erreur parsing JSON:", e, "data:", data);
+      return fallback;
+    }
+  };
+
+  return {
+    ...portfolio,
+    livrable: safeParse(portfolio.livrable, []),
+    bento: safeParse(portfolio.bento, []),
   };
 }
 
@@ -126,11 +178,72 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
     orderBy: { createdAt: "desc" },
   });
 
+  // Fonction helper pour parser les données JSON de manière sécurisée
+  const safeParse = (data: string, fallback: any = []) => {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.warn("Erreur parsing JSON:", e, "data:", data);
+      return fallback;
+    }
+  };
+
   return portfolios.map((portfolio) => ({
     ...portfolio,
-    livrable: JSON.parse(portfolio.livrable),
-    bento: JSON.parse(portfolio.bento),
+    livrable: safeParse(portfolio.livrable, []),
+    bento: safeParse(portfolio.bento, []),
   }));
+}
+
+// Mettre à jour un portfolio par slug
+export async function updatePortfolioBySlug(
+  slug: string,
+  data: Partial<PortfolioData>
+): Promise<void> {
+  const updateData: any = { ...data };
+
+  // Convertir les arrays/objects en JSON strings si nécessaire
+  if (data.livrable) {
+    updateData.livrable = JSON.stringify(data.livrable);
+  }
+  if (data.bento) {
+    updateData.bento = JSON.stringify(data.bento);
+  }
+
+  await prisma.portfolio.update({
+    where: { slug },
+    data: updateData,
+  });
+}
+
+// Supprimer un portfolio par slug
+export async function deletePortfolioBySlug(slug: string): Promise<void> {
+  // Récupérer le portfolio avec ses médias
+  const portfolio = await prisma.portfolio.findUnique({
+    where: { slug },
+    include: { medias: true },
+  });
+
+  if (!portfolio) {
+    throw new Error("Portfolio non trouvé");
+  }
+
+  // Supprimer tous les médias associés
+  for (const media of portfolio.medias) {
+    try {
+      await deleteMedia(media.id);
+    } catch (error) {
+      console.error(
+        `Erreur lors de la suppression du média ${media.id}:`,
+        error
+      );
+    }
+  }
+
+  // Supprimer le portfolio
+  await prisma.portfolio.delete({
+    where: { slug },
+  });
 }
 
 // Supprimer un portfolio
@@ -169,6 +282,7 @@ export async function getPublicPortfolios() {
     select: {
       id: true,
       titre: true,
+      slug: true,
       photoCouverture: true,
       description: true,
       kicker: true,
@@ -180,10 +294,20 @@ export async function getPublicPortfolios() {
     orderBy: { createdAt: "desc" },
   });
 
+  // Fonction helper pour parser les données JSON de manière sécurisée
+  const safeParse = (data: string, fallback: any = []) => {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.warn("Erreur parsing JSON:", e, "data:", data);
+      return fallback;
+    }
+  };
+
   return portfolios.map((portfolio) => ({
     ...portfolio,
-    livrable: JSON.parse(portfolio.livrable),
-    bento: JSON.parse(portfolio.bento),
+    livrable: safeParse(portfolio.livrable, []),
+    bento: safeParse(portfolio.bento, []),
   }));
 }
 

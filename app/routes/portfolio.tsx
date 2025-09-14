@@ -1,3 +1,5 @@
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { useScrollProgress } from "~/utils/hooks/useScrollProgress";
 import { useViewport } from "~/utils/hooks/useViewport";
 import Header from "~/components/Header";
@@ -6,21 +8,38 @@ import Card from "~/components/Card";
 import PortfolioTitle from "~/components/Portfolio/components/PortfolioTitle";
 import PortfolioTitleMobile from "~/components/Portfolio/components/PortfolioTitleMobile";
 import Filter from "~/components/Portfolio/components/Filter";
-import {
-  portfolioTopCards,
-  portfolioBottomCards,
-} from "~/components/Portfolio/data";
+import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import Background from "~/assets/icons/Background";
-import "~/styles/tailwind.css";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
+import { getPublicPortfolios } from "~/server/portfolio.server";
+import "~/styles/tailwind.css";
+
+// Loader pour récupérer les portfolios depuis la base de données
+export async function loader({ request }: LoaderFunctionArgs) {
+  try {
+    const portfolios = await getPublicPortfolios();
+    return json({ portfolios });
+  } catch (error) {
+    console.error("Erreur lors du chargement des portfolios:", error);
+    return json({ portfolios: [] });
+  }
+}
 
 export default function Portfolio() {
+  const { portfolios } = useLoaderData<typeof loader>();
   const isMobile = useViewport();
   const { isImageFixed, imageOpacity, imageScale } = useScrollProgress();
 
   const imageMobile = isMobile
     ? "/images/portfolio/ClientsWallMobile.png"
     : "/images/portfolio/ClientsWall.png";
+
+  // Diviser les portfolios en deux groupes pour l'affichage
+  const midPoint = Math.ceil(portfolios.length / 2);
+  const portfolioTopCards = portfolios.slice(0, midPoint);
+  const portfolioBottomCards = portfolios.slice(midPoint);
+
+  console.log(portfolioTopCards);
 
   return (
     <div className="w-screen h-fit relative">
@@ -42,12 +61,18 @@ export default function Portfolio() {
         </div>
         <Filter />
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-          {portfolioTopCards.map((card, index) => (
+          {portfolioTopCards.map((portfolio, index) => (
             <Card
-              key={index}
-              height={card.height}
-              content={card.content}
-              borderClass={card.borderClass}
+              key={portfolio.id}
+              height="370px"
+              content={
+                <ContentPortfolio
+                  imageUrl={portfolio.photoCouverture}
+                  titre={portfolio.titre}
+                  slug={portfolio.slug}
+                />
+              }
+              borderClass="card-hover"
             />
           ))}
         </div>
@@ -80,12 +105,18 @@ export default function Portfolio() {
           <div className="pt-32 pb-32">
             <section className="md:px-36 px-4 flex flex-col gap-8">
               <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-                {portfolioBottomCards.map((card, index) => (
+                {portfolioBottomCards.map((portfolio, index) => (
                   <Card
-                    key={index}
-                    height={card.height}
-                    content={card.content}
-                    borderClass={card.borderClass}
+                    key={portfolio.id}
+                    height="370px"
+                    content={
+                      <ContentPortfolio
+                        imageUrl={portfolio.photoCouverture}
+                        titre={portfolio.titre}
+                        slug={portfolio.slug}
+                      />
+                    }
+                    borderClass="card-hover"
                   />
                 ))}
               </div>

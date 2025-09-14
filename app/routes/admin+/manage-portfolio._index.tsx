@@ -5,7 +5,7 @@ import {
   unstable_parseMultipartFormData,
   unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
-import { Form, useLoaderData, useActionData, Link } from "@remix-run/react";
+import { useLoaderData, useActionData, Link } from "@remix-run/react";
 import { useState } from "react";
 import { requireAuth, getSessionData } from "~/server/auth.server";
 import { saveMedia } from "~/server/media.server";
@@ -27,6 +27,7 @@ interface BentoItem {
 
 interface PortfolioData {
   titre: string;
+  slug: string;
   photoCouverture: string;
   description: string;
   kicker: string;
@@ -61,6 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
     // Créer d'abord le portfolio pour avoir l'ID
     const portfolioData: PortfolioData = {
       titre: formData.get("titre") as string,
+      slug: formData.get("slug") as string,
       photoCouverture: "", // Sera mis à jour après l'upload
       description: formData.get("description") as string,
       kicker: formData.get("kicker") as string,
@@ -97,10 +99,10 @@ export async function action({ request }: ActionFunctionArgs) {
         value instanceof File &&
         value.size > 0
       ) {
-        // Extraire les indices de ligne et d'image du nom du champ
+        // Extraire les indices de bento et d'image du nom du champ
         const match = key.match(/bentoFile_(\d+)_(\d+)/);
         if (match) {
-          const lineIndex = parseInt(match[1]);
+          const bentoIndex = parseInt(match[1]);
           const imageIndex = parseInt(match[2]);
 
           // Sauvegarder le fichier
@@ -111,13 +113,32 @@ export async function action({ request }: ActionFunctionArgs) {
           );
 
           // Mettre à jour l'URL dans le bento
-          if (updatedBento[lineIndex] && updatedBento[lineIndex].lines[0]) {
-            if (!updatedBento[lineIndex].lines[0].listImage[imageIndex]) {
-              updatedBento[lineIndex].lines[0].listImage[imageIndex] =
-                savedMedia.url;
-            } else {
-              updatedBento[lineIndex].lines[0].listImage[imageIndex] =
-                savedMedia.url;
+          // Trouver la première image "pending_" dans le bento correspondant
+          if (updatedBento[bentoIndex]) {
+            let currentImageIndex = 0;
+            let found = false;
+
+            for (
+              let lineIndex = 0;
+              lineIndex < updatedBento[bentoIndex].lines.length && !found;
+              lineIndex++
+            ) {
+              const line = updatedBento[bentoIndex].lines[lineIndex];
+              for (
+                let imgIndex = 0;
+                imgIndex < line.listImage.length && !found;
+                imgIndex++
+              ) {
+                if (line.listImage[imgIndex].startsWith("pending_")) {
+                  if (currentImageIndex === imageIndex) {
+                    updatedBento[bentoIndex].lines[lineIndex].listImage[
+                      imgIndex
+                    ] = savedMedia.url;
+                    found = true;
+                  }
+                  currentImageIndex++;
+                }
+              }
             }
           }
         }
@@ -149,11 +170,18 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ManagePortfolio() {
   const { sessionData, portfolios } = useLoaderData<typeof loader>();
+
+  console.log("📋 Portfolios loaded:", portfolios);
+  console.log("📋 Number of portfolios:", portfolios.length);
+  portfolios.forEach((p, i) => {
+    console.log(`📋 Portfolio ${i + 1}: slug="${p.slug}", titre="${p.titre}"`);
+  });
   const actionData = useActionData<typeof action>();
 
   // États pour le formulaire
   const [formData, setFormData] = useState<PortfolioData>({
     titre: "",
+    slug: "",
     photoCouverture: "",
     description: "",
     kicker: "",
@@ -325,20 +353,81 @@ export default function ManagePortfolio() {
     }));
   };
 
+  // Fonction de soumission personnalisée pour gérer les fichiers bento
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const submitFormData = new FormData(form);
+
+    // Ajouter les fichiers bento avec les noms corrects
+    let globalImageIndex = 0;
+    formData.bento.forEach((bento, bentoIndex) => {
+      bento.lines.forEach((line, lineIndex) => {
+        line.listImage.forEach((image, imageIndex) => {
+          // Si l'image commence par "pending_", c'est un fichier à uploader
+          if (image.startsWith("pending_")) {
+            const fileName = image.replace("pending_", "");
+            const file = bentoFiles.find((f) => f.name === fileName);
+            if (file) {
+              submitFormData.append(
+                `bentoFile_${bentoIndex}_${globalImageIndex}`,
+                file
+              );
+              globalImageIndex++;
+            }
+          }
+        });
+      });
+    });
+
+    // Soumettre le formulaire
+    try {
+      const response = await fetch("/admin/manage-portfolio", {
+        method: "POST",
+        body: submitFormData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Réinitialiser le formulaire
+        setFormData({
+          titre: "",
+          slug: "",
+          photoCouverture: "",
+          description: "",
+          kicker: "",
+          livrable: [],
+          sousTitre: "",
+          bento: [],
+        });
+        setCurrentLivrable("");
+        setCurrentBento({ lines: [] });
+        setCurrentBentoLine({ format: "1/3 - 2/3", listImage: [] });
+        setPreviewImage(null);
+        setBentoPreviewImages([]);
+        setBentoFiles([]);
+
+        // Recharger la page pour voir le nouveau portfolio
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Erreur lors de la soumission:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1
-              className="text-4xl font-bold text-white mb-2"
-              style={{ fontFamily: "MADE Soulmaze" }}
-            >
+            <h1 className="text-4xl font-bold text-white mb-2 font-jakarta-bold">
               Gestion Portfolio
             </h1>
-            <p className="text-gray-400" style={{ fontFamily: "Jakarta" }}>
-              Créer ou modifier un élément du portfolio
+            <p className="text-gray-300" style={{ fontFamily: "Jakarta" }}>
+              Créer un nouveau projet
             </p>
           </div>
           <Link
@@ -368,7 +457,11 @@ export default function ManagePortfolio() {
         )}
 
         {/* Formulaire principal */}
-        <Form method="post" className="space-y-8" encType="multipart/form-data">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-8"
+          encType="multipart/form-data"
+        >
           <input
             type="hidden"
             name="bento"
@@ -403,6 +496,33 @@ export default function ManagePortfolio() {
                   className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   style={{ fontFamily: "Jakarta" }}
                   placeholder="Titre du projet"
+                />
+              </div>
+
+              {/* Slug */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="slug"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Slug *{" "}
+                  <span className="text-xs text-gray-300">
+                    (URL-friendly, ex: mon-projet-web)
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  id="slug"
+                  name="slug"
+                  value={formData.slug}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="mon-projet-web"
+                  pattern="[a-z0-9-]+"
+                  title="Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets"
                 />
               </div>
 
@@ -953,6 +1073,7 @@ export default function ManagePortfolio() {
               onClick={() => {
                 setFormData({
                   titre: "",
+                  slug: "",
                   photoCouverture: "",
                   description: "",
                   kicker: "",
@@ -976,10 +1097,10 @@ export default function ManagePortfolio() {
               className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-[1.02]"
               style={{ fontFamily: "Jakarta Semi Bold" }}
             >
-              Créer le Portfolio
+              Créer le Projet
             </button>
           </div>
-        </Form>
+        </form>
       </div>
 
       {/* Section des portfolios existants */}
@@ -988,12 +1109,12 @@ export default function ManagePortfolio() {
           className="text-2xl font-bold text-gray-900 mb-6"
           style={{ fontFamily: "Jakarta Bold" }}
         >
-          Portfolios existants ({portfolios.length})
+          Projets existants ({portfolios.length})
         </h2>
 
         {portfolios.length === 0 ? (
           <p className="text-gray-500 text-center py-8">
-            Aucun portfolio créé pour le moment.
+            Aucun projets créés pour le moment.
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1072,22 +1193,47 @@ export default function ManagePortfolio() {
                   {/* Actions */}
                   <div className="flex gap-2">
                     <Link
-                      to={`/admin/manage-portfolio/${portfolio.id}`}
+                      to={`/admin/manage-portfolio/${portfolio.slug}`}
                       className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200"
+                      onClick={() => {
+                        console.log(
+                          "🔗 Navigating to:",
+                          `/admin/manage-portfolio/${portfolio.slug}`
+                        );
+                        console.log("📋 Portfolio slug:", portfolio.slug);
+                      }}
                     >
                       Modifier
                     </Link>
                     <button
                       type="button"
                       className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200"
-                      onClick={() => {
+                      onClick={async () => {
                         if (
                           confirm(
-                            "Êtes-vous sûr de vouloir supprimer ce portfolio ?"
+                            "Êtes-vous sûr de vouloir supprimer ce portfolio ? Cette action est irréversible."
                           )
                         ) {
-                          // TODO: Implémenter la suppression
-                          console.log("Supprimer portfolio:", portfolio.id);
+                          try {
+                            const response = await fetch(
+                              `/admin/manage-portfolio/${portfolio.slug}`,
+                              {
+                                method: "DELETE",
+                              }
+                            );
+
+                            if (response.ok) {
+                              // Recharger la page pour actualiser la liste
+                              window.location.reload();
+                            } else {
+                              alert(
+                                "Erreur lors de la suppression du portfolio"
+                              );
+                            }
+                          } catch (error) {
+                            console.error("Erreur:", error);
+                            alert("Erreur lors de la suppression du portfolio");
+                          }
                         }
                       }}
                     >
