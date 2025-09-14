@@ -19,6 +19,15 @@ export interface PortfolioData {
   kicker: string;
   livrable: string[];
   sousTitre: string;
+  topTitle: string;
+  couleur: string;
+  shortlist: string;
+  temoignage: {
+    auteur: string;
+    contenu: string;
+    poste?: string;
+    entreprise?: string;
+  };
   bento: BentoItem[];
 }
 
@@ -30,6 +39,15 @@ export interface PortfolioWithMedia {
   description: string;
   kicker: string;
   sousTitre: string;
+  topTitle: string;
+  couleur: string;
+  shortlist: string;
+  temoignage: {
+    auteur: string;
+    contenu: string;
+    poste?: string;
+    entreprise?: string;
+  };
   livrable: string[];
   bento: BentoItem[];
   createdAt: Date;
@@ -53,6 +71,10 @@ export async function createPortfolio(data: PortfolioData): Promise<string> {
       description: data.description,
       kicker: data.kicker,
       sousTitre: data.sousTitre,
+      topTitle: data.topTitle,
+      couleur: data.couleur,
+      shortlist: data.shortlist,
+      temoignage: JSON.stringify(data.temoignage),
       livrable: JSON.stringify(data.livrable),
       bento: JSON.stringify(data.bento),
     },
@@ -74,6 +96,12 @@ export async function updatePortfolio(
   }
   if (data.bento) {
     updateData.bento = JSON.stringify(data.bento);
+  }
+  if (data.shortlist !== undefined) {
+    updateData.shortlist = data.shortlist;
+  }
+  if (data.temoignage) {
+    updateData.temoignage = JSON.stringify(data.temoignage);
   }
 
   await prisma.portfolio.update({
@@ -118,6 +146,8 @@ export async function getPortfolio(
     ...portfolio,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
+    shortlist: portfolio.shortlist,
+    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
   };
 }
 
@@ -157,6 +187,8 @@ export async function getPortfolioBySlug(
     ...portfolio,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
+    shortlist: portfolio.shortlist,
+    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
   };
 }
 
@@ -192,6 +224,8 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
     ...portfolio,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
+    shortlist: portfolio.shortlist,
+    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
   }));
 }
 
@@ -208,6 +242,12 @@ export async function updatePortfolioBySlug(
   }
   if (data.bento) {
     updateData.bento = JSON.stringify(data.bento);
+  }
+  if (data.shortlist !== undefined) {
+    updateData.shortlist = data.shortlist;
+  }
+  if (data.temoignage) {
+    updateData.temoignage = JSON.stringify(data.temoignage);
   }
 
   await prisma.portfolio.update({
@@ -287,6 +327,10 @@ export async function getPublicPortfolios() {
       description: true,
       kicker: true,
       sousTitre: true,
+      topTitle: true,
+      couleur: true,
+      shortlist: true,
+      temoignage: true,
       livrable: true,
       bento: true,
       createdAt: true,
@@ -308,6 +352,8 @@ export async function getPublicPortfolios() {
     ...portfolio,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
+    shortlist: portfolio.shortlist,
+    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
   }));
 }
 

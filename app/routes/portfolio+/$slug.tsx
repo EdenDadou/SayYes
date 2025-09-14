@@ -55,12 +55,24 @@ export default function PortfolioSlug() {
             {/* Title and Kicker */}
             <div className="flex flex-col gap-8">
               <div className="h-[3px] w-28 holographic-bg" />
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 flex flex-row items-center gap-6">
+
+              <div className="flex flex-col">
+                {/* Top Title si disponible */}
+                {portfolio.topTitle ? (
+                  <p
+                    className="text-4xl md:text-6xl font-bold text-white mb-4 flex flex-row items-center gap-6
+                  font-jakarta"
+                  >
+                    {portfolio.topTitle}
+                  </p>
+                ) : null}
+                <h1
+                  className="text-4xl md:text-6xl font-bold text-white mb-4 flex flex-row items-center gap-6 font-jakarta"
+                  style={{ color: portfolio.couleur }}
+                >
                   <ArrowLight className="w-16 h-16" />
                   {portfolio.titre}
                 </h1>
-                <div className="text-right"></div>
               </div>
             </div>
 
@@ -114,6 +126,44 @@ export default function PortfolioSlug() {
             ))}
           </div>
         </div>
+
+        {/* Shortlist */}
+        {portfolio.shortlist && portfolio.shortlist.length > 0 && (
+          <div className="flex flex-col items-start justify-between gap-4 w-full">
+            <h3 className="flex flex-row items-center gap-2 text-xl font-bold text-white mb-6">
+              <Star className="w-10 h-10" />
+              Shortlist
+            </h3>
+            <div className="flex flex-row gap-2 w-full flex-wrap">
+              {portfolio.shortlist}
+            </div>
+          </div>
+        )}
+
+        {/* Témoignage */}
+        {portfolio.temoignage && portfolio.temoignage.contenu && (
+          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-xl p-8">
+            <h3 className="flex flex-row items-center gap-2 text-xl font-bold text-white mb-6">
+              <Star className="w-10 h-10" />
+              Témoignage Client
+            </h3>
+            <blockquote className="text-gray-300 text-lg leading-relaxed italic mb-4">
+              "{portfolio.temoignage.contenu}"
+            </blockquote>
+            <div className="flex flex-col gap-1">
+              <cite className="text-white font-semibold not-italic">
+                {portfolio.temoignage.auteur}
+              </cite>
+              {portfolio.temoignage.poste && (
+                <span className="text-gray-400 text-sm">
+                  {portfolio.temoignage.poste}
+                  {portfolio.temoignage.entreprise &&
+                    ` chez ${portfolio.temoignage.entreprise}`}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Bento Grid - Project Gallery */}
         {portfolio.bento && portfolio.bento.length > 0 && (

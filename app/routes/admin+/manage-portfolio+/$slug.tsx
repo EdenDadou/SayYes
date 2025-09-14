@@ -42,20 +42,24 @@ interface EditPortfolioFormData {
   kicker: string;
   livrable: string[];
   sousTitre: string;
+  topTitle: string;
+  couleur: string;
+  shortlist: string;
+  temoignage: {
+    auteur: string;
+    contenu: string;
+    poste?: string;
+    entreprise?: string;
+  };
   bento: BentoItem[];
 }
 
 // Loader pour charger le portfolio à éditer
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  console.log("🚀 LOADER CALLED - manage-portfolio.$slug.tsx");
-  console.log("📋 URL:", request.url);
-  console.log("📋 Params:", params);
-
   await requireAuth(request);
   const sessionData = await getSessionData(request);
 
   const { slug } = params;
-  console.log("📋 Extracted slug:", slug);
 
   if (!slug) {
     console.error("❌ Pas de slug fourni");
@@ -64,7 +68,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const portfolio = await getPortfolioBySlug(slug);
 
   if (!portfolio) {
-    console.log("❌ Portfolio non trouvé");
+    console.error("❌ Portfolio non trouvé");
     throw new Response("Portfolio non trouvé", { status: 404 });
   }
   return { sessionData, portfolio };
@@ -76,6 +80,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { slug } = params;
   if (!slug) {
+    console.error("❌ Pas de slug fourni dans l'action");
     return Response.json(
       { success: false, error: "Slug du portfolio requis" },
       { status: 400 }
@@ -88,7 +93,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       return redirect("/admin/manage-portfolio");
     }
 
-    // Traitement des fichiers uploadés pour PUT
+    // Traitement des fichiers uploadés pour PUT/POST
     const uploadHandler = unstable_createMemoryUploadHandler({
       maxPartSize: 10 * 1024 * 1024, // 10MB
     });
@@ -126,26 +131,113 @@ export async function action({ request, params }: ActionFunctionArgs) {
       kicker: formData.get("kicker") as string,
       livrable: formData.getAll("livrable") as string[],
       sousTitre: formData.get("sousTitre") as string,
+      topTitle: formData.get("topTitle") as string,
+      couleur: formData.get("couleur") as string,
+      shortlist: formData.get("shortlist") as string,
+      temoignage: {
+        auteur: (formData.get("temoignageAuteur") as string) || "",
+        contenu: (formData.get("temoignageContenu") as string) || "",
+        poste: (formData.get("temoignagePoste") as string) || undefined,
+        entreprise:
+          (formData.get("temoignageEntreprise") as string) || undefined,
+      },
       bento: (() => {
         try {
           const bentoData = formData.get("bento") as string;
-          return bentoData ? JSON.parse(bentoData) : [];
+          const parsed = bentoData ? JSON.parse(bentoData) : [];
+          console.log(
+            "📦 Bento parsé côté serveur:",
+            JSON.stringify(parsed, null, 2)
+          );
+          return parsed;
         } catch (e) {
-          console.warn("Error parsing bento data:", e);
+          console.error("❌ Erreur parsing bento data:", e);
           return [];
         }
       })(),
     };
 
+    // Traitement des fichiers du bento (même logique que la création)
+    const updatedBento = [...(portfolioData.bento || [])];
+
+    // Récupérer le portfolio pour obtenir l'ID
+    const portfolio = await getPortfolioBySlug(slug);
+    if (!portfolio) {
+      return Response.json(
+        { success: false, error: "Portfolio non trouvé" },
+        { status: 404 }
+      );
+    }
+
+    // Créer une map des fichiers uploadés pour un accès plus facile
+    const uploadedFiles = new Map<string, any>();
+    for (const [key, value] of formData.entries()) {
+      if (
+        key.startsWith("bentoFile_") &&
+        value instanceof File &&
+        value.size > 0
+      ) {
+        const match = key.match(/bentoFile_(\d+)_(\d+)/);
+        if (match) {
+          const bentoIndex = parseInt(match[1]);
+          const globalIndex = parseInt(match[2]);
+
+          // Sauvegarder le fichier
+          const savedMedia = await saveMedia(
+            value,
+            "portfolio/bento",
+            portfolio.id
+          );
+
+          uploadedFiles.set(`${bentoIndex}_${globalIndex}`, savedMedia.url);
+          console.log(`✅ Fichier sauvegardé: ${key} -> ${savedMedia.url}`);
+        }
+      }
+    }
+
+    // Maintenant, parcourir le bento et remplacer les images pending
+    updatedBento.forEach((bento, bentoIndex) => {
+      let globalPendingIndex = 0;
+
+      bento.lines.forEach((line, lineIndex) => {
+        line.listImage.forEach((image, imgIndex) => {
+          if (image.startsWith("pending_")) {
+            const fileKey = `${bentoIndex}_${globalPendingIndex}`;
+            const newUrl = uploadedFiles.get(fileKey);
+
+            if (newUrl) {
+              console.log(`🔄 Remplacement: ${image} -> ${newUrl}`);
+              updatedBento[bentoIndex].lines[lineIndex].listImage[imgIndex] =
+                newUrl;
+            } else {
+              console.warn(
+                `⚠️ Aucun fichier trouvé pour ${fileKey} (image: ${image})`
+              );
+            }
+            globalPendingIndex++;
+          }
+        });
+      });
+    });
+
+    // Mettre à jour les données avec le bento traité
+    portfolioData.bento = updatedBento;
+
     // Mettre à jour en base de données
     await updatePortfolioBySlug(slug, portfolioData);
 
-    return Response.json({
+    const successResponse = {
       success: true,
       message: "Portfolio mis à jour avec succès!",
-    });
+    };
+
+    return Response.json(successResponse);
   } catch (error) {
-    console.error("Erreur lors de la mise à jour du portfolio:", error);
+    console.error("❌ Erreur lors de la mise à jour du portfolio:", error);
+    console.error(
+      "❌ Stack trace:",
+      error instanceof Error ? error.stack : "N/A"
+    );
     return Response.json({
       success: false,
       error:
@@ -157,22 +249,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function EditPortfolio() {
-  console.log("🚀 EditPortfolio component rendering...");
-
   const { sessionData, portfolio } = useLoaderData<typeof loader>();
-
-  console.log(portfolio);
-  console.log("📦 Loader data received:", {
-    sessionData: !!sessionData,
-    portfolio: !!portfolio,
-  });
-  console.log("📋 Portfolio details:", portfolio);
-
   const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
-
-  console.log("Component - Portfolio reçu:", portfolio);
-
   // États pour le formulaire - initialisation simple pour éviter les problèmes d'hydratation
   const [formData, setFormData] = useState<EditPortfolioFormData>({
     titre: "",
@@ -182,6 +261,15 @@ export default function EditPortfolio() {
     kicker: "",
     livrable: [],
     sousTitre: "",
+    topTitle: "",
+    couleur: "",
+    shortlist: "",
+    temoignage: {
+      auteur: "",
+      contenu: "",
+      poste: "",
+      entreprise: "",
+    },
     bento: [],
   });
 
@@ -196,18 +284,70 @@ export default function EditPortfolio() {
   const [bentoPreviewImages, setBentoPreviewImages] = useState<
     { url: string; name: string }[]
   >([]);
+  const [bentoFiles, setBentoFiles] = useState<File[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [toast, setToast] = useState<{
+    show: boolean;
+    message: string;
+    type: "success" | "error";
+  }>({ show: false, message: "", type: "success" });
 
   // Mise à jour du formulaire quand les données du portfolio changent
   useEffect(() => {
-    if (portfolio) {
-      console.log("Portfolio data loaded:", portfolio);
-      console.log(
-        "Portfolio livrable:",
-        portfolio.livrable,
-        typeof portfolio.livrable
-      );
-      console.log("Portfolio bento:", portfolio.bento, typeof portfolio.bento);
+    if (portfolio && !isDataLoaded) {
+      // Parser les données JSON si nécessaire
+      let parsedLivrable = [];
+      let parsedBento = [];
+      let parsedTemoignage = {
+        auteur: "",
+        contenu: "",
+        poste: "",
+        entreprise: "",
+      };
+
+      try {
+        parsedLivrable = Array.isArray(portfolio.livrable)
+          ? portfolio.livrable
+          : typeof portfolio.livrable === "string"
+            ? JSON.parse(portfolio.livrable)
+            : [];
+      } catch (e) {
+        console.warn("⚠️ Erreur parsing livrable:", e);
+        parsedLivrable = [];
+      }
+
+      try {
+        parsedBento = Array.isArray(portfolio.bento)
+          ? portfolio.bento
+          : typeof portfolio.bento === "string"
+            ? JSON.parse(portfolio.bento)
+            : [];
+      } catch (e) {
+        console.warn("⚠️ Erreur parsing bento:", e);
+        parsedBento = [];
+      }
+
+      try {
+        parsedTemoignage =
+          portfolio.temoignage && typeof portfolio.temoignage === "object"
+            ? portfolio.temoignage
+            : typeof portfolio.temoignage === "string"
+              ? JSON.parse(portfolio.temoignage)
+              : {
+                  auteur: "",
+                  contenu: "",
+                  poste: "",
+                  entreprise: "",
+                };
+      } catch (e) {
+        console.warn("⚠️ Erreur parsing temoignage:", e);
+        parsedTemoignage = {
+          auteur: "",
+          contenu: "",
+          poste: "",
+          entreprise: "",
+        };
+      }
 
       const newFormData: EditPortfolioFormData = {
         titre: portfolio.titre || "",
@@ -215,16 +355,39 @@ export default function EditPortfolio() {
         photoCouverture: portfolio.photoCouverture || "",
         description: portfolio.description || "",
         kicker: portfolio.kicker || "",
-        livrable: Array.isArray(portfolio.livrable) ? portfolio.livrable : [],
+        livrable: parsedLivrable,
         sousTitre: portfolio.sousTitre || "",
-        bento: Array.isArray(portfolio.bento) ? portfolio.bento : [],
+        topTitle: portfolio.topTitle || "",
+        couleur: portfolio.couleur || "",
+        shortlist: portfolio.shortlist || "",
+        temoignage: parsedTemoignage,
+        bento: parsedBento,
       };
-      console.log("Setting form data:", newFormData);
+
       setFormData(newFormData);
       setPreviewImage(portfolio.photoCouverture || null);
       setIsDataLoaded(true);
     }
-  }, [portfolio]);
+  }, [portfolio, isDataLoaded]);
+
+  // Gestion des retours de l'action
+  useEffect(() => {
+    if (actionData && isDataLoaded) {
+      console.log("📡 Action data received:", actionData);
+      if (actionData.success) {
+        showToast(
+          actionData.message || "Portfolio mis à jour avec succès!",
+          "success"
+        );
+        // Recharger la page pour voir les modifications après un délai
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else if (actionData.error) {
+        showToast(actionData.error, "error");
+      }
+    }
+  }, [actionData, isDataLoaded]);
 
   // Options pour les formats de bento
   const bentoFormats = [
@@ -274,108 +437,159 @@ export default function EditPortfolio() {
     }));
   };
 
-  // Gestion du bento
-  const addBentoItem = () => {
+  // Gestion du témoignage
+  const handleTemoignageChange = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
-      bento: [...prev.bento, { lines: [] }],
+      temoignage: {
+        ...prev.temoignage,
+        [field]: value,
+      },
     }));
   };
 
-  const removeBentoItem = (bentoIndex: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      bento: prev.bento.filter((_, i) => i !== bentoIndex),
-    }));
+  // Gestion de l'upload de fichiers multiples pour les images bento
+  const handleBentoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach((file) => {
+        // Vérifier le type de fichier
+        if (file.type.startsWith("image/")) {
+          // Stocker le fichier réel pour l'envoi
+          setBentoFiles((prev) => [...prev, file]);
+
+          // Créer un aperçu de l'image
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const imageUrl = event.target?.result as string;
+            setBentoPreviewImages((prev) => [
+              ...prev,
+              { url: imageUrl, name: file.name },
+            ]);
+
+            // Ajouter un placeholder à la ligne bento actuelle
+            setCurrentBentoLine((prev) => ({
+              ...prev,
+              listImage: [...prev.listImage, `pending_${file.name}`],
+            }));
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
+      e.target.value = "";
+    }
   };
 
-  const addBentoLine = (bentoIndex: number) => {
-    setFormData((prev) => {
-      const newBento = [...prev.bento];
-      newBento[bentoIndex].lines.push({
+  const removeBentoImage = (index: number) => {
+    setCurrentBentoLine((prev) => ({
+      ...prev,
+      listImage: prev.listImage.filter((_, i) => i !== index),
+    }));
+    // Supprimer aussi l'aperçu et le fichier correspondants
+    setBentoPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    setBentoFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Gestion des lignes de bento
+  const addBentoLine = () => {
+    if (
+      currentBentoLine.listImage.length > 0 &&
+      currentBento.lines.length < 10
+    ) {
+      setCurrentBento((prev) => ({
+        lines: [...prev.lines, currentBentoLine],
+      }));
+      setCurrentBentoLine({
         format: "1/3 - 2/3",
         listImage: [],
       });
-      return { ...prev, bento: newBento };
-    });
-  };
-
-  const removeBentoLine = (bentoIndex: number, lineIndex: number) => {
-    setFormData((prev) => {
-      const newBento = [...prev.bento];
-      newBento[bentoIndex].lines = newBento[bentoIndex].lines.filter(
-        (_, i) => i !== lineIndex
-      );
-      return { ...prev, bento: newBento };
-    });
-  };
-
-  const updateBentoLineFormat = (
-    bentoIndex: number,
-    lineIndex: number,
-    format: BentoLine["format"]
-  ) => {
-    setFormData((prev) => {
-      const newBento = [...prev.bento];
-      newBento[bentoIndex].lines[lineIndex].format = format;
-      return { ...prev, bento: newBento };
-    });
-  };
-
-  const addImageToBentoLine = (
-    bentoIndex: number,
-    lineIndex: number,
-    imageUrl: string
-  ) => {
-    setFormData((prev) => {
-      const newBento = [...prev.bento];
-      newBento[bentoIndex].lines[lineIndex].listImage.push(imageUrl);
-      return { ...prev, bento: newBento };
-    });
-  };
-
-  const removeImageFromBentoLine = (
-    bentoIndex: number,
-    lineIndex: number,
-    imageIndex: number
-  ) => {
-    setFormData((prev) => {
-      const newBento = [...prev.bento];
-      newBento[bentoIndex].lines[lineIndex].listImage = newBento[
-        bentoIndex
-      ].lines[lineIndex].listImage.filter((_, i) => i !== imageIndex);
-      return { ...prev, bento: newBento };
-    });
-  };
-
-  // Gestion des uploads d'images pour le bento
-  const handleBentoImageUpload = async (
-    file: File,
-    bentoIndex: number,
-    lineIndex: number
-  ) => {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder", "portfolio");
-      formData.append("portfolioId", portfolio.id);
-
-      const response = await fetch("/api/media", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        addImageToBentoLine(bentoIndex, lineIndex, result.media.url);
-      } else {
-        console.error("Erreur lors de l'upload:", response.statusText);
-        alert("Erreur lors de l'upload de l'image");
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'upload:", error);
-      alert("Erreur lors de l'upload de l'image");
+      setBentoPreviewImages([]);
+      // Ne pas réinitialiser bentoFiles ici car on peut avoir plusieurs lignes par bento
     }
+  };
+
+  const removeBentoLine = (index: number) => {
+    setCurrentBento((prev) => ({
+      lines: prev.lines.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Gestion des bentos
+  const addBento = () => {
+    if (currentBento.lines.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        bento: [...prev.bento, currentBento],
+      }));
+      setCurrentBento({
+        lines: [],
+      });
+      setCurrentBentoLine({
+        format: "1/3 - 2/3",
+        listImage: [],
+      });
+      setBentoPreviewImages([]);
+      // Réinitialiser les fichiers bento pour le prochain bento
+      setBentoFiles([]);
+    }
+  };
+
+  const removeBento = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      bento: prev.bento.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Fonction pour afficher le toast
+  const showToast = (message: string, type: "success" | "error") => {
+    setToast({ show: true, message, type });
+    // Masquer le toast après 5 secondes
+    setTimeout(() => {
+      setToast({ show: false, message: "", type: "success" });
+    }, 5000);
+  };
+
+  // Fonction de soumission personnalisée pour gérer les fichiers bento
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // Scroll vers le haut
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    const form = e.currentTarget;
+    const submitFormData = new FormData(form);
+
+    // S'assurer que les données bento sont correctement sérialisées
+    console.log("📦 Structure bento avant envoi:", formData.bento);
+    submitFormData.set("bento", JSON.stringify(formData.bento));
+
+    // Ajouter les fichiers bento avec les noms corrects
+    let globalImageIndex = 0;
+    formData.bento.forEach((bento, bentoIndex) => {
+      bento.lines.forEach((line, lineIndex) => {
+        line.listImage.forEach((image, imageIndex) => {
+          // Si l'image commence par "pending_", c'est un fichier à uploader
+          if (image.startsWith("pending_")) {
+            const fileName = image.replace("pending_", "");
+            const file = bentoFiles.find((f) => f.name === fileName);
+            if (file) {
+              // Utiliser l'index global des images pending uniquement
+              submitFormData.append(
+                `bentoFile_${bentoIndex}_${globalImageIndex}`,
+                file
+              );
+              console.log(
+                `📎 Ajout fichier: bentoFile_${bentoIndex}_${globalImageIndex} -> ${fileName}`
+              );
+              globalImageIndex++;
+            }
+          }
+        });
+      });
+    });
+
+    // Laisser Remix gérer la soumission naturellement
+    // Ne pas empêcher le comportement par défaut
   };
 
   // Fonction pour supprimer le portfolio
@@ -406,19 +620,78 @@ export default function EditPortfolio() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-300 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-black p-8">
+      {/* Toast Notification */}
+      {toast.show && (
+        <div
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg border transition-all duration-300 transform ${
+            toast.type === "success"
+              ? "bg-green-900/90 border-green-700 text-green-100"
+              : "bg-red-900/90 border-red-700 text-red-100"
+          }`}
+          style={{ fontFamily: "Jakarta" }}
+        >
+          <div className="flex items-center gap-3">
+            {toast.type === "success" ? (
+              <svg
+                className="w-5 h-5 text-green-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5 text-red-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            )}
+            <span className="font-medium">{toast.message}</span>
+            <button
+              onClick={() =>
+                setToast({ show: false, message: "", type: "success" })
+              }
+              className="ml-2 text-gray-400 hover:text-white transition-colors"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="max-w-4xl mx-auto">
         {/* En-tête */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1
-              className="text-3xl font-bold text-gray-900"
+              className="text-4xl font-bold text-white mb-2"
               style={{ fontFamily: "Jakarta Bold" }}
             >
               Modifier le Portfolio
             </h1>
-            <p className="text-gray-600 mt-2">Slug: {portfolio.slug}</p>
-            <p className="text-gray-600 mt-1">Titre: {portfolio.titre}</p>
+            <p className="text-gray-300 mt-2" style={{ fontFamily: "Jakarta" }}>
+              Slug: {portfolio.slug}
+            </p>
+            <p className="text-gray-300 mt-1" style={{ fontFamily: "Jakarta" }}>
+              Titre: {portfolio.titre}
+            </p>
           </div>
           <div className="flex gap-3">
             <Link
@@ -437,492 +710,839 @@ export default function EditPortfolio() {
           </div>
         </div>
 
-        {/* Messages de retour */}
-        {actionData?.success && "message" in actionData && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-            {actionData.message}
-          </div>
-        )}
-        {actionData && !actionData.success && "error" in actionData && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            {actionData.error}
-          </div>
-        )}
-
-        {/* Formulaire de modification */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          {/* Indicateur de chargement */}
-          {!isDataLoaded && (
-            <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mb-6 flex items-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-700 mr-2"></div>
+        {/* Indicateur de chargement */}
+        {!isDataLoaded && (
+          <div className="mb-6 p-4 bg-blue-900/50 border border-blue-700 rounded-lg flex items-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300 mr-2"></div>
+            <p className="text-blue-300" style={{ fontFamily: "Jakarta" }}>
               Chargement des données du portfolio...
-            </div>
-          )}
+            </p>
+          </div>
+        )}
 
-          <Form
-            method="post"
-            encType="multipart/form-data"
-            className="space-y-6"
-          >
-            {/* Titre */}
-            <div>
-              <label
-                htmlFor="titre"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Titre du portfolio *
-              </label>
-              <input
-                type="text"
-                id="titre"
-                name="titre"
-                value={formData.titre}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Entrez le titre du portfolio..."
-              />
-            </div>
-
-            {/* Slug */}
-            <div>
-              <label
-                htmlFor="slug"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Slug *{" "}
-                <span className="text-xs text-gray-500">
-                  (URL-friendly, ex: mon-projet-web)
-                </span>
-              </label>
-              <input
-                type="text"
-                id="slug"
-                name="slug"
-                value={formData.slug}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="mon-projet-web"
-                pattern="[a-z0-9-]+"
-                title="Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets"
-              />
-            </div>
-
-            {/* Photo de couverture */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Photo de couverture *
-              </label>
-              <div className="space-y-4">
-                <div className="flex gap-4">
-                  <label className="flex items-center text-gray-600">
-                    <input
-                      type="radio"
-                      value="url"
-                      checked={uploadMethod === "url"}
-                      onChange={(e) =>
-                        setUploadMethod(e.target.value as "url" | "file")
-                      }
-                      className="mr-2"
-                    />
-                    URL
-                  </label>
-                  <label className="flex items-center text-gray-600">
-                    <input
-                      type="radio"
-                      value="file"
-                      checked={uploadMethod === "file"}
-                      onChange={(e) =>
-                        setUploadMethod(e.target.value as "url" | "file")
-                      }
-                      className="mr-2"
-                    />
-                    Upload fichier
-                  </label>
-                </div>
-
-                {uploadMethod === "url" ? (
-                  <input
-                    type="url"
-                    name="photoCouvertureUrl"
-                    value={formData.photoCouverture}
-                    onChange={(e) => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        photoCouverture: e.target.value,
-                      }));
-                      setPreviewImage(e.target.value);
-                    }}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://example.com/image.jpg"
-                  />
-                ) : (
-                  <>
-                    <input
-                      type="hidden"
-                      name="photoCouvertureUrl"
-                      value={formData.photoCouverture}
-                    />
-                    <input
-                      type="file"
-                      name="photoCouvertureFile"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </>
-                )}
-
-                {previewImage && (
-                  <div className="mt-4">
-                    <img
-                      src={previewImage}
-                      alt="Aperçu"
-                      className="w-full max-w-md h-48 object-cover rounded-lg border"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Kicker */}
-            <div>
-              <label
-                htmlFor="kicker"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Kicker (phrase d'accroche)
-              </label>
-              <input
-                type="text"
-                id="kicker"
-                name="kicker"
-                value={formData.kicker}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Une phrase courte et percutante..."
-              />
-            </div>
-
-            {/* Description */}
-            <div>
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Description *
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
-                placeholder="Décrivez le projet, ses objectifs, les défis relevés..."
-              />
-            </div>
-
-            {/* Sous-titre */}
-            <div>
-              <label
-                htmlFor="sousTitre"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Sous-titre
-              </label>
-              <input
-                type="text"
-                id="sousTitre"
-                name="sousTitre"
-                value={formData.sousTitre}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Sous-titre ou complément d'information..."
-              />
-            </div>
-
-            {/* Livrables */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Livrables
-              </label>
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={currentLivrable}
-                    onChange={(e) => setCurrentLivrable(e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Ex: Logo, Charte graphique, Site web..."
-                    onKeyPress={(e) =>
-                      e.key === "Enter" && (e.preventDefault(), addLivrable())
-                    }
-                  />
-                  <button
-                    type="button"
-                    onClick={addLivrable}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-                  >
-                    Ajouter
-                  </button>
-                </div>
-
-                {formData.livrable.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {formData.livrable.map((livrable, index) => (
-                      <div
-                        key={index}
-                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                      >
-                        {livrable}
-                        <button
-                          type="button"
-                          onClick={() => removeLivrable(index)}
-                          className="text-blue-600 hover:text-blue-800 font-bold text-lg leading-none"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Champs cachés pour les livrables */}
-                {formData.livrable.map((livrable, index) => (
-                  <input
-                    key={index}
-                    type="hidden"
-                    name="livrable"
-                    value={livrable}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Gestion du Bento */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-4">
-                Bento (Galerie d'images organisée)
-              </label>
-
-              <div className="space-y-6">
-                {formData.bento.map((bentoItem, bentoIndex) => (
-                  <div
-                    key={bentoIndex}
-                    className="border border-gray-300 rounded-lg p-4 bg-gray-50"
-                  >
-                    <div className="flex justify-between items-center mb-4">
-                      <h4 className="font-semibold text-gray-800">
-                        Bento #{bentoIndex + 1}
-                      </h4>
-                      <button
-                        type="button"
-                        onClick={() => removeBentoItem(bentoIndex)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-medium transition-colors duration-200"
-                      >
-                        Supprimer Bento
-                      </button>
-                    </div>
-
-                    {/* Lignes du bento */}
-                    <div className="space-y-4">
-                      {bentoItem.lines.map((line, lineIndex) => (
-                        <div
-                          key={lineIndex}
-                          className="border border-gray-200 rounded p-3 bg-white"
-                        >
-                          <div className="flex justify-between items-center mb-3">
-                            <h5 className="font-medium text-gray-700">
-                              Ligne #{lineIndex + 1}
-                            </h5>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeBentoLine(bentoIndex, lineIndex)
-                              }
-                              className="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded text-xs font-medium transition-colors duration-200"
-                            >
-                              Supprimer Ligne
-                            </button>
-                          </div>
-
-                          {/* Sélection du format */}
-                          <div className="mb-3">
-                            <label className="block text-xs font-medium text-gray-600 mb-1">
-                              Format de la ligne
-                            </label>
-                            <select
-                              value={line.format}
-                              onChange={(e) =>
-                                updateBentoLineFormat(
-                                  bentoIndex,
-                                  lineIndex,
-                                  e.target.value as BentoLine["format"]
-                                )
-                              }
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                            >
-                              {bentoFormats.map((format) => (
-                                <option key={format} value={format}>
-                                  {format}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-
-                          {/* Upload d'images pour cette ligne */}
-                          <div className="mb-3">
-                            <label className="block text-xs font-medium text-gray-600 mb-2">
-                              Ajouter des images à la ligne
-                            </label>
-
-                            {/* Upload par fichier */}
-                            <div className="mb-2">
-                              <label className="block text-xs text-gray-500 mb-1">
-                                Upload fichier
-                              </label>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    handleBentoImageUpload(
-                                      file,
-                                      bentoIndex,
-                                      lineIndex
-                                    );
-                                  }
-                                }}
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                              />
-                            </div>
-
-                            {/* Ajout par URL */}
-                            <div className="flex gap-2">
-                              <input
-                                type="url"
-                                placeholder="https://example.com/image.jpg"
-                                className="flex-1 px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                                onKeyPress={(e) => {
-                                  if (e.key === "Enter") {
-                                    e.preventDefault();
-                                    const input = e.target as HTMLInputElement;
-                                    if (input.value.trim()) {
-                                      addImageToBentoLine(
-                                        bentoIndex,
-                                        lineIndex,
-                                        input.value.trim()
-                                      );
-                                      input.value = "";
-                                    }
-                                  }
-                                }}
-                              />
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  const input = (e.target as HTMLButtonElement)
-                                    .previousElementSibling as HTMLInputElement;
-                                  if (input.value.trim()) {
-                                    addImageToBentoLine(
-                                      bentoIndex,
-                                      lineIndex,
-                                      input.value.trim()
-                                    );
-                                    input.value = "";
-                                  }
-                                }}
-                                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium transition-colors duration-200"
-                              >
-                                Ajouter URL
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Affichage des images de cette ligne */}
-                          {line.listImage.length > 0 && (
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                              {line.listImage.map((imageUrl, imageIndex) => (
-                                <div
-                                  key={imageIndex}
-                                  className="relative group"
-                                >
-                                  <img
-                                    src={imageUrl}
-                                    alt={`Image ${imageIndex + 1}`}
-                                    className="w-full h-20 object-cover rounded border"
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      removeImageFromBentoLine(
-                                        bentoIndex,
-                                        lineIndex,
-                                        imageIndex
-                                      )
-                                    }
-                                    className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                                  >
-                                    ×
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-
-                      {/* Bouton pour ajouter une ligne */}
-                      <button
-                        type="button"
-                        onClick={() => addBentoLine(bentoIndex)}
-                        className="w-full bg-blue-100 hover:bg-blue-200 text-blue-700 py-2 px-4 rounded-lg font-medium transition-colors duration-200 border-2 border-dashed border-blue-300"
-                      >
-                        + Ajouter une ligne
-                      </button>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Bouton pour ajouter un bento */}
-                <button
-                  type="button"
-                  onClick={addBentoItem}
-                  className="w-full bg-green-100 hover:bg-green-200 text-green-700 py-3 px-4 rounded-lg font-semibold transition-colors duration-200 border-2 border-dashed border-green-300"
-                >
-                  + Ajouter un Bento
-                </button>
-              </div>
-            </div>
-
-            {/* Champ caché pour le bento */}
+        <Form
+          method="post"
+          onSubmit={handleSubmit}
+          className="space-y-8"
+          encType="multipart/form-data"
+        >
+          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-xl p-8">
+            <h2
+              className="text-2xl font-bold text-white mb-6"
+              style={{ fontFamily: "Jakarta Bold" }}
+            >
+              Informations générales
+            </h2>
             <input
               type="hidden"
               name="bento"
               value={JSON.stringify(formData.bento)}
             />
 
-            {/* Boutons de soumission */}
-            <div className="flex gap-4 justify-end pt-6 border-t">
-              <Link
-                to="/admin/manage-portfolio"
-                className="bg-gray-600 hover:bg-gray-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"
+            {/* Champ caché pour l'URL de la photo de couverture actuelle */}
+            <input
+              type="hidden"
+              name="photoCouvertureUrl"
+              value={formData.photoCouverture}
+            />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Top Title */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="topTitle"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Top Title
+                </label>
+                <input
+                  type="text"
+                  id="topTitle"
+                  name="topTitle"
+                  value={formData.topTitle}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Titre principal du projet"
+                />
+              </div>
+
+              {/* Titre */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="titre"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Titre *
+                </label>
+                <input
+                  type="text"
+                  id="titre"
+                  name="titre"
+                  value={formData.titre}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Titre du projet"
+                />
+              </div>
+
+              {/* Couleur */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="couleur"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Couleur
+                </label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    id="couleurPicker"
+                    value={formData.couleur || "#000000"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        couleur: e.target.value,
+                      }))
+                    }
+                    className="w-16 h-12 rounded-lg border border-gray-700 bg-gray-800 cursor-pointer"
+                    title="Choisir une couleur"
+                  />
+                  <input
+                    type="text"
+                    id="couleur"
+                    name="couleur"
+                    value={formData.couleur}
+                    onChange={handleInputChange}
+                    className="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    style={{ fontFamily: "Jakarta" }}
+                    placeholder="Couleur principale (ex: #FF5733)"
+                  />
+                </div>
+              </div>
+
+              {/* Section Shortlist */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="titre"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Note Shortlist (ex : 4.5)
+                </label>
+                <input
+                  type="text"
+                  id="shortlist"
+                  name="shortlist"
+                  value={formData.shortlist}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Note shortlist (ex: 4.5)"
+                />
+              </div>
+
+              {/* Slug */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="slug"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Slug *{" "}
+                  <span className="text-xs text-gray-300">
+                    (URL-friendly, ex: mon-projet-web)
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  id="slug"
+                  name="slug"
+                  value={formData.slug}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="mon-projet-web"
+                  pattern="[a-z0-9-]+"
+                  title="Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets"
+                />
+              </div>
+
+              {/* Photo de couverture */}
+              <div className="lg:col-span-2">
+                <label
+                  className="block text-sm font-medium text-gray-300 mb-4"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Photo de couverture *
+                </label>
+
+                {/* Upload de fichier */}
+                <div className="space-y-4">
+                  <input
+                    type="file"
+                    id="photoCouvertureFile"
+                    name="photoCouvertureFile"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:cursor-pointer hover:file:bg-blue-700 transition-all duration-200"
+                    style={{ fontFamily: "Jakarta" }}
+                  />
+
+                  {/* Aperçu de l'image */}
+                  {previewImage && (
+                    <div className="mt-4">
+                      <p
+                        className="text-sm text-gray-400 mb-2"
+                        style={{ fontFamily: "Jakarta" }}
+                      >
+                        Aperçu :
+                      </p>
+                      <img
+                        src={previewImage}
+                        alt="Aperçu"
+                        className="max-w-xs h-32 object-cover rounded-lg border border-gray-600"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Kicker */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="kicker"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Kicker
+                </label>
+                <input
+                  type="text"
+                  id="kicker"
+                  name="kicker"
+                  value={formData.kicker}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Texte d'accroche"
+                />
+              </div>
+
+              {/* Sous-titre */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="sousTitre"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Sous-titre
+                </label>
+                <input
+                  type="text"
+                  id="sousTitre"
+                  name="sousTitre"
+                  value={formData.sousTitre}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Sous-titre du projet"
+                />
+              </div>
+
+              {/* Description */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Description *
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  required
+                  rows={4}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-vertical"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Description détaillée du projet"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section Témoignage */}
+          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-xl p-8">
+            <h2
+              className="text-2xl font-bold text-white mb-6"
+              style={{ fontFamily: "Jakarta Bold" }}
+            >
+              Témoignage
+            </h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Auteur */}
+              <div>
+                <label
+                  htmlFor="temoignageAuteur"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Auteur *
+                </label>
+                <input
+                  type="text"
+                  id="temoignageAuteur"
+                  name="temoignageAuteur"
+                  value={formData.temoignage.auteur}
+                  onChange={(e) =>
+                    handleTemoignageChange("auteur", e.target.value)
+                  }
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Nom de l'auteur du témoignage"
+                />
+              </div>
+
+              {/* Poste */}
+              <div>
+                <label
+                  htmlFor="temoignagePoste"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Poste
+                </label>
+                <input
+                  type="text"
+                  id="temoignagePoste"
+                  name="temoignagePoste"
+                  value={formData.temoignage.poste || ""}
+                  onChange={(e) =>
+                    handleTemoignageChange("poste", e.target.value)
+                  }
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Poste de l'auteur"
+                />
+              </div>
+
+              {/* Entreprise */}
+              <div>
+                <label
+                  htmlFor="temoignageEntreprise"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Entreprise
+                </label>
+                <input
+                  type="text"
+                  id="temoignageEntreprise"
+                  name="temoignageEntreprise"
+                  value={formData.temoignage.entreprise || ""}
+                  onChange={(e) =>
+                    handleTemoignageChange("entreprise", e.target.value)
+                  }
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Entreprise de l'auteur"
+                />
+              </div>
+
+              {/* Contenu */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="temoignageContenu"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Contenu du témoignage *
+                </label>
+                <textarea
+                  id="temoignageContenu"
+                  name="temoignageContenu"
+                  value={formData.temoignage.contenu}
+                  onChange={(e) =>
+                    handleTemoignageChange("contenu", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-vertical"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Contenu du témoignage"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section Livrables */}
+          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-xl p-8">
+            <h2
+              className="text-2xl font-bold text-white mb-6"
+              style={{ fontFamily: "Jakarta Bold" }}
+            >
+              Livrables
+            </h2>
+
+            <div className="space-y-4">
+              {/* Ajouter un livrable */}
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  value={currentLivrable}
+                  onChange={(e) => setCurrentLivrable(e.target.value)}
+                  className="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Nom du livrable"
+                  onKeyPress={(e) =>
+                    e.key === "Enter" && (e.preventDefault(), addLivrable())
+                  }
+                />
+                <button
+                  type="button"
+                  onClick={addLivrable}
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"
+                  style={{ fontFamily: "Jakarta Semi Bold" }}
+                >
+                  Ajouter
+                </button>
+              </div>
+
+              {/* Liste des livrables */}
+              {formData.livrable.length > 0 && (
+                <div className="space-y-2">
+                  <h3
+                    className="text-lg font-semibold text-white"
+                    style={{ fontFamily: "Jakarta Semi Bold" }}
+                  >
+                    Livrables ajoutés :
+                  </h3>
+                  {formData.livrable.map((livrable, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-gray-800/30 p-3 rounded-lg"
+                    >
+                      <span
+                        className="text-white"
+                        style={{ fontFamily: "Jakarta" }}
+                      >
+                        {livrable}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeLivrable(index)}
+                        className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                  {/* Inputs cachés pour les livrables */}
+                  {formData.livrable.map((livrable, index) => (
+                    <input
+                      key={index}
+                      type="hidden"
+                      name="livrable"
+                      value={livrable}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Section Bento */}
+          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-xl p-8">
+            <h2
+              className="text-2xl font-bold text-white mb-6"
+              style={{ fontFamily: "Jakarta Bold" }}
+            >
+              Configuration Bento
+            </h2>
+
+            {/* Ajouter un nouveau bento */}
+            <div className="space-y-6 mb-8 p-6 bg-gray-800/30 rounded-lg">
+              <h3
+                className="text-lg font-semibold text-white"
+                style={{ fontFamily: "Jakarta Semi Bold" }}
               >
-                Annuler
-              </Link>
+                Nouveau Bento ({currentBento.lines.length}/10 lignes)
+              </h3>
+
+              {/* Affichage des lignes existantes */}
+              {currentBento.lines.length > 0 && (
+                <div className="space-y-3 mb-6">
+                  <h4
+                    className="text-md font-medium text-gray-300"
+                    style={{ fontFamily: "Jakarta Medium" }}
+                  >
+                    Lignes configurées :
+                  </h4>
+                  {currentBento.lines.map((line, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-700/30 p-3 rounded-lg flex items-center justify-between"
+                    >
+                      <div>
+                        <span
+                          className="text-white font-medium"
+                          style={{ fontFamily: "Jakarta Medium" }}
+                        >
+                          Ligne {index + 1}: {line.format}
+                        </span>
+                        <span
+                          className="text-gray-400 ml-2"
+                          style={{ fontFamily: "Jakarta" }}
+                        >
+                          ({line.listImage.length} images)
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeBentoLine(index)}
+                        className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Ajouter une nouvelle ligne */}
+              {currentBento.lines.length < 10 && (
+                <div className="p-4 bg-gray-700/20 rounded-lg border border-gray-600">
+                  <h4
+                    className="text-md font-medium text-white mb-4"
+                    style={{ fontFamily: "Jakarta Medium" }}
+                  >
+                    Nouvelle ligne {currentBento.lines.length + 1}
+                  </h4>
+
+                  {/* Format de la ligne */}
+                  <div className="mb-4">
+                    <label
+                      className="block text-sm font-medium text-gray-300 mb-2"
+                      style={{ fontFamily: "Jakarta Medium" }}
+                    >
+                      Format
+                    </label>
+                    <select
+                      value={currentBentoLine.format}
+                      onChange={(e) =>
+                        setCurrentBentoLine((prev) => ({
+                          ...prev,
+                          format: e.target.value as any,
+                        }))
+                      }
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      style={{ fontFamily: "Jakarta" }}
+                    >
+                      {bentoFormats.map((format) => (
+                        <option key={format} value={format}>
+                          {format}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Images de la ligne */}
+                  <div>
+                    <label
+                      className="block text-sm font-medium text-gray-300 mb-2"
+                      style={{ fontFamily: "Jakarta Medium" }}
+                    >
+                      Images et GIFs *
+                    </label>
+                    {/* Upload de fichiers multiples */}
+                    <div className="mb-4">
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*,.gif"
+                        onChange={handleBentoFilesChange}
+                        className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-600 file:text-white file:cursor-pointer hover:file:bg-green-700 transition-all duration-200"
+                        style={{ fontFamily: "Jakarta" }}
+                      />
+                      <p
+                        className="text-xs text-gray-300 mt-2"
+                        style={{ fontFamily: "Jakarta" }}
+                      >
+                        📁 Sélectionnez plusieurs images ou GIFs (formats
+                        supportés: JPG, PNG, GIF, WebP, etc.)
+                      </p>
+                    </div>
+
+                    {/* Aperçus des images uploadées */}
+                    {bentoPreviewImages.length > 0 && (
+                      <div className="mb-4">
+                        <h5
+                          className="text-sm font-medium text-gray-300 mb-3"
+                          style={{ fontFamily: "Jakarta Medium" }}
+                        >
+                          Aperçu des images ({bentoPreviewImages.length}) :
+                        </h5>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                          {bentoPreviewImages.map((image, index) => (
+                            <div
+                              key={index}
+                              className="relative group bg-gray-700/30 rounded-lg overflow-hidden"
+                            >
+                              <img
+                                src={image.url}
+                                alt={`Aperçu ${index + 1}`}
+                                className="w-full h-20 object-cover"
+                              />
+                              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                                <button
+                                  type="button"
+                                  onClick={() => removeBentoImage(index)}
+                                  className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                                >
+                                  <svg
+                                    className="w-5 h-5"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                              <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1">
+                                <p
+                                  className="text-xs text-white truncate"
+                                  style={{ fontFamily: "Jakarta" }}
+                                >
+                                  {image.name}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Liste textuelle des images */}
+                    {currentBentoLine.listImage.length > 0 && (
+                      <div className="space-y-2 mb-4">
+                        <h5
+                          className="text-sm font-medium text-gray-300"
+                          style={{ fontFamily: "Jakarta Medium" }}
+                        >
+                          Fichiers sélectionnés :
+                        </h5>
+                        {currentBentoLine.listImage.map((image, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between bg-gray-600/30 p-2 rounded"
+                          >
+                            <span
+                              className="text-white text-sm truncate"
+                              style={{ fontFamily: "Jakarta" }}
+                            >
+                              📎 {image}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removeBentoImage(index)}
+                              className="text-red-400 hover:text-red-300 transition-colors duration-200 ml-2"
+                            >
+                              <svg
+                                className="w-4 h-4"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={addBentoLine}
+                      disabled={currentBentoLine.listImage.length === 0}
+                      className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg font-semibold transition-colors duration-200"
+                      style={{ fontFamily: "Jakarta Semi Bold" }}
+                    >
+                      Ajouter cette ligne
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {currentBento.lines.length >= 10 && (
+                <div className="p-4 bg-yellow-900/20 border border-yellow-700 rounded-lg">
+                  <p
+                    className="text-yellow-300 text-sm"
+                    style={{ fontFamily: "Jakarta" }}
+                  >
+                    ⚠️ Limite atteinte : Maximum 10 lignes par bento
+                  </p>
+                </div>
+              )}
+
               <button
-                type="submit"
-                className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-[1.02]"
+                type="button"
+                onClick={addBento}
+                disabled={currentBento.lines.length === 0}
+                className="w-full mt-4 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"
+                style={{ fontFamily: "Jakarta Semi Bold" }}
               >
-                Mettre à jour
+                Finaliser ce Bento
               </button>
             </div>
-          </Form>
-        </div>
+
+            {/* Liste des bentos créés */}
+            {formData.bento.length > 0 && (
+              <div className="space-y-4">
+                <h3
+                  className="text-lg font-semibold text-white"
+                  style={{ fontFamily: "Jakarta Semi Bold" }}
+                >
+                  Bentos configurés :
+                </h3>
+                {formData.bento.map((bento, index) => (
+                  <div key={index} className="bg-gray-800/30 p-4 rounded-lg">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <span
+                          className="text-white font-semibold"
+                          style={{ fontFamily: "Jakarta Semi Bold" }}
+                        >
+                          Bento {index + 1}
+                        </span>
+                        <span
+                          className="text-gray-400 ml-3"
+                          style={{ fontFamily: "Jakarta" }}
+                        >
+                          ({bento.lines.length} lignes)
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeBento(index)}
+                        className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* Affichage des lignes du bento */}
+                    <div className="space-y-3">
+                      {bento.lines.map((line, lineIndex) => (
+                        <div
+                          key={lineIndex}
+                          className="bg-gray-700/20 p-3 rounded-lg"
+                        >
+                          <div className="mb-2">
+                            <span
+                              className="text-white font-medium"
+                              style={{ fontFamily: "Jakarta Medium" }}
+                            >
+                              Ligne {lineIndex + 1}: {line.format}
+                            </span>
+                            <span
+                              className="text-gray-400 ml-2"
+                              style={{ fontFamily: "Jakarta" }}
+                            >
+                              ({line.listImage.length} images)
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                            {line.listImage.map((image, imgIndex) => (
+                              <div
+                                key={imgIndex}
+                                className="text-xs text-gray-300 bg-gray-600/30 p-2 rounded truncate"
+                                style={{ fontFamily: "Jakarta" }}
+                              >
+                                {image}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Champ caché pour le bento */}
+          <input
+            type="hidden"
+            name="bento"
+            value={JSON.stringify(formData.bento)}
+          />
+
+          {/* Boutons de soumission */}
+          <div className="flex gap-4 justify-end">
+            <Link
+              to="/admin/manage-portfolio"
+              className="bg-gray-600 hover:bg-gray-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"
+              style={{ fontFamily: "Jakarta Semi Bold" }}
+            >
+              Annuler
+            </Link>
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-[1.02]"
+              style={{ fontFamily: "Jakarta Semi Bold" }}
+            >
+              Mettre à jour
+            </button>
+          </div>
+        </Form>
       </div>
     </div>
   );

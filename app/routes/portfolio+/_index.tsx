@@ -39,8 +39,6 @@ export default function Portfolio() {
   const portfolioTopCards = portfolios.slice(0, midPoint);
   const portfolioBottomCards = portfolios.slice(midPoint);
 
-  console.log(portfolioTopCards);
-
   return (
     <div className="w-screen h-fit relative">
       {isMobile ? (
@@ -81,7 +79,7 @@ export default function Portfolio() {
       {/* Section avec image sticky et cartes qui passent par-dessus */}
       <div className="relative z-10">
         {/* Image ClientsWall - sticky au scroll */}
-        <div
+        {/* <div
           className={`w-screen h-screen ${
             isImageFixed ? "sticky top-0 z-0" : "relative"
           }`}
@@ -98,7 +96,7 @@ export default function Portfolio() {
             width={"100%"}
             height={"100%"}
           />
-        </div>
+        </div> */}
 
         {/* Cartes du bas */}
         <div className="relative z-10 bg-transparent min-h-screen">

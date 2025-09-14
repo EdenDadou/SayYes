@@ -33,6 +33,15 @@ interface PortfolioData {
   kicker: string;
   livrable: string[];
   sousTitre: string;
+  topTitle: string;
+  couleur: string;
+  shortlist: string;
+  temoignage: {
+    auteur: string;
+    contenu: string;
+    poste?: string;
+    entreprise?: string;
+  };
   bento: BentoItem[];
 }
 
@@ -68,6 +77,16 @@ export async function action({ request }: ActionFunctionArgs) {
       kicker: formData.get("kicker") as string,
       livrable: formData.getAll("livrable") as string[],
       sousTitre: formData.get("sousTitre") as string,
+      topTitle: formData.get("topTitle") as string,
+      couleur: formData.get("couleur") as string,
+      shortlist: formData.get("shortlist") as string,
+      temoignage: {
+        auteur: (formData.get("temoignageAuteur") as string) || "",
+        contenu: (formData.get("temoignageContenu") as string) || "",
+        poste: (formData.get("temoignagePoste") as string) || undefined,
+        entreprise:
+          (formData.get("temoignageEntreprise") as string) || undefined,
+      },
       bento: JSON.parse((formData.get("bento") as string) || "[]"),
     };
 
@@ -113,28 +132,33 @@ export async function action({ request }: ActionFunctionArgs) {
           );
 
           // Mettre à jour l'URL dans le bento
-          // Trouver la première image "pending_" dans le bento correspondant
+          // Trouver l'image "pending_" correspondante dans le bento
           if (updatedBento[bentoIndex]) {
             let currentImageIndex = 0;
-            let found = false;
 
+            // Parcourir toutes les lignes du bento
             for (
               let lineIndex = 0;
-              lineIndex < updatedBento[bentoIndex].lines.length && !found;
+              lineIndex < updatedBento[bentoIndex].lines.length;
               lineIndex++
             ) {
               const line = updatedBento[bentoIndex].lines[lineIndex];
+
+              // Parcourir toutes les images de la ligne
               for (
                 let imgIndex = 0;
-                imgIndex < line.listImage.length && !found;
+                imgIndex < line.listImage.length;
                 imgIndex++
               ) {
                 if (line.listImage[imgIndex].startsWith("pending_")) {
+                  // Vérifier si c'est l'image correspondante à l'index
                   if (currentImageIndex === imageIndex) {
                     updatedBento[bentoIndex].lines[lineIndex].listImage[
                       imgIndex
                     ] = savedMedia.url;
-                    found = true;
+                    // Sortir de toutes les boucles une fois l'image trouvée et remplacée
+                    lineIndex = updatedBento[bentoIndex].lines.length;
+                    break;
                   }
                   currentImageIndex++;
                 }
@@ -170,12 +194,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ManagePortfolio() {
   const { sessionData, portfolios } = useLoaderData<typeof loader>();
-
-  console.log("📋 Portfolios loaded:", portfolios);
-  console.log("📋 Number of portfolios:", portfolios.length);
-  portfolios.forEach((p, i) => {
-    console.log(`📋 Portfolio ${i + 1}: slug="${p.slug}", titre="${p.titre}"`);
-  });
   const actionData = useActionData<typeof action>();
 
   // États pour le formulaire
@@ -187,6 +205,15 @@ export default function ManagePortfolio() {
     kicker: "",
     livrable: [],
     sousTitre: "",
+    topTitle: "",
+    couleur: "",
+    shortlist: "",
+    temoignage: {
+      auteur: "",
+      contenu: "",
+      poste: "",
+      entreprise: "",
+    },
     bento: [],
   });
 
@@ -259,6 +286,17 @@ export default function ManagePortfolio() {
     setFormData((prev) => ({
       ...prev,
       livrable: prev.livrable.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Gestion du témoignage
+  const handleTemoignageChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      temoignage: {
+        ...prev.temoignage,
+        [field]: value,
+      },
     }));
   };
 
@@ -400,6 +438,15 @@ export default function ManagePortfolio() {
           kicker: "",
           livrable: [],
           sousTitre: "",
+          topTitle: "",
+          couleur: "",
+          shortlist: "",
+          temoignage: {
+            auteur: "",
+            contenu: "",
+            poste: "",
+            entreprise: "",
+          },
           bento: [],
         });
         setCurrentLivrable("");
@@ -477,6 +524,27 @@ export default function ManagePortfolio() {
             </h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Top Title */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="topTitle"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Top Title
+                </label>
+                <input
+                  type="text"
+                  id="topTitle"
+                  name="topTitle"
+                  value={formData.topTitle}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Titre principal du projet"
+                />
+              </div>
+
               {/* Titre */}
               <div className="lg:col-span-2">
                 <label
@@ -496,6 +564,63 @@ export default function ManagePortfolio() {
                   className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   style={{ fontFamily: "Jakarta" }}
                   placeholder="Titre du projet"
+                />
+              </div>
+
+              {/* Couleur */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="couleur"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Couleur
+                </label>
+                <div className="flex gap-3">
+                  <input
+                    type="color"
+                    id="couleurPicker"
+                    value={formData.couleur || "#000000"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        couleur: e.target.value,
+                      }))
+                    }
+                    className="w-16 h-12 rounded-lg border border-gray-700 bg-gray-800 cursor-pointer"
+                    title="Choisir une couleur"
+                  />
+                  <input
+                    type="text"
+                    id="couleur"
+                    name="couleur"
+                    value={formData.couleur}
+                    onChange={handleInputChange}
+                    className="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    style={{ fontFamily: "Jakarta" }}
+                    placeholder="Couleur principale (ex: #FF5733)"
+                  />
+                </div>
+              </div>
+
+              {/* Section Shortlist */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="shortlist"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Note Shortlist (ex : 4.5)
+                </label>
+                <input
+                  type="text"
+                  id="shortlist"
+                  name="shortlist"
+                  value={formData.shortlist}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Note shortlist (ex: 4.5)"
                 />
               </div>
 
@@ -627,6 +752,110 @@ export default function ManagePortfolio() {
                   className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-vertical"
                   style={{ fontFamily: "Jakarta" }}
                   placeholder="Description détaillée du projet"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section Témoignage */}
+          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-xl p-8">
+            <h2
+              className="text-2xl font-bold text-white mb-6"
+              style={{ fontFamily: "Jakarta Bold" }}
+            >
+              Témoignage
+            </h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Auteur */}
+              <div>
+                <label
+                  htmlFor="temoignageAuteur"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Auteur *
+                </label>
+                <input
+                  type="text"
+                  id="temoignageAuteur"
+                  name="temoignageAuteur"
+                  value={formData.temoignage.auteur}
+                  onChange={(e) =>
+                    handleTemoignageChange("auteur", e.target.value)
+                  }
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Nom de l'auteur du témoignage"
+                />
+              </div>
+
+              {/* Poste */}
+              <div>
+                <label
+                  htmlFor="temoignagePoste"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Poste
+                </label>
+                <input
+                  type="text"
+                  id="temoignagePoste"
+                  name="temoignagePoste"
+                  value={formData.temoignage.poste || ""}
+                  onChange={(e) =>
+                    handleTemoignageChange("poste", e.target.value)
+                  }
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Poste de l'auteur"
+                />
+              </div>
+
+              {/* Entreprise */}
+              <div>
+                <label
+                  htmlFor="temoignageEntreprise"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Entreprise
+                </label>
+                <input
+                  type="text"
+                  id="temoignageEntreprise"
+                  name="temoignageEntreprise"
+                  value={formData.temoignage.entreprise || ""}
+                  onChange={(e) =>
+                    handleTemoignageChange("entreprise", e.target.value)
+                  }
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Entreprise de l'auteur"
+                />
+              </div>
+
+              {/* Contenu */}
+              <div className="lg:col-span-2">
+                <label
+                  htmlFor="temoignageContenu"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Contenu du témoignage *
+                </label>
+                <textarea
+                  id="temoignageContenu"
+                  name="temoignageContenu"
+                  value={formData.temoignage.contenu}
+                  onChange={(e) =>
+                    handleTemoignageChange("contenu", e.target.value)
+                  }
+                  rows={4}
+                  className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-vertical"
+                  style={{ fontFamily: "Jakarta" }}
+                  placeholder="Contenu du témoignage"
                 />
               </div>
             </div>
@@ -842,7 +1071,7 @@ export default function ManagePortfolio() {
                         style={{ fontFamily: "Jakarta" }}
                       />
                       <p
-                        className="text-xs text-gray-400 mt-2"
+                        className="text-xs text-gray-300 mt-2"
                         style={{ fontFamily: "Jakarta" }}
                       >
                         📁 Sélectionnez plusieurs images ou GIFs (formats
@@ -1079,6 +1308,15 @@ export default function ManagePortfolio() {
                   kicker: "",
                   livrable: [],
                   sousTitre: "",
+                  topTitle: "",
+                  couleur: "",
+                  shortlist: "",
+                  temoignage: {
+                    auteur: "",
+                    contenu: "",
+                    poste: "",
+                    entreprise: "",
+                  },
                   bento: [],
                 });
                 setCurrentLivrable("");
@@ -1195,13 +1433,6 @@ export default function ManagePortfolio() {
                     <Link
                       to={`/admin/manage-portfolio/${portfolio.slug}`}
                       className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200"
-                      onClick={() => {
-                        console.log(
-                          "🔗 Navigating to:",
-                          `/admin/manage-portfolio/${portfolio.slug}`
-                        );
-                        console.log("📋 Portfolio slug:", portfolio.slug);
-                      }}
                     >
                       Modifier
                     </Link>
