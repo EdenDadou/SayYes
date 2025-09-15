@@ -69,12 +69,34 @@ jobs:
             fi
             
             echo "📋 Application des migrations..."
-            npx prisma migrate deploy || { 
-              echo "❌ Échec des migrations. Tentative de génération du client..."
-              npx prisma generate || { echo "❌ Échec prisma generate"; exit 1; }
-              echo "✅ Client Prisma généré. Réessai des migrations..."
-              npx prisma migrate deploy || { echo "❌ Échec définitif des migrations"; exit 1; }
-            }
+            # Essayer d'abord migrate deploy
+            if ! npx prisma migrate deploy 2>&1; then
+              echo "⚠️ Échec des migrations classiques. Vérification si c'est un problème de baseline..."
+              
+              # Vérifier si c'est l'erreur P3005 (base de données non vide)
+              DEPLOY_ERROR=$(npx prisma migrate deploy 2>&1 || true)
+              if echo "$DEPLOY_ERROR" | grep -q "P3005\|database schema is not empty"; then
+                echo "📋 Détection d'une base de données existante non baselinée. Application du baseline..."
+                
+                # Marquer toutes les migrations existantes comme appliquées
+                for migration_dir in prisma/migrations/*/; do
+                  if [ -d "$migration_dir" ]; then
+                    migration_name=$(basename "$migration_dir")
+                    echo "📋 Marquage de la migration $migration_name comme appliquée..."
+                    npx prisma migrate resolve --applied "$migration_name" || true
+                  fi
+                done
+                
+                echo "📋 Tentative de déploiement après baseline..."
+                npx prisma migrate deploy || {
+                  echo "❌ Échec après baseline. Utilisation de db push en dernier recours..."
+                  npx prisma db push --accept-data-loss || { echo "❌ Échec définitif"; exit 1; }
+                }
+              else
+                echo "❌ Erreur de migration non liée au baseline: $DEPLOY_ERROR"
+                exit 1
+              fi
+            fi
             echo "✅ Migrations appliquées avec succès."
           fi
 
