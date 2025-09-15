@@ -1,18 +1,16 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import {
-  getPortfolioBySlug,
-  PortfolioWithMedia,
-} from "~/server/portfolio.server";
+import { getPortfolioBySlug } from "~/server/portfolio.server";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
-import Background from "~/assets/icons/Background";
-import BackgroundMobile from "~/assets/icons/BackgroundMobile";
 import { useViewport } from "~/utils/hooks/useViewport";
 import "~/styles/tailwind.css";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import Coche from "~/assets/icons/Coche";
+import NoteStar from "~/assets/icons/NoteStar";
+import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
+import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
 
 // Loader pour récupérer le portfolio par slug
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -37,88 +35,93 @@ export default function PortfolioSlug() {
 
   return (
     <div className="w-screen h-fit relative">
-      {/* Background */}
-      {/* {isMobile ? (
-        <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
-      ) : (
-        <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
-      )} */}
-
+      {/* Background Project SVG - Full Screen */}
+      {/* <div className="fixed top-0 left-0 w-full h-full z-0 overflow-hidden"> */}
+      <BackgroundProject1
+        fill={portfolio.couleur}
+        className="absolute top-0 left-0 right-0 w-screen object-cover"
+      />
       {/* Header */}
       <Header />
 
       {/* Main Content */}
-      <main className="relative z-10 px-4 md:px-36 py-12 flex flex-col gap-10">
+      <main className="relative z-10 py-12 flex flex-col">
         {/* Hero Section */}
-        <section className="mb-16">
-          <div className="flex flex-col gap-10">
-            {/* Title and Kicker */}
-            <div className="flex flex-col gap-8">
+        <section className="py-12 md:px-20 flex flex-col gap-12">
+          {/* Title and Kicker */}
+          <div className="flex flex-row justify-between items-end pl-16">
+            <div className="flex flex-col gap-12">
               <div className="h-[3px] w-28 holographic-bg" />
 
               <div className="flex flex-col">
                 {/* Top Title si disponible */}
                 {portfolio.topTitle ? (
                   <p
-                    className="text-4xl md:text-6xl font-bold text-white mb-4 flex flex-row items-center gap-6
-                  font-jakarta"
+                    className="text-4xl md:text-7xl font-bold text-white flex flex-row items-center
+                  font-jakarta mb-2"
                   >
                     {portfolio.topTitle}
                   </p>
                 ) : null}
                 <h1
-                  className="text-4xl md:text-6xl font-bold text-white mb-4 flex flex-row items-center gap-6 font-jakarta"
+                  className="text-4xl md:text-7xl font-bold text-white flex flex-row items-center gap-6 font-jakarta leading-[60px]"
                   style={{ color: portfolio.couleur }}
                 >
-                  <ArrowLight className="w-16 h-16" />
+                  <ArrowLight className="w-20 h-20" />
                   {portfolio.titre}
                 </h1>
               </div>
             </div>
-
-            {/* Hero Image */}
-            <div className="relative w-full h-[400px] md:h-[600px] rounded-2xl overflow-hidden">
-              <img
-                src={portfolio.photoCouverture}
-                alt={portfolio.titre}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <div className="flex flex-row items-center gap-2">
+              <NoteStar width={20} height={20} />
+              <p className="text-xl font-jakarta-bold">
+                Shortlist {portfolio.shortlist}|5
+              </p>
             </div>
+          </div>
+
+          {/* Hero Image */}
+          <div className="relative w-full h-[400px] md:h-[600px] rounded-2xl overflow-hidden">
+            <img
+              src={portfolio.photoCouverture}
+              alt={portfolio.titre}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>
         </section>
 
         {/* Content Grid */}
-        <section className="grid md:grid-cols-2 gap-12 mb-16">
+        <section className="grid md:grid-cols-2 gap-32 py-12 bg-white md:px-36">
           {/* Description */}
           <div className="md:col-span-1">
-            <p className="text-gray-300 text-lg leading-relaxed">
+            <p className="text-black text-[30px] font-jakarta leading-relaxed">
               {portfolio.description}
             </p>
           </div>
           <div className="md:col-span-1">
             <div className="flex flex-col gap-4">
               <p className="text-gray-300 text-lg leading-relaxed">
-                <span className="font-bold">Le Brief :</span> {portfolio.kicker}
-              </p>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                <span className="font-bold">L'équipe créative' :</span>{" "}
                 {portfolio.kicker}
               </p>
             </div>
           </div>
         </section>
         {/* Deliverables */}
-        <div className="flex flex-col items-start justify-between gap-4 w-full ">
-          <h3 className=" flex flex-row items-center gap-2 text-xl font-bold text-white mb-6">
-            <Star className="w-10 h-10" />
+        <div className="flex flex-col items-start justify-between gap-4 w-full md:px-36 bg-white py-12">
+          <h3 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-bold">
+            <Star className="w-6 h-6" fill="black" />
             Nos Livrables
           </h3>
-          <div className="flex flex-row gap-2 w-full">
+          <div className="flex flex-row gap-6 w-full">
             {portfolio.livrable.map((item, index) => (
               <span
                 key={index}
-                className="flex flex-row items-center gap-6 px-5 py-3 text-blue-300 rounded-full text-sm border border-blue-500/30"
+                className="flex flex-row items-center gap-6 px-3 py-3 rounded-full text-sm border font-jakarta-bold"
+                style={{
+                  color: portfolio.couleur,
+                  borderColor: portfolio.couleur,
+                }}
               >
                 <Coche className="w-4 h-4" />
                 {item}
@@ -127,65 +130,33 @@ export default function PortfolioSlug() {
           </div>
         </div>
 
-        {/* Shortlist */}
-        {portfolio.shortlist && portfolio.shortlist.length > 0 && (
-          <div className="flex flex-col items-start justify-between gap-4 w-full">
-            <h3 className="flex flex-row items-center gap-2 text-xl font-bold text-white mb-6">
-              <Star className="w-10 h-10" />
-              Shortlist
-            </h3>
-            <div className="flex flex-row gap-2 w-full flex-wrap">
-              {portfolio.shortlist}
-            </div>
-          </div>
-        )}
-
-        {/* Témoignage */}
-        {portfolio.temoignage && portfolio.temoignage.contenu && (
-          <div className="bg-gray-900/50 backdrop-blur-lg border border-gray-800 rounded-xl p-8">
-            <h3 className="flex flex-row items-center gap-2 text-xl font-bold text-white mb-6">
-              <Star className="w-10 h-10" />
-              Témoignage Client
-            </h3>
-            <blockquote className="text-gray-300 text-lg leading-relaxed italic mb-4">
-              "{portfolio.temoignage.contenu}"
-            </blockquote>
-            <div className="flex flex-col gap-1">
-              <cite className="text-white font-semibold not-italic">
-                {portfolio.temoignage.auteur}
-              </cite>
-              {portfolio.temoignage.poste && (
-                <span className="text-gray-400 text-sm">
-                  {portfolio.temoignage.poste}
-                  {portfolio.temoignage.entreprise &&
-                    ` chez ${portfolio.temoignage.entreprise}`}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* Bento Grid - Project Gallery */}
         {portfolio.bento && portfolio.bento.length > 0 && (
-          <section className="mb-16">
-            <h2
-              className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-white 
-        font jakarta mb-6"
-            >
-              <Star className="w-5 h-5" />
-              {portfolio.sousTitre}
-              <Star className="w-5 h-5" />
-            </h2>
+          <section className="mb-16 relative px-32">
+            <BackgroundProject2
+              fill={portfolio.couleur}
+              className="absolute top-0 left-0 right-0 w-screen"
+            />
+            <div className="relative z-50">
+              <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font jakarta mb-12 z-50">
+                <Star className="w-5 h-5" fill="black" />
+                {portfolio.sousTitre.split(" ").slice(0, 3).join(" ")}{" "}
+                <span style={{ color: portfolio.couleur }}>
+                  {portfolio.sousTitre.split(" ").slice(3).join(" ")}
+                </span>
+                <Star className="w-5 h-5" fill="black" />
+              </h2>
+            </div>
 
             <div className="space-y-6">
               {portfolio.bento.map((bentoItem, bentoIndex) => (
-                <div key={bentoIndex} className="space-y-4">
+                <div key={bentoIndex} className="space-y-6">
                   {bentoItem.lines.map((line, lineIndex) => (
                     <div
                       key={lineIndex}
                       className={`grid gap-4 ${
                         line.format === "1/3 - 2/3"
-                          ? "grid-cols-3"
+                          ? "grid-cols-5"
                           : line.format === "3 carrés"
                             ? "grid-cols-3"
                             : line.format === "2 carré"
@@ -198,18 +169,20 @@ export default function PortfolioSlug() {
                       {line.listImage.map((image, imageIndex) => (
                         <div
                           key={imageIndex}
-                          className={`relative rounded-lg overflow-hidden ${
+                          className={`relative rounded-3xl h-full overflow-hidden ${
                             line.format === "1/3 - 2/3" && imageIndex === 1
-                              ? "col-span-2"
-                              : line.format === "banner"
-                                ? "aspect-[21/9]"
-                                : "aspect-square"
+                              ? "col-span-3"
+                              : line.format === "1/3 - 2/3"
+                                ? "col-span-2"
+                                : line.format === "banner"
+                                  ? "aspect-[21/9]"
+                                  : "aspect-square"
                           }`}
                         >
                           <img
                             src={image}
                             alt={`${portfolio.titre} - Image ${imageIndex + 1}`}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                       ))}
@@ -221,57 +194,29 @@ export default function PortfolioSlug() {
           </section>
         )}
 
-        {/* Media Gallery */}
-        {portfolio.medias && portfolio.medias.length > 0 && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-white mb-8">
-              Médias additionnels
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {portfolio.medias.map((media) => (
-                <div
-                  key={media.id}
-                  className="relative aspect-square rounded-lg overflow-hidden group"
-                >
-                  {media.type === "IMAGE" ? (
-                    <img
-                      src={media.url}
-                      alt={media.originalName}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                      <span className="text-gray-400">{media.type}</span>
-                    </div>
-                  )}
-                </div>
-              ))}
+        <section className="flex flex-col items-center justify-center py-12 md:px-60">
+          <div className="h-[3px] w-28 holographic-bg" />
+          {/* Témoignage */}
+          {portfolio.temoignage && portfolio.temoignage.contenu ? (
+            <div className="p-8 flex flex-col items-center justify-center gap-8 ">
+              <blockquote className="text-white text-xl leading-relaxed text-center font-jakarta">
+                {portfolio.temoignage.contenu}
+              </blockquote>
+              <div className="flex flex-col gap-1">
+                <cite className="text-white font-jakarta-bold">
+                  {portfolio.temoignage.auteur}
+                  {portfolio.temoignage.poste}
+                  {portfolio.temoignage.entreprise &&
+                    ` chez ${portfolio.temoignage.entreprise}`}
+                </cite>
+              </div>
             </div>
-          </section>
-        )}
-
-        {/* Navigation */}
-        <section className="flex justify-between items-center pt-12 border-t border-gray-800">
-          <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Retour au portfolio
-          </button>
-          <div className="flex gap-4">
-            <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
-              Projet suivant
-            </button>
+          ) : null}
+          <div className="flex flex-row items-center justify-center gap-2">
+            <NoteStar width={20} height={20} />
+            <p className="text-2xl font-jakarta-bold">
+              Shortlist {portfolio.shortlist}|5
+            </p>
           </div>
         </section>
       </main>

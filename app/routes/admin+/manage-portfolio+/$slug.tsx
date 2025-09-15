@@ -171,6 +171,19 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     // Créer une map des fichiers uploadés pour un accès plus facile
     const uploadedFiles = new Map<string, any>();
+
+    // Debug: Lister tous les champs du formulaire
+    console.log("🔍 Tous les champs du formulaire reçus:");
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`  📁 ${key}: ${value.name} (${value.size} bytes)`);
+      } else {
+        console.log(
+          `  📝 ${key}: ${typeof value === "string" ? value.substring(0, 100) : value}`
+        );
+      }
+    }
+
     for (const [key, value] of formData.entries()) {
       if (
         key.startsWith("bentoFile_") &&
@@ -284,7 +297,7 @@ export default function EditPortfolio() {
   const [bentoPreviewImages, setBentoPreviewImages] = useState<
     { url: string; name: string }[]
   >([]);
-  const [bentoFiles, setBentoFiles] = useState<File[]>([]);
+  const [bentoFiles, setBentoFiles] = useState<Map<string, File>>(new Map());
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [toast, setToast] = useState<{
     show: boolean;
@@ -456,7 +469,11 @@ export default function EditPortfolio() {
         // Vérifier le type de fichier
         if (file.type.startsWith("image/")) {
           // Stocker le fichier réel pour l'envoi
-          setBentoFiles((prev) => [...prev, file]);
+          setBentoFiles((prev) => {
+            const newFiles = new Map(prev);
+            newFiles.set(file.name, file);
+            return newFiles;
+          });
 
           // Créer un aperçu de l'image
           const reader = new FileReader();
@@ -487,8 +504,152 @@ export default function EditPortfolio() {
       listImage: prev.listImage.filter((_, i) => i !== index),
     }));
     // Supprimer aussi l'aperçu et le fichier correspondants
-    setBentoPreviewImages((prev) => prev.filter((_, i) => i !== index));
-    setBentoFiles((prev) => prev.filter((_, i) => i !== index));
+    setBentoPreviewImages((prev) => {
+      const imageToRemove = prev[index];
+      if (imageToRemove) {
+        // Supprimer aussi le fichier correspondant de la Map
+        setBentoFiles((prevFiles) => {
+          const newFiles = new Map(prevFiles);
+          newFiles.delete(imageToRemove.name);
+          return newFiles;
+        });
+      }
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  // Fonction pour supprimer une image d'un bento existant
+  const removeExistingBentoImage = (
+    bentoIndex: number,
+    lineIndex: number,
+    imageIndex: number
+  ) => {
+    setFormData((prev) => {
+      const newBento = [...prev.bento];
+      const imageToRemove =
+        newBento[bentoIndex].lines[lineIndex].listImage[imageIndex];
+
+      // Si c'est une image pending, supprimer le fichier correspondant
+      if (imageToRemove && imageToRemove.startsWith("pending_")) {
+        const fileName = imageToRemove.replace("pending_", "");
+        setBentoFiles((prevFiles) => {
+          const newFiles = new Map(prevFiles);
+          newFiles.delete(fileName);
+          console.log(`🗑️ Fichier supprimé de bentoFiles: "${fileName}"`);
+          return newFiles;
+        });
+      }
+
+      newBento[bentoIndex].lines[lineIndex].listImage = newBento[
+        bentoIndex
+      ].lines[lineIndex].listImage.filter((_, i) => i !== imageIndex);
+
+      // Si la ligne n'a plus d'images, la supprimer
+      if (newBento[bentoIndex].lines[lineIndex].listImage.length === 0) {
+        newBento[bentoIndex].lines = newBento[bentoIndex].lines.filter(
+          (_, i) => i !== lineIndex
+        );
+      }
+
+      // Si le bento n'a plus de lignes, le supprimer
+      if (newBento[bentoIndex].lines.length === 0) {
+        return {
+          ...prev,
+          bento: newBento.filter((_, i) => i !== bentoIndex),
+        };
+      }
+
+      return {
+        ...prev,
+        bento: newBento,
+      };
+    });
+  };
+
+  // Fonction pour supprimer une ligne entière d'un bento existant
+  const removeExistingBentoLine = (bentoIndex: number, lineIndex: number) => {
+    setFormData((prev) => {
+      const newBento = [...prev.bento];
+      newBento[bentoIndex].lines = newBento[bentoIndex].lines.filter(
+        (_, i) => i !== lineIndex
+      );
+
+      // Si le bento n'a plus de lignes, le supprimer
+      if (newBento[bentoIndex].lines.length === 0) {
+        return {
+          ...prev,
+          bento: newBento.filter((_, i) => i !== bentoIndex),
+        };
+      }
+
+      return {
+        ...prev,
+        bento: newBento,
+      };
+    });
+  };
+
+  // Fonction pour ajouter des images à un bento existant
+  const addImagesToExistingBento = (
+    bentoIndex: number,
+    files: FileList,
+    inputElement?: HTMLInputElement
+  ) => {
+    console.log(`🔄 Ajout de ${files.length} fichiers au bento ${bentoIndex}`);
+
+    Array.from(files).forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        console.log(
+          `📁 Ajout du fichier: "${file.name}" (taille: ${file.size})`
+        );
+
+        // Stocker le fichier réel pour l'envoi avec son nom comme clé
+        setBentoFiles((prev) => {
+          const newFiles = new Map(prev);
+          newFiles.set(file.name, file);
+          console.log(
+            `📋 bentoFiles mis à jour, total: ${newFiles.size} fichiers`
+          );
+          console.log(`📁 Fichier ajouté: "${file.name}"`);
+          return newFiles;
+        });
+
+        // Ajouter l'image pending au bento existant
+        setFormData((prev) => {
+          const newBento = [...prev.bento];
+
+          // Trouver la dernière ligne ou créer une nouvelle ligne
+          if (newBento[bentoIndex].lines.length === 0) {
+            newBento[bentoIndex].lines.push({
+              format: "1/3 - 2/3",
+              listImage: [`pending_${file.name}`],
+            });
+            console.log(
+              `➕ Nouvelle ligne créée pour bento ${bentoIndex} avec image: pending_${file.name}`
+            );
+          } else {
+            // Ajouter à la dernière ligne
+            const lastLineIndex = newBento[bentoIndex].lines.length - 1;
+            newBento[bentoIndex].lines[lastLineIndex].listImage.push(
+              `pending_${file.name}`
+            );
+            console.log(
+              `➕ Image ajoutée à la ligne ${lastLineIndex} du bento ${bentoIndex}: pending_${file.name}`
+            );
+          }
+
+          return {
+            ...prev,
+            bento: newBento,
+          };
+        });
+      }
+    });
+
+    // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
+    if (inputElement) {
+      inputElement.value = "";
+    }
   };
 
   // Gestion des lignes de bento
@@ -530,8 +691,7 @@ export default function EditPortfolio() {
         listImage: [],
       });
       setBentoPreviewImages([]);
-      // Réinitialiser les fichiers bento pour le prochain bento
-      setBentoFiles([]);
+      // Note: On ne réinitialise pas bentoFiles car il contient les fichiers de tous les bentos
     }
   };
 
@@ -552,7 +712,9 @@ export default function EditPortfolio() {
   };
 
   // Fonction de soumission personnalisée pour gérer les fichiers bento
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Empêcher la soumission par défaut
+
     // Scroll vers le haut
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -564,32 +726,91 @@ export default function EditPortfolio() {
     submitFormData.set("bento", JSON.stringify(formData.bento));
 
     // Ajouter les fichiers bento avec les noms corrects
-    let globalImageIndex = 0;
+    console.log(
+      "🔍 Debug - bentoFiles disponibles:",
+      Array.from(bentoFiles.keys())
+    );
+    console.log(
+      "🔍 Debug - formData.bento:",
+      JSON.stringify(formData.bento, null, 2)
+    );
+
     formData.bento.forEach((bento, bentoIndex) => {
+      let bentoImageIndex = 0; // Index local pour chaque bento
       bento.lines.forEach((line, lineIndex) => {
         line.listImage.forEach((image, imageIndex) => {
           // Si l'image commence par "pending_", c'est un fichier à uploader
           if (image.startsWith("pending_")) {
             const fileName = image.replace("pending_", "");
-            const file = bentoFiles.find((f) => f.name === fileName);
+            console.log(`🔍 Recherche du fichier: "${fileName}"`);
+
+            const file = bentoFiles.get(fileName);
             if (file) {
-              // Utiliser l'index global des images pending uniquement
+              // Utiliser l'index local pour chaque bento
               submitFormData.append(
-                `bentoFile_${bentoIndex}_${globalImageIndex}`,
+                `bentoFile_${bentoIndex}_${bentoImageIndex}`,
                 file
               );
               console.log(
-                `📎 Ajout fichier: bentoFile_${bentoIndex}_${globalImageIndex} -> ${fileName}`
+                `📎 Ajout fichier: bentoFile_${bentoIndex}_${bentoImageIndex} -> ${fileName}`
               );
-              globalImageIndex++;
+              bentoImageIndex++;
+            } else {
+              console.warn(
+                `⚠️ Fichier non trouvé dans bentoFiles: "${fileName}"`
+              );
+              console.log(
+                "📋 Fichiers disponibles:",
+                Array.from(bentoFiles.keys()).map((name) => `"${name}"`)
+              );
             }
           }
         });
       });
     });
 
-    // Laisser Remix gérer la soumission naturellement
-    // Ne pas empêcher le comportement par défaut
+    // Soumettre manuellement avec fetch
+    try {
+      console.log("🚀 Soumission du formulaire...");
+
+      const response = await fetch(window.location.pathname, {
+        method: "POST",
+        body: submitFormData,
+      });
+
+      console.log("📡 Statut de la réponse:", response.status);
+      console.log("📡 Headers de la réponse:", response.headers);
+
+      const result = await response.json();
+      console.log("📡 Réponse du serveur:", result);
+
+      // Vérification plus robuste du succès
+      const isSuccess =
+        response.ok &&
+        (result.success === true ||
+          result.success === "true" ||
+          response.status === 200);
+
+      if (isSuccess) {
+        console.log("✅ Portfolio mis à jour avec succès!");
+        showToast("Portfolio mis à jour avec succès!", "success");
+
+        // Recharger la page après un délai pour voir les changements
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        console.error("❌ Erreur détectée:");
+        console.error("  - response.ok:", response.ok);
+        console.error("  - response.status:", response.status);
+        console.error("  - result.success:", result.success);
+        console.error("  - result:", result);
+        showToast(result.message || "Erreur lors de la mise à jour", "error");
+      }
+    } catch (error) {
+      console.error("❌ Erreur lors de la soumission:", error);
+      showToast("Erreur lors de la mise à jour du portfolio", "error");
+    }
   };
 
   // Fonction pour supprimer le portfolio
@@ -1441,15 +1662,18 @@ export default function EditPortfolio() {
                 >
                   Bentos configurés :
                 </h3>
-                {formData.bento.map((bento, index) => (
-                  <div key={index} className="bg-gray-800/30 p-4 rounded-lg">
+                {formData.bento.map((bento, bentoIndex) => (
+                  <div
+                    key={bentoIndex}
+                    className="bg-gray-800/30 p-4 rounded-lg"
+                  >
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <span
                           className="text-white font-semibold"
                           style={{ fontFamily: "Jakarta Semi Bold" }}
                         >
-                          Bento {index + 1}
+                          Bento {bentoIndex + 1}
                         </span>
                         <span
                           className="text-gray-400 ml-3"
@@ -1458,54 +1682,159 @@ export default function EditPortfolio() {
                           ({bento.lines.length} lignes)
                         </span>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeBento(index)}
-                        className="text-red-400 hover:text-red-300 transition-colors duration-200"
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clipRule="evenodd"
+                      <div className="flex items-center gap-2">
+                        {/* Bouton pour ajouter des images à ce bento */}
+                        <label className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors duration-200 cursor-pointer text-sm">
+                          + Images
+                          <input
+                            type="file"
+                            multiple
+                            accept="image/*,.gif"
+                            onChange={(e) =>
+                              e.target.files &&
+                              addImagesToExistingBento(
+                                bentoIndex,
+                                e.target.files,
+                                e.target
+                              )
+                            }
+                            className="hidden"
                           />
-                        </svg>
-                      </button>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => removeBento(bentoIndex)}
+                          className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
 
-                    {/* Affichage des lignes du bento */}
+                    {/* Affichage des lignes du bento avec possibilité de modification */}
                     <div className="space-y-3">
                       {bento.lines.map((line, lineIndex) => (
                         <div
                           key={lineIndex}
                           className="bg-gray-700/20 p-3 rounded-lg"
                         >
-                          <div className="mb-2">
-                            <span
-                              className="text-white font-medium"
-                              style={{ fontFamily: "Jakarta Medium" }}
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <span
+                                className="text-white font-medium"
+                                style={{ fontFamily: "Jakarta Medium" }}
+                              >
+                                Ligne {lineIndex + 1}: {line.format}
+                              </span>
+                              <span
+                                className="text-gray-400 ml-2"
+                                style={{ fontFamily: "Jakarta" }}
+                              >
+                                ({line.listImage.length} images)
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                removeExistingBentoLine(bentoIndex, lineIndex)
+                              }
+                              className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                              title="Supprimer cette ligne"
                             >
-                              Ligne {lineIndex + 1}: {line.format}
-                            </span>
-                            <span
-                              className="text-gray-400 ml-2"
-                              style={{ fontFamily: "Jakarta" }}
-                            >
-                              ({line.listImage.length} images)
-                            </span>
+                              <svg
+                                className="w-4 h-4"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </button>
                           </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+
+                          {/* Grille des images avec possibilité de suppression individuelle */}
+                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                             {line.listImage.map((image, imgIndex) => (
                               <div
                                 key={imgIndex}
-                                className="text-xs text-gray-300 bg-gray-600/30 p-2 rounded truncate"
-                                style={{ fontFamily: "Jakarta" }}
+                                className="relative group bg-gray-600/30 rounded-lg overflow-hidden"
                               >
-                                {image}
+                                {/* Affichage de l'image ou du nom du fichier */}
+                                {image.startsWith("pending_") ? (
+                                  <div className="aspect-square bg-gray-700 flex items-center justify-center p-2">
+                                    <span className="text-xs text-gray-300 text-center break-all">
+                                      📎 {image.replace("pending_", "")}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div className="aspect-square">
+                                    <img
+                                      src={image}
+                                      alt={`Image ${imgIndex + 1}`}
+                                      className="w-full h-full object-cover"
+                                      onError={(e) => {
+                                        // Si l'image ne charge pas, afficher le nom du fichier
+                                        const target =
+                                          e.target as HTMLImageElement;
+                                        target.style.display = "none";
+                                        const parent = target.parentElement;
+                                        if (parent) {
+                                          parent.innerHTML = `<div class="w-full h-full bg-gray-700 flex items-center justify-center p-2"><span class="text-xs text-gray-300 text-center break-all">📎 ${image.split("/").pop()}</span></div>`;
+                                        }
+                                      }}
+                                    />
+                                  </div>
+                                )}
+
+                                {/* Bouton de suppression */}
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      removeExistingBentoImage(
+                                        bentoIndex,
+                                        lineIndex,
+                                        imgIndex
+                                      )
+                                    }
+                                    className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                                    title="Supprimer cette image"
+                                  >
+                                    <svg
+                                      className="w-5 h-5"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  </button>
+                                </div>
+
+                                {/* Nom du fichier en bas */}
+                                <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1">
+                                  <p className="text-xs text-white truncate">
+                                    {image.startsWith("pending_")
+                                      ? image.replace("pending_", "")
+                                      : image.split("/").pop()}
+                                  </p>
+                                </div>
                               </div>
                             ))}
                           </div>
