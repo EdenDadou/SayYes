@@ -54,15 +54,34 @@ jobs:
           export DATABASE_URL="file:./prisma/dev.db"
           echo "📋 DATABASE_URL configuré: $DATABASE_URL"
 
+          # Vérifier le statut des migrations
+          echo "📋 Vérification du statut des migrations..."
+          MIGRATION_STATUS=$(npx prisma migrate status --schema=./prisma/schema.prisma 2>&1 || echo "NEEDS_MIGRATION")
+
+          if echo "$MIGRATION_STATUS" | grep -q "Database schema is up to date"; then
+            echo "✅ Base de données déjà à jour."
+          else
+            echo "📋 Sauvegarde de la base de données..."
+            # Créer une sauvegarde avant les migrations
+            if [ -f "./prisma/dev.db" ]; then
+              cp ./prisma/dev.db ./prisma/dev.db.backup.$(date +%Y%m%d_%H%M%S)
+              echo "✅ Sauvegarde créée."
+            fi
+            
+            echo "📋 Application des migrations..."
+            npx prisma migrate deploy || { 
+              echo "❌ Échec des migrations. Tentative de génération du client..."
+              npx prisma generate || { echo "❌ Échec prisma generate"; exit 1; }
+              echo "✅ Client Prisma généré. Réessai des migrations..."
+              npx prisma migrate deploy || { echo "❌ Échec définitif des migrations"; exit 1; }
+            }
+            echo "✅ Migrations appliquées avec succès."
+          fi
+
           # Générer le client Prisma
           echo "📋 Génération du client Prisma..."
           npx prisma generate || { echo "❌ Échec prisma generate"; exit 1; }
           echo "✅ Client Prisma généré avec succès."
-
-          # Appliquer les migrations/schema à la base de données
-          echo "📋 Application du schema à la base de données..."
-          npx prisma db push --accept-data-loss || { echo "❌ Échec prisma db push"; exit 1; }
-          echo "✅ Schema appliqué avec succès."
 
           echo "✅ Base de données configurée."
 
@@ -71,6 +90,10 @@ jobs:
           mkdir -p public/uploads/portfolio
           mkdir -p public/uploads/portfolio/bento
           chmod 755 public/uploads -R || true
+
+          # Créer le dossier logs pour PM2
+          mkdir -p logs
+          chmod 755 logs || true
 
           echo "✅ Dossiers créés."
 
