@@ -33,7 +33,7 @@ const Header = () => {
     <HeaderMobile />
   ) : (
     <motion.div
-      className="header-custom border-custom flex flex-row justify-between items-center m-12 mx-24 h-[74px]"
+      className="header-custom border-custom flex flex-row justify-between items-center mx-24 h-[74px]"
       initial={{ y: 0 }}
       animate={{ y: isVisible ? 0 : -130 }}
       transition={{

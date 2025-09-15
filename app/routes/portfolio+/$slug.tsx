@@ -35,8 +35,6 @@ export default function PortfolioSlug() {
 
   return (
     <div className="w-screen h-fit relative">
-      {/* Background Project SVG - Full Screen */}
-      {/* <div className="fixed top-0 left-0 w-full h-full z-0 overflow-hidden"> */}
       <BackgroundProject1
         fill={portfolio.couleur}
         className="absolute top-0 left-0 right-0 w-screen object-cover"

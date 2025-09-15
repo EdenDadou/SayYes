@@ -1,12 +1,14 @@
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useLoaderData, useNavigate, Link } from "@remix-run/react";
 import { requireAuth, getSessionData, logout } from "~/server/auth.server";
+import { getPortfolioCount } from "~/server/portfolio.server";
 
 // Loader pour vérifier l'authentification
 export async function loader({ request }: LoaderFunctionArgs) {
   await requireAuth(request); // Vérification de l'authentification
   const sessionData = await getSessionData(request);
-  return { sessionData };
+  const portfolioCount = await getPortfolioCount();
+  return { sessionData, portfolioCount };
 }
 
 // Action pour gérer la déconnexion
@@ -15,7 +17,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 }
 
 export default function AdminDashboard() {
-  const { sessionData } = useLoaderData<typeof loader>();
+  const { sessionData, portfolioCount } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-black p-8">
@@ -57,7 +59,7 @@ export default function AdminDashboard() {
               className="text-lg font-semibold text-white mb-2"
               style={{ fontFamily: "Jakarta Semi Bold" }}
             >
-              Projets
+              Temoignages
             </h3>
             <p
               className="text-3xl font-bold text-blue-500"
@@ -72,13 +74,13 @@ export default function AdminDashboard() {
               className="text-lg font-semibold text-white mb-2"
               style={{ fontFamily: "Jakarta Semi Bold" }}
             >
-              Clients
+              Projets
             </h3>
             <p
               className="text-3xl font-bold text-green-500"
               style={{ fontFamily: "Jakarta Bold" }}
             >
-              156
+              {portfolioCount}
             </p>
           </div>
 
@@ -87,13 +89,13 @@ export default function AdminDashboard() {
               className="text-lg font-semibold text-white mb-2"
               style={{ fontFamily: "Jakarta Semi Bold" }}
             >
-              Messages
+              Visites ce mois-ci
             </h3>
             <p
-              className="text-3xl font-bold text-purple-500"
+              className="text-3xl font-bold text-gray-300"
               style={{ fontFamily: "Jakarta Bold" }}
             >
-              12
+              2210
             </p>
           </div>
 
@@ -102,13 +104,13 @@ export default function AdminDashboard() {
               className="text-lg font-semibold text-white mb-2"
               style={{ fontFamily: "Jakarta Semi Bold" }}
             >
-              Revenus
+              Visites totales
             </h3>
             <p
               className="text-3xl font-bold text-yellow-500"
               style={{ fontFamily: "Jakarta Bold" }}
             >
-              €45K
+              100k+
             </p>
           </div>
         </div>
@@ -127,7 +129,7 @@ export default function AdminDashboard() {
               className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"
               style={{ fontFamily: "Jakarta Semi Bold" }}
             >
-              Nouveau projet
+              Nouveau Temoignage
             </button>
 
             <button
@@ -136,13 +138,6 @@ export default function AdminDashboard() {
               onClick={() => navigate("/admin/manage-portfolio")}
             >
               Gérer portfolio
-            </button>
-
-            <button
-              className="bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"
-              style={{ fontFamily: "Jakarta Semi Bold" }}
-            >
-              Messages clients
             </button>
 
             <button
