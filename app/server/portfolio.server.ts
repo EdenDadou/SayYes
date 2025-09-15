@@ -71,10 +71,10 @@ export async function createPortfolio(data: PortfolioData): Promise<string> {
       description: data.description,
       kicker: data.kicker,
       sousTitre: data.sousTitre,
-      topTitle: data.topTitle,
-      couleur: data.couleur,
-      shortlist: data.shortlist,
-      temoignage: JSON.stringify(data.temoignage),
+      ...(data.topTitle && { topTitle: data.topTitle }),
+      ...(data.couleur && { couleur: data.couleur }),
+      ...(data.shortlist && { shortlist: data.shortlist }),
+      ...(data.temoignage && { temoignage: JSON.stringify(data.temoignage) }),
       livrable: JSON.stringify(data.livrable),
       bento: JSON.stringify(data.bento),
     },
@@ -143,11 +143,25 @@ export async function getPortfolio(
   };
 
   return {
-    ...portfolio,
+    id: portfolio.id,
+    titre: portfolio.titre,
+    slug: portfolio.slug,
+    photoCouverture: portfolio.photoCouverture,
+    description: portfolio.description,
+    kicker: portfolio.kicker,
+    sousTitre: portfolio.sousTitre,
+    topTitle: (portfolio as any).topTitle || "",
+    couleur: (portfolio as any).couleur || "",
+    shortlist: (portfolio as any).shortlist || "",
+    createdAt: portfolio.createdAt,
+    updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
-    shortlist: portfolio.shortlist,
-    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
+    temoignage: safeParse(
+      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
+      { auteur: "", contenu: "" }
+    ),
+    medias: portfolio.medias,
   };
 }
 
@@ -184,11 +198,25 @@ export async function getPortfolioBySlug(
   };
 
   return {
-    ...portfolio,
+    id: portfolio.id,
+    titre: portfolio.titre,
+    slug: portfolio.slug,
+    photoCouverture: portfolio.photoCouverture,
+    description: portfolio.description,
+    kicker: portfolio.kicker,
+    sousTitre: portfolio.sousTitre,
+    topTitle: (portfolio as any).topTitle || "",
+    couleur: (portfolio as any).couleur || "",
+    shortlist: (portfolio as any).shortlist || "",
+    createdAt: portfolio.createdAt,
+    updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
-    shortlist: portfolio.shortlist,
-    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
+    temoignage: safeParse(
+      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
+      { auteur: "", contenu: "" }
+    ),
+    medias: portfolio.medias,
   };
 }
 
@@ -221,11 +249,25 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
   };
 
   return portfolios.map((portfolio) => ({
-    ...portfolio,
+    id: portfolio.id,
+    titre: portfolio.titre,
+    slug: portfolio.slug,
+    photoCouverture: portfolio.photoCouverture,
+    description: portfolio.description,
+    kicker: portfolio.kicker,
+    sousTitre: portfolio.sousTitre,
+    topTitle: (portfolio as any).topTitle || "",
+    couleur: (portfolio as any).couleur || "",
+    shortlist: (portfolio as any).shortlist || "",
+    createdAt: portfolio.createdAt,
+    updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
-    shortlist: portfolio.shortlist,
-    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
+    temoignage: safeParse(
+      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
+      { auteur: "", contenu: "" }
+    ),
+    medias: portfolio.medias,
   }));
 }
 
@@ -327,10 +369,6 @@ export async function getPublicPortfolios() {
       description: true,
       kicker: true,
       sousTitre: true,
-      topTitle: true,
-      couleur: true,
-      shortlist: true,
-      temoignage: true,
       livrable: true,
       bento: true,
       createdAt: true,
@@ -349,11 +387,23 @@ export async function getPublicPortfolios() {
   };
 
   return portfolios.map((portfolio) => ({
-    ...portfolio,
+    id: portfolio.id,
+    titre: portfolio.titre,
+    slug: portfolio.slug,
+    photoCouverture: portfolio.photoCouverture,
+    description: portfolio.description,
+    kicker: portfolio.kicker,
+    sousTitre: portfolio.sousTitre,
+    topTitle: (portfolio as any).topTitle || "",
+    couleur: (portfolio as any).couleur || "",
+    shortlist: (portfolio as any).shortlist || "",
+    createdAt: portfolio.createdAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
-    shortlist: portfolio.shortlist,
-    temoignage: safeParse(portfolio.temoignage, { auteur: "", contenu: "" }),
+    temoignage: safeParse(
+      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
+      { auteur: "", contenu: "" }
+    ),
   }));
 }
 
