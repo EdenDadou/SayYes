@@ -22,6 +22,8 @@
     "db:inspect": "tsx scripts/inspect-db.ts",
     "db:reset": "prisma db push --force-reset",
     "db:setup": "prisma generate && prisma db push",
+    "db:baseline": "./scripts/fix-prisma-baseline.sh",
+    "db:migrate": "prisma migrate deploy",
     "deploy:setup": "npm install && npm run db:setup && npm run build"
   },
   "dependencies": {
