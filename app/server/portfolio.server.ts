@@ -222,53 +222,60 @@ export async function getPortfolioBySlug(
 
 // Récupérer tous les portfolios
 export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
-  const portfolios = await prisma.portfolio.findMany({
-    include: {
-      medias: {
-        select: {
-          id: true,
-          filename: true,
-          originalName: true,
-          url: true,
-          type: true,
+  try {
+    console.log("📊 Récupération de tous les portfolios...");
+    const portfolios = await prisma.portfolio.findMany({
+      include: {
+        medias: {
+          select: {
+            id: true,
+            filename: true,
+            originalName: true,
+            url: true,
+            type: true,
+          },
+          orderBy: { createdAt: "desc" },
         },
-        orderBy: { createdAt: "desc" },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      orderBy: { createdAt: "desc" },
+    });
+    console.log(`📊 ${portfolios.length} portfolios trouvés`);
 
-  // Fonction helper pour parser les données JSON de manière sécurisée
-  const safeParse = (data: string, fallback: any = []) => {
-    try {
-      return JSON.parse(data);
-    } catch (e) {
-      console.warn("Erreur parsing JSON:", e, "data:", data);
-      return fallback;
-    }
-  };
+    // Fonction helper pour parser les données JSON de manière sécurisée
+    const safeParse = (data: string, fallback: any = []) => {
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        console.warn("Erreur parsing JSON:", e, "data:", data);
+        return fallback;
+      }
+    };
 
-  return portfolios.map((portfolio) => ({
-    id: portfolio.id,
-    titre: portfolio.titre,
-    slug: portfolio.slug,
-    photoCouverture: portfolio.photoCouverture,
-    description: portfolio.description,
-    kicker: portfolio.kicker,
-    sousTitre: portfolio.sousTitre,
-    topTitle: (portfolio as any).topTitle || "",
-    couleur: (portfolio as any).couleur || "",
-    shortlist: (portfolio as any).shortlist || "",
-    createdAt: portfolio.createdAt,
-    updatedAt: portfolio.updatedAt,
-    livrable: safeParse(portfolio.livrable, []),
-    bento: safeParse(portfolio.bento, []),
-    temoignage: safeParse(
-      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
-      { auteur: "", contenu: "" }
-    ),
-    medias: portfolio.medias,
-  }));
+    return portfolios.map((portfolio) => ({
+      id: portfolio.id,
+      titre: portfolio.titre,
+      slug: portfolio.slug,
+      photoCouverture: portfolio.photoCouverture,
+      description: portfolio.description,
+      kicker: portfolio.kicker,
+      sousTitre: portfolio.sousTitre,
+      topTitle: (portfolio as any).topTitle || "",
+      couleur: (portfolio as any).couleur || "",
+      shortlist: (portfolio as any).shortlist || "",
+      createdAt: portfolio.createdAt,
+      updatedAt: portfolio.updatedAt,
+      livrable: safeParse(portfolio.livrable, []),
+      bento: safeParse(portfolio.bento, []),
+      temoignage: safeParse(
+        (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
+        { auteur: "", contenu: "" }
+      ),
+      medias: portfolio.medias,
+    }));
+  } catch (error) {
+    console.error("❌ Erreur lors de la récupération des portfolios:", error);
+    throw error;
+  }
 }
 
 // Mettre à jour un portfolio par slug

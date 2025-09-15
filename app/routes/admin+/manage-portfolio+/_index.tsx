@@ -47,10 +47,21 @@ interface PortfolioData {
 
 // Loader pour vérifier l'authentification et charger les portfolios
 export async function loader({ request }: LoaderFunctionArgs) {
-  await requireAuth(request);
-  const sessionData = await getSessionData(request);
-  const portfolios = await getAllPortfolios();
-  return { sessionData, portfolios };
+  try {
+    await requireAuth(request);
+    const sessionData = await getSessionData(request);
+    const portfolios = await getAllPortfolios();
+    return { sessionData, portfolios };
+  } catch (error) {
+    console.error("Erreur dans le loader manage-portfolio:", error);
+    // Si c'est une erreur d'authentification, la laisser passer
+    if (error instanceof Response) {
+      throw error;
+    }
+    // Pour les autres erreurs, retourner un état vide
+    const sessionData = await getSessionData(request);
+    return { sessionData, portfolios: [] };
+  }
 }
 
 // Action pour gérer la soumission du formulaire
