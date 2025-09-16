@@ -19,7 +19,7 @@ const Background = (props: SVGProps<SVGSVGElement>) => (
       </g>
       <g filter="url(#d)">
         <path
-          fill="url(#e)"
+          fill="url(#holographicGradient)"
           d="M1440.31 610.96C906.57 793.628 289.901 610.771-25.191 377.632c-5.327-3.941-12.809-.074-12.809 6.552V1091c0 4.42 3.582 8 8 8h1473c4.42 0 8-3.58 8-8V618.547c0-5.518-5.47-9.373-10.69-7.587"
         />
       </g>

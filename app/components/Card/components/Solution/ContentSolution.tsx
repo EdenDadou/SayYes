@@ -1,11 +1,12 @@
 import Coche from "~/assets/icons/Coche";
 import Star from "~/assets/icons/Star";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import Masque from "~/components/Card/components/Masque";
+import Masque from "~/components/Card/components/Solution/Masque";
 import { useViewport } from "~/utils/hooks/useViewport";
 import { cn } from "~/utils/ui/ui";
 
 import "~/styles/tailwind.css";
+import ContentSolutionMobile from "./ContentSolutionMobile";
 
 interface PropsContent {
   imageUrl?: string;
@@ -26,15 +27,20 @@ export default function ContentSolution({
 }: PropsContent) {
   const isMobile = useViewport();
 
-  const backgroundMobile = isMobile
-    ? "bg-gradient-to-b from-transparent via-black/70 to-black/90"
-    : "";
-
   const imageClasses = cn(
     "h-full flex items-center justify-center rounded-[15px] relative "
   );
 
-  return (
+  return isMobile ? (
+    <ContentSolutionMobile
+      imageUrl={imageUrl}
+      videoUrl={videoUrl}
+      subtitle={subtitle}
+      title1={title1}
+      title2={title2}
+      bulletPoints={bulletPoints}
+    />
+  ) : (
     <div className="size-full md:p-4 p-2">
       <div
         className={imageClasses}
@@ -56,14 +62,10 @@ export default function ContentSolution({
         ) : null}
 
         <div className="size-full relative">
-          <div
-            className={`relative w-full h-full flex flex-col items-center justify-center ${backgroundMobile}`}
-          >
-            {!isMobile ? (
-              <Masque className="absolute inset-0 w-full h-full object-contain rounded-xl z-0" />
-            ) : null}
+          <div className="relative w-full h-full flex flex-col items-center justify-center">
+            <Masque className="absolute inset-0 w-full h-full object-contain rounded-xl z-0" />
             {/* Contenu au premier plan */}
-            <div className="relative z-10 flex flex-col items-start md:justify-center justify-end size-full px-4 md:px-20 gap-4">
+            <div className="relative z-10 flex flex-col items-start justify-center size-full gap-4 px-20">
               <div className="flex flex-row items-center justify-center gap-2 ">
                 <Star className="w-4 h-4" />
                 <h2 className="text-lg">{subtitle}</h2>
