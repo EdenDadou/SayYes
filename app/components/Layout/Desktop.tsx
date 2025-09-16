@@ -14,9 +14,13 @@ export const meta: MetaFunction = () => {
 
 interface ILayoutProps {
   children: React.ReactNode;
+  footer?: boolean;
 }
 
-export default function Desktoplayout({ children }: ILayoutProps) {
+export default function Desktoplayout({
+  children,
+  footer = true,
+}: ILayoutProps) {
   const [isOpenModalContact, setIsOpenModalContact] = useState(false);
 
   return (
@@ -27,7 +31,7 @@ export default function Desktoplayout({ children }: ILayoutProps) {
       />
       <Header setIsOpenModalContact={setIsOpenModalContact} />
       {children}
-      <Footer />
+      {footer ? <Footer /> : null}
     </main>
   );
 }
