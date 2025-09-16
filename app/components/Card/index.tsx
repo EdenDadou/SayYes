@@ -5,9 +5,15 @@ interface CardProps {
   height: string;
   content?: React.ReactNode;
   borderClass?: string;
+  children?: React.ReactNode;
 }
 
-export default function Card({ content, height, borderClass }: CardProps) {
+export default function Card({
+  content,
+  height,
+  borderClass,
+  children,
+}: CardProps) {
   const containerClasses = cn(
     "border-custom w-full rounded-[25px]",
     borderClass
@@ -15,7 +21,7 @@ export default function Card({ content, height, borderClass }: CardProps) {
 
   return (
     <div className={containerClasses} style={{ height }}>
-      {content}
+      {content || children}
     </div>
   );
 }

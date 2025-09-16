@@ -3,7 +3,7 @@ import useIntroTimer from "~/utils/hooks/useIntroTimer";
 import HeaderMobile from "../Header/mobile/HeaderMobile";
 import "~/styles/tailwind.css";
 import FooterMobile from "../Footer/mobile/FooterMobile";
-import ModalParlonsDesignMobile from "../ModalParlonsDesign/mobile/ModalParlonsDesignMobile";
+import ModalParlonsDesignMobile from "../ModalContact/mobile/ModalParlonsDesignMobile";
 
 const Section1Mobile = React.lazy(
   () => import("../Sections/Section-1/mobile/Section1Mobile")

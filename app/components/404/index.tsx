@@ -1,14 +1,14 @@
 import { Link } from "@remix-run/react";
 import Footer from "../Footer";
 import Header from "../Header";
-import ModalParlonsDesign from "../ModalParlonsDesign";
+import ModalContact from "../ModalContact";
 import { useState } from "react";
 
 export default function Page404() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex items-center justify-center w-screen h-full">
-      <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
+      <ModalContact isOpen={isOpen} close={() => setIsOpen(false)} />
       <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
         <Header setIsOpen={setIsOpen} isIntroFinish={true} />
         <div

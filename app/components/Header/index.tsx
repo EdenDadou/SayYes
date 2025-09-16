@@ -11,7 +11,11 @@ import Coeur from "./components/Coeur";
 import Smile from "./components/Smile";
 import Idea from "./components/Idea";
 
-const Header = () => {
+interface IHeaderProps {
+  setIsOpenModalContact: (value: boolean) => void;
+}
+
+const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
   const navigate = useNavigate();
   const isMobile = useViewport();
   const [isVisible, setIsVisible] = useState(true);
@@ -82,6 +86,7 @@ const Header = () => {
           label="Parlons Design !"
           leftIcon={<ChatBuble />}
           type="plain"
+          onClick={() => setIsOpenModalContact(true)}
         />
       </div>
     </motion.div>

@@ -1,13 +1,13 @@
 import { Link } from "@remix-run/react";
-import ModalParlonsDesign from "../../ModalParlonsDesign";
 import { useState } from "react";
 import HeaderMobile from "~/components/Header/mobile/HeaderMobile";
+import ModalContact from "~/components/ModalContact";
 
 export default function Page404Mobile() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex items-center justify-center w-screen h-full">
-      <ModalParlonsDesign isOpen={isOpen} close={() => setIsOpen(false)} />
+      <ModalContact isOpen={isOpen} close={() => setIsOpen(false)} />
       <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
         <HeaderMobile
           setIsOpen={setIsOpen}

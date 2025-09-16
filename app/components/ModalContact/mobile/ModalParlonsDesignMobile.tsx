@@ -4,7 +4,7 @@ import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
 import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 
-export default function ModalParlonsDesignMobile() {
+export default function ModalContactDesignMobile() {
   return (
     <div className="flex flex-col items-center justify-start w-full h-max bg-gray-400">
       <div
