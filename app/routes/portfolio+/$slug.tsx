@@ -11,6 +11,7 @@ import Coche from "~/assets/icons/Coche";
 import NoteStar from "~/assets/icons/NoteStar";
 import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
 import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
+import PhotoCarousel from "~/components/PhotoCarousel";
 
 // Loader pour récupérer le portfolio par slug
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -78,15 +79,15 @@ export default function PortfolioSlug() {
             </div>
           </div>
 
-          {/* Hero Image */}
-          <div className="relative w-full h-[400px] md:h-[600px] rounded-2xl overflow-hidden">
-            <img
-              src={portfolio.photoCouverture}
-              alt={portfolio.titre}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-          </div>
+          {/* Photo Carousel */}
+          <PhotoCarousel
+            photos={
+              portfolio.photosCarrousel.length > 0
+                ? portfolio.photosCarrousel
+                : [portfolio.photoCouverture]
+            }
+            title={portfolio.titre}
+          />
         </section>
 
         {/* Content Grid */}
@@ -129,7 +130,7 @@ export default function PortfolioSlug() {
         </div>
 
         {/* Bento Grid - Project Gallery */}
-        {portfolio.bento && portfolio.bento.length > 0 && (
+        {portfolio.bento[1] ? (
           <section className="mb-16 relative px-32">
             <BackgroundProject2
               fill={portfolio.couleur}
@@ -147,50 +148,48 @@ export default function PortfolioSlug() {
             </div>
 
             <div className="space-y-6">
-              {portfolio.bento.map((bentoItem, bentoIndex) => (
-                <div key={bentoIndex} className="space-y-6">
-                  {bentoItem.lines.map((line, lineIndex) => (
+              {portfolio.bento[0].lines.map((line, lineIndex) => (
+                <div
+                  key={lineIndex}
+                  className={`grid gap-4 ${
+                    line.format === "1/3 - 2/3"
+                      ? "grid-cols-5"
+                      : line.format === "3 carrés"
+                        ? "grid-cols-3"
+                        : line.format === "2 carré"
+                          ? "grid-cols-2"
+                          : line.format === "banner"
+                            ? "grid-cols-1"
+                            : "grid-cols-1"
+                  }`}
+                >
+                  {line.listImage.map((image, imageIndex) => (
                     <div
-                      key={lineIndex}
-                      className={`grid gap-4 ${
-                        line.format === "1/3 - 2/3"
-                          ? "grid-cols-5"
-                          : line.format === "3 carrés"
-                            ? "grid-cols-3"
-                            : line.format === "2 carré"
-                              ? "grid-cols-2"
-                              : line.format === "banner"
-                                ? "grid-cols-1"
-                                : "grid-cols-1"
+                      key={imageIndex}
+                      className={`relative rounded-3xl h-[full] overflow-hidden ${
+                        line.format === "1/3 - 2/3" && imageIndex === 1
+                          ? "col-span-3"
+                          : line.format === "1/3 - 2/3"
+                            ? "col-span-2"
+                            : line.format === "banner"
+                              ? "aspect-[21/9]"
+                              : line.format === "full"
+                                ? "aspect-[16/9]"
+                                : "aspect-square"
                       }`}
                     >
-                      {line.listImage.map((image, imageIndex) => (
-                        <div
-                          key={imageIndex}
-                          className={`relative rounded-3xl h-full overflow-hidden ${
-                            line.format === "1/3 - 2/3" && imageIndex === 1
-                              ? "col-span-3"
-                              : line.format === "1/3 - 2/3"
-                                ? "col-span-2"
-                                : line.format === "banner"
-                                  ? "aspect-[21/9]"
-                                  : "aspect-square"
-                          }`}
-                        >
-                          <img
-                            src={image}
-                            alt={`${portfolio.titre} - Image ${imageIndex + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
+                      <img
+                        src={image}
+                        alt={`${portfolio.titre} - Image ${imageIndex + 1}`}
+                        className="w-full h-full object-cover object-center"
+                      />
                     </div>
                   ))}
                 </div>
               ))}
             </div>
           </section>
-        )}
+        ) : null}
 
         <section className="flex flex-col items-center justify-center py-12 md:px-60">
           <div className="h-[3px] w-28 holographic-bg" />
@@ -217,6 +216,52 @@ export default function PortfolioSlug() {
             </p>
           </div>
         </section>
+        {/* Bento Grid - Project Gallery */}
+        {portfolio.bento[1] ? (
+          <section className="mb-16 relative px-32">
+            <div className="space-y-6">
+              {portfolio.bento[1].lines.map((line, lineIndex) => (
+                <div
+                  key={lineIndex}
+                  className={`grid gap-4 ${
+                    line.format === "1/3 - 2/3"
+                      ? "grid-cols-5"
+                      : line.format === "3 carrés"
+                        ? "grid-cols-3"
+                        : line.format === "2 carré"
+                          ? "grid-cols-2"
+                          : line.format === "banner"
+                            ? "grid-cols-1"
+                            : "grid-cols-1"
+                  }`}
+                >
+                  {line.listImage.map((image, imageIndex) => (
+                    <div
+                      key={imageIndex}
+                      className={`relative rounded-3xl h-full overflow-hidden ${
+                        line.format === "1/3 - 2/3" && imageIndex === 1
+                          ? "col-span-3"
+                          : line.format === "1/3 - 2/3"
+                            ? "col-span-2"
+                            : line.format === "banner"
+                              ? "aspect-[21/9]"
+                              : line.format === "full"
+                                ? "aspect-[16/9]"
+                                : "aspect-square"
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${portfolio.titre} - Image ${imageIndex + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </main>
 
       {/* Footer */}

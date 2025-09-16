@@ -29,6 +29,7 @@ interface PortfolioData {
   titre: string;
   slug: string;
   photoCouverture: string;
+  photosCarrousel: string[];
   description: string;
   kicker: string;
   livrable: string[];
@@ -84,6 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
       titre: formData.get("titre") as string,
       slug: formData.get("slug") as string,
       photoCouverture: "", // Sera mis à jour après l'upload
+      photosCarrousel: [], // Sera mis à jour après l'upload des fichiers
       description: formData.get("description") as string,
       kicker: formData.get("kicker") as string,
       livrable: formData.getAll("livrable") as string[],
@@ -117,6 +119,26 @@ export async function action({ request }: ActionFunctionArgs) {
         portfolioId
       );
       photoCouverture = savedMedia.url;
+    }
+
+    // Gestion des photos carrousel
+    const photosCarrousel: string[] = [];
+
+    // Parcourir tous les fichiers uploadés pour le carrousel
+    for (const [key, value] of formData.entries()) {
+      if (
+        key.startsWith("carrouselFile_") &&
+        value instanceof File &&
+        value.size > 0
+      ) {
+        // Sauvegarder le fichier
+        const savedMedia = await saveMedia(
+          value,
+          "portfolio/carrousel",
+          portfolioId
+        );
+        photosCarrousel.push(savedMedia.url);
+      }
     }
 
     // Traitement des fichiers du bento
@@ -183,6 +205,7 @@ export async function action({ request }: ActionFunctionArgs) {
     // Mettre à jour le portfolio avec les URLs finales
     await updatePortfolio(portfolioId, {
       photoCouverture: photoCouverture,
+      photosCarrousel: photosCarrousel,
       bento: updatedBento,
     });
 
@@ -212,6 +235,7 @@ export default function ManagePortfolio() {
     titre: "",
     slug: "",
     photoCouverture: "",
+    photosCarrousel: [],
     description: "",
     kicker: "",
     livrable: [],
@@ -238,6 +262,10 @@ export default function ManagePortfolio() {
   });
   // États pour la gestion des uploads
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [carrouselPreviewImages, setCarrouselPreviewImages] = useState<
+    { url: string; name: string }[]
+  >([]);
+  const [carrouselFiles, setCarrouselFiles] = useState<File[]>([]);
   const [bentoPreviewImages, setBentoPreviewImages] = useState<
     { url: string; name: string }[]
   >([]);
@@ -309,6 +337,40 @@ export default function ManagePortfolio() {
         [field]: value,
       },
     }));
+  };
+
+  // Gestion de l'upload de fichiers multiples pour les photos carrousel
+  const handleCarrouselFilesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach((file) => {
+        // Vérifier le type de fichier
+        if (file.type.startsWith("image/")) {
+          // Stocker le fichier réel pour l'envoi
+          setCarrouselFiles((prev) => [...prev, file]);
+
+          // Créer un aperçu de l'image
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const imageUrl = event.target?.result as string;
+            setCarrouselPreviewImages((prev) => [
+              ...prev,
+              { url: imageUrl, name: file.name },
+            ]);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
+      e.target.value = "";
+    }
+  };
+
+  const removeCarrouselImage = (index: number) => {
+    setCarrouselPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    setCarrouselFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   // Gestion de l'upload de fichiers multiples pour les images bento
@@ -409,6 +471,11 @@ export default function ManagePortfolio() {
     const form = e.currentTarget;
     const submitFormData = new FormData(form);
 
+    // Ajouter les fichiers carrousel avec les noms corrects
+    carrouselFiles.forEach((file, index) => {
+      submitFormData.append(`carrouselFile_${index}`, file);
+    });
+
     // Ajouter les fichiers bento avec les noms corrects
     let globalImageIndex = 0;
     formData.bento.forEach((bento, bentoIndex) => {
@@ -445,6 +512,7 @@ export default function ManagePortfolio() {
           titre: "",
           slug: "",
           photoCouverture: "",
+          photosCarrousel: [],
           description: "",
           kicker: "",
           livrable: [],
@@ -464,6 +532,8 @@ export default function ManagePortfolio() {
         setCurrentBento({ lines: [] });
         setCurrentBentoLine({ format: "1/3 - 2/3", listImage: [] });
         setPreviewImage(null);
+        setCarrouselPreviewImages([]);
+        setCarrouselFiles([]);
         setBentoPreviewImages([]);
         setBentoFiles([]);
 
@@ -697,6 +767,89 @@ export default function ManagePortfolio() {
                         alt="Aperçu"
                         className="max-w-xs h-32 object-cover rounded-lg border border-gray-600"
                       />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Photos Carrousel */}
+              <div className="lg:col-span-2">
+                <label
+                  className="block text-sm font-medium text-gray-300 mb-4"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Photos Carrousel
+                </label>
+
+                {/* Upload de fichiers multiples */}
+                <div className="space-y-4">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleCarrouselFilesChange}
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-600 file:text-white file:cursor-pointer hover:file:bg-green-700 transition-all duration-200"
+                    style={{ fontFamily: "Jakarta" }}
+                  />
+                  <p
+                    className="text-xs text-gray-300"
+                    style={{ fontFamily: "Jakarta" }}
+                  >
+                    📁 Sélectionnez plusieurs images pour le carrousel (formats
+                    supportés: JPG, PNG, GIF, WebP, etc.)
+                  </p>
+
+                  {/* Aperçus des images uploadées */}
+                  {carrouselPreviewImages.length > 0 && (
+                    <div className="mt-4">
+                      <p
+                        className="text-sm text-gray-400 mb-3"
+                        style={{ fontFamily: "Jakarta Medium" }}
+                      >
+                        Aperçu des images du carrousel (
+                        {carrouselPreviewImages.length}) :
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {carrouselPreviewImages.map((image, index) => (
+                          <div
+                            key={index}
+                            className="relative group bg-gray-700/30 rounded-lg overflow-hidden"
+                          >
+                            <img
+                              src={image.url}
+                              alt={`Carrousel ${index + 1}`}
+                              className="w-full h-20 object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                              <button
+                                type="button"
+                                onClick={() => removeCarrouselImage(index)}
+                                className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                              >
+                                <svg
+                                  className="w-5 h-5"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1">
+                              <p
+                                className="text-xs text-white truncate"
+                                style={{ fontFamily: "Jakarta" }}
+                              >
+                                {image.name}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1315,6 +1468,7 @@ export default function ManagePortfolio() {
                   titre: "",
                   slug: "",
                   photoCouverture: "",
+                  photosCarrousel: [],
                   description: "",
                   kicker: "",
                   livrable: [],
@@ -1334,6 +1488,8 @@ export default function ManagePortfolio() {
                 setCurrentBento({ lines: [] });
                 setCurrentBentoLine({ format: "1/3 - 2/3", listImage: [] });
                 setPreviewImage(null);
+                setCarrouselPreviewImages([]);
+                setCarrouselFiles([]);
                 setBentoPreviewImages([]);
               }}
               className="bg-gray-600 hover:bg-gray-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"

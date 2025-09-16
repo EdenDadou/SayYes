@@ -5,13 +5,7 @@ import {
   unstable_parseMultipartFormData,
   unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
-import {
-  Form,
-  useLoaderData,
-  useActionData,
-  Link,
-  useNavigate,
-} from "@remix-run/react";
+import { useLoaderData, Link, useNavigate } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { requireAuth, getSessionData } from "~/server/auth.server";
 import { saveMedia } from "~/server/media.server";
@@ -38,6 +32,7 @@ interface EditPortfolioFormData {
   titre: string;
   slug: string;
   photoCouverture: string;
+  photosCarrousel: string[];
   description: string;
   kicker: string;
   livrable: string[];
@@ -109,24 +104,68 @@ export async function action({ request, params }: ActionFunctionArgs) {
       "photoCouvertureFile"
     ) as File | null;
 
+    // Récupérer le portfolio pour obtenir l'ID nécessaire
+    const portfolio = await getPortfolioBySlug(slug);
+    if (!portfolio) {
+      return Response.json(
+        { success: false, error: "Portfolio non trouvé" },
+        { status: 404 }
+      );
+    }
+
+    // Traiter la photo de couverture si un nouveau fichier est uploadé
     if (photoCouvertureFile && photoCouvertureFile.size > 0) {
-      // Récupérer le portfolio pour obtenir l'ID nécessaire pour saveMedia
-      const portfolio = await getPortfolioBySlug(slug);
-      if (portfolio) {
+      const savedMedia = await saveMedia(
+        photoCouvertureFile,
+        "portfolio",
+        portfolio.id
+      );
+      photoCouverture = savedMedia.url;
+    }
+
+    // Gestion des photos carrousel
+    let photosCarrousel: string[] = [...(portfolio.photosCarrousel || [])];
+    console.log("🎠 Photos carrousel initiales:", photosCarrousel);
+
+    // Traiter les nouvelles photos carrousel uploadées
+    for (const [key, value] of formData.entries()) {
+      if (
+        key.startsWith("carrouselFile_") &&
+        value instanceof File &&
+        value.size > 0
+      ) {
+        console.log(`🎠 Traitement fichier carrousel: ${key} - ${value.name}`);
+        // Sauvegarder le fichier
         const savedMedia = await saveMedia(
-          photoCouvertureFile,
-          "portfolio",
+          value,
+          "portfolio/carrousel",
           portfolio.id
         );
-        photoCouverture = savedMedia.url;
+        photosCarrousel.push(savedMedia.url);
+        console.log("🎠 Photo carrousel ajoutée:", savedMedia.url);
       }
     }
+
+    // Gérer les suppressions de photos carrousel
+    const photosToKeep = formData.getAll("carrouselPhotosToKeep") as string[];
+    console.log("🎠 Photos à conserver:", photosToKeep);
+    if (photosToKeep.length > 0) {
+      // Filtrer pour ne garder que les photos marquées à conserver
+      photosCarrousel = photosCarrousel.filter(
+        (photo) =>
+          photosToKeep.includes(photo) ||
+          !portfolio.photosCarrousel?.includes(photo)
+      );
+    }
+
+    console.log("🎠 Photos carrousel finales:", photosCarrousel);
 
     // Récupération des données du formulaire
     const portfolioData: Partial<PortfolioData> = {
       titre: formData.get("titre") as string,
       slug: formData.get("slug") as string,
       photoCouverture: photoCouverture,
+      photosCarrousel: photosCarrousel,
       description: formData.get("description") as string,
       kicker: formData.get("kicker") as string,
       livrable: formData.getAll("livrable") as string[],
@@ -159,15 +198,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     // Traitement des fichiers du bento (même logique que la création)
     const updatedBento = [...(portfolioData.bento || [])];
-
-    // Récupérer le portfolio pour obtenir l'ID
-    const portfolio = await getPortfolioBySlug(slug);
-    if (!portfolio) {
-      return Response.json(
-        { success: false, error: "Portfolio non trouvé" },
-        { status: 404 }
-      );
-    }
 
     // Créer une map des fichiers uploadés pour un accès plus facile
     const uploadedFiles = new Map<string, any>();
@@ -237,13 +267,26 @@ export async function action({ request, params }: ActionFunctionArgs) {
     portfolioData.bento = updatedBento;
 
     // Mettre à jour en base de données
+    console.log(
+      "📝 Données portfolio à mettre à jour:",
+      JSON.stringify(
+        {
+          ...portfolioData,
+          photosCarrousel: photosCarrousel,
+        },
+        null,
+        2
+      )
+    );
     await updatePortfolioBySlug(slug, portfolioData);
+    console.log("✅ Portfolio mis à jour avec succès en base de données");
 
     const successResponse = {
       success: true,
       message: "Portfolio mis à jour avec succès!",
     };
 
+    console.log("✅ Réponse de succès préparée:", successResponse);
     return Response.json(successResponse);
   } catch (error) {
     console.error("❌ Erreur lors de la mise à jour du portfolio:", error);
@@ -263,13 +306,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function EditPortfolio() {
   const { sessionData, portfolio } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
   // États pour le formulaire - initialisation simple pour éviter les problèmes d'hydratation
   const [formData, setFormData] = useState<EditPortfolioFormData>({
     titre: "",
     slug: "",
     photoCouverture: "",
+    photosCarrousel: [],
     description: "",
     kicker: "",
     livrable: [],
@@ -294,6 +337,13 @@ export default function EditPortfolio() {
   });
   const [uploadMethod, setUploadMethod] = useState<"url" | "file">("file");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [carrouselPreviewImages, setCarrouselPreviewImages] = useState<
+    { url: string; name: string }[]
+  >([]);
+  const [carrouselFiles, setCarrouselFiles] = useState<File[]>([]);
+  const [carrouselPhotosToKeep, setCarrouselPhotosToKeep] = useState<string[]>(
+    []
+  );
   const [bentoPreviewImages, setBentoPreviewImages] = useState<
     { url: string; name: string }[]
   >([]);
@@ -311,6 +361,7 @@ export default function EditPortfolio() {
       // Parser les données JSON si nécessaire
       let parsedLivrable = [];
       let parsedBento = [];
+      let parsedPhotosCarrousel = [];
       let parsedTemoignage = {
         auteur: "",
         contenu: "",
@@ -341,6 +392,17 @@ export default function EditPortfolio() {
       }
 
       try {
+        parsedPhotosCarrousel = Array.isArray(portfolio.photosCarrousel)
+          ? portfolio.photosCarrousel
+          : typeof portfolio.photosCarrousel === "string"
+            ? JSON.parse(portfolio.photosCarrousel)
+            : [];
+      } catch (e) {
+        console.warn("⚠️ Erreur parsing photosCarrousel:", e);
+        parsedPhotosCarrousel = [];
+      }
+
+      try {
         parsedTemoignage =
           portfolio.temoignage && typeof portfolio.temoignage === "object"
             ? portfolio.temoignage
@@ -366,6 +428,7 @@ export default function EditPortfolio() {
         titre: portfolio.titre || "",
         slug: portfolio.slug || "",
         photoCouverture: portfolio.photoCouverture || "",
+        photosCarrousel: parsedPhotosCarrousel,
         description: portfolio.description || "",
         kicker: portfolio.kicker || "",
         livrable: parsedLivrable,
@@ -379,28 +442,12 @@ export default function EditPortfolio() {
 
       setFormData(newFormData);
       setPreviewImage(portfolio.photoCouverture || null);
+      setCarrouselPhotosToKeep(parsedPhotosCarrousel);
       setIsDataLoaded(true);
     }
   }, [portfolio, isDataLoaded]);
 
-  // Gestion des retours de l'action
-  useEffect(() => {
-    if (actionData && isDataLoaded) {
-      console.log("📡 Action data received:", actionData);
-      if (actionData.success) {
-        showToast(
-          actionData.message || "Portfolio mis à jour avec succès!",
-          "success"
-        );
-        // Recharger la page pour voir les modifications après un délai
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } else if (actionData.error) {
-        showToast(actionData.error, "error");
-      }
-    }
-  }, [actionData, isDataLoaded]);
+  // Note: Action handling is now done manually in handleSubmit function
 
   // Options pour les formats de bento
   const bentoFormats = [
@@ -459,6 +506,44 @@ export default function EditPortfolio() {
         [field]: value,
       },
     }));
+  };
+
+  // Gestion de l'upload de fichiers multiples pour les photos carrousel
+  const handleCarrouselFilesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach((file) => {
+        // Vérifier le type de fichier
+        if (file.type.startsWith("image/")) {
+          // Stocker le fichier réel pour l'envoi
+          setCarrouselFiles((prev) => [...prev, file]);
+
+          // Créer un aperçu de l'image
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const imageUrl = event.target?.result as string;
+            setCarrouselPreviewImages((prev) => [
+              ...prev,
+              { url: imageUrl, name: file.name },
+            ]);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
+      e.target.value = "";
+    }
+  };
+
+  const removeCarrouselImage = (index: number) => {
+    setCarrouselPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    setCarrouselFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingCarrouselImage = (photoUrl: string) => {
+    setCarrouselPhotosToKeep((prev) => prev.filter((url) => url !== photoUrl));
   };
 
   // Gestion de l'upload de fichiers multiples pour les images bento
@@ -714,6 +799,7 @@ export default function EditPortfolio() {
   // Fonction de soumission personnalisée pour gérer les fichiers bento
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Empêcher la soumission par défaut
+    console.log("🚀 Début de la soumission du formulaire");
 
     // Scroll vers le haut
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -724,6 +810,16 @@ export default function EditPortfolio() {
     // S'assurer que les données bento sont correctement sérialisées
     console.log("📦 Structure bento avant envoi:", formData.bento);
     submitFormData.set("bento", JSON.stringify(formData.bento));
+
+    // Ajouter les fichiers carrousel avec les noms corrects
+    carrouselFiles.forEach((file, index) => {
+      submitFormData.append(`carrouselFile_${index}`, file);
+    });
+
+    // Ajouter la liste des photos carrousel à conserver
+    carrouselPhotosToKeep.forEach((photoUrl) => {
+      submitFormData.append("carrouselPhotosToKeep", photoUrl);
+    });
 
     // Ajouter les fichiers bento avec les noms corrects
     console.log(
@@ -793,6 +889,7 @@ export default function EditPortfolio() {
 
       if (isSuccess) {
         console.log("✅ Portfolio mis à jour avec succès!");
+        console.log("📨 Réponse détaillée:", result);
         showToast("Portfolio mis à jour avec succès!", "success");
 
         // Recharger la page après un délai pour voir les changements
@@ -941,8 +1038,7 @@ export default function EditPortfolio() {
           </div>
         )}
 
-        <Form
-          method="post"
+        <form
           onSubmit={handleSubmit}
           className="space-y-8"
           encType="multipart/form-data"
@@ -1130,6 +1226,136 @@ export default function EditPortfolio() {
                         alt="Aperçu"
                         className="max-w-xs h-32 object-cover rounded-lg border border-gray-600"
                       />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Photos Carrousel */}
+              <div className="lg:col-span-2">
+                <label
+                  className="block text-sm font-medium text-gray-300 mb-4"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
+                  Photos Carrousel
+                </label>
+
+                <div className="space-y-4">
+                  {/* Photos existantes */}
+                  {formData.photosCarrousel.length > 0 && (
+                    <div>
+                      <p
+                        className="text-sm text-gray-400 mb-3"
+                        style={{ fontFamily: "Jakarta Medium" }}
+                      >
+                        Photos existantes ({formData.photosCarrousel.length}) :
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+                        {formData.photosCarrousel.map((photo, index) => (
+                          <div
+                            key={index}
+                            className={`relative group rounded-lg overflow-hidden ${
+                              carrouselPhotosToKeep.includes(photo)
+                                ? "ring-2 ring-green-500"
+                                : "ring-2 ring-red-500 opacity-50"
+                            }`}
+                          >
+                            <img
+                              src={photo}
+                              alt={`Carrousel ${index + 1}`}
+                              className="w-full h-20 object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  removeExistingCarrouselImage(photo)
+                                }
+                                className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                                title="Supprimer cette photo"
+                              >
+                                <svg
+                                  className="w-5 h-5"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Upload de nouvelles photos */}
+                  <div>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleCarrouselFilesChange}
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-600 file:text-white file:cursor-pointer hover:file:bg-green-700 transition-all duration-200"
+                      style={{ fontFamily: "Jakarta" }}
+                    />
+                  </div>
+
+                  {/* Aperçus des nouvelles images */}
+                  {carrouselPreviewImages.length > 0 && (
+                    <div>
+                      <p
+                        className="text-sm text-gray-400 mb-3"
+                        style={{ fontFamily: "Jakarta Medium" }}
+                      >
+                        Nouvelles images à ajouter (
+                        {carrouselPreviewImages.length}) :
+                      </p>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {carrouselPreviewImages.map((image, index) => (
+                          <div
+                            key={index}
+                            className="relative group bg-gray-700/30 rounded-lg overflow-hidden ring-2 ring-blue-500"
+                          >
+                            <img
+                              src={image.url}
+                              alt={`Nouvelle ${index + 1}`}
+                              className="w-full h-20 object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                              <button
+                                type="button"
+                                onClick={() => removeCarrouselImage(index)}
+                                className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                              >
+                                <svg
+                                  className="w-5 h-5"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1">
+                              <p
+                                className="text-xs text-white truncate"
+                                style={{ fontFamily: "Jakarta" }}
+                              >
+                                {image.name}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1871,7 +2097,7 @@ export default function EditPortfolio() {
               Mettre à jour
             </button>
           </div>
-        </Form>
+        </form>
       </div>
     </div>
   );

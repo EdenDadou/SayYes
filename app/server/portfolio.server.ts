@@ -15,6 +15,7 @@ export interface PortfolioData {
   titre: string;
   slug: string;
   photoCouverture: string;
+  photosCarrousel: string[];
   description: string;
   kicker: string;
   livrable: string[];
@@ -36,6 +37,7 @@ export interface PortfolioWithMedia {
   titre: string;
   slug: string;
   photoCouverture: string;
+  photosCarrousel: string[];
   description: string;
   kicker: string;
   sousTitre: string;
@@ -68,6 +70,7 @@ export async function createPortfolio(data: PortfolioData): Promise<string> {
       titre: data.titre,
       slug: data.slug,
       photoCouverture: data.photoCouverture,
+      photosCarrousel: JSON.stringify(data.photosCarrousel || []),
       description: data.description,
       kicker: data.kicker,
       sousTitre: data.sousTitre,
@@ -96,6 +99,9 @@ export async function updatePortfolio(
   }
   if (data.bento) {
     updateData.bento = JSON.stringify(data.bento);
+  }
+  if (data.photosCarrousel) {
+    updateData.photosCarrousel = JSON.stringify(data.photosCarrousel);
   }
   if (data.shortlist !== undefined) {
     updateData.shortlist = data.shortlist;
@@ -147,6 +153,7 @@ export async function getPortfolio(
     titre: portfolio.titre,
     slug: portfolio.slug,
     photoCouverture: portfolio.photoCouverture,
+    photosCarrousel: safeParse((portfolio as any).photosCarrousel || "[]", []),
     description: portfolio.description,
     kicker: portfolio.kicker,
     sousTitre: portfolio.sousTitre,
@@ -202,6 +209,7 @@ export async function getPortfolioBySlug(
     titre: portfolio.titre,
     slug: portfolio.slug,
     photoCouverture: portfolio.photoCouverture,
+    photosCarrousel: safeParse((portfolio as any).photosCarrousel || "[]", []),
     description: portfolio.description,
     kicker: portfolio.kicker,
     sousTitre: portfolio.sousTitre,
@@ -256,6 +264,10 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
       titre: portfolio.titre,
       slug: portfolio.slug,
       photoCouverture: portfolio.photoCouverture,
+      photosCarrousel: safeParse(
+        (portfolio as any).photosCarrousel || "[]",
+        []
+      ),
       description: portfolio.description,
       kicker: portfolio.kicker,
       sousTitre: portfolio.sousTitre,
@@ -291,6 +303,9 @@ export async function updatePortfolioBySlug(
   }
   if (data.bento) {
     updateData.bento = JSON.stringify(data.bento);
+  }
+  if (data.photosCarrousel) {
+    updateData.photosCarrousel = JSON.stringify(data.photosCarrousel);
   }
   if (data.shortlist !== undefined) {
     updateData.shortlist = data.shortlist;
@@ -398,6 +413,7 @@ export async function getPublicPortfolios() {
     titre: portfolio.titre,
     slug: portfolio.slug,
     photoCouverture: portfolio.photoCouverture,
+    photosCarrousel: safeParse((portfolio as any).photosCarrousel || "[]", []),
     description: portfolio.description,
     kicker: portfolio.kicker,
     sousTitre: portfolio.sousTitre,

@@ -12,6 +12,7 @@ model Portfolio {
   titre           String
   slug            String   @unique
   photoCouverture String
+  photosCarrousel String   @default("[]")
   description     String
   kicker          String
   sousTitre       String
