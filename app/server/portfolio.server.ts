@@ -231,7 +231,6 @@ export async function getPortfolioBySlug(
 // Récupérer tous les portfolios
 export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
   try {
-    console.log("📊 Récupération de tous les portfolios...");
     const portfolios = await prisma.portfolio.findMany({
       include: {
         medias: {
@@ -247,7 +246,6 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
       },
       orderBy: { createdAt: "desc" },
     });
-    console.log(`📊 ${portfolios.length} portfolios trouvés`);
 
     // Fonction helper pour parser les données JSON de manière sécurisée
     const safeParse = (data: string, fallback: any = []) => {

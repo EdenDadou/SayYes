@@ -19,7 +19,7 @@ export default function Solutions() {
       ) : (
         <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
       )}
-      <section className="relative z-10 px-6 md:px-36 flex flex-col gap-6 justify-center items-center md:items-start pt-20">
+      <section className="relative z-10 px-6 md:px-36 flex flex-col gap-6 justify-center items-center md:items-start md:pt-20">
         <div className="h-[3px] md:w-28 w-20 holographic-bg my-6" />
         {isMobile ? <SolutionTitleMobile /> : <SolutionTitle />}
         <h2 className="flex flex-row items-center justify-start gap-2 md:text-xl text-sm font-jakarta pb-6">

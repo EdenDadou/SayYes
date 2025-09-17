@@ -1,7 +1,6 @@
 import Coche from "~/assets/icons/Coche";
 import Star from "~/assets/icons/Star";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import Masque from "~/components/Card/components/Solution/Masque";
 import { useViewport } from "~/utils/hooks/useViewport";
 import { cn } from "~/utils/ui/ui";
 
@@ -35,7 +34,7 @@ export default function ContentSolutionMobile({
     <div className="size-full p-2">
       <div className="size-full relative">
         <div className="absolute inset-0 size-full bg-gradient-to-b from-transparent via-black/70 to-black/10 z-20" />
-        <MasqueMobile className="absolute inset-0 size-full object-cover z-0 rounded-[15px]" />
+        <MasqueMobile className="absolute inset-0 size-full object-cover z-10 rounded-[15px]" />
         {videoUrl ? (
           <video
             src={videoUrl}

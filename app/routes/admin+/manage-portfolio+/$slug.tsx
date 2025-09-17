@@ -125,7 +125,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     // Gestion des photos carrousel
     let photosCarrousel: string[] = [...(portfolio.photosCarrousel || [])];
-    console.log("🎠 Photos carrousel initiales:", photosCarrousel);
 
     // Traiter les nouvelles photos carrousel uploadées
     for (const [key, value] of formData.entries()) {
@@ -134,7 +133,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
         value instanceof File &&
         value.size > 0
       ) {
-        console.log(`🎠 Traitement fichier carrousel: ${key} - ${value.name}`);
         // Sauvegarder le fichier
         const savedMedia = await saveMedia(
           value,
@@ -142,13 +140,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
           portfolio.id
         );
         photosCarrousel.push(savedMedia.url);
-        console.log("🎠 Photo carrousel ajoutée:", savedMedia.url);
       }
     }
 
     // Gérer les suppressions de photos carrousel
     const photosToKeep = formData.getAll("carrouselPhotosToKeep") as string[];
-    console.log("🎠 Photos à conserver:", photosToKeep);
     if (photosToKeep.length > 0) {
       // Filtrer pour ne garder que les photos marquées à conserver
       photosCarrousel = photosCarrousel.filter(
@@ -157,8 +153,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
           !portfolio.photosCarrousel?.includes(photo)
       );
     }
-
-    console.log("🎠 Photos carrousel finales:", photosCarrousel);
 
     // Récupération des données du formulaire
     const portfolioData: Partial<PortfolioData> = {
@@ -184,10 +178,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
         try {
           const bentoData = formData.get("bento") as string;
           const parsed = bentoData ? JSON.parse(bentoData) : [];
-          console.log(
-            "📦 Bento parsé côté serveur:",
-            JSON.stringify(parsed, null, 2)
-          );
           return parsed;
         } catch (e) {
           console.error("❌ Erreur parsing bento data:", e);
@@ -201,18 +191,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     // Créer une map des fichiers uploadés pour un accès plus facile
     const uploadedFiles = new Map<string, any>();
-
-    // Debug: Lister tous les champs du formulaire
-    console.log("🔍 Tous les champs du formulaire reçus:");
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`  📁 ${key}: ${value.name} (${value.size} bytes)`);
-      } else {
-        console.log(
-          `  📝 ${key}: ${typeof value === "string" ? value.substring(0, 100) : value}`
-        );
-      }
-    }
 
     for (const [key, value] of formData.entries()) {
       if (
@@ -233,7 +211,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
           );
 
           uploadedFiles.set(`${bentoIndex}_${globalIndex}`, savedMedia.url);
-          console.log(`✅ Fichier sauvegardé: ${key} -> ${savedMedia.url}`);
         }
       }
     }
@@ -249,7 +226,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
             const newUrl = uploadedFiles.get(fileKey);
 
             if (newUrl) {
-              console.log(`🔄 Remplacement: ${image} -> ${newUrl}`);
               updatedBento[bentoIndex].lines[lineIndex].listImage[imgIndex] =
                 newUrl;
             } else {
@@ -267,26 +243,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
     portfolioData.bento = updatedBento;
 
     // Mettre à jour en base de données
-    console.log(
-      "📝 Données portfolio à mettre à jour:",
-      JSON.stringify(
-        {
-          ...portfolioData,
-          photosCarrousel: photosCarrousel,
-        },
-        null,
-        2
-      )
-    );
+
     await updatePortfolioBySlug(slug, portfolioData);
-    console.log("✅ Portfolio mis à jour avec succès en base de données");
 
     const successResponse = {
       success: true,
       message: "Portfolio mis à jour avec succès!",
     };
 
-    console.log("✅ Réponse de succès préparée:", successResponse);
     return Response.json(successResponse);
   } catch (error) {
     console.error("❌ Erreur lors de la mise à jour du portfolio:", error);
@@ -620,7 +584,6 @@ export default function EditPortfolio() {
         setBentoFiles((prevFiles) => {
           const newFiles = new Map(prevFiles);
           newFiles.delete(fileName);
-          console.log(`🗑️ Fichier supprimé de bentoFiles: "${fileName}"`);
           return newFiles;
         });
       }
@@ -680,22 +643,12 @@ export default function EditPortfolio() {
     files: FileList,
     inputElement?: HTMLInputElement
   ) => {
-    console.log(`🔄 Ajout de ${files.length} fichiers au bento ${bentoIndex}`);
-
     Array.from(files).forEach((file) => {
       if (file.type.startsWith("image/")) {
-        console.log(
-          `📁 Ajout du fichier: "${file.name}" (taille: ${file.size})`
-        );
-
         // Stocker le fichier réel pour l'envoi avec son nom comme clé
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
           newFiles.set(file.name, file);
-          console.log(
-            `📋 bentoFiles mis à jour, total: ${newFiles.size} fichiers`
-          );
-          console.log(`📁 Fichier ajouté: "${file.name}"`);
           return newFiles;
         });
 
@@ -709,17 +662,11 @@ export default function EditPortfolio() {
               format: "1/3 - 2/3",
               listImage: [`pending_${file.name}`],
             });
-            console.log(
-              `➕ Nouvelle ligne créée pour bento ${bentoIndex} avec image: pending_${file.name}`
-            );
           } else {
             // Ajouter à la dernière ligne
             const lastLineIndex = newBento[bentoIndex].lines.length - 1;
             newBento[bentoIndex].lines[lastLineIndex].listImage.push(
               `pending_${file.name}`
-            );
-            console.log(
-              `➕ Image ajoutée à la ligne ${lastLineIndex} du bento ${bentoIndex}: pending_${file.name}`
             );
           }
 
@@ -799,7 +746,6 @@ export default function EditPortfolio() {
   // Fonction de soumission personnalisée pour gérer les fichiers bento
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Empêcher la soumission par défaut
-    console.log("🚀 Début de la soumission du formulaire");
 
     // Scroll vers le haut
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -808,7 +754,6 @@ export default function EditPortfolio() {
     const submitFormData = new FormData(form);
 
     // S'assurer que les données bento sont correctement sérialisées
-    console.log("📦 Structure bento avant envoi:", formData.bento);
     submitFormData.set("bento", JSON.stringify(formData.bento));
 
     // Ajouter les fichiers carrousel avec les noms corrects
@@ -822,15 +767,6 @@ export default function EditPortfolio() {
     });
 
     // Ajouter les fichiers bento avec les noms corrects
-    console.log(
-      "🔍 Debug - bentoFiles disponibles:",
-      Array.from(bentoFiles.keys())
-    );
-    console.log(
-      "🔍 Debug - formData.bento:",
-      JSON.stringify(formData.bento, null, 2)
-    );
-
     formData.bento.forEach((bento, bentoIndex) => {
       let bentoImageIndex = 0; // Index local pour chaque bento
       bento.lines.forEach((line, lineIndex) => {
@@ -838,7 +774,6 @@ export default function EditPortfolio() {
           // Si l'image commence par "pending_", c'est un fichier à uploader
           if (image.startsWith("pending_")) {
             const fileName = image.replace("pending_", "");
-            console.log(`🔍 Recherche du fichier: "${fileName}"`);
 
             const file = bentoFiles.get(fileName);
             if (file) {
@@ -847,17 +782,11 @@ export default function EditPortfolio() {
                 `bentoFile_${bentoIndex}_${bentoImageIndex}`,
                 file
               );
-              console.log(
-                `📎 Ajout fichier: bentoFile_${bentoIndex}_${bentoImageIndex} -> ${fileName}`
-              );
+
               bentoImageIndex++;
             } else {
               console.warn(
                 `⚠️ Fichier non trouvé dans bentoFiles: "${fileName}"`
-              );
-              console.log(
-                "📋 Fichiers disponibles:",
-                Array.from(bentoFiles.keys()).map((name) => `"${name}"`)
               );
             }
           }
@@ -867,18 +796,12 @@ export default function EditPortfolio() {
 
     // Soumettre manuellement avec fetch
     try {
-      console.log("🚀 Soumission du formulaire...");
-
       const response = await fetch(window.location.pathname, {
         method: "POST",
         body: submitFormData,
       });
 
-      console.log("📡 Statut de la réponse:", response.status);
-      console.log("📡 Headers de la réponse:", response.headers);
-
       const result = await response.json();
-      console.log("📡 Réponse du serveur:", result);
 
       // Vérification plus robuste du succès
       const isSuccess =
@@ -888,8 +811,6 @@ export default function EditPortfolio() {
           response.status === 200);
 
       if (isSuccess) {
-        console.log("✅ Portfolio mis à jour avec succès!");
-        console.log("📨 Réponse détaillée:", result);
         showToast("Portfolio mis à jour avec succès!", "success");
 
         // Recharger la page après un délai pour voir les changements
