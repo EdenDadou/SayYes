@@ -6,7 +6,7 @@ export const solutionsCards = [
     content: (
       <ContentSolution
         imageUrl="/images/solutions/Card1.png"
-        videoUrl="/video/bureau.mov"
+        videoUrl="/video/bureau.mp4"
         subtitle="Étape N°1"
         title1="Définir vos"
         title2="objectifs"
