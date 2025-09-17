@@ -4,7 +4,7 @@ import { useState } from "react";
 import Button from "../Button";
 import LogoSayYes from "~/components/Header/components/LogoSayYes";
 import { useViewport } from "~/utils/hooks/useViewport";
-import HeaderMobile from "./mobile/HeaderMobile";
+import HeaderMobile from "./HeaderMobile";
 import ChatBuble from "./components/ChatBuble";
 import Flamme from "./components/Flamme";
 import Coeur from "./components/Coeur";

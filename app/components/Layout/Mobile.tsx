@@ -1,62 +1,31 @@
-import React, { Suspense, useState } from "react";
-import useIntroTimer from "~/utils/hooks/useIntroTimer";
-import HeaderMobile from "../Header/mobile/HeaderMobile";
+import React, { useState } from "react";
+import HeaderMobile from "../Header/HeaderMobile";
 import "~/styles/tailwind.css";
 import FooterMobile from "../Footer/mobile/FooterMobile";
-import ModalParlonsDesignMobile from "../ModalContact/mobile/ModalParlonsDesignMobile";
+import ModalContactMobile from "../ModalContact/ModalContactMobile";
 
-const Section1Mobile = React.lazy(
-  () => import("../Sections/Section-1/mobile/Section1Mobile")
-);
-const Section2Mobile = React.lazy(
-  () => import("../Sections/Section-2/mobile/Section2Mobile")
-);
-const Section3Mobile = React.lazy(
-  () => import("../Sections/Section-3/mobile/Section3Mobile")
-);
-const Section4Mobile = React.lazy(
-  () => import("../Sections/Section-4/mobile/Section4Mobile")
-);
-const Section5Mobile = React.lazy(
-  () => import("../Sections/Section-5/mobile/Section5Mobile")
-);
+interface ILayoutProps {
+  children: React.ReactNode;
+  footer?: boolean;
+}
 
 export const VIDEO_DURATION = 4.5;
 
-export default function Mobile() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { isIntroFinish } = useIntroTimer();
+export default function MobileLayout({
+  children,
+  footer = true,
+}: ILayoutProps) {
+  const [isOpenModalContact, setIsOpenModalContact] = useState(false);
 
   return (
-    <div className="flex items-center justify-center w-screen h-max relative">
-      {isOpen ? (
-        <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
-          <HeaderMobile
-            setIsOpen={setIsOpen}
-            isIntroFinish={isIntroFinish}
-            isOpen={isOpen}
-          />
-          <ModalParlonsDesignMobile />
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-start w-screen bg-gray-600">
-          <Suspense fallback={<div>Chargement...</div>}>
-            <HeaderMobile
-              setIsOpen={setIsOpen}
-              isIntroFinish={isIntroFinish}
-              isOpen={isOpen}
-            />
-
-            {/* Rendu des sections */}
-            <Section1Mobile />
-            <Section2Mobile />
-            <Section3Mobile />
-            <Section4Mobile />
-            <Section5Mobile setIsOpen={setIsOpen} />
-            <FooterMobile />
-          </Suspense>
-        </div>
-      )}
-    </div>
+    <main className="w-full h-fit relative">
+      <ModalContactMobile
+        isOpen={isOpenModalContact}
+        close={() => setIsOpenModalContact(false)}
+      />
+      <HeaderMobile setIsOpenModalContact={setIsOpenModalContact} />
+      {children}
+      {footer ? <FooterMobile /> : null}
+    </main>
   );
 }

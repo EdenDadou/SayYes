@@ -1,22 +1,16 @@
 import LogoSayYes from "~/components/Header/components/LogoSayYes";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { redirect, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import Button from "~/components/Button";
-import Flamme from "../components/Flamme";
-import Coeur from "../components/Coeur";
-import Smile from "../components/Smile";
-import Idea from "../components/Idea";
-import ChatBuble from "../components/ChatBuble";
+import ChatBuble from "./components/ChatBuble";
 import BurgerMenu from "~/components/Header/components/BurgerMenu";
 
 interface HeaderProps {
-  setIsOpen: (value: boolean) => void;
-  isIntroFinish: boolean;
-  isOpen: boolean;
+  setIsOpenModalContact: (value: boolean) => void;
 }
 
-const HeaderMobile = () => {
+const HeaderMobile = ({ setIsOpenModalContact }: HeaderProps) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -60,7 +54,11 @@ const HeaderMobile = () => {
 
       {/* Section droite */}
       <div className="flex justify-end">
-        <Button leftIcon={<ChatBuble />} type="mobile" />
+        <Button
+          leftIcon={<ChatBuble />}
+          type="mobile"
+          onClick={() => setIsOpenModalContact(true)}
+        />
       </div>
     </motion.div>
   );

@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import HeaderMobile from "~/components/Header/mobile/HeaderMobile";
+import HeaderMobile from "~/components/Header/HeaderMobile";
 import ModalContact from "~/components/ModalContact";
 
 export default function Page404Mobile() {

@@ -1,28 +1,27 @@
 import { useEffect } from "react";
 import SvgArrowLight from "~/assets/icons/ArrowLight";
-import Card from "../Card";
-import BackgroundModal from "./components/BackgroundModal";
-import SvgBtnInstagram from "../Footer/components/BtnInstagram";
-import SvgBtnLinkedin from "../Footer/components/BtnLinkedin";
-import SvgBtnFacebook from "../Footer/components/BtnFacebook";
-import SvgBtnTiktok from "../Footer/components/BtnTiktok";
-import SvgBtnYoutube from "../Footer/components/BtnYoutube";
-import ArrowFull from "~/assets/icons/ArrowFull";
-import ChatBuble from "../Header/components/ChatBuble";
-import Tel from "~/assets/icons/Tel";
-import Localisation from "~/assets/icons/Localisation";
 import Close from "~/assets/icons/Close";
+import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
+import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
+import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
+import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
+import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
+import ChatBuble from "../Header/components/ChatBuble";
+import Localisation from "~/assets/icons/Localisation";
+import Tel from "~/assets/icons/Tel";
+import ArrowFull from "~/assets/icons/ArrowFull";
+import Card from "../Card";
+import BackgroundModalMobile from "./components/BackgroundModalMobile";
 
 interface ModalModalContactProps {
   isOpen: boolean;
   close: () => void;
 }
 
-export default function ModalContact({
+export default function ModalContactMobile({
   isOpen,
   close,
 }: ModalModalContactProps) {
-  // Bloquer le scroll du body quand la modal est ouverte
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -38,74 +37,63 @@ export default function ModalContact({
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center w-full h-screen  ${
-        isOpen ? "block" : "hidden"
-      }`}
+      className={`fixed inset-0 z-[100] flex flex-col items-center w-full h-screen overflow-y-auto pt-20 px-4
+    ${isOpen ? "block" : "hidden"}`}
       style={{
         background: "rgba(0, 0, 0, 0.30)",
         backdropFilter: "blur(25px)",
       }}
     >
-      <Card
-        borderClass="light-border flex justify-center items-center w-[90%] max-w-6xl p-3"
-        height="85%"
+      <button
+        className="absolute top-4 right-4 text-white cursor-pointer z-30 hover:opacity-70"
+        onClick={close}
       >
-        <div className="relative w-full h-full rounded-xl flex flex-row overflow-hidden px-20">
-          <BackgroundModal className="absolute inset-0 w-full h-full z-0 rounded-[20px]" />
-
-          <button
-            className="absolute top-4 right-4 text-white cursor-pointer z-30 hover:opacity-70"
-            onClick={close}
-          >
-            <Close />
-          </button>
-
-          <div className="relative z-10 w-[55%] flex flex-col justify-center gap-10">
-            <div className="flex flex-col gap-8">
-              <div className="h-[3px] w-28 holographic-bg" />
-
-              <div className="flex flex-col gap-1">
-                <p className="text-5xltext-white font-jakarta-bold">
-                  Une idée, un projet,{" "}
-                </p>
-                <p className="text-5xl text-white font-jakarta-bold">
-                  un évènement ?
-                </p>
-                <h1 className="text-5xltext-white flex flex-row items-center gap-4 font-jakarta-bold leading-tight holographic-text mt-2">
-                  <SvgArrowLight className="w-12 h-12" />
-                  Contactez-nous !
-                </h1>
-              </div>
-            </div>
-
-            {/* Contact Information */}
-            <div className="flex flex-col gap-2 text-white">
-              <div className="flex items-center gap-3">
-                <Tel color="white" />
-                <span className="text-lg font-jakarta">07 82 45 68</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <ChatBuble color="white" />
-                <span className="text-lg font-jakarta">hello@say_yes.com</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Localisation color="white" />
-                <span className="text-lg font-jakarta">
-                  40 Rue Sèvres - 75015 Paris
-                </span>
-              </div>
-            </div>
-            {/* Social Icons */}
-            <div className="flex flex-row h-5 gap-3">
-              <SvgBtnLinkedin className="w-8 h-8" />
-              <SvgBtnFacebook className="w-8 h-8" />
-              <SvgBtnInstagram className="w-8 h-8" />
-              <SvgBtnTiktok className="w-8 h-8" />
-              <SvgBtnYoutube className="w-8 h-8" />
-            </div>
+        <Close />
+      </button>
+      <div className="flex flex-col items-center justify-start gap-8 z-20 pb-8">
+        <div className="h-[3px] w-20 holographic-bg" />
+        <div className="flex flex-col items-center justify-center gap-1">
+          <p className="text-4xl text-white font-jakarta-bold">
+            Une idée, un projet,{" "}
+          </p>
+          <p className="text-4xl text-white font-jakarta-bold ">
+            un évènement ?
+          </p>
+          <h1 className="text-4xl text-white flex flex-row items-center gap-2 font-jakarta holographic-text tracking-tighter">
+            <SvgArrowLight className="w-10 h-10" />
+            Contactez-nous !
+          </h1>
+        </div>
+        {/* Contact Information */}
+        <div className="flex flex-col gap-2 text-white items-center">
+          <div className="flex items-center gap-3">
+            <Tel color="white" />
+            <span className="text-lg font-jakarta">07 82 45 68</span>
           </div>
+          <div className="flex items-center gap-3">
+            <ChatBuble color="white" />
+            <span className="text-lg font-jakarta">hello@say_yes.com</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Localisation color="white" />
+            <span className="text-lg font-jakarta">
+              40 Rue Sèvres - 75015 Paris
+            </span>
+          </div>
+        </div>
+        <div className="w-full h-full flex flex-col items-center gap-8 px-5">
+          <div className="flex flex-row h-5 gap-3">
+            <SvgBtnLinkedin className="w-8 h-8" />
+            <SvgBtnFacebook className="w-8 h-8" />
+            <SvgBtnInstagram className="w-8 h-8" />
+            <SvgBtnTiktok className="w-8 h-8" />
+            <SvgBtnYoutube className="w-8 h-8" />
+          </div>
+        </div>
+        <Card height="85%" borderClass="p-8 bg-black">
+          <BackgroundModalMobile className="absolute inset-0 w-full h-full z-0 rounded-[20px] object-cover" />
 
-          <form className="relative w-[45%] h-full flex flex-col gap-3 justify-center">
+          <form className="relative w-full h-full flex flex-col gap-6 justify-center text-center">
             <label className="block">
               <span className="text-sm text-white font-bold mb-2 block">
                 Nom et prénom*
@@ -113,10 +101,9 @@ export default function ModalContact({
               <input
                 type="text"
                 name="name"
-                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
+                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
                   boxShadow:
                     "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
                 }}
@@ -131,10 +118,9 @@ export default function ModalContact({
               <input
                 type="email"
                 name="email"
-                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
+                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
                   boxShadow:
                     "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
                 }}
@@ -149,10 +135,9 @@ export default function ModalContact({
               <input
                 type="tel"
                 name="mobile"
-                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
+                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
                   boxShadow:
                     "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
                 }}
@@ -167,10 +152,9 @@ export default function ModalContact({
               <input
                 type="text"
                 name="company"
-                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
+                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
                   boxShadow:
                     "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
                 }}
@@ -184,11 +168,10 @@ export default function ModalContact({
               </span>
               <textarea
                 name="message"
-                rows={3}
-                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
+                rows={4}
+                className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
                   boxShadow:
                     "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
                 }}
@@ -197,7 +180,7 @@ export default function ModalContact({
             </label>
 
             <div className="flex justify-between items-center mt-6">
-              <p className="flex items-center gap-2 text-sm text-gray-100">
+              <p className="flex items-center gap-2 text-sm text-gray-100 text-center">
                 *Champs obligatoires
               </p>
 
@@ -215,8 +198,8 @@ export default function ModalContact({
               </button>
             </div>
           </form>
-        </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }
