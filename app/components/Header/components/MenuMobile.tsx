@@ -1,77 +1,44 @@
-import type { SVGProps } from "react";
-const SvgMenuMobile = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 97 60"
-    fill="none"
-    className="w-full h-full"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <g filter="url(#filter0_di_3654_5623)">
-      <path
-        d="M60.624 0.152344H-0.000167847V60H75.123L60.624 0.152344Z"
-        fill="url(#paint0_linear_3654_5623)"
-      />
-    </g>
-    <foreignObject x={-5.38507} y={-5.54327} width={82.1041} height={71.524}>
-      <div
-        style={{
-          backdropFilter: "blur(7.59px)",
-          clipPath: "url(#bgblur_0_3654_5623_clip_path)",
-          height: "100%",
-          width: "100%",
-        }}
-      />
-    </foreignObject>
-    <g filter="url(#filter1_di_3654_5623)" data-figma-bg-blur-radius={15.1898}>
-      <path
-        d="M52.1224 9.64648H9.80566V50.7917H61.5293L52.1224 9.64648Z"
-        fill="url(#holographicGradient)"
-      />
-      <path
-        d="M61.3864 50.6778L52.0316 9.76041H9.91959V50.6778H61.3864Z"
-        stroke="white"
-        strokeOpacity={0.7}
-        strokeWidth={0.227846}
-        style={{
-          mixBlendMode: "overlay",
-        }}
-      />
-    </g>
-    <path d="M20 21H44V23H20V21Z" fill="#202020" />
-    <path d="M20 29H44V31H20V29Z" fill="#202020" />
-    <path d="M20 37H44V39H20V37Z" fill="#202020" />
-    <defs>
-      <clipPath
-        id="bgblur_0_3654_5623_clip_path"
-        transform="translate(5.38507 5.54327)"
-      >
-        <path d="M52.1224 9.64648H9.80566V50.7917H61.5293L52.1224 9.64648Z" />
-      </clipPath>
-      <linearGradient
-        id="paint0_linear_3654_5623"
-        x1={127.698}
-        y1={-17.3032}
-        x2={95.3189}
-        y2={105.592}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#626262" />
-        <stop offset={1} />
-      </linearGradient>
-      <linearGradient
-        id="paint1_linear_3654_5623"
-        x1={60.6226}
-        y1={34.5}
-        x2={11.9004}
-        y2={14.6388}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#DCC4FF" />
-        <stop offset={0.5} stopColor="#B0F5FF" />
-        <stop offset={1} stopColor="#E1FF8B" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
-export default SvgMenuMobile;
+import { useEffect } from "react";
+import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
+import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
+import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
+import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
+import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
+import "~/styles/tailwind.css";
+import Button from "~/components/Button";
+import { useNavigate } from "@remix-run/react";
+import BackgroundModalMobile from "~/components/ModalContact/assets/BackgroundModalMobile";
+import BackgroundMenuMobile from "../assets/BackgroundMenuMobile";
+
+interface MenuMobileProps {
+  isOpen: boolean;
+  close: () => void;
+}
+
+export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      className={`fixed inset-0 z-20 flex flex-col items-center w-full h-screen overflow-y-auto pt-20 px-4 bg-black/90
+        ${isOpen ? "block" : "hidden"}`}
+    >
+      {/* <BackgroundMenuMobile className="w-full h-full inset-0 absolute z-0" /> */}
+      <div className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10">
+        <div className="font-jakarta text-md">Communication visuelle*</div>
+
+        <Button label="Solutions" onClick={() => navigate("/solutions")} />
+        <Button label="Portfolio" onClick={() => navigate("/portfolio")} />
+        <div className="h-[3px] w-20 holographic-bg mb-6" />
+
+        <div className="flex flex-row h-5 gap-3">
+          <SvgBtnLinkedin className="w-8 h-8" />
+          <SvgBtnFacebook className="w-8 h-8" />
+          <SvgBtnInstagram className="w-8 h-8" />
+          <SvgBtnTiktok className="w-8 h-8" />
+          <SvgBtnYoutube className="w-8 h-8" />
+        </div>
+      </div>
+    </div>
+  );
+}

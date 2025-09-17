@@ -1,7 +1,7 @@
 import useFooterMotion from "~/utils/hooks/useFooterMotion";
 import Button from "../../Button";
 import { motion } from "framer-motion";
-import LogoSayYes from "~/components/Header/components/LogoSayYes";
+import LogoSayYes from "~/components/Header/assets/LogoSayYes";
 import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";

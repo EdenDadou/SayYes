@@ -8,7 +8,7 @@ import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import SvgBtnFacebook from "./components/BtnFacebook";
 import SvgBtnTiktok from "./components/BtnTiktok";
 import SayYesFooter from "./components/SayYes";
-import LogoSayYes from "~/components/Header/components/LogoSayYes";
+import LogoSayYes from "~/components/Header/assets/LogoSayYes";
 import FooterMobile from "./mobile/FooterMobile";
 import LogoSayYesHolo from "./components/LogoSayYesHolo";
 

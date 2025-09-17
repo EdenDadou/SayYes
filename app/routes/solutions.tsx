@@ -1,5 +1,4 @@
 import SolutionTitle from "~/components/Solutions/components/SolutionTitle";
-import "~/styles/tailwind.css";
 import Card from "~/components/Card";
 import { solutionsCards } from "~/components/Solutions/data";
 import { useViewport } from "~/utils/hooks/useViewport";
@@ -9,6 +8,7 @@ import Desktoplayout from "~/components/Layout/Desktop";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
 import Background from "~/assets/icons/Background";
 import MobileLayout from "~/components/Layout/Mobile";
+import "~/styles/tailwind.css";
 
 export default function Solutions() {
   const isMobile = useViewport();

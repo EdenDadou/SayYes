@@ -1,16 +1,26 @@
-import LogoSayYes from "~/components/Header/components/LogoSayYes";
+import LogoSayYes from "~/components/Header/assets/LogoSayYes";
 import { useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useNavigate } from "@remix-run/react";
 import Button from "~/components/Button";
-import ChatBuble from "./components/ChatBuble";
-import BurgerMenu from "~/components/Header/components/BurgerMenu";
+import ChatBuble from "../assets/ChatBuble";
+import BurgerMenu from "~/components/Header/assets/BurgerMenu";
+import Close from "~/assets/icons/Close";
+import AnimatedBurgerMenu from "../assets/AnimatedBurgerMenu";
 
 interface HeaderProps {
   setIsOpenModalContact: (value: boolean) => void;
+  setIsOpenMenu: (value: boolean) => void;
+  isOpenModalContact: boolean;
+  isOpenMenu: boolean;
 }
 
-const HeaderMobile = ({ setIsOpenModalContact }: HeaderProps) => {
+const HeaderMobile = ({
+  setIsOpenModalContact,
+  setIsOpenMenu,
+  isOpenModalContact,
+  isOpenMenu,
+}: HeaderProps) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -41,7 +51,21 @@ const HeaderMobile = ({ setIsOpenModalContact }: HeaderProps) => {
     >
       {/* Section gauche */}
       <div className="flex justify-start">
-        <Button leftIcon={<BurgerMenu color="black" />} type="mobile" />
+        <Button
+          leftIcon={
+            <AnimatedBurgerMenu
+              isOpen={isOpenMenu}
+              className="text-black hover:text-black -m-1"
+            />
+          }
+          type="mobile"
+          onClick={() => {
+            setIsOpenMenu(!isOpenMenu);
+            if (!isOpenMenu) {
+              setIsOpenModalContact(false); // Ferme la modal contact si on ouvre le menu
+            }
+          }}
+        />
       </div>
 
       {/* Logo centré */}
@@ -57,7 +81,10 @@ const HeaderMobile = ({ setIsOpenModalContact }: HeaderProps) => {
         <Button
           leftIcon={<ChatBuble />}
           type="mobile"
-          onClick={() => setIsOpenModalContact(true)}
+          onClick={() => {
+            setIsOpenModalContact(!isOpenModalContact);
+            setIsOpenMenu(false); // Ferme le menu si on ouvre la modal contact
+          }}
         />
       </div>
     </motion.div>

@@ -2,14 +2,14 @@ import { useNavigate } from "@remix-run/react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { useState } from "react";
 import Button from "../Button";
-import LogoSayYes from "~/components/Header/components/LogoSayYes";
+import LogoSayYes from "~/components/Header/assets/LogoSayYes";
 import { useViewport } from "~/utils/hooks/useViewport";
-import HeaderMobile from "./HeaderMobile";
-import ChatBuble from "./components/ChatBuble";
-import Flamme from "./components/Flamme";
-import Coeur from "./components/Coeur";
-import Smile from "./components/Smile";
-import Idea from "./components/Idea";
+import HeaderMobile from "./components/HeaderMobile";
+import ChatBuble from "./assets/ChatBuble";
+import Flamme from "./assets/Flamme";
+import Coeur from "./assets/Coeur";
+import Smile from "./assets/Smile";
+import Idea from "./assets/Idea";
 
 interface IHeaderProps {
   setIsOpenModalContact: (value: boolean) => void;
@@ -34,7 +34,7 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
   });
 
   return isMobile ? (
-    <HeaderMobile />
+    <HeaderMobile setIsOpenModalContact={setIsOpenModalContact} />
   ) : (
     <motion.div
       className="header-custom border-custom flex flex-row justify-between items-center mx-24 h-[74px]"

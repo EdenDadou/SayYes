@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import SvgArrowLight from "~/assets/icons/ArrowLight";
 import Card from "../Card";
-import BackgroundModal from "./components/BackgroundModal";
+import BackgroundModal from "./assets/BackgroundModal";
 import SvgBtnInstagram from "../Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "../Footer/components/BtnLinkedin";
 import SvgBtnFacebook from "../Footer/components/BtnFacebook";
 import SvgBtnTiktok from "../Footer/components/BtnTiktok";
 import SvgBtnYoutube from "../Footer/components/BtnYoutube";
 import ArrowFull from "~/assets/icons/ArrowFull";
-import ChatBuble from "../Header/components/ChatBuble";
+import ChatBuble from "../Header/assets/ChatBuble";
 import Tel from "~/assets/icons/Tel";
 import Localisation from "~/assets/icons/Localisation";
 import Close from "~/assets/icons/Close";

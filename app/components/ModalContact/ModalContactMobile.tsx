@@ -6,12 +6,13 @@ import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
 import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
-import ChatBuble from "../Header/components/ChatBuble";
+import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
 import Tel from "~/assets/icons/Tel";
 import ArrowFull from "~/assets/icons/ArrowFull";
 import Card from "../Card";
-import BackgroundModalMobile from "./components/BackgroundModalMobile";
+import BackgroundModalMobile from "./assets/BackgroundModalMobile";
+import "~/styles/tailwind.css";
 
 interface ModalModalContactProps {
   isOpen: boolean;
@@ -22,37 +23,25 @@ export default function ModalContactMobile({
   isOpen,
   close,
 }: ModalModalContactProps) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    // Cleanup function pour restaurer le scroll quand le component se démonte
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
-
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center w-full h-screen overflow-y-auto pt-20 px-4
+      className={`fixed inset-0 z-20 flex flex-col items-center w-full h-screen overflow-y-auto pt-20
     ${isOpen ? "block" : "hidden"}`}
       style={{
         background: "rgba(0, 0, 0, 0.30)",
         backdropFilter: "blur(25px)",
       }}
     >
-      <button
-        className="absolute top-4 right-4 text-white cursor-pointer z-30 hover:opacity-70"
-        onClick={close}
-      >
-        <Close />
-      </button>
-      <div className="flex flex-col items-center justify-start gap-8 z-20 pb-8">
-        <div className="h-[3px] w-20 holographic-bg" />
+      <div className="flex flex-col items-center justify-start gap-10 z-20 pb-8 pt-20 relative w-full px-4">
+        <button
+          className="absolute top-10 right-8 text-white cursor-pointer z-30 hover:opacity-70"
+          onClick={close}
+        >
+          <Close />
+        </button>
+
         <div className="flex flex-col items-center justify-center gap-1">
+          <div className="h-[3px] w-20 holographic-bg mb-6" />
           <p className="text-4xl text-white font-jakarta-bold">
             Une idée, un projet,{" "}
           </p>
@@ -179,14 +168,14 @@ export default function ModalContactMobile({
               ></textarea>
             </label>
 
-            <div className="flex justify-between items-center mt-6">
+            <div className="flex flex-col gap-4 justify-between items-center mt-6">
               <p className="flex items-center gap-2 text-sm text-gray-100 text-center">
                 *Champs obligatoires
               </p>
 
               <button
                 type="submit"
-                className="text-white px-6 py-3 font-jakarta flex items-center gap-3 text-lg rounded-full hover:scale-105 transition-all"
+                className="text-white px-6 py-3 font-jakarta flex items-center gap-2 text-md rounded-full"
                 style={{
                   border: "0.3px solid rgba(255, 255, 255, 0.30)",
                   boxShadow:
