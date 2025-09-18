@@ -7,6 +7,15 @@
   }
 }
 
+@keyframes moveGradientVertical {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
 .holographic-effect {
   animation: moveGradient 5s ease infinite;
   background-size: 400% 400%;
@@ -86,6 +95,29 @@
   );
   background-size: 500% 500%;
   animation: moveGradient 4s linear infinite;
+  box-shadow:
+    0 0 10px #dcc4ff,
+    0 0 20px #b0f5ff,
+    0 0 30px #e1ff8b;
+  filter: blur(0.3px);
+}
+
+.holographic-bg-vertical {
+  background: linear-gradient(
+    0deg,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef
+  );
+  background-size: 500% 500%;
+  animation: moveGradientVertical 4s linear infinite;
   box-shadow:
     0 0 10px #dcc4ff,
     0 0 20px #b0f5ff,

@@ -42,7 +42,7 @@ export default function ContentPortfolio({
       <div className="size-full absolute top-0 left-0 bottom-0">
         <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
           <div className="flex flex-row items-center justify-between w-full p-4 ">
-            <div className="flex flex-row justify-center items-center ">
+            <div className="flex flex-row justify-center items-center">
               <div className="h-[3px] w-14 holographic-bg rotate-90" />
               <div className="flex flex-col items-start justify-center">
                 <span className="text-white text-3xl font-jakarta-bold">
