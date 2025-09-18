@@ -30,7 +30,6 @@ export default function Page404() {
           }}
         />
 
-        {/* Container for image overlays - matches the actual visible image area */}
         <div
           className="absolute z-10"
           style={{
