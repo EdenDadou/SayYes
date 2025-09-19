@@ -42,7 +42,10 @@ export default function Bento({ bento }: { bento: BentoItem }) {
           >
             <img
               src={image}
-              alt={`Image ${imageIndex + 1}`}
+              alt={
+                image.split("/").pop()?.split(".")[0] ||
+                `Image ${imageIndex + 1}`
+              }
               className="w-full h-full object-cover object-center"
             />
           </div>

@@ -24,7 +24,7 @@ export default function Desktoplayout({
   const [isOpenModalContact, setIsOpenModalContact] = useState(false);
 
   return (
-    <main className="w-full h-fit relative">
+    <main className="w-full h-fit relative flex flex-col">
       <ModalContact
         isOpen={isOpenModalContact}
         close={() => setIsOpenModalContact(false)}

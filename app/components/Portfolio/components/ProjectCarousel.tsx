@@ -65,7 +65,7 @@ export default function ProjectCarousel({
   };
 
   return (
-    <div className={`relative w-full py-16 gap-12 ${className}`}>
+    <div className={`relative w-full pt-16 gap-12 z-10 ${className}`}>
       {/* Title Section */}
       <h2 className="flex flex-row items-center gap-4 text-3xl font-bold text-white font-jakarta mb-4 px-32">
         <Star className="w-8 h-8 text-white" /> Nos Love Stories

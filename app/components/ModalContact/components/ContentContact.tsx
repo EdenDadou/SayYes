@@ -2,15 +2,10 @@ import ArrowFull from "~/assets/icons/ArrowFull";
 import Card from "~/components/Card";
 import BackgroundModal from "../assets/BackgroundModal";
 import Close from "~/assets/icons/Close";
-import SvgArrowLight from "~/assets/icons/ArrowLight";
+import ArrowLight from "~/assets/icons/ArrowLight";
 import Tel from "~/assets/icons/Tel";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
-import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
-import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
-import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
-import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
-import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import "~/styles/tailwind.css";
 
 interface IContentContactProps {
@@ -48,7 +43,7 @@ export default function ContentContact({
                 un évènement ?
               </p>
               <h1 className="text-5xl text-white flex flex-row items-center gap-4 font-jakarta-bold leading-tight holographic-text mt-2">
-                <SvgArrowLight className="w-12 h-12" />
+                <ArrowLight className="w-12 h-12" />
                 Contactez-nous !
               </h1>
             </div>

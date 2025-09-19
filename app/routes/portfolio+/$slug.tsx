@@ -18,6 +18,7 @@ import Card from "~/components/Card";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import ProjectCarousel from "~/components/Portfolio/components/ProjectCarousel";
 import "~/styles/tailwind.css";
+import BackgroundProject3 from "~/components/PortfolioProject/BackgroundProject3";
 
 // Loader pour récupérer le portfolio par slug
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -47,9 +48,9 @@ export default function PortfolioSlug() {
         fill={portfolio.couleur}
         className="absolute top-0 left-0 right-0 w-screen object-cover"
       />
-      <main className="w-screen h-fit relative">
+      <main className="w-screen h-fit relative pb-20">
         {/* Main Content */}
-        <div className="relative z-10 py-12 flex flex-col ">
+        <div className="relative z-10 pt-12 flex flex-col ">
           {/* Hero Section */}
           <section className="py-12 md:px-20 flex flex-col gap-12">
             {/* Title and Kicker */}
@@ -164,15 +165,18 @@ export default function PortfolioSlug() {
               </div>
             ) : null}
           </section>
-          <section className="mb-16 relative px-32">
+          <section className="mb-16 relative px-32 z-10">
             <div className="space-y-6">
               {portfolio.bento[1] && <Bento bento={portfolio.bento[1]} />}
             </div>
           </section>
-
-          <ProjectCarousel portfolios={allPortfolios} />
         </div>
+        <ProjectCarousel portfolios={allPortfolios} />
       </main>
+      <BackgroundProject3
+        fill={portfolio.couleur}
+        className="absolute bottom-[620px] left-0 right-0 w-screen h-auto z-0"
+      />
     </Desktoplayout>
   );
 }

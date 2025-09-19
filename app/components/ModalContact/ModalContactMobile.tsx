@@ -1,11 +1,5 @@
-import { useEffect } from "react";
-import SvgArrowLight from "~/assets/icons/ArrowLight";
+import ArrowLight from "~/assets/icons/ArrowLight";
 import Close from "~/assets/icons/Close";
-import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
-import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
-import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
-import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
-import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
 import Tel from "~/assets/icons/Tel";
@@ -49,7 +43,7 @@ export default function ModalContactMobile({
             un évènement ?
           </p>
           <h1 className="text-4xl text-white flex flex-row items-center gap-2 font-jakarta holographic-text tracking-tighter">
-            <SvgArrowLight className="w-10 h-10" />
+            <ArrowLight className="w-10 h-10" />
             Contactez-nous !
           </h1>
         </div>

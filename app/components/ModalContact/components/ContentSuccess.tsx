@@ -1,7 +1,7 @@
 import Close from "~/assets/icons/Close";
 import Card from "../../Card";
 import BackgroundModal from "../assets/BackgroundModal";
-import SvgArrowLight from "~/assets/icons/ArrowLight";
+import ArrowLight from "~/assets/icons/ArrowLight";
 import "~/styles/tailwind.css";
 import Coche from "~/assets/icons/Coche";
 import ArrowFull from "~/assets/icons/ArrowFull";
@@ -59,7 +59,7 @@ export default function ContentSuccess({
                 </h1>
               </div>
               <p className="flex flex-row items-center gap-3 text-2xl">
-                <SvgArrowLight className="w-10 h-10" />
+                <ArrowLight className="w-10 h-10" />
                 Bonne journée et à très vite.
               </p>
             </div>
