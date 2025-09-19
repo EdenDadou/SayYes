@@ -56,19 +56,39 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
 
   // Gestion de l'upload de fichiers multiples pour les images bento (version édition)
   const handleBentoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("handleBentoFilesChange EDITION appelé", e.target.files);
     const files = e.target.files;
     if (files) {
+      const validFiles: File[] = [];
+      const newImageNames: string[] = [];
+
       Array.from(files).forEach((file) => {
         // Vérifier le type de fichier
         if (file.type.startsWith("image/")) {
-          // Stocker le fichier réel pour l'envoi
-          setBentoFiles((prev) => {
-            const newFiles = new Map(prev);
-            newFiles.set(file.name, file);
-            return newFiles;
-          });
+          validFiles.push(file);
+          newImageNames.push(`pending_${file.name}`);
+        }
+      });
 
-          // Créer un aperçu de l'image
+      // Mettre à jour les fichiers et les noms d'images de manière synchrone
+      if (validFiles.length > 0) {
+        // Stocker les fichiers réels pour l'envoi avec Map
+        setBentoFiles((prev) => {
+          const newFiles = new Map(prev);
+          validFiles.forEach((file) => {
+            newFiles.set(file.name, file);
+          });
+          return newFiles;
+        });
+
+        // Ajouter les placeholders à la ligne bento actuelle immédiatement
+        setCurrentBentoLine((prev) => ({
+          ...prev,
+          listImage: [...prev.listImage, ...newImageNames],
+        }));
+
+        // Créer les aperçus de manière asynchrone (pour l'affichage uniquement)
+        validFiles.forEach((file) => {
           const reader = new FileReader();
           reader.onload = (event) => {
             const imageUrl = event.target?.result as string;
@@ -76,16 +96,11 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
               ...prev,
               { url: imageUrl, name: file.name },
             ]);
-
-            // Ajouter un placeholder à la ligne bento actuelle
-            setCurrentBentoLine((prev) => ({
-              ...prev,
-              listImage: [...prev.listImage, `pending_${file.name}`],
-            }));
           };
           reader.readAsDataURL(file);
-        }
-      });
+        });
+      }
+
       // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
       e.target.value = "";
     }

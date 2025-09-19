@@ -26,6 +26,8 @@ interface FormulaireAdminProps {
   onDelete?: () => void;
   showDeleteButton?: boolean;
   portfolioSlug?: string;
+  resetTrigger?: number; // Nouveau prop pour déclencher le reset
+  fetcher?: any; // Fetcher pour la soumission sans rechargement
 }
 
 export default function FormulaireAdmin({
@@ -37,6 +39,8 @@ export default function FormulaireAdmin({
   onDelete,
   showDeleteButton = false,
   portfolioSlug,
+  resetTrigger,
+  fetcher,
 }: FormulaireAdminProps) {
   // États pour le formulaire
   const [formData, setFormData] = useState<PortfolioFormData>({
@@ -55,7 +59,6 @@ export default function FormulaireAdmin({
       auteur: initialData?.temoignage?.auteur || "",
       contenu: initialData?.temoignage?.contenu || "",
       poste: initialData?.temoignage?.poste || "",
-      entreprise: initialData?.temoignage?.entreprise || "",
     },
     bento: initialData?.bento || [],
   });
@@ -68,6 +71,11 @@ export default function FormulaireAdmin({
     format: "1/3 - 2/3",
     listImage: [],
   });
+
+  // Debug: Log l'état de currentBentoLine à chaque changement
+  useEffect(() => {
+    console.log("currentBentoLine mis à jour:", currentBentoLine);
+  }, [currentBentoLine]);
 
   // États pour la gestion des uploads
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -82,6 +90,44 @@ export default function FormulaireAdmin({
   // Options pour les formats de bento
   const bentoFormats = BENTO_FORMATS;
 
+  // Fonction pour réinitialiser le formulaire
+  const resetForm = () => {
+    setFormData({
+      titre: "",
+      categories: [],
+      slug: "",
+      photoCouverture: "",
+      photoMain: "",
+      description: "",
+      kicker: "",
+      livrable: [],
+      sousTitre: "",
+      topTitle: "",
+      couleur: "",
+      temoignage: {
+        auteur: "",
+        contenu: "",
+        poste: "",
+      },
+      bento: [],
+    });
+    setCurrentLivrable("");
+    setCurrentBento({ lines: [] });
+    setCurrentBentoLine({ format: "1/3 - 2/3", listImage: [] });
+    setPreviewImage(null);
+    setPhotoMainPreview(null);
+    setPhotoMainFile(null);
+    setBentoPreviewImages([]);
+    setBentoFiles(new Map());
+  };
+
+  // Écouter le trigger de reset depuis le parent
+  useEffect(() => {
+    if (resetTrigger && resetTrigger > 0) {
+      resetForm();
+    }
+  }, [resetTrigger]);
+
   // Mise à jour du formulaire quand les données initiales changent (mode édition)
   useEffect(() => {
     if (initialData && isEditing && !isDataLoaded) {
@@ -94,6 +140,7 @@ export default function FormulaireAdmin({
   }, [initialData, isEditing, isDataLoaded]);
 
   // Utiliser les handlers centralisés selon le mode
+  console.log("Mode formulaire:", isEditing ? "ÉDITION" : "CRÉATION");
   const handlers = isEditing
     ? usePortfolioEditFormHandlers({
         formData,
@@ -124,7 +171,7 @@ export default function FormulaireAdmin({
         setPhotoMainPreview,
         setPhotoMainFile,
         setBentoPreviewImages,
-        setBentoFiles: setBentoFiles as any, // Cast temporaire pour la compatibilité
+        setBentoFiles,
       });
 
   const {
@@ -191,16 +238,14 @@ export default function FormulaireAdmin({
       submitFormData.set("photoCouvertureUrl", formData.photoCouverture);
       submitFormData.set("photoMainUrl", formData.photoMain);
     } else {
-      // Mode création: utiliser Array pour les fichiers bento
+      // Mode création: utiliser Map pour les fichiers bento
       let globalImageIndex = 0;
       formData.bento.forEach((bento, bentoIndex) => {
         bento.lines.forEach((line, lineIndex) => {
           line.listImage.forEach((image, imageIndex) => {
             if (image.startsWith("pending_")) {
               const fileName = image.replace("pending_", "");
-              const file = Array.from(bentoFiles.values()).find(
-                (f) => f.name === fileName
-              );
+              const file = bentoFiles.get(fileName);
               if (file) {
                 submitFormData.append(
                   `bentoFile_${bentoIndex}_${globalImageIndex}`,
@@ -214,61 +259,22 @@ export default function FormulaireAdmin({
       });
     }
 
+    // Si fetcher est fourni, utiliser fetcher.submit
+    if (fetcher) {
+      e.preventDefault();
+      fetcher.submit(e.currentTarget, { method: "POST" });
+      return;
+    }
+
     // Appeler la fonction onSubmit si fournie, sinon utiliser la soumission par défaut
     if (onSubmit) {
       await onSubmit(submitFormData);
     } else {
-      // Soumission par défaut
-      try {
-        const response = await fetch("/admin/manage-portfolio", {
-          method: "POST",
-          body: submitFormData,
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          // Réinitialiser le formulaire
-          resetForm();
-          // Recharger la page pour voir le nouveau portfolio
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error("Erreur lors de la soumission:", error);
-      }
+      // Soumission par défaut : laisser Remix gérer la soumission
+      // Le formulaire HTML se soumettra automatiquement à l'action
+      const form = e.currentTarget;
+      form.submit();
     }
-  };
-
-  // Fonction pour réinitialiser le formulaire
-  const resetForm = () => {
-    setFormData({
-      titre: "",
-      categories: [],
-      slug: "",
-      photoCouverture: "",
-      photoMain: "",
-      description: "",
-      kicker: "",
-      livrable: [],
-      sousTitre: "",
-      topTitle: "",
-      couleur: "",
-      temoignage: {
-        auteur: "",
-        contenu: "",
-        poste: "",
-        entreprise: "",
-      },
-      bento: [],
-    });
-    setCurrentLivrable("");
-    setCurrentBento({ lines: [] });
-    setCurrentBentoLine({ format: "1/3 - 2/3", listImage: [] });
-    setPreviewImage(null);
-    setPhotoMainPreview(null);
-    setPhotoMainFile(null);
-    setBentoPreviewImages([]);
-    setBentoFiles(new Map());
   };
 
   return (
@@ -339,7 +345,7 @@ export default function FormulaireAdmin({
               id="topTitle"
               name="topTitle"
               label="Top Title"
-              placeholder="Titre principal du projet"
+              placeholder="Top title"
               value={formData.topTitle}
               onChange={(value) =>
                 handleInputChange({
@@ -639,7 +645,7 @@ export default function FormulaireAdmin({
               id="sousTitre"
               name="sousTitre"
               label="Sous-titre"
-              placeholder="Sous-titre du projet"
+              placeholder="Sous-titre  ( juste avant le bento )"
               value={formData.sousTitre}
               onChange={(value) =>
                 handleInputChange({
@@ -676,19 +682,6 @@ export default function FormulaireAdmin({
             value={formData.temoignage.poste || ""}
             onChange={(value) =>
               handleTemoignageChange("poste", value as string)
-            }
-          />
-
-          {/* Entreprise */}
-          <InputAdmin
-            type="text"
-            id="temoignageEntreprise"
-            name="temoignageEntreprise"
-            label="Entreprise"
-            placeholder="Entreprise de l'auteur"
-            value={formData.temoignage.entreprise || ""}
-            onChange={(value) =>
-              handleTemoignageChange("entreprise", value as string)
             }
           />
 
@@ -804,15 +797,70 @@ export default function FormulaireAdmin({
                     label="Images et GIFs"
                     accept="image/*,.gif"
                     onChange={(value) => {
+                      console.log("InputAdmin onChange appelé avec:", value);
+                      console.log(
+                        "Type de value:",
+                        typeof value,
+                        Array.isArray(value)
+                      );
+                      if (value) {
+                        console.log("Contenu de value:", value);
+                        if (Array.isArray(value)) {
+                          console.log("Nombre de fichiers:", value.length);
+                          value.forEach((file, index) => {
+                            if (file instanceof File) {
+                              console.log(
+                                `Fichier ${index}:`,
+                                file instanceof File,
+                                file.name,
+                                file.type
+                              );
+                            } else {
+                              console.log(
+                                `Fichier ${index}:`,
+                                typeof file,
+                                file
+                              );
+                            }
+                          });
+                        }
+                      }
+
                       if (
                         Array.isArray(value) &&
                         value.every((v) => v instanceof File)
                       ) {
-                        // Créer un événement simulé pour le handler existant
+                        console.log("Création de la FileList simulée...");
+                        // Créer une FileList simulée à partir de l'array
+                        const fileList = {
+                          length: value.length,
+                          item: (index: number) => value[index] || null,
+                          [Symbol.iterator]: function* () {
+                            for (let i = 0; i < value.length; i++) {
+                              yield value[i];
+                            }
+                          },
+                        } as FileList;
+
+                        // Ajouter les fichiers comme propriétés indexées
+                        value.forEach((file, index) => {
+                          (fileList as any)[index] = file;
+                        });
+
+                        console.log("FileList créée:", fileList);
+                        // Créer un événement simulé avec une vraie FileList
                         const fakeEvent = {
-                          target: { files: value },
+                          target: { files: fileList },
                         } as unknown as React.ChangeEvent<HTMLInputElement>;
+                        console.log(
+                          "Appel de handleBentoFilesChange avec:",
+                          fakeEvent
+                        );
                         handleBentoFilesChange(fakeEvent);
+                      } else {
+                        console.log(
+                          "Condition non remplie pour handleBentoFilesChange"
+                        );
                       }
                     }}
                     previews={bentoPreviewImages}
@@ -854,12 +902,19 @@ export default function FormulaireAdmin({
 
                   <button
                     type="button"
-                    onClick={addBentoLine}
+                    onClick={() => {
+                      console.log(
+                        "Bouton cliqué - currentBentoLine.listImage:",
+                        currentBentoLine.listImage
+                      );
+                      addBentoLine();
+                    }}
                     disabled={currentBentoLine.listImage.length === 0}
                     className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg font-semibold transition-colors duration-200"
                     style={{ fontFamily: "Jakarta Semi Bold" }}
                   >
-                    Ajouter cette ligne
+                    Ajouter cette ligne ({currentBentoLine.listImage.length}{" "}
+                    images)
                   </button>
                 </div>
               </div>

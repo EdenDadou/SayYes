@@ -3,13 +3,14 @@ import {
   type ActionFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { useLoaderData, Link, useNavigate } from "@remix-run/react";
-import { useState } from "react";
+import { useLoaderData, Link, useNavigate, useFetcher } from "@remix-run/react";
+import { useState, useEffect } from "react";
 import { requireAuth, getSessionData } from "~/server/auth.server";
 import {
   getPortfolioBySlug,
   updatePortfolioBySlug,
   deletePortfolioBySlug,
+  isSlugUnique,
   type PortfolioData,
   type PortfolioWithMedia,
 } from "~/server/portfolio.server";
@@ -19,7 +20,7 @@ import {
   processPhotoCouverture,
   processPhotoMain,
   processBentoFiles,
-  validatePortfolioData,
+  validatePortfolioDataAsync,
   createJsonResponse,
   handleError,
 } from "~/utils/admin/manage-portfolio";
@@ -77,8 +78,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
     // Extraire les données du portfolio
     const portfolioData = extractPortfolioData(formData);
 
-    // Valider les données
-    const errors = validatePortfolioData(portfolioData);
+    // Valider les données (incluant la vérification d'unicité du slug, en excluant le portfolio actuel)
+    const errors = await validatePortfolioDataAsync(
+      portfolioData,
+      isSlugUnique,
+      portfolio.id
+    );
     if (errors.length > 0) {
       return createJsonResponse(false, errors.join(", "), undefined, 400);
     }
@@ -86,17 +91,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
     // Traiter les fichiers uploadés
     const photoCouverture = await processPhotoCouverture(
       formData,
-      Number(portfolio.id),
+      portfolio.id,
       portfolio.photoCouverture
     );
     const photoMain = await processPhotoMain(
       formData,
-      Number(portfolio.id),
+      portfolio.id,
       portfolio.photoMain
     );
     const updatedBento = await processBentoFiles(
       formData,
-      Number(portfolio.id),
+      portfolio.id,
       portfolioData.bento
     );
 
@@ -117,6 +122,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function EditPortfolio() {
   const { sessionData, portfolio } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const fetcher = useFetcher<typeof action>();
 
   const [toast, setToast] = useState<{
     show: boolean;
@@ -124,55 +130,43 @@ export default function EditPortfolio() {
     type: "success" | "error";
   }>({ show: false, message: "", type: "success" });
 
-  // Fonction pour afficher le toast
-  const showToast = (message: string, type: "success" | "error") => {
-    setToast({ show: true, message, type });
-    // Masquer le toast après 5 secondes
-    setTimeout(() => {
-      setToast({ show: false, message: "", type: "success" });
-    }, 5000);
-  };
-
-  // Fonction de soumission personnalisée
-  const handleSubmit = async (formData: FormData) => {
-    // Scroll vers le haut
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-    // Soumettre manuellement avec fetch
-    try {
-      const response = await fetch(window.location.pathname, {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      // Vérification plus robuste du succès
-      const isSuccess =
-        response.ok &&
-        (result.success === true ||
-          result.success === "true" ||
-          response.status === 200);
-
-      if (isSuccess) {
-        showToast("Portfolio mis à jour avec succès!", "success");
+  // Afficher le toast quand fetcher.data change après soumission
+  useEffect(() => {
+    if (fetcher.data) {
+      if (fetcher.data.success) {
+        setToast({
+          show: true,
+          message: fetcher.data.message || "Portfolio mis à jour avec succès!",
+          type: "success",
+        });
 
         // Recharger la page après un délai pour voir les changements
         setTimeout(() => {
           window.location.reload();
         }, 1500);
       } else {
-        console.error("❌ Erreur détectée:");
-        console.error("  - response.ok:", response.ok);
-        console.error("  - response.status:", response.status);
-        console.error("  - result.success:", result.success);
-        console.error("  - result:", result);
-        showToast(result.message || "Erreur lors de la mise à jour", "error");
+        setToast({
+          show: true,
+          message:
+            fetcher.data.message ||
+            fetcher.data.error ||
+            "Une erreur est survenue",
+          type: "error",
+        });
       }
-    } catch (error) {
-      console.error("❌ Erreur lors de la soumission:", error);
-      showToast("Erreur lors de la mise à jour du portfolio", "error");
+
+      // Masquer le toast après 5 secondes
+      setTimeout(() => {
+        setToast({ show: false, message: "", type: "success" });
+      }, 5000);
     }
+  }, [fetcher.data]);
+
+  // Fonction de soumission utilisant fetcher
+  const handleSubmit = async (formData: FormData) => {
+    // Scroll vers le haut
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    fetcher.submit(formData, { method: "POST" });
   };
 
   // Fonction pour supprimer le portfolio
@@ -264,11 +258,17 @@ export default function EditPortfolio() {
         <FormulaireAdmin
           onSubmit={handleSubmit}
           initialData={portfolio as any}
-          submitButtonText="Mettre à jour"
+          submitButtonText={
+            fetcher.state === "submitting"
+              ? "Mise à jour en cours..."
+              : "Mettre à jour"
+          }
           isEditing={true}
           onDelete={handleDelete}
           showDeleteButton={true}
           portfolioSlug={portfolio.slug}
+          fetcher={fetcher}
+          actionData={fetcher.data}
         />
       </div>
     </div>

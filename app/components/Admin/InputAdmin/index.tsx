@@ -110,7 +110,7 @@ export default function InputAdmin({
   // Classes CSS communes
   const baseInputClasses = `
     w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg 
-    text-white placeholder-gray-400 
+    text-white placeholder-gray-100 
     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent 
     transition-all duration-200
     ${disabled ? "opacity-50 cursor-not-allowed" : ""}
@@ -151,10 +151,29 @@ export default function InputAdmin({
     const files = e.target.files;
     if (!files) return;
 
-    if (multiple) {
+    console.log(
+      "InputAdmin handleFileChange appelé avec:",
+      files.length,
+      "fichiers"
+    );
+    console.log(
+      "Type:",
+      type,
+      "Multiple prop:",
+      multiple,
+      "Should be multiple:",
+      type === "file-multiple"
+    );
+
+    // Utiliser le type pour déterminer si c'est multiple, pas la prop
+    const isMultiple = type === "file-multiple" || multiple;
+
+    if (isMultiple) {
       const fileArray = Array.from(files);
+      console.log("Envoi de fileArray:", fileArray);
       onChange?.(fileArray);
     } else {
+      console.log("Envoi d'un seul fichier:", files[0]);
       onChange?.(files[0]);
     }
   };

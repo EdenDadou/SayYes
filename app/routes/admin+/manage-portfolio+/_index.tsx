@@ -3,12 +3,19 @@ import {
   type ActionFunctionArgs,
   json,
 } from "@remix-run/node";
-import { useLoaderData, useActionData, Link } from "@remix-run/react";
+import {
+  useLoaderData,
+  useActionData,
+  Link,
+  useFetcher,
+} from "@remix-run/react";
+import { useState, useEffect } from "react";
 import { requireAuth, getSessionData } from "~/server/auth.server";
 import {
   createPortfolio,
   getAllPortfolios,
   updatePortfolio,
+  isSlugUnique,
 } from "~/server/portfolio.server";
 import {
   parseFormData,
@@ -16,7 +23,7 @@ import {
   processPhotoCouverture,
   processPhotoMain,
   processBentoFiles,
-  validatePortfolioData,
+  validatePortfolioDataAsync,
   createJsonResponse,
   handleError,
 } from "~/utils/admin/manage-portfolio";
@@ -52,8 +59,11 @@ export async function action({ request }: ActionFunctionArgs) {
     // Extraire les données du portfolio
     const portfolioData = extractPortfolioData(formData);
 
-    // Valider les données
-    const errors = validatePortfolioData(portfolioData);
+    // Valider les données (incluant la vérification d'unicité du slug)
+    const errors = await validatePortfolioDataAsync(
+      portfolioData,
+      isSlugUnique
+    );
     if (errors.length > 0) {
       return createJsonResponse(false, errors.join(", "), undefined, 400);
     }
@@ -62,14 +72,11 @@ export async function action({ request }: ActionFunctionArgs) {
     const portfolioId = await createPortfolio(portfolioData);
 
     // Traiter les fichiers uploadés
-    const photoCouverture = await processPhotoCouverture(
-      formData,
-      Number(portfolioId)
-    );
-    const photoMain = await processPhotoMain(formData, Number(portfolioId));
+    const photoCouverture = await processPhotoCouverture(formData, portfolioId);
+    const photoMain = await processPhotoMain(formData, portfolioId);
     const updatedBento = await processBentoFiles(
       formData,
-      Number(portfolioId),
+      portfolioId,
       portfolioData.bento
     );
 
@@ -90,30 +97,67 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ManagePortfolio() {
   const { sessionData, portfolios } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof action>();
 
-  // Fonction de soumission personnalisée pour gérer les fichiers bento
-  const handleSubmit = async (submitFormData: FormData) => {
-    try {
-      const response = await fetch("/admin/manage-portfolio", {
-        method: "POST",
-        body: submitFormData,
-      });
+  const [toast, setToast] = useState<{
+    show: boolean;
+    message: string;
+    type: "success" | "error";
+  }>({ show: false, message: "", type: "success" });
 
-      const result = await response.json();
+  const [resetTrigger, setResetTrigger] = useState(0);
 
-      if (result.success) {
-        // Recharger la page pour voir le nouveau portfolio
-        window.location.reload();
+  // Afficher le toast quand fetcher.data change après soumission
+  useEffect(() => {
+    if (fetcher.data) {
+      if (fetcher.data.success) {
+        setToast({
+          show: true,
+          message: fetcher.data.message || "Portfolio créé avec succès!",
+          type: "success",
+        });
+        // Déclencher le reset du formulaire
+        setResetTrigger((prev) => prev + 1);
+
+        // Recharger la page après un délai pour voir le nouveau portfolio
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        setToast({
+          show: true,
+          message:
+            fetcher.data.message ||
+            fetcher.data.error ||
+            "Une erreur est survenue",
+          type: "error",
+        });
       }
-    } catch (error) {
-      console.error("Erreur lors de la soumission:", error);
+
+      // Masquer le toast après 5 secondes
+      setTimeout(() => {
+        setToast({ show: false, message: "", type: "success" });
+      }, 5000);
     }
-  };
+  }, [fetcher.data]);
 
   return (
     <div className="min-h-screen bg-black p-8">
       <div className="max-w-4xl mx-auto">
+        {/* Toast de notification */}
+        {toast.show && (
+          <div
+            className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 ${
+              toast.type === "success"
+                ? "bg-green-900/90 border border-green-700 text-green-300"
+                : "bg-red-900/90 border border-red-700 text-red-300"
+            }`}
+            style={{ fontFamily: "Jakarta" }}
+          >
+            {toast.message}
+          </div>
+        )}
+
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
           <div>
@@ -135,9 +179,14 @@ export default function ManagePortfolio() {
 
         {/* Formulaire principal */}
         <FormulaireAdmin
-          onSubmit={handleSubmit}
-          actionData={actionData}
-          submitButtonText="Créer le Projet"
+          actionData={fetcher.data}
+          submitButtonText={
+            fetcher.state === "submitting"
+              ? "Création en cours..."
+              : "Créer le Projet"
+          }
+          resetTrigger={resetTrigger}
+          fetcher={fetcher}
         />
       </div>
 

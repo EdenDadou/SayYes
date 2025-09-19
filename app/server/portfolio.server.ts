@@ -63,6 +63,25 @@ export interface PortfolioWithMedia {
   }>;
 }
 
+// Vérifier si un slug existe déjà
+export async function isSlugUnique(
+  slug: string,
+  excludeId?: string
+): Promise<boolean> {
+  const existingPortfolio = await prisma.portfolio.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+
+  // Si aucun portfolio trouvé, le slug est unique
+  if (!existingPortfolio) return true;
+
+  // Si on exclut un ID (pour les mises à jour), vérifier que ce n'est pas le même portfolio
+  if (excludeId && existingPortfolio.id === excludeId) return true;
+
+  return false;
+}
+
 // Créer un nouveau portfolio
 export async function createPortfolio(data: PortfolioData): Promise<string> {
   const portfolio = await prisma.portfolio.create({

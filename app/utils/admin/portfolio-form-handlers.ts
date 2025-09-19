@@ -15,7 +15,6 @@ export interface PortfolioFormData {
     auteur: string;
     contenu: string;
     poste?: string;
-    entreprise?: string;
   };
   bento: BentoItem[];
 }
@@ -32,13 +31,11 @@ export interface BentoLine {
 // Options pour les formats de bento (répliqué pour éviter l'import de modules serveur)
 export const BENTO_FORMATS = [
   "1/3 - 2/3",
+  "2/3 - 1/3",
   "3 carrés",
   "banner",
   "2 carré",
   "full",
-  "2/3 - 1/3",
-  "1/2 - 1/2",
-  "1/1",
 ] as const;
 
 // Fonction utilitaire pour parser les champs JSON (client-safe)
@@ -72,7 +69,6 @@ export function initializeFormData(portfolio: any): PortfolioFormData {
       auteur: "",
       contenu: "",
       poste: "",
-      entreprise: "",
     }),
     bento: parseJsonField(portfolio.bento, []),
   };
@@ -119,7 +115,7 @@ export interface FormState {
   setBentoPreviewImages: React.Dispatch<
     React.SetStateAction<{ url: string; name: string }[]>
   >;
-  setBentoFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setBentoFiles: React.Dispatch<React.SetStateAction<Map<string, File>>>;
 }
 
 // Fonction factory pour créer les handlers
@@ -223,15 +219,40 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
   // Gestion de l'upload de fichiers multiples pour les images bento
   const handleBentoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("handleBentoFilesChange appelé", e.target.files);
     const files = e.target.files;
     if (files) {
+      const validFiles: File[] = [];
+      const newPreviews: { url: string; name: string }[] = [];
+      const newImageNames: string[] = [];
+
       Array.from(files).forEach((file) => {
         // Vérifier le type de fichier
         if (file.type.startsWith("image/")) {
-          // Stocker le fichier réel pour l'envoi
-          setBentoFiles((prev) => [...prev, file]);
+          validFiles.push(file);
+          newImageNames.push(`pending_${file.name}`);
+        }
+      });
 
-          // Créer un aperçu de l'image
+      // Mettre à jour les fichiers et les noms d'images de manière synchrone
+      if (validFiles.length > 0) {
+        // Stocker les fichiers réels pour l'envoi avec Map
+        setBentoFiles((prev) => {
+          const newFiles = new Map(prev);
+          validFiles.forEach((file) => {
+            newFiles.set(file.name, file);
+          });
+          return newFiles;
+        });
+
+        // Ajouter les placeholders à la ligne bento actuelle immédiatement
+        setCurrentBentoLine((prev) => ({
+          ...prev,
+          listImage: [...prev.listImage, ...newImageNames],
+        }));
+
+        // Créer les aperçus de manière asynchrone (pour l'affichage uniquement)
+        validFiles.forEach((file) => {
           const reader = new FileReader();
           reader.onload = (event) => {
             const imageUrl = event.target?.result as string;
@@ -239,16 +260,11 @@ export function createFormHandlers(state: FormState): FormHandlers {
               ...prev,
               { url: imageUrl, name: file.name },
             ]);
-
-            // Ajouter un placeholder à la ligne bento actuelle
-            setCurrentBentoLine((prev) => ({
-              ...prev,
-              listImage: [...prev.listImage, `pending_${file.name}`],
-            }));
           };
           reader.readAsDataURL(file);
-        }
-      });
+        });
+      }
+
       // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
       e.target.value = "";
     }
@@ -260,12 +276,27 @@ export function createFormHandlers(state: FormState): FormHandlers {
       listImage: prev.listImage.filter((_, i) => i !== index),
     }));
     // Supprimer aussi l'aperçu et le fichier correspondants
-    setBentoPreviewImages((prev) => prev.filter((_, i) => i !== index));
-    setBentoFiles((prev) => prev.filter((_, i) => i !== index));
+    setBentoPreviewImages((prev) => {
+      const imageToRemove = prev[index];
+      if (imageToRemove) {
+        // Supprimer aussi le fichier correspondant de la Map
+        setBentoFiles((prevFiles) => {
+          const newFiles = new Map(prevFiles);
+          newFiles.delete(imageToRemove.name);
+          return newFiles;
+        });
+      }
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   // Gestion des lignes de bento
   const addBentoLine = () => {
+    console.log(
+      "addBentoLine appelé, currentBentoLine.listImage:",
+      currentBentoLine.listImage
+    );
+    console.log("currentBento.lines.length:", currentBento.lines.length);
     if (
       currentBentoLine.listImage.length > 0 &&
       currentBento.lines.length < 10

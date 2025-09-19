@@ -30,7 +30,6 @@ export interface PortfolioFormData {
     auteur: string;
     contenu: string;
     poste?: string;
-    entreprise?: string;
   };
   bento: BentoItem[];
 }
@@ -85,7 +84,6 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
       auteur: (formData.get("temoignageAuteur") as string) || "",
       contenu: (formData.get("temoignageContenu") as string) || "",
       poste: (formData.get("temoignagePoste") as string) || undefined,
-      entreprise: (formData.get("temoignageEntreprise") as string) || undefined,
     },
     bento: (() => {
       try {
@@ -104,7 +102,7 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
  */
 export async function processPhotoCouverture(
   formData: FormData,
-  portfolioId: number,
+  portfolioId: string,
   currentUrl?: string
 ): Promise<string> {
   let photoCouverture =
@@ -117,7 +115,7 @@ export async function processPhotoCouverture(
     const savedMedia = await saveMedia(
       photoCouvertureFile,
       "portfolio",
-      portfolioId.toString()
+      portfolioId
     );
     photoCouverture = savedMedia.url;
   }
@@ -130,18 +128,14 @@ export async function processPhotoCouverture(
  */
 export async function processPhotoMain(
   formData: FormData,
-  portfolioId: number,
+  portfolioId: string,
   currentUrl?: string
 ): Promise<string> {
   let photoMain = currentUrl || (formData.get("photoMainUrl") as string);
   const photoMainFile = formData.get("photoMainFile") as File | null;
 
   if (photoMainFile && photoMainFile.size > 0) {
-    const savedMedia = await saveMedia(
-      photoMainFile,
-      "portfolio",
-      portfolioId.toString()
-    );
+    const savedMedia = await saveMedia(photoMainFile, "portfolio", portfolioId);
     photoMain = savedMedia.url;
   }
 
@@ -153,7 +147,7 @@ export async function processPhotoMain(
  */
 export async function processBentoFiles(
   formData: FormData,
-  portfolioId: number,
+  portfolioId: string,
   bentoData: BentoItem[]
 ): Promise<BentoItem[]> {
   const updatedBento = [...bentoData];
@@ -176,7 +170,7 @@ export async function processBentoFiles(
         const savedMedia = await saveMedia(
           value,
           "portfolio/bento",
-          portfolioId.toString()
+          portfolioId
         );
 
         uploadedFiles.set(`${bentoIndex}_${globalIndex}`, savedMedia.url);
@@ -245,6 +239,30 @@ export function validatePortfolioData(data: PortfolioFormData): string[] {
 }
 
 /**
+ * Valide les données du portfolio de manière asynchrone (incluant la vérification d'unicité du slug)
+ */
+export async function validatePortfolioDataAsync(
+  data: PortfolioFormData,
+  isSlugUniqueCheck: (slug: string, excludeId?: string) => Promise<boolean>,
+  excludeId?: string
+): Promise<string[]> {
+  // Validation synchrone de base
+  const errors = validatePortfolioData(data);
+
+  // Vérification asynchrone de l'unicité du slug
+  if (data.slug?.trim() && !/^[a-z0-9-]+$/.test(data.slug)) {
+    // Pas besoin de vérifier l'unicité si le format est déjà invalide
+  } else if (data.slug?.trim()) {
+    const isUnique = await isSlugUniqueCheck(data.slug, excludeId);
+    if (!isUnique) {
+      errors.push("Ce slug existe déjà. Veuillez en choisir un autre.");
+    }
+  }
+
+  return errors;
+}
+
+/**
  * Utilitaires pour parser les données JSON stockées en base
  */
 export function parseJsonField<T>(field: any, defaultValue: T): T {
@@ -279,7 +297,6 @@ export function initializeFormData(portfolio: any): PortfolioFormData {
       auteur: "",
       contenu: "",
       poste: "",
-      entreprise: "",
     }),
     bento: parseJsonField(portfolio.bento, []),
   };
