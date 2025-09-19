@@ -10,15 +10,15 @@ datasource db {
 model Portfolio {
   id              String   @id @default(cuid())
   titre           String
+  categories      String   @default("[]")
   slug            String   @unique
   photoCouverture String
-  photosCarrousel String   @default("[]")
+  photoMain       String   @default("")
   description     String
   kicker          String
   sousTitre       String
   topTitle        String   @default("")
   couleur         String   @default("")
-  shortlist       String   @default("")
   temoignage      String   @default("{\"auteur\":\"\",\"contenu\":\"\"}")
   livrable        String
   bento           String

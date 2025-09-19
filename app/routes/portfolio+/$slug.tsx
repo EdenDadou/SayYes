@@ -11,7 +11,7 @@ import Coche from "~/assets/icons/Coche";
 import NoteStar from "~/assets/icons/NoteStar";
 import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
 import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
-import PhotoCarousel from "~/components/Portfolio/components/PhotoCarousel";
+import PhotoMain from "~/components/Portfolio/components/PhotoMain";
 import Desktoplayout from "~/components/Layout/Desktop";
 import Bento from "~/components/Portfolio/components/Bento";
 import Card from "~/components/Card";
@@ -74,23 +74,29 @@ export default function PortfolioSlug() {
                     <ArrowLight className="w-20 h-20" />
                     {portfolio.titre}
                   </h1>
+
+                  {/* Catégories */}
+                  {portfolio.categories && portfolio.categories.length > 0 && (
+                    <div className="flex flex-wrap gap-3 mt-6">
+                      {portfolio.categories.map(
+                        (category: string, index: number) => (
+                          <span
+                            key={index}
+                            className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm font-jakarta-medium border border-white/20"
+                          >
+                            {category}
+                          </span>
+                        )
+                      )}
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div className="flex flex-row items-center gap-2">
-                <NoteStar width={20} height={20} />
-                <p className="text-xl font-jakarta-bold">
-                  Shortlist {portfolio.shortlist}|5
-                </p>
               </div>
             </div>
 
-            {/* Photo Carousel */}
-            <PhotoCarousel
-              photos={
-                portfolio.photosCarrousel.length > 0
-                  ? portfolio.photosCarrousel
-                  : [portfolio.photoCouverture]
-              }
+            {/* Photo Main */}
+            <PhotoMain
+              photo={portfolio.photoMain || portfolio.photoCouverture}
               title={portfolio.titre}
             />
           </section>
@@ -173,12 +179,6 @@ export default function PortfolioSlug() {
                 </div>
               </div>
             ) : null}
-            <div className="flex flex-row items-center justify-center gap-2">
-              <NoteStar width={20} height={20} />
-              <p className="text-2xl font-jakarta-bold">
-                Shortlist {portfolio.shortlist}|5
-              </p>
-            </div>
           </section>
           <section className="mb-16 relative px-32">
             <div className="space-y-6">

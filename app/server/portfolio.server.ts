@@ -13,16 +13,16 @@ export interface BentoItem {
 
 export interface PortfolioData {
   titre: string;
+  categories: string[];
   slug: string;
   photoCouverture: string;
-  photosCarrousel: string[];
+  photoMain: string;
   description: string;
   kicker: string;
   livrable: string[];
   sousTitre: string;
   topTitle: string;
   couleur: string;
-  shortlist: string;
   temoignage: {
     auteur: string;
     contenu: string;
@@ -35,15 +35,15 @@ export interface PortfolioData {
 export interface PortfolioWithMedia {
   id: string;
   titre: string;
+  categories: string[];
   slug: string;
   photoCouverture: string;
-  photosCarrousel: string[];
+  photoMain: string;
   description: string;
   kicker: string;
   sousTitre: string;
   topTitle: string;
   couleur: string;
-  shortlist: string;
   temoignage: {
     auteur: string;
     contenu: string;
@@ -68,15 +68,15 @@ export async function createPortfolio(data: PortfolioData): Promise<string> {
   const portfolio = await prisma.portfolio.create({
     data: {
       titre: data.titre,
+      categories: JSON.stringify(data.categories),
       slug: data.slug,
       photoCouverture: data.photoCouverture,
-      photosCarrousel: JSON.stringify(data.photosCarrousel || []),
+      photoMain: data.photoMain || "",
       description: data.description,
       kicker: data.kicker,
       sousTitre: data.sousTitre,
       ...(data.topTitle && { topTitle: data.topTitle }),
       ...(data.couleur && { couleur: data.couleur }),
-      ...(data.shortlist && { shortlist: data.shortlist }),
       ...(data.temoignage && { temoignage: JSON.stringify(data.temoignage) }),
       livrable: JSON.stringify(data.livrable),
       bento: JSON.stringify(data.bento),
@@ -100,11 +100,11 @@ export async function updatePortfolio(
   if (data.bento) {
     updateData.bento = JSON.stringify(data.bento);
   }
-  if (data.photosCarrousel) {
-    updateData.photosCarrousel = JSON.stringify(data.photosCarrousel);
+  if (data.photoMain !== undefined) {
+    updateData.photoMain = data.photoMain;
   }
-  if (data.shortlist !== undefined) {
-    updateData.shortlist = data.shortlist;
+  if (data.categories !== undefined) {
+    updateData.categories = JSON.stringify(data.categories);
   }
   if (data.temoignage) {
     updateData.temoignage = JSON.stringify(data.temoignage);
@@ -151,15 +151,15 @@ export async function getPortfolio(
   return {
     id: portfolio.id,
     titre: portfolio.titre,
+    categories: safeParse(portfolio.categories, []),
     slug: portfolio.slug,
     photoCouverture: portfolio.photoCouverture,
-    photosCarrousel: safeParse((portfolio as any).photosCarrousel || "[]", []),
+    photoMain: (portfolio as any).photoMain || "",
     description: portfolio.description,
     kicker: portfolio.kicker,
     sousTitre: portfolio.sousTitre,
     topTitle: (portfolio as any).topTitle || "",
     couleur: (portfolio as any).couleur || "",
-    shortlist: (portfolio as any).shortlist || "",
     createdAt: portfolio.createdAt,
     updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
@@ -207,15 +207,15 @@ export async function getPortfolioBySlug(
   return {
     id: portfolio.id,
     titre: portfolio.titre,
+    categories: safeParse(portfolio.categories, []),
     slug: portfolio.slug,
     photoCouverture: portfolio.photoCouverture,
-    photosCarrousel: safeParse((portfolio as any).photosCarrousel || "[]", []),
+    photoMain: (portfolio as any).photoMain || "",
     description: portfolio.description,
     kicker: portfolio.kicker,
     sousTitre: portfolio.sousTitre,
     topTitle: (portfolio as any).topTitle || "",
     couleur: (portfolio as any).couleur || "",
-    shortlist: (portfolio as any).shortlist || "",
     createdAt: portfolio.createdAt,
     updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
@@ -262,16 +262,12 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
       titre: portfolio.titre,
       slug: portfolio.slug,
       photoCouverture: portfolio.photoCouverture,
-      photosCarrousel: safeParse(
-        (portfolio as any).photosCarrousel || "[]",
-        []
-      ),
+      photoMain: (portfolio as any).photoMain || "",
       description: portfolio.description,
       kicker: portfolio.kicker,
       sousTitre: portfolio.sousTitre,
       topTitle: (portfolio as any).topTitle || "",
       couleur: (portfolio as any).couleur || "",
-      shortlist: (portfolio as any).shortlist || "",
       createdAt: portfolio.createdAt,
       updatedAt: portfolio.updatedAt,
       livrable: safeParse(portfolio.livrable, []),
@@ -302,11 +298,11 @@ export async function updatePortfolioBySlug(
   if (data.bento) {
     updateData.bento = JSON.stringify(data.bento);
   }
-  if (data.photosCarrousel) {
-    updateData.photosCarrousel = JSON.stringify(data.photosCarrousel);
+  if (data.photoMain !== undefined) {
+    updateData.photoMain = data.photoMain;
   }
-  if (data.shortlist !== undefined) {
-    updateData.shortlist = data.shortlist;
+  if (data.categories !== undefined) {
+    updateData.categories = JSON.stringify(data.categories);
   }
   if (data.temoignage) {
     updateData.temoignage = JSON.stringify(data.temoignage);
@@ -409,15 +405,15 @@ export async function getPublicPortfolios() {
   return portfolios.map((portfolio) => ({
     id: portfolio.id,
     titre: portfolio.titre,
+    categories: safeParse(portfolio.categories, []),
     slug: portfolio.slug,
     photoCouverture: portfolio.photoCouverture,
-    photosCarrousel: safeParse((portfolio as any).photosCarrousel || "[]", []),
+    photoMain: (portfolio as any).photoMain || "",
     description: portfolio.description,
     kicker: portfolio.kicker,
     sousTitre: portfolio.sousTitre,
     topTitle: (portfolio as any).topTitle || "",
     couleur: (portfolio as any).couleur || "",
-    shortlist: (portfolio as any).shortlist || "",
     createdAt: portfolio.createdAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
