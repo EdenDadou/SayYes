@@ -23,7 +23,7 @@ export default function Footer() {
   ) : (
     <div
       ref={footerRef}
-      className="relative w-full flex flex-col justify-center items-center filter"
+      className="relative w-full flex flex-col justify-center items-center filter pt-20"
     >
       <span className="font-jakarta text-[60px] leading-[60px]">
         Ça vous inspire ? <br />
