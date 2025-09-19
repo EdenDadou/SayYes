@@ -74,22 +74,6 @@ export default function PortfolioSlug() {
                     <ArrowLight className="w-20 h-20" />
                     {portfolio.titre}
                   </h1>
-
-                  {/* Catégories */}
-                  {portfolio.categories && portfolio.categories.length > 0 && (
-                    <div className="flex flex-wrap gap-3 mt-6">
-                      {portfolio.categories.map(
-                        (category: string, index: number) => (
-                          <span
-                            key={index}
-                            className="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm font-jakarta-medium border border-white/20"
-                          >
-                            {category}
-                          </span>
-                        )
-                      )}
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -157,7 +141,7 @@ export default function PortfolioSlug() {
             </div>
 
             <div className="space-y-6">
-              <Bento bento={portfolio.bento[0]} />
+              {portfolio.bento[0] && <Bento bento={portfolio.bento[0]} />}
             </div>
           </section>
 
@@ -182,7 +166,7 @@ export default function PortfolioSlug() {
           </section>
           <section className="mb-16 relative px-32">
             <div className="space-y-6">
-              <Bento bento={portfolio.bento[1]} />
+              {portfolio.bento[1] && <Bento bento={portfolio.bento[1]} />}
             </div>
           </section>
 

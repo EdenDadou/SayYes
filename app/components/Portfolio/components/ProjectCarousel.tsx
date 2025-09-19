@@ -23,7 +23,7 @@ export default function ProjectCarousel({
 }: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const itemsPerView = 3; // Nombre de projets visibles simultanément
+  const itemsPerView = 4; // Affiche 4 cartes: 2 complètes au centre + 2 bouts sur les côtés
 
   // If no portfolios, don't render anything
   if (!portfolios || portfolios.length === 0) {
@@ -72,11 +72,11 @@ export default function ProjectCarousel({
       </h2>
 
       {/* Carousel Container */}
-      <div className="relative max-w-6xl mx-auto px-4">
+      <div className="relative w-full overflow-hidden">
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"
           aria-label="Projet précédent"
         >
           <ArrowLight className="w-12 h-12 text-white rotate-180 group-hover:scale-110 transition-transform" />
@@ -84,14 +84,14 @@ export default function ProjectCarousel({
 
         <button
           onClick={nextSlide}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"
           aria-label="Projet suivant"
         >
           <ArrowLight className="w-12 h-12 text-white group-hover:scale-110 transition-transform" />
         </button>
 
         {/* Carousel Content */}
-        <div className="relative h-[400px] overflow-hidden rounded-2xl mx-16">
+        <div className="relative h-[400px] overflow-visible">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={currentIndex}
@@ -116,12 +116,12 @@ export default function ProjectCarousel({
                   prevSlide();
                 }
               }}
-              className="absolute inset-0 flex items-center justify-center gap-6"
+              className="absolute inset-0 flex items-center justify-center"
             >
               {portfolios
                 .slice(currentIndex, currentIndex + itemsPerView)
                 .map((project, index) => (
-                  <div key={project.id} className="flex-1 min-w-0">
+                  <div key={project.id} className="w-[490px] flex-shrink-0">
                     <Card
                       height="370px"
                       content={

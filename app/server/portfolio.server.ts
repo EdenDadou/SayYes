@@ -158,7 +158,10 @@ export async function getPortfolio(
   if (!portfolio) return null;
 
   // Fonction helper pour parser les données JSON de manière sécurisée
-  const safeParse = (data: string, fallback: any = []) => {
+  const safeParse = (data: string | null | undefined, fallback: any = []) => {
+    if (!data || data === "undefined" || data === "null") {
+      return fallback;
+    }
     try {
       return JSON.parse(data);
     } catch (e) {
@@ -183,10 +186,10 @@ export async function getPortfolio(
     updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
-    temoignage: safeParse(
-      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
-      { auteur: "", contenu: "" }
-    ),
+    temoignage: safeParse((portfolio as any).temoignage, {
+      auteur: "",
+      contenu: "",
+    }),
     medias: portfolio.medias,
   };
 }
@@ -214,7 +217,10 @@ export async function getPortfolioBySlug(
   if (!portfolio) return null;
 
   // Fonction helper pour parser les données JSON de manière sécurisée
-  const safeParse = (data: string, fallback: any = []) => {
+  const safeParse = (data: string | null | undefined, fallback: any = []) => {
+    if (!data || data === "undefined" || data === "null") {
+      return fallback;
+    }
     try {
       return JSON.parse(data);
     } catch (e) {
@@ -239,10 +245,10 @@ export async function getPortfolioBySlug(
     updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
-    temoignage: safeParse(
-      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
-      { auteur: "", contenu: "" }
-    ),
+    temoignage: safeParse((portfolio as any).temoignage, {
+      auteur: "",
+      contenu: "",
+    }),
     medias: portfolio.medias,
   };
 }
@@ -267,7 +273,7 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
     });
 
     // Fonction helper pour parser les données JSON de manière sécurisée
-    const safeParse = (data: string, fallback: any = []) => {
+    const safeParse = (data: string | null | undefined, fallback: any = []) => {
       try {
         return JSON.parse(data);
       } catch (e) {
@@ -291,10 +297,10 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
       updatedAt: portfolio.updatedAt,
       livrable: safeParse(portfolio.livrable, []),
       bento: safeParse(portfolio.bento, []),
-      temoignage: safeParse(
-        (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
-        { auteur: "", contenu: "" }
-      ),
+      temoignage: safeParse((portfolio as any).temoignage, {
+        auteur: "",
+        contenu: "",
+      }),
       medias: portfolio.medias,
     }));
   } catch (error) {
@@ -399,11 +405,16 @@ export async function getPublicPortfolios() {
     select: {
       id: true,
       titre: true,
+      categories: true,
       slug: true,
       photoCouverture: true,
+      photoMain: true,
       description: true,
       kicker: true,
       sousTitre: true,
+      topTitle: true,
+      couleur: true,
+      temoignage: true,
       livrable: true,
       bento: true,
       createdAt: true,
@@ -412,7 +423,10 @@ export async function getPublicPortfolios() {
   });
 
   // Fonction helper pour parser les données JSON de manière sécurisée
-  const safeParse = (data: string, fallback: any = []) => {
+  const safeParse = (data: string | null | undefined, fallback: any = []) => {
+    if (!data || data === "undefined" || data === "null") {
+      return fallback;
+    }
     try {
       return JSON.parse(data);
     } catch (e) {
@@ -436,10 +450,10 @@ export async function getPublicPortfolios() {
     createdAt: portfolio.createdAt,
     livrable: safeParse(portfolio.livrable, []),
     bento: safeParse(portfolio.bento, []),
-    temoignage: safeParse(
-      (portfolio as any).temoignage || '{"auteur":"","contenu":""}',
-      { auteur: "", contenu: "" }
-    ),
+    temoignage: safeParse((portfolio as any).temoignage, {
+      auteur: "",
+      contenu: "",
+    }),
   }));
 }
 

@@ -62,8 +62,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   try {
     if (request.method === "DELETE") {
+      console.log(`🗑️ Suppression du portfolio demandée: ${slug}`);
       await deletePortfolioBySlug(slug);
-      return redirect("/admin/manage-portfolio");
+      console.log(`✅ Portfolio ${slug} supprimé avec succès`);
+      return Response.json({
+        success: true,
+        message: "Portfolio supprimé avec succès !",
+      });
     }
 
     // Récupérer le portfolio pour obtenir l'ID nécessaire
@@ -115,6 +120,23 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
     return createJsonResponse(true, "Portfolio mis à jour avec succès!");
   } catch (error) {
+    console.error(`❌ Erreur dans l'action pour ${slug}:`, error);
+
+    // Gestion spéciale pour les erreurs de suppression
+    if (request.method === "DELETE") {
+      console.error(
+        `❌ Erreur lors de la suppression du portfolio ${slug}:`,
+        error
+      );
+      return Response.json(
+        {
+          success: false,
+          error: `Erreur lors de la suppression: ${error.message}`,
+        },
+        { status: 500 }
+      );
+    }
+
     return handleError(error, "la mise à jour du portfolio");
   }
 }
@@ -177,21 +199,73 @@ export default function EditPortfolio() {
       )
     ) {
       try {
+        console.log("🗑️ Début de la suppression du portfolio:", portfolio.slug);
+
         const response = await fetch(
           `/admin/manage-portfolio/${portfolio.slug}`,
           {
             method: "DELETE",
+            credentials: "same-origin", // Important: inclure les cookies d'authentification
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
         );
 
+        console.log("📊 Réponse DELETE:", response.status, response.statusText);
+
         if (response.ok) {
-          navigate("/admin/manage-portfolio");
+          console.log("✅ Portfolio supprimé avec succès");
+
+          // Lire la réponse JSON
+          const data = await response.json();
+
+          // Afficher un toast de succès
+          setToast({
+            show: true,
+            message:
+              data.message ||
+              `Portfolio "${portfolio.titre}" supprimé avec succès !`,
+            type: "success",
+          });
+
+          // Masquer le toast après 3 secondes et naviguer
+          setTimeout(() => {
+            setToast({ show: false, message: "", type: "success" });
+            navigate("/admin/manage-portfolio");
+          }, 3000);
         } else {
-          alert("Erreur lors de la suppression du portfolio");
+          console.error(
+            "❌ Erreur lors de la suppression:",
+            response.status,
+            response.statusText
+          );
+
+          // Essayer de lire le message d'erreur
+          try {
+            const errorData = await response.json();
+            console.error("📄 Détails de l'erreur:", errorData);
+            alert(
+              `Erreur lors de la suppression du portfolio: ${errorData.message || errorData.error || "Erreur inconnue"}`
+            );
+          } catch (e) {
+            // Si on ne peut pas lire le JSON, essayer le texte
+            try {
+              const errorText = await response.text();
+              console.error("📄 Erreur (texte):", errorText);
+              alert(
+                `Erreur lors de la suppression du portfolio: ${errorText || "Erreur inconnue"}`
+              );
+            } catch (e2) {
+              alert(
+                `Erreur lors de la suppression du portfolio (${response.status})`
+              );
+            }
+          }
         }
       } catch (error) {
-        console.error("Erreur:", error);
-        alert("Erreur lors de la suppression du portfolio");
+        console.error("❌ Erreur lors de la requête DELETE:", error);
+        alert("Erreur lors de la suppression du portfolio: " + error.message);
       }
     }
   };
