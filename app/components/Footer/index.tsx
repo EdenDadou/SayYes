@@ -11,6 +11,8 @@ import SayYesFooter from "./components/SayYes";
 import LogoSayYes from "~/components/Header/assets/LogoSayYes";
 import FooterMobile from "./mobile/FooterMobile";
 import LogoSayYesHolo from "./components/LogoSayYesHolo";
+import ChatBuble from "../Header/assets/ChatBuble";
+import Localisation from "~/assets/icons/Localisation";
 
 export default function Footer() {
   const isMobile = useViewport();
@@ -51,8 +53,12 @@ export default function Footer() {
               Communication visuelle*
             </div>
           </div>
-          <p className="text-gray-200 text-md py-2">hello@say_yes.com</p>
-          <p className="text-gray-200 text-md py-2">
+          <p className="text-gray-200 text-md py-2 flex flex-row items-center gap-2">
+            <ChatBuble color="grey" />
+            hello@say_yes.com
+          </p>
+          <p className="text-gray-200 text-md py-2 flex flex-row items-center gap-2">
+            <Localisation color="grey" />
             40 Rue Servan - 75 011 - Paris
           </p>
         </div>
@@ -60,34 +66,37 @@ export default function Footer() {
         <div className="h-[1px] w-full mb-12 holographic-bg" />
         <div className="flex flex-row justfy-between w-full pb-8">
           <div className="flex flex-col gap-4 w-1/3">
-            <p className="text-md font-jakarta-bold">
+            <p className="text-md font-jakarta">
               L’agence de communication
               <br /> visuelle qui qui met tout le
               <br /> monde d’accord !
             </p>
+            {/* 
+            
+            TODO : Add social icons
             <div className="flex flex-row h-5 gap-3">
               <SvgBtnLinkedin className="w-8 h-8" />
               <SvgBtnFacebook className="w-8 h-8" />
               <SvgBtnInstagram className="w-8 h-8" />
               <SvgBtnTiktok className="w-8 h-8" />
               <SvgBtnYoutube className="w-8 h-8" />
-            </div>
+            </div> */}
           </div>
           <div className="flex flex-row justify-between w-full">
-            <div className="flex flex-col gap-4 text-gray-200 ml-10">
-              <Button label="Branding" />
-              <Button label="Graphisme" />
-              <Button label="Web Design" />
+            <div className="flex flex-col gap-6 text-gray-200 ml-10">
+              <p className="text-md font-jakarta">Branding</p>
+              <p className="text-md font-jakarta">Graphisme</p>
+              <p className="text-md font-jakarta">Web Design</p>
             </div>
-            <div className="flex flex-col gap-4 text-gray-200 ml-10">
-              <Button label="Identité Visuelle" />
-              <Button label="Communication Print" />
-              <Button label="Facilitation Graphique" />
+            <div className="flex flex-col gap-6 text-gray-200 ml-10">
+              <p className="text-md font-jakarta">Identité Visuelle</p>
+              <p className="text-md font-jakarta">Communication Print</p>
+              <p className="text-md font-jakarta">Facilitation Graphique</p>
             </div>
-            <div className="flex flex-col gap-4 text-gray-200 ml-10">
-              <Button label="Motion Design" />
-              <Button label="Infographie" />
-              <Button label="Nos Solutions" />
+            <div className="flex flex-col gap-6 text-gray-200 ml-10">
+              <p className="text-md font-jakarta">Motion Design</p>
+              <p className="text-md font-jakarta">Infographie</p>
+              <p className="text-md font-jakarta">Nos Solutions</p>
             </div>
           </div>
         </div>

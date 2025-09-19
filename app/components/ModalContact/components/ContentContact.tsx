@@ -72,13 +72,15 @@ export default function ContentContact({
             </div>
           </div>
           {/* Social Icons */}
+          {/* 
+          TODO Add social icons
           <div className="flex flex-row h-5 gap-3">
             <SvgBtnLinkedin className="w-8 h-8" />
             <SvgBtnFacebook className="w-8 h-8" />
             <SvgBtnInstagram className="w-8 h-8" />
             <SvgBtnTiktok className="w-8 h-8" />
             <SvgBtnYoutube className="w-8 h-8" />
-          </div>
+          </div> */}
         </div>
 
         <form

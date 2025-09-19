@@ -48,17 +48,12 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
       }}
     >
       {/* Section gauche */}
-      <div className="flex flex-row items-center gap-8 flex-1 pl-8">
+      <div className="flex flex-row items-center gap-8 pl-8 justify-between w-[35%]">
         <div className="font-jakarta text-lg">Communication visuelle*</div>
         <Button
           label="Solutions"
           leftIcon={<Flamme className="text-shadow-lg shadow-black" />}
           onClick={() => navigate("/solutions")}
-        />
-        <Button
-          label="Portfolio"
-          leftIcon={<Coeur />}
-          onClick={() => navigate("/portfolio")}
         />
       </div>
 
@@ -71,16 +66,11 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
       />
 
       {/* Section droite */}
-      <div className="flex flex-row items-center gap-8 flex-1 justify-end">
+      <div className="flex flex-row items-center gap-8 justify-between w-[35%]">
         <Button
-          label="L'agence"
-          leftIcon={<Smile />}
-          onClick={() => navigate("/agence")}
-        />
-        <Button
-          label="Ressources"
-          leftIcon={<Idea />}
-          onClick={() => navigate("/ressources")}
+          label="Portfolio"
+          leftIcon={<Coeur />}
+          onClick={() => navigate("/portfolio")}
         />
         <Button
           label="Parlons Design !"
@@ -94,3 +84,16 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
 };
 
 export default Header;
+
+{
+  /* <Button
+          label="L'agence"
+          leftIcon={<Smile />}
+          onClick={() => navigate("/agence")}
+        />
+        <Button
+          label="Ressources"
+          leftIcon={<Idea />}
+          onClick={() => navigate("/ressources")}
+        /> */
+}

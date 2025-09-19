@@ -50,13 +50,15 @@ export default function FooterMobile() {
         <p className="text-gray-200 text-md">hello@say_yes.com</p>
         <p className="text-gray-200 text-md">40 Rue Servan - 75 011 - Paris</p>
         <div className="flex flex-col justfy-between w-full pb-8 items-center gap-8 ">
+          {/*
+          TODO : Add social icons
           <div className="flex flex-row gap-3">
             <SvgBtnLinkedin className="w-8 h-8" />
             <SvgBtnFacebook className="w-8 h-8" />
             <SvgBtnInstagram className="w-8 h-8" />
             <SvgBtnTiktok className="w-8 h-8" />
             <SvgBtnYoutube className="w-8 h-8" />
-          </div>
+          </div> */}
 
           <Button label="Branding" />
           <Button label="Graphisme" />

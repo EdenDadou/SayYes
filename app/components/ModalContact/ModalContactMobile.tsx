@@ -71,13 +71,15 @@ export default function ModalContactMobile({
           </div>
         </div>
         <div className="w-full h-full flex flex-col items-center gap-8 px-5">
+          {/* 
+          TODO add sociale icons
           <div className="flex flex-row h-5 gap-3">
             <SvgBtnLinkedin className="w-8 h-8" />
             <SvgBtnFacebook className="w-8 h-8" />
             <SvgBtnInstagram className="w-8 h-8" />
             <SvgBtnTiktok className="w-8 h-8" />
             <SvgBtnYoutube className="w-8 h-8" />
-          </div>
+          </div> */}
         </div>
         <Card height="85%" borderClass="p-8 bg-black">
           <BackgroundModalMobile className="absolute inset-0 w-full h-full z-0 rounded-[20px] object-cover" />

@@ -31,13 +31,15 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
         <Button label="Portfolio" onClick={() => navigate("/portfolio")} />
         <div className="h-[3px] w-20 holographic-bg mb-6" />
 
+        {/* 
+        TODO Add Social Icons
         <div className="flex flex-row h-5 gap-3">
           <SvgBtnLinkedin className="w-8 h-8" />
           <SvgBtnFacebook className="w-8 h-8" />
           <SvgBtnInstagram className="w-8 h-8" />
           <SvgBtnTiktok className="w-8 h-8" />
           <SvgBtnYoutube className="w-8 h-8" />
-        </div>
+        </div> */}
       </div>
     </div>
   );
