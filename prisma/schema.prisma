@@ -14,14 +14,14 @@ model Portfolio {
   slug            String   @unique
   photoCouverture String
   photoMain       String   @default("")
-  description     String
-  kicker          String
-  sousTitre       String
+  description     String   @default("")
+  kicker          String   @default("")
+  sousTitre       String   @default("")
   topTitle        String   @default("")
   couleur         String   @default("")
   temoignage      String   @default("{\"auteur\":\"\",\"contenu\":\"\"}")
-  livrable        String
-  bento           String
+  livrable        String   @default("[]")
+  bento           String   @default("[]")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   medias          Media[]

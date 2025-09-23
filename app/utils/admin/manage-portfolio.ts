@@ -68,11 +68,31 @@ export async function parseFormData(request: Request) {
  * Extrait les données du portfolio depuis FormData
  */
 export function extractPortfolioData(formData: FormData): PortfolioFormData {
+  console.log("🔍 Extraction des données du formulaire...");
+
+  // Debug: Afficher tous les champs reçus
+  for (const [key, value] of formData.entries()) {
+    if (typeof value === "string") {
+      console.log(
+        `📋 FormData[${key}]:`,
+        value.substring(0, 100) + (value.length > 100 ? "..." : "")
+      );
+    } else {
+      console.log(
+        `📋 FormData[${key}]:`,
+        value instanceof File ? `File(${value.name})` : value
+      );
+    }
+  }
+
   // Traitement des catégories - peut être un string ou un array
   const categoriesValue = formData.get("categories") as string;
   let categories: string[] = [];
   if (categoriesValue) {
     categories = [categoriesValue];
+    console.log("📂 Catégories extraites:", categories);
+  } else {
+    console.log("⚠️ Aucune catégorie trouvée dans FormData");
   }
 
   // Traitement des livrables - peut être envoyé différemment
@@ -81,16 +101,40 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
   if (livrableValue) {
     try {
       livrable = JSON.parse(livrableValue);
+      console.log("📦 Livrables extraits (JSON):", livrable);
     } catch {
       livrable = [livrableValue];
+      console.log("📦 Livrables extraits (string):", livrable);
     }
+  } else {
+    console.log("⚠️ Aucun livrable trouvé dans FormData");
   }
 
-  return {
+  // Extraction de la photo de couverture (priorité au fichier uploadé)
+  let photoCouverture = (formData.get("photoCouvertureUrl") as string) || "";
+  const photoCouvertureFile = formData.get(
+    "photoCouvertureFile"
+  ) as File | null;
+
+  if (photoCouvertureFile && photoCouvertureFile.size > 0) {
+    // Si un fichier est uploadé, on utilisera une URL temporaire pour la création
+    // Le fichier sera traité après la création du portfolio
+    console.log(
+      "📸 Fichier photo de couverture détecté:",
+      photoCouvertureFile.name
+    );
+    photoCouverture = "temp_" + photoCouvertureFile.name; // URL temporaire
+  } else if (photoCouverture) {
+    console.log("📸 URL photo de couverture:", photoCouverture);
+  } else {
+    console.log("⚠️ Aucune photo de couverture trouvée");
+  }
+
+  const extractedData = {
     titre: (formData.get("titre") as string) || "",
     categories: categories,
     slug: (formData.get("slug") as string) || "",
-    photoCouverture: (formData.get("photoCouvertureUrl") as string) || "",
+    photoCouverture: photoCouverture,
     photoMain: (formData.get("photoMainUrl") as string) || "",
     description: (formData.get("description") as string) || "",
     kicker: (formData.get("kicker") as string) || "",
@@ -106,12 +150,31 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
     bento: (() => {
       try {
         const bentoData = formData.get("bento") as string;
-        return bentoData ? JSON.parse(bentoData) : [];
+        const parsed = bentoData ? JSON.parse(bentoData) : [];
+        console.log("🎯 Bento extraits:", parsed);
+        return parsed;
       } catch (e) {
+        console.log("⚠️ Erreur parsing bento:", e);
         return [];
       }
     })(),
   };
+
+  console.log("✅ Données extraites:", {
+    titre: extractedData.titre,
+    categories: extractedData.categories,
+    slug: extractedData.slug,
+    hasPhotoCouverture: !!extractedData.photoCouverture,
+    hasDescription: !!extractedData.description,
+    hasKicker: !!extractedData.kicker,
+    hasSousTitre: !!extractedData.sousTitre,
+    livrableCount: extractedData.livrable.length,
+    temoignageAuteur: extractedData.temoignage.auteur,
+    temoignageContenu: extractedData.temoignage.contenu,
+    bentoCount: extractedData.bento.length,
+  });
+
+  return extractedData;
 }
 
 /**
@@ -123,18 +186,36 @@ export async function processPhotoCouverture(
   currentUrl?: string
 ): Promise<string> {
   let photoCouverture =
-    currentUrl || (formData.get("photoCouvertureUrl") as string);
+    currentUrl || (formData.get("photoCouvertureUrl") as string) || "";
   const photoCouvertureFile = formData.get(
     "photoCouvertureFile"
   ) as File | null;
 
   if (photoCouvertureFile && photoCouvertureFile.size > 0) {
-    const savedMedia = await saveMedia(
-      photoCouvertureFile,
-      "portfolio",
-      portfolioId
+    console.log(
+      "📸 Traitement du fichier photo de couverture:",
+      photoCouvertureFile.name
     );
-    photoCouverture = savedMedia.url;
+    console.log("📸 Taille du fichier:", photoCouvertureFile.size, "bytes");
+    console.log("📸 Type du fichier:", photoCouvertureFile.type);
+
+    try {
+      const savedMedia = await saveMedia(
+        photoCouvertureFile,
+        "portfolio",
+        portfolioId
+      );
+      photoCouverture = savedMedia.url;
+      console.log("✅ Photo de couverture sauvegardée:", photoCouverture);
+    } catch (error) {
+      console.error(
+        "❌ Erreur lors de la sauvegarde de la photo de couverture:",
+        error
+      );
+      throw error;
+    }
+  } else {
+    console.log("ℹ️ Aucun fichier photo de couverture à traiter");
   }
 
   return photoCouverture;
@@ -148,12 +229,14 @@ export async function processPhotoMain(
   portfolioId: string,
   currentUrl?: string
 ): Promise<string> {
-  let photoMain = currentUrl || (formData.get("photoMainUrl") as string);
+  let photoMain = currentUrl || (formData.get("photoMainUrl") as string) || "";
   const photoMainFile = formData.get("photoMainFile") as File | null;
 
   if (photoMainFile && photoMainFile.size > 0) {
+    console.log("📸 Traitement du fichier photo main:", photoMainFile.name);
     const savedMedia = await saveMedia(photoMainFile, "portfolio", portfolioId);
     photoMain = savedMedia.url;
+    console.log("✅ Photo main sauvegardée:", photoMain);
   }
 
   return photoMain;
@@ -228,6 +311,7 @@ export async function processBentoFiles(
 export function validatePortfolioData(data: PortfolioFormData): string[] {
   const errors: string[] = [];
 
+  // Champs obligatoires de base
   if (!data.titre?.trim()) {
     errors.push("Le titre est obligatoire");
   }
@@ -239,6 +323,20 @@ export function validatePortfolioData(data: PortfolioFormData): string[] {
       "Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets"
     );
   }
+
+  // Validation des catégories
+  if (!data.categories || data.categories.length === 0) {
+    errors.push("Au moins une catégorie est obligatoire");
+  }
+
+  // Validation de la photo de couverture (accepter les URLs temporaires)
+  if (!data.photoCouverture?.trim()) {
+    errors.push("La photo de couverture est obligatoire");
+  }
+
+  // NOTE: Les autres champs (description, kicker, sousTitre, témoignage, livrable)
+  // sont maintenant optionnels pour éviter les erreurs 500.
+  // Le schéma Prisma accepte des chaînes vides pour ces champs.
 
   return errors;
 }

@@ -51,46 +51,68 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action pour gérer la soumission du formulaire
 export async function action({ request }: ActionFunctionArgs) {
   try {
+    console.log("🚀 Début de la création du portfolio");
     await requireAuth(request);
 
     // Parse les données du formulaire
+    console.log("📝 Parsing des données du formulaire...");
     const formData = await parseFormData(request);
 
     // Extraire les données du portfolio
+    console.log("🔍 Extraction des données du portfolio...");
     const portfolioData = extractPortfolioData(formData);
 
     // Valider les données (incluant la vérification d'unicité du slug)
+    console.log("✅ Validation des données...");
     const errors = await validatePortfolioDataAsync(
       portfolioData,
       isSlugUnique
     );
     if (errors.length > 0) {
+      console.log("❌ Erreurs de validation:", errors);
       return createJsonResponse(false, errors.join(", "), undefined, 400);
     }
 
     // Créer d'abord le portfolio pour avoir l'ID
+    console.log("💾 Création du portfolio en base...");
     const portfolioId = await createPortfolio(portfolioData);
+    console.log("✅ Portfolio créé avec l'ID:", portfolioId);
 
     // Traiter les fichiers uploadés
+    console.log("📸 Traitement de la photo de couverture...");
     const photoCouverture = await processPhotoCouverture(formData, portfolioId);
+    console.log("✅ Photo de couverture traitée:", photoCouverture);
+
+    console.log("📸 Traitement de la photo main...");
     const photoMain = await processPhotoMain(formData, portfolioId);
+    console.log("✅ Photo main traitée:", photoMain);
+
+    console.log("🎯 Traitement des fichiers bento...");
     const updatedBento = await processBentoFiles(
       formData,
       portfolioId,
       portfolioData.bento
     );
+    console.log("✅ Fichiers bento traités:", updatedBento.length, "bentos");
 
     // Mettre à jour le portfolio avec les URLs finales
+    console.log("🔄 Mise à jour du portfolio avec les URLs finales...");
     await updatePortfolio(portfolioId, {
       photoCouverture,
       photoMain,
       bento: updatedBento,
     });
 
+    console.log("🎉 Portfolio créé avec succès!");
     return createJsonResponse(true, "Portfolio créé avec succès!", {
       portfolioId,
     });
   } catch (error) {
+    console.error("❌ Erreur détaillée dans la création du portfolio:", error);
+    console.error(
+      "❌ Stack trace:",
+      error instanceof Error ? error.stack : "N/A"
+    );
     return handleError(error, "la création du portfolio");
   }
 }
