@@ -255,6 +255,7 @@ export async function processBentoFiles(
   // Créer une map des fichiers uploadés pour un accès plus facile
   const uploadedFiles = new Map<string, string>();
 
+  // Traiter tous les fichiers bento
   for (const [key, value] of formData.entries()) {
     if (
       key.startsWith("bentoFile_") &&
@@ -278,14 +279,14 @@ export async function processBentoFiles(
     }
   }
 
-  // Maintenant, parcourir le bento et remplacer les images pending
-  updatedBento.forEach((bento, bentoIndex) => {
-    let globalPendingIndex = 0;
+  // CORRECTION PRINCIPALE: Utiliser un index global qui correspond à celui du formulaire
+  let globalFileIndex = 0;
 
+  updatedBento.forEach((bento, bentoIndex) => {
     bento.lines.forEach((line, lineIndex) => {
       line.listImage.forEach((image, imgIndex) => {
         if (image.startsWith("pending_")) {
-          const fileKey = `${bentoIndex}_${globalPendingIndex}`;
+          const fileKey = `${bentoIndex}_${globalFileIndex}`;
           const newUrl = uploadedFiles.get(fileKey);
 
           if (newUrl) {
@@ -296,7 +297,7 @@ export async function processBentoFiles(
               `⚠️ Aucun fichier trouvé pour ${fileKey} (image: ${image})`
             );
           }
-          globalPendingIndex++;
+          globalFileIndex++; // ← LA CORRECTION: index global au lieu de local
         }
       });
     });
