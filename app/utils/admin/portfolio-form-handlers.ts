@@ -116,6 +116,7 @@ export interface FormState {
     React.SetStateAction<{ url: string; name: string }[]>
   >;
   setBentoFiles: React.Dispatch<React.SetStateAction<Map<string, File>>>;
+  setIsUploadingFiles: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Fonction factory pour créer les handlers
@@ -134,6 +135,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
     setPhotoMainFile,
     setBentoPreviewImages,
     setBentoFiles,
+    setIsUploadingFiles,
   } = state;
 
   // Gestion des changements dans le formulaire
@@ -219,9 +221,12 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
   // Gestion de l'upload de fichiers multiples pour les images bento
   const handleBentoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("handleBentoFilesChange appelé", e.target.files);
+    console.log("🔍 handleBentoFilesChange appelé", e.target.files);
     const files = e.target.files;
     if (files) {
+      // Activer l'état de chargement
+      setIsUploadingFiles(true);
+      
       const validFiles: File[] = [];
       const newPreviews: { url: string; name: string }[] = [];
       const newImageNames: string[] = [];
@@ -231,17 +236,24 @@ export function createFormHandlers(state: FormState): FormHandlers {
         if (file.type.startsWith("image/")) {
           validFiles.push(file);
           newImageNames.push(`pending_${file.name}`);
+          console.log(`✅ Valid file added: ${file.name}`);
         }
       });
+
+      console.log(`🔍 Total valid files: ${validFiles.length}`);
+      console.log(`🔍 New image names: ${newImageNames.join(", ")}`);
 
       // Mettre à jour les fichiers et les noms d'images de manière synchrone
       if (validFiles.length > 0) {
         // Stocker les fichiers réels pour l'envoi avec Map
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
+          console.log(`🔍 Previous bentoFiles size: ${prev.size}`);
           validFiles.forEach((file) => {
             newFiles.set(file.name, file);
+            console.log(`✅ Added to bentoFiles Map: ${file.name}`);
           });
+          console.log(`🔍 New bentoFiles size: ${newFiles.size}`);
           return newFiles;
         });
 
@@ -252,6 +264,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
         }));
 
         // Créer les aperçus de manière asynchrone (pour l'affichage uniquement)
+        let loadedCount = 0;
         validFiles.forEach((file) => {
           const reader = new FileReader();
           reader.onload = (event) => {
@@ -260,9 +273,19 @@ export function createFormHandlers(state: FormState): FormHandlers {
               ...prev,
               { url: imageUrl, name: file.name },
             ]);
+            
+            // Désactiver le loader quand tous les fichiers sont chargés
+            loadedCount++;
+            if (loadedCount === validFiles.length) {
+              setIsUploadingFiles(false);
+              console.log("✅ Tous les fichiers bento sont chargés");
+            }
           };
           reader.readAsDataURL(file);
         });
+      } else {
+        // Aucun fichier valide, désactiver immédiatement le loader
+        setIsUploadingFiles(false);
       }
 
       // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire

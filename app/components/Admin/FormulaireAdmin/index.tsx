@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   usePortfolioFormHandlers,
   type PortfolioFormData,
@@ -86,6 +86,10 @@ export default function FormulaireAdmin({
   >([]);
   const [bentoFiles, setBentoFiles] = useState<Map<string, File>>(new Map());
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isUploadingFiles, setIsUploadingFiles] = useState(false);
+  
+  // Référence synchrone pour les fichiers bento (évite les problèmes de timing)
+  const bentoFilesRef = useRef<Map<string, File>>(new Map());
 
   // Options pour les formats de bento
   const bentoFormats = BENTO_FORMATS;
@@ -156,6 +160,7 @@ export default function FormulaireAdmin({
         setPhotoMainFile,
         setBentoPreviewImages,
         setBentoFiles,
+        setIsUploadingFiles,
         bentoFiles,
       })
     : usePortfolioFormHandlers({
@@ -172,6 +177,7 @@ export default function FormulaireAdmin({
         setPhotoMainFile,
         setBentoPreviewImages,
         setBentoFiles,
+        setIsUploadingFiles,
       });
 
   const {
@@ -212,6 +218,28 @@ export default function FormulaireAdmin({
       submitFormData.append("photoMainFile", photoMainFile);
     }
 
+    // CORRECTION TIMING: Utiliser une référence synchrone pour éviter les problèmes de timing
+    // Récupérer les fichiers bento directement depuis les inputs du formulaire comme fallback
+
+    // Créer une Map combinée avec les fichiers de bentoFiles + fallback depuis les inputs du formulaire
+    const allBentoFiles = new Map(bentoFiles);
+    
+    // Fallback: récupérer les fichiers depuis les inputs du formulaire si bentoFiles est vide
+    if (allBentoFiles.size === 0) {
+      console.log("⚠️ bentoFiles Map is empty, trying fallback from form inputs");
+      const inputs = form.querySelectorAll('input[type="file"][accept*="image"]') as NodeListOf<HTMLInputElement>;
+      inputs.forEach(input => {
+        if (input.files) {
+          Array.from(input.files).forEach(file => {
+            if (file.type.startsWith("image/")) {
+              allBentoFiles.set(file.name, file);
+              console.log(`📁 Fallback: Added file ${file.name} from input`);
+            }
+          });
+        }
+      });
+    }
+
     // Ajouter les fichiers bento avec les noms corrects
     if (isEditing) {
       // Mode édition: utiliser Map pour les fichiers bento
@@ -221,13 +249,17 @@ export default function FormulaireAdmin({
           line.listImage.forEach((image, imageIndex) => {
             if (image.startsWith("pending_")) {
               const fileName = image.replace("pending_", "");
-              const file = bentoFiles.get(fileName);
+              const file = allBentoFiles.get(fileName);
+              console.log(`🔍 Debug - Looking for file: ${fileName}, found:`, file ? "YES" : "NO");
               if (file) {
                 submitFormData.append(
                   `bentoFile_${bentoIndex}_${bentoImageIndex}`,
                   file
                 );
+                console.log(`✅ Added bentoFile_${bentoIndex}_${bentoImageIndex}`);
                 bentoImageIndex++;
+              } else {
+                console.warn(`⚠️ File not found in allBentoFiles Map: ${fileName}`);
               }
             }
           });
@@ -245,13 +277,17 @@ export default function FormulaireAdmin({
           line.listImage.forEach((image, imageIndex) => {
             if (image.startsWith("pending_")) {
               const fileName = image.replace("pending_", "");
-              const file = bentoFiles.get(fileName);
+              const file = allBentoFiles.get(fileName);
+              console.log(`🔍 Debug - Looking for file: ${fileName}, found:`, file ? "YES" : "NO");
               if (file) {
                 submitFormData.append(
                   `bentoFile_${bentoIndex}_${globalImageIndex}`,
                   file
                 );
+                console.log(`✅ Added bentoFile_${bentoIndex}_${globalImageIndex}`);
                 globalImageIndex++;
+              } else {
+                console.warn(`⚠️ File not found in allBentoFiles Map: ${fileName}`);
               }
             }
           });
@@ -792,10 +828,11 @@ export default function FormulaireAdmin({
 
                 {/* Images de la ligne */}
                 <div>
-                  <InputAdmin
-                    type="file-multiple"
-                    label="Images et GIFs"
-                    accept="image/*,.gif"
+                  <div className="flex items-center gap-2 mb-2">
+                    <InputAdmin
+                      type="file-multiple"
+                      label="Images et GIFs"
+                      accept="image/*,.gif"
                     onChange={(value) => {
                       console.log("InputAdmin onChange appelé avec:", value);
                       console.log(
@@ -867,6 +904,17 @@ export default function FormulaireAdmin({
                     onRemovePreview={removeBentoImage}
                     required
                   />
+                  
+                  {/* Indicateur de chargement */}
+                  {isUploadingFiles && (
+                    <div className="flex items-center gap-2 text-blue-400 text-sm mt-2">
+                      <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                      <span style={{ fontFamily: "Jakarta Medium" }}>
+                        Chargement des fichiers...
+                      </span>
+                    </div>
+                  )}
+                  </div>
 
                   {/* Liste textuelle des images */}
                   {currentBentoLine.listImage.length > 0 && (
@@ -1146,10 +1194,22 @@ export default function FormulaireAdmin({
           </button>
           <button
             type="submit"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-[1.02]"
+            disabled={isUploadingFiles}
+            className={`py-3 px-8 rounded-lg font-semibold transition-all duration-200 transform ${
+              isUploadingFiles
+                ? "bg-gray-400 cursor-not-allowed text-gray-200"
+                : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 hover:scale-[1.02]"
+            }`}
             style={{ fontFamily: "Jakarta Semi Bold" }}
           >
-            {submitButtonText}
+            {isUploadingFiles ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+                Chargement des fichiers...
+              </div>
+            ) : (
+              submitButtonText
+            )}
           </button>
         </div>
       </form>
