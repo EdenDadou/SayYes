@@ -50,9 +50,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 // Action pour gérer la soumission du formulaire
 export async function action({ request }: ActionFunctionArgs) {
-  await requireAuth(request);
-
   try {
+    await requireAuth(request);
+
     // Parse les données du formulaire
     const formData = await parseFormData(request);
 

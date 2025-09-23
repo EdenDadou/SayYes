@@ -68,18 +68,36 @@ export async function parseFormData(request: Request) {
  * Extrait les données du portfolio depuis FormData
  */
 export function extractPortfolioData(formData: FormData): PortfolioFormData {
+  // Traitement des catégories - peut être un string ou un array
+  const categoriesValue = formData.get("categories") as string;
+  let categories: string[] = [];
+  if (categoriesValue) {
+    categories = [categoriesValue];
+  }
+
+  // Traitement des livrables - peut être envoyé différemment
+  const livrableValue = formData.get("livrable") as string;
+  let livrable: string[] = [];
+  if (livrableValue) {
+    try {
+      livrable = JSON.parse(livrableValue);
+    } catch {
+      livrable = [livrableValue];
+    }
+  }
+
   return {
-    titre: formData.get("titre") as string,
-    categories: formData.getAll("categories") as string[],
-    slug: formData.get("slug") as string,
+    titre: (formData.get("titre") as string) || "",
+    categories: categories,
+    slug: (formData.get("slug") as string) || "",
     photoCouverture: (formData.get("photoCouvertureUrl") as string) || "",
     photoMain: (formData.get("photoMainUrl") as string) || "",
-    description: formData.get("description") as string,
-    kicker: formData.get("kicker") as string,
-    livrable: formData.getAll("livrable") as string[],
-    sousTitre: formData.get("sousTitre") as string,
-    topTitle: formData.get("topTitle") as string,
-    couleur: formData.get("couleur") as string,
+    description: (formData.get("description") as string) || "",
+    kicker: (formData.get("kicker") as string) || "",
+    livrable: livrable,
+    sousTitre: (formData.get("sousTitre") as string) || "",
+    topTitle: (formData.get("topTitle") as string) || "",
+    couleur: (formData.get("couleur") as string) || "",
     temoignage: {
       auteur: (formData.get("temoignageAuteur") as string) || "",
       contenu: (formData.get("temoignageContenu") as string) || "",
@@ -90,7 +108,6 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
         const bentoData = formData.get("bento") as string;
         return bentoData ? JSON.parse(bentoData) : [];
       } catch (e) {
-        console.error("❌ Erreur parsing bento data:", e);
         return [];
       }
     })(),
@@ -221,18 +238,6 @@ export function validatePortfolioData(data: PortfolioFormData): string[] {
     errors.push(
       "Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets"
     );
-  }
-
-  if (!data.description?.trim()) {
-    errors.push("La description est obligatoire");
-  }
-
-  if (!data.temoignage.auteur?.trim()) {
-    errors.push("L'auteur du témoignage est obligatoire");
-  }
-
-  if (!data.temoignage.contenu?.trim()) {
-    errors.push("Le contenu du témoignage est obligatoire");
   }
 
   return errors;

@@ -198,59 +198,64 @@ export async function getPortfolio(
 export async function getPortfolioBySlug(
   slug: string
 ): Promise<PortfolioWithMedia | null> {
-  const portfolio = await prisma.portfolio.findUnique({
-    where: { slug },
-    include: {
-      medias: {
-        select: {
-          id: true,
-          filename: true,
-          originalName: true,
-          url: true,
-          type: true,
+  try {
+    const portfolio = await prisma.portfolio.findUnique({
+      where: { slug },
+      include: {
+        medias: {
+          select: {
+            id: true,
+            filename: true,
+            originalName: true,
+            url: true,
+            type: true,
+          },
+          orderBy: { createdAt: "desc" },
         },
-        orderBy: { createdAt: "desc" },
       },
-    },
-  });
+    });
 
-  if (!portfolio) return null;
-
-  // Fonction helper pour parser les données JSON de manière sécurisée
-  const safeParse = (data: string | null | undefined, fallback: any = []) => {
-    if (!data || data === "undefined" || data === "null") {
-      return fallback;
+    if (!portfolio) {
+      return null;
     }
-    try {
-      return JSON.parse(data);
-    } catch (e) {
-      console.warn("Erreur parsing JSON:", e, "data:", data);
-      return fallback;
-    }
-  };
 
-  return {
-    id: portfolio.id,
-    titre: portfolio.titre,
-    categories: safeParse(portfolio.categories, []),
-    slug: portfolio.slug,
-    photoCouverture: portfolio.photoCouverture,
-    photoMain: (portfolio as any).photoMain || "",
-    description: portfolio.description,
-    kicker: portfolio.kicker,
-    sousTitre: portfolio.sousTitre,
-    topTitle: (portfolio as any).topTitle || "",
-    couleur: (portfolio as any).couleur || "",
-    createdAt: portfolio.createdAt,
-    updatedAt: portfolio.updatedAt,
-    livrable: safeParse(portfolio.livrable, []),
-    bento: safeParse(portfolio.bento, []),
-    temoignage: safeParse((portfolio as any).temoignage, {
-      auteur: "",
-      contenu: "",
-    }),
-    medias: portfolio.medias,
-  };
+    // Fonction helper pour parser les données JSON de manière sécurisée
+    const safeParse = (data: string | null | undefined, fallback: any = []) => {
+      if (!data || data === "undefined" || data === "null") {
+        return fallback;
+      }
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return fallback;
+      }
+    };
+
+    return {
+      id: portfolio.id,
+      titre: portfolio.titre,
+      categories: safeParse(portfolio.categories, []),
+      slug: portfolio.slug,
+      photoCouverture: portfolio.photoCouverture,
+      photoMain: (portfolio as any).photoMain || "",
+      description: portfolio.description || "",
+      kicker: portfolio.kicker || "",
+      sousTitre: portfolio.sousTitre || "",
+      topTitle: (portfolio as any).topTitle || "",
+      couleur: (portfolio as any).couleur || "",
+      createdAt: portfolio.createdAt,
+      updatedAt: portfolio.updatedAt,
+      livrable: safeParse(portfolio.livrable, []),
+      bento: safeParse(portfolio.bento, []),
+      temoignage: safeParse((portfolio as any).temoignage, {
+        auteur: "",
+        contenu: "",
+      }),
+      medias: portfolio.medias,
+    };
+  } catch (error) {
+    return null;
+  }
 }
 
 // Récupérer tous les portfolios
@@ -274,6 +279,9 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
 
     // Fonction helper pour parser les données JSON de manière sécurisée
     const safeParse = (data: string | null | undefined, fallback: any = []) => {
+      if (!data || data === "undefined" || data === "null") {
+        return fallback;
+      }
       try {
         return JSON.parse(data);
       } catch (e) {
@@ -285,12 +293,13 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
     return portfolios.map((portfolio) => ({
       id: portfolio.id,
       titre: portfolio.titre,
+      categories: safeParse(portfolio.categories, []),
       slug: portfolio.slug,
       photoCouverture: portfolio.photoCouverture,
       photoMain: (portfolio as any).photoMain || "",
-      description: portfolio.description,
-      kicker: portfolio.kicker,
-      sousTitre: portfolio.sousTitre,
+      description: portfolio.description || "",
+      kicker: portfolio.kicker || "",
+      sousTitre: portfolio.sousTitre || "",
       topTitle: (portfolio as any).topTitle || "",
       couleur: (portfolio as any).couleur || "",
       createdAt: portfolio.createdAt,
@@ -401,60 +410,89 @@ export async function deletePortfolio(id: string): Promise<void> {
 
 // Récupérer les portfolios pour l'affichage public (sans les médias)
 export async function getPublicPortfolios() {
-  const portfolios = await prisma.portfolio.findMany({
-    select: {
-      id: true,
-      titre: true,
-      categories: true,
-      slug: true,
-      photoCouverture: true,
-      photoMain: true,
-      description: true,
-      kicker: true,
-      sousTitre: true,
-      topTitle: true,
-      couleur: true,
-      temoignage: true,
-      livrable: true,
-      bento: true,
-      createdAt: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    const portfolios = await prisma.portfolio.findMany({
+      select: {
+        id: true,
+        titre: true,
+        categories: true,
+        slug: true,
+        photoCouverture: true,
+        photoMain: true,
+        description: true,
+        kicker: true,
+        sousTitre: true,
+        topTitle: true,
+        couleur: true,
+        temoignage: true,
+        livrable: true,
+        bento: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
 
-  // Fonction helper pour parser les données JSON de manière sécurisée
-  const safeParse = (data: string | null | undefined, fallback: any = []) => {
-    if (!data || data === "undefined" || data === "null") {
-      return fallback;
-    }
-    try {
-      return JSON.parse(data);
-    } catch (e) {
-      console.warn("Erreur parsing JSON:", e, "data:", data);
-      return fallback;
-    }
-  };
+    // Fonction helper pour parser les données JSON de manière sécurisée
+    const safeParse = (data: string | null | undefined, fallback: any = []) => {
+      if (!data || data === "undefined" || data === "null") {
+        return fallback;
+      }
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return fallback;
+      }
+    };
 
-  return portfolios.map((portfolio) => ({
-    id: portfolio.id,
-    titre: portfolio.titre,
-    categories: safeParse(portfolio.categories, []),
-    slug: portfolio.slug,
-    photoCouverture: portfolio.photoCouverture,
-    photoMain: (portfolio as any).photoMain || "",
-    description: portfolio.description,
-    kicker: portfolio.kicker,
-    sousTitre: portfolio.sousTitre,
-    topTitle: (portfolio as any).topTitle || "",
-    couleur: (portfolio as any).couleur || "",
-    createdAt: portfolio.createdAt,
-    livrable: safeParse(portfolio.livrable, []),
-    bento: safeParse(portfolio.bento, []),
-    temoignage: safeParse((portfolio as any).temoignage, {
-      auteur: "",
-      contenu: "",
-    }),
-  }));
+    return portfolios.map((portfolio) => {
+      try {
+        return {
+          id: portfolio.id,
+          titre: portfolio.titre,
+          categories: safeParse(portfolio.categories, []),
+          slug: portfolio.slug,
+          photoCouverture: portfolio.photoCouverture,
+          photoMain: (portfolio as any).photoMain || "",
+          description: portfolio.description || "",
+          kicker: portfolio.kicker || "",
+          sousTitre: portfolio.sousTitre || "",
+          topTitle: (portfolio as any).topTitle || "",
+          couleur: (portfolio as any).couleur || "",
+          createdAt: portfolio.createdAt,
+          livrable: safeParse(portfolio.livrable, []),
+          bento: safeParse(portfolio.bento, []),
+          temoignage: safeParse((portfolio as any).temoignage, {
+            auteur: "",
+            contenu: "",
+          }),
+        };
+      } catch (error) {
+        // En cas d'erreur sur un portfolio, retourner un portfolio par défaut plutôt que de faire planter
+        return {
+          id: portfolio.id,
+          titre: portfolio.titre || "Titre par défaut",
+          categories: [],
+          slug: portfolio.slug,
+          photoCouverture: portfolio.photoCouverture,
+          photoMain: "",
+          description: "",
+          kicker: "",
+          sousTitre: "",
+          topTitle: "",
+          couleur: "",
+          createdAt: portfolio.createdAt,
+          livrable: [],
+          bento: [],
+          temoignage: {
+            auteur: "",
+            contenu: "",
+          },
+        };
+      }
+    });
+  } catch (error) {
+    return [];
+  }
 }
 
 // Compter le nombre total de portfolios

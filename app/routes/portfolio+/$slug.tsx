@@ -28,14 +28,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Slug manquant", { status: 400 });
   }
 
-  const portfolio = await getPortfolioBySlug(slug);
-  const allPortfolios = await getPublicPortfolios();
+  try {
+    const portfolio = await getPortfolioBySlug(slug);
+    const allPortfolios = await getPublicPortfolios();
 
-  if (!portfolio) {
-    throw new Response("Portfolio non trouvé", { status: 404 });
+    if (!portfolio) {
+      throw new Response("Portfolio non trouvé", { status: 404 });
+    }
+
+    return Response.json({ portfolio, allPortfolios });
+  } catch (error) {
+    if (error instanceof Response) {
+      throw error;
+    }
+    throw new Response("Erreur interne du serveur", { status: 500 });
   }
-
-  return Response.json({ portfolio, allPortfolios });
 }
 
 export default function PortfolioSlug() {
