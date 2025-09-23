@@ -52,6 +52,10 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
     setBentoPreviewImages,
     bentoFiles,
     setBentoFiles,
+    setIsUploadingFiles,
+    setUploadProgress,
+    setUploadedCount,
+    setTotalFiles,
   } = state;
 
   // Gestion de l'upload de fichiers multiples pour les images bento (version édition)
@@ -59,6 +63,9 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
     console.log("handleBentoFilesChange EDITION appelé", e.target.files);
     const files = e.target.files;
     if (files) {
+      // Activer l'état de chargement
+      setIsUploadingFiles(true);
+
       const validFiles: File[] = [];
       const newImageNames: string[] = [];
 
@@ -67,11 +74,20 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
         if (file.type.startsWith("image/")) {
           validFiles.push(file);
           newImageNames.push(`pending_${file.name}`);
+          console.log(`✅ Valid file added: ${file.name}`);
         }
       });
 
+      console.log(`🔍 Total valid files: ${validFiles.length}`);
+      console.log(`🔍 New image names: ${newImageNames.join(", ")}`);
+
       // Mettre à jour les fichiers et les noms d'images de manière synchrone
       if (validFiles.length > 0) {
+        // Initialiser les états de progression
+        setTotalFiles(validFiles.length);
+        setUploadedCount(0);
+        setUploadProgress(0);
+
         // Stocker les fichiers réels pour l'envoi avec Map
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
@@ -87,18 +103,69 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
           listImage: [...prev.listImage, ...newImageNames],
         }));
 
-        // Créer les aperçus de manière asynchrone (pour l'affichage uniquement)
-        validFiles.forEach((file) => {
+        // Créer les aperçus de manière asynchrone avec barre de progression
+        let loadedCount = 0;
+        validFiles.forEach((file, index) => {
           const reader = new FileReader();
+
+          reader.onprogress = (event) => {
+            if (event.lengthComputable) {
+              const fileProgress = (event.loaded / event.total) * 100;
+              const totalProgress =
+                (loadedCount * 100 + fileProgress) / validFiles.length;
+              setUploadProgress(Math.round(totalProgress));
+            }
+          };
+
           reader.onload = (event) => {
             const imageUrl = event.target?.result as string;
             setBentoPreviewImages((prev) => [
               ...prev,
               { url: imageUrl, name: file.name },
             ]);
+
+            // Mettre à jour le compteur et la progression
+            loadedCount++;
+            setUploadedCount(loadedCount);
+            const totalProgress = (loadedCount / validFiles.length) * 100;
+            setUploadProgress(Math.round(totalProgress));
+
+            console.log(
+              `📁 Fichier ${loadedCount}/${validFiles.length} chargé: ${file.name}`
+            );
+
+            // Désactiver le loader quand tous les fichiers sont chargés
+            if (loadedCount === validFiles.length) {
+              setTimeout(() => {
+                setIsUploadingFiles(false);
+                setUploadProgress(0);
+                setUploadedCount(0);
+                setTotalFiles(0);
+                console.log(
+                  "✅ Tous les fichiers bento sont chargés (EDITION)"
+                );
+              }, 500); // Petit délai pour voir la progression complète
+            }
           };
+
+          reader.onerror = () => {
+            console.error(`❌ Erreur lors du chargement de ${file.name}`);
+            loadedCount++;
+            setUploadedCount(loadedCount);
+
+            if (loadedCount === validFiles.length) {
+              setIsUploadingFiles(false);
+              setUploadProgress(0);
+              setUploadedCount(0);
+              setTotalFiles(0);
+            }
+          };
+
           reader.readAsDataURL(file);
         });
+      } else {
+        // Aucun fichier valide, désactiver immédiatement le loader
+        setIsUploadingFiles(false);
       }
 
       // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire

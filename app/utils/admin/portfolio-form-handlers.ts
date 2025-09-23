@@ -117,6 +117,9 @@ export interface FormState {
   >;
   setBentoFiles: React.Dispatch<React.SetStateAction<Map<string, File>>>;
   setIsUploadingFiles: React.Dispatch<React.SetStateAction<boolean>>;
+  setUploadProgress: React.Dispatch<React.SetStateAction<number>>;
+  setUploadedCount: React.Dispatch<React.SetStateAction<number>>;
+  setTotalFiles: React.Dispatch<React.SetStateAction<number>>;
 }
 
 // Fonction factory pour créer les handlers
@@ -136,6 +139,9 @@ export function createFormHandlers(state: FormState): FormHandlers {
     setBentoPreviewImages,
     setBentoFiles,
     setIsUploadingFiles,
+    setUploadProgress,
+    setUploadedCount,
+    setTotalFiles,
   } = state;
 
   // Gestion des changements dans le formulaire
@@ -245,6 +251,11 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
       // Mettre à jour les fichiers et les noms d'images de manière synchrone
       if (validFiles.length > 0) {
+        // Initialiser les états de progression
+        setTotalFiles(validFiles.length);
+        setUploadedCount(0);
+        setUploadProgress(0);
+
         // Stocker les fichiers réels pour l'envoi avec Map
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
@@ -263,10 +274,20 @@ export function createFormHandlers(state: FormState): FormHandlers {
           listImage: [...prev.listImage, ...newImageNames],
         }));
 
-        // Créer les aperçus de manière asynchrone (pour l'affichage uniquement)
+        // Créer les aperçus de manière asynchrone avec barre de progression
         let loadedCount = 0;
-        validFiles.forEach((file) => {
+        validFiles.forEach((file, index) => {
           const reader = new FileReader();
+
+          reader.onprogress = (event) => {
+            if (event.lengthComputable) {
+              const fileProgress = (event.loaded / event.total) * 100;
+              const totalProgress =
+                (loadedCount * 100 + fileProgress) / validFiles.length;
+              setUploadProgress(Math.round(totalProgress));
+            }
+          };
+
           reader.onload = (event) => {
             const imageUrl = event.target?.result as string;
             setBentoPreviewImages((prev) => [
@@ -274,13 +295,41 @@ export function createFormHandlers(state: FormState): FormHandlers {
               { url: imageUrl, name: file.name },
             ]);
 
-            // Désactiver le loader quand tous les fichiers sont chargés
+            // Mettre à jour le compteur et la progression
             loadedCount++;
+            setUploadedCount(loadedCount);
+            const totalProgress = (loadedCount / validFiles.length) * 100;
+            setUploadProgress(Math.round(totalProgress));
+
+            console.log(
+              `📁 Fichier ${loadedCount}/${validFiles.length} chargé: ${file.name}`
+            );
+
+            // Désactiver le loader quand tous les fichiers sont chargés
             if (loadedCount === validFiles.length) {
-              setIsUploadingFiles(false);
-              console.log("✅ Tous les fichiers bento sont chargés");
+              setTimeout(() => {
+                setIsUploadingFiles(false);
+                setUploadProgress(0);
+                setUploadedCount(0);
+                setTotalFiles(0);
+                console.log("✅ Tous les fichiers bento sont chargés");
+              }, 500); // Petit délai pour voir la progression complète
             }
           };
+
+          reader.onerror = () => {
+            console.error(`❌ Erreur lors du chargement de ${file.name}`);
+            loadedCount++;
+            setUploadedCount(loadedCount);
+
+            if (loadedCount === validFiles.length) {
+              setIsUploadingFiles(false);
+              setUploadProgress(0);
+              setUploadedCount(0);
+              setTotalFiles(0);
+            }
+          };
+
           reader.readAsDataURL(file);
         });
       } else {

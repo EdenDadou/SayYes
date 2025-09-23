@@ -87,6 +87,9 @@ export default function FormulaireAdmin({
   const [bentoFiles, setBentoFiles] = useState<Map<string, File>>(new Map());
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadedCount, setUploadedCount] = useState(0);
+  const [totalFiles, setTotalFiles] = useState(0);
 
   // Référence synchrone pour les fichiers bento (évite les problèmes de timing)
   const bentoFilesRef = useRef<Map<string, File>>(new Map());
@@ -161,6 +164,9 @@ export default function FormulaireAdmin({
         setBentoPreviewImages,
         setBentoFiles,
         setIsUploadingFiles,
+        setUploadProgress,
+        setUploadedCount,
+        setTotalFiles,
         bentoFiles,
       })
     : usePortfolioFormHandlers({
@@ -178,6 +184,9 @@ export default function FormulaireAdmin({
         setBentoPreviewImages,
         setBentoFiles,
         setIsUploadingFiles,
+        setUploadProgress,
+        setUploadedCount,
+        setTotalFiles,
       });
 
   const {
@@ -923,13 +932,50 @@ export default function FormulaireAdmin({
                       required
                     />
 
-                    {/* Indicateur de chargement */}
+                    {/* Barre de progression */}
                     {isUploadingFiles && (
-                      <div className="flex items-center gap-2 text-blue-400 text-sm mt-2">
-                        <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                        <span style={{ fontFamily: "Jakarta Medium" }}>
-                          Chargement des fichiers...
-                        </span>
+                      <div className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-600">
+                        <div className="flex items-center justify-between mb-2">
+                          <span
+                            className="text-blue-400 text-sm font-medium"
+                            style={{ fontFamily: "Jakarta Medium" }}
+                          >
+                            Chargement des fichiers...
+                          </span>
+                          <span
+                            className="text-gray-300 text-sm"
+                            style={{ fontFamily: "Jakarta" }}
+                          >
+                            {uploadedCount}/{totalFiles}
+                          </span>
+                        </div>
+
+                        {/* Barre de progression */}
+                        <div className="w-full bg-gray-700 rounded-full h-2.5 mb-2">
+                          <div
+                            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2.5 rounded-full transition-all duration-300 ease-out"
+                            style={{ width: `${uploadProgress}%` }}
+                          ></div>
+                        </div>
+
+                        {/* Pourcentage */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                            <span
+                              className="text-gray-400 text-xs"
+                              style={{ fontFamily: "Jakarta" }}
+                            >
+                              Traitement en cours...
+                            </span>
+                          </div>
+                          <span
+                            className="text-blue-400 text-sm font-bold"
+                            style={{ fontFamily: "Jakarta Bold" }}
+                          >
+                            {uploadProgress}%
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1221,9 +1267,14 @@ export default function FormulaireAdmin({
             style={{ fontFamily: "Jakarta Semi Bold" }}
           >
             {isUploadingFiles ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <div className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
-                Chargement des fichiers...
+                <span>Chargement... {uploadProgress}%</span>
+                {totalFiles > 0 && (
+                  <span className="text-xs opacity-75">
+                    ({uploadedCount}/{totalFiles})
+                  </span>
+                )}
               </div>
             ) : (
               submitButtonText
