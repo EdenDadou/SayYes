@@ -87,7 +87,7 @@ export default function FormulaireAdmin({
   const [bentoFiles, setBentoFiles] = useState<Map<string, File>>(new Map());
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
-  
+
   // Référence synchrone pour les fichiers bento (évite les problèmes de timing)
   const bentoFilesRef = useRef<Map<string, File>>(new Map());
 
@@ -223,14 +223,18 @@ export default function FormulaireAdmin({
 
     // Créer une Map combinée avec les fichiers de bentoFiles + fallback depuis les inputs du formulaire
     const allBentoFiles = new Map(bentoFiles);
-    
+
     // Fallback: récupérer les fichiers depuis les inputs du formulaire si bentoFiles est vide
     if (allBentoFiles.size === 0) {
-      console.log("⚠️ bentoFiles Map is empty, trying fallback from form inputs");
-      const inputs = form.querySelectorAll('input[type="file"][accept*="image"]') as NodeListOf<HTMLInputElement>;
-      inputs.forEach(input => {
+      console.log(
+        "⚠️ bentoFiles Map is empty, trying fallback from form inputs"
+      );
+      const inputs = form.querySelectorAll(
+        'input[type="file"][accept*="image"]'
+      ) as NodeListOf<HTMLInputElement>;
+      inputs.forEach((input) => {
         if (input.files) {
-          Array.from(input.files).forEach(file => {
+          Array.from(input.files).forEach((file) => {
             if (file.type.startsWith("image/")) {
               allBentoFiles.set(file.name, file);
               console.log(`📁 Fallback: Added file ${file.name} from input`);
@@ -250,16 +254,23 @@ export default function FormulaireAdmin({
             if (image.startsWith("pending_")) {
               const fileName = image.replace("pending_", "");
               const file = allBentoFiles.get(fileName);
-              console.log(`🔍 Debug - Looking for file: ${fileName}, found:`, file ? "YES" : "NO");
+              console.log(
+                `🔍 Debug - Looking for file: ${fileName}, found:`,
+                file ? "YES" : "NO"
+              );
               if (file) {
                 submitFormData.append(
                   `bentoFile_${bentoIndex}_${bentoImageIndex}`,
                   file
                 );
-                console.log(`✅ Added bentoFile_${bentoIndex}_${bentoImageIndex}`);
+                console.log(
+                  `✅ Added bentoFile_${bentoIndex}_${bentoImageIndex}`
+                );
                 bentoImageIndex++;
               } else {
-                console.warn(`⚠️ File not found in allBentoFiles Map: ${fileName}`);
+                console.warn(
+                  `⚠️ File not found in allBentoFiles Map: ${fileName}`
+                );
               }
             }
           });
@@ -278,16 +289,23 @@ export default function FormulaireAdmin({
             if (image.startsWith("pending_")) {
               const fileName = image.replace("pending_", "");
               const file = allBentoFiles.get(fileName);
-              console.log(`🔍 Debug - Looking for file: ${fileName}, found:`, file ? "YES" : "NO");
+              console.log(
+                `🔍 Debug - Looking for file: ${fileName}, found:`,
+                file ? "YES" : "NO"
+              );
               if (file) {
                 submitFormData.append(
                   `bentoFile_${bentoIndex}_${globalImageIndex}`,
                   file
                 );
-                console.log(`✅ Added bentoFile_${bentoIndex}_${globalImageIndex}`);
+                console.log(
+                  `✅ Added bentoFile_${bentoIndex}_${globalImageIndex}`
+                );
                 globalImageIndex++;
               } else {
-                console.warn(`⚠️ File not found in allBentoFiles Map: ${fileName}`);
+                console.warn(
+                  `⚠️ File not found in allBentoFiles Map: ${fileName}`
+                );
               }
             }
           });
@@ -833,87 +851,87 @@ export default function FormulaireAdmin({
                       type="file-multiple"
                       label="Images et GIFs"
                       accept="image/*,.gif"
-                    onChange={(value) => {
-                      console.log("InputAdmin onChange appelé avec:", value);
-                      console.log(
-                        "Type de value:",
-                        typeof value,
-                        Array.isArray(value)
-                      );
-                      if (value) {
-                        console.log("Contenu de value:", value);
-                        if (Array.isArray(value)) {
-                          console.log("Nombre de fichiers:", value.length);
-                          value.forEach((file, index) => {
-                            if (file instanceof File) {
-                              console.log(
-                                `Fichier ${index}:`,
-                                file instanceof File,
-                                file.name,
-                                file.type
-                              );
-                            } else {
-                              console.log(
-                                `Fichier ${index}:`,
-                                typeof file,
-                                file
-                              );
-                            }
-                          });
+                      onChange={(value) => {
+                        console.log("InputAdmin onChange appelé avec:", value);
+                        console.log(
+                          "Type de value:",
+                          typeof value,
+                          Array.isArray(value)
+                        );
+                        if (value) {
+                          console.log("Contenu de value:", value);
+                          if (Array.isArray(value)) {
+                            console.log("Nombre de fichiers:", value.length);
+                            value.forEach((file, index) => {
+                              if (file instanceof File) {
+                                console.log(
+                                  `Fichier ${index}:`,
+                                  file instanceof File,
+                                  file.name,
+                                  file.type
+                                );
+                              } else {
+                                console.log(
+                                  `Fichier ${index}:`,
+                                  typeof file,
+                                  file
+                                );
+                              }
+                            });
+                          }
                         }
-                      }
 
-                      if (
-                        Array.isArray(value) &&
-                        value.every((v) => v instanceof File)
-                      ) {
-                        console.log("Création de la FileList simulée...");
-                        // Créer une FileList simulée à partir de l'array
-                        const fileList = {
-                          length: value.length,
-                          item: (index: number) => value[index] || null,
-                          [Symbol.iterator]: function* () {
-                            for (let i = 0; i < value.length; i++) {
-                              yield value[i];
-                            }
-                          },
-                        } as FileList;
+                        if (
+                          Array.isArray(value) &&
+                          value.every((v) => v instanceof File)
+                        ) {
+                          console.log("Création de la FileList simulée...");
+                          // Créer une FileList simulée à partir de l'array
+                          const fileList = {
+                            length: value.length,
+                            item: (index: number) => value[index] || null,
+                            [Symbol.iterator]: function* () {
+                              for (let i = 0; i < value.length; i++) {
+                                yield value[i];
+                              }
+                            },
+                          } as FileList;
 
-                        // Ajouter les fichiers comme propriétés indexées
-                        value.forEach((file, index) => {
-                          (fileList as any)[index] = file;
-                        });
+                          // Ajouter les fichiers comme propriétés indexées
+                          value.forEach((file, index) => {
+                            (fileList as any)[index] = file;
+                          });
 
-                        console.log("FileList créée:", fileList);
-                        // Créer un événement simulé avec une vraie FileList
-                        const fakeEvent = {
-                          target: { files: fileList },
-                        } as unknown as React.ChangeEvent<HTMLInputElement>;
-                        console.log(
-                          "Appel de handleBentoFilesChange avec:",
-                          fakeEvent
-                        );
-                        handleBentoFilesChange(fakeEvent);
-                      } else {
-                        console.log(
-                          "Condition non remplie pour handleBentoFilesChange"
-                        );
-                      }
-                    }}
-                    previews={bentoPreviewImages}
-                    onRemovePreview={removeBentoImage}
-                    required
-                  />
-                  
-                  {/* Indicateur de chargement */}
-                  {isUploadingFiles && (
-                    <div className="flex items-center gap-2 text-blue-400 text-sm mt-2">
-                      <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                      <span style={{ fontFamily: "Jakarta Medium" }}>
-                        Chargement des fichiers...
-                      </span>
-                    </div>
-                  )}
+                          console.log("FileList créée:", fileList);
+                          // Créer un événement simulé avec une vraie FileList
+                          const fakeEvent = {
+                            target: { files: fileList },
+                          } as unknown as React.ChangeEvent<HTMLInputElement>;
+                          console.log(
+                            "Appel de handleBentoFilesChange avec:",
+                            fakeEvent
+                          );
+                          handleBentoFilesChange(fakeEvent);
+                        } else {
+                          console.log(
+                            "Condition non remplie pour handleBentoFilesChange"
+                          );
+                        }
+                      }}
+                      previews={bentoPreviewImages}
+                      onRemovePreview={removeBentoImage}
+                      required
+                    />
+
+                    {/* Indicateur de chargement */}
+                    {isUploadingFiles && (
+                      <div className="flex items-center gap-2 text-blue-400 text-sm mt-2">
+                        <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                        <span style={{ fontFamily: "Jakarta Medium" }}>
+                          Chargement des fichiers...
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Liste textuelle des images */}

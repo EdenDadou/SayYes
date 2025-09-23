@@ -226,7 +226,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
     if (files) {
       // Activer l'état de chargement
       setIsUploadingFiles(true);
-      
+
       const validFiles: File[] = [];
       const newPreviews: { url: string; name: string }[] = [];
       const newImageNames: string[] = [];
@@ -273,7 +273,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
               ...prev,
               { url: imageUrl, name: file.name },
             ]);
-            
+
             // Désactiver le loader quand tous les fichiers sont chargés
             loadedCount++;
             if (loadedCount === validFiles.length) {
