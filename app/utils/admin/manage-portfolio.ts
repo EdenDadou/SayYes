@@ -250,31 +250,52 @@ export async function processBentoFiles(
   portfolioId: string,
   bentoData: BentoItem[]
 ): Promise<BentoItem[]> {
+  console.log("🎯 === DÉBUT TRAITEMENT FICHIERS BENTO ===");
+  console.log("📋 Données bento reçues:", JSON.stringify(bentoData, null, 2));
+
   const updatedBento = [...bentoData];
 
   // Créer une map des fichiers uploadés pour un accès plus facile
   const uploadedFiles = new Map<string, string>();
 
   // Traiter tous les fichiers bento
+  let foundFiles = 0;
+
   for (const [key, value] of formData.entries()) {
-    if (
-      key.startsWith("bentoFile_") &&
-      value instanceof File &&
-      value.size > 0
-    ) {
-      const match = key.match(/bentoFile_(\d+)_(\d+)/);
-      if (match) {
-        const bentoIndex = parseInt(match[1]);
-        const globalIndex = parseInt(match[2]);
+    if (key.startsWith("bentoFile_")) {
+      console.log(`🔍 Fichier bento trouvé: ${key}`);
+      foundFiles++;
 
-        // Sauvegarder le fichier
-        const savedMedia = await saveMedia(
-          value,
-          "portfolio/bento",
-          portfolioId
-        );
+      if (value instanceof File && value.size > 0) {
+        const match = key.match(/bentoFile_(\d+)_(\d+)/);
+        if (match) {
+          const bentoIndex = parseInt(match[1]);
+          const globalIndex = parseInt(match[2]);
 
-        uploadedFiles.set(`${bentoIndex}_${globalIndex}`, savedMedia.url);
+          try {
+            // Sauvegarder le fichier
+            const savedMedia = await saveMedia(
+              value,
+              "portfolio/bento",
+              portfolioId
+            );
+
+            const fileKey = `${bentoIndex}_${globalIndex}`;
+            uploadedFiles.set(fileKey, savedMedia.url);
+            console.log(
+              `✅ Fichier sauvegardé: ${fileKey} -> ${savedMedia.url}`
+            );
+          } catch (error) {
+            console.error(`❌ Erreur sauvegarde ${key}:`, error);
+          }
+        } else {
+          console.warn(`⚠️ Format de clé invalide: ${key}`);
+        }
+      } else {
+        console.warn(`⚠️ Fichier invalide pour ${key}:`, {
+          isFile: value instanceof File,
+          size: value instanceof File ? value.size : "N/A",
+        });
       }
     }
   }
@@ -294,10 +315,13 @@ export async function processBentoFiles(
               newUrl;
           } else {
             console.warn(
-              `⚠️ Aucun fichier trouvé pour ${fileKey} (image: ${image})`
+              `    ❌ Aucun fichier trouvé pour ${fileKey} (image: ${image})`
+            );
+            console.warn(
+              `    📋 Clés disponibles: [${Array.from(uploadedFiles.keys()).join(", ")}]`
             );
           }
-          globalFileIndex++; // ← LA CORRECTION: index global au lieu de local
+          globalFileIndex++;
         }
       });
     });
