@@ -9,7 +9,17 @@ import { flatRoutes } from "remix-flat-routes";
 export default defineConfig({
   server: {
     port: 4000,
+    // Options pour désactiver le cache en développement
+    hmr: {
+      overlay: true, // Afficher les erreurs en overlay
+    },
   },
+
+  // Configuration pour gérer le cache en développement
+  cacheDir:
+    process.env.NODE_ENV === "development"
+      ? ".vite-dev-cache"
+      : "node_modules/.vite",
   // Inclure des fichiers spécifiques (par exemple, les polices)
   assetsInclude: ["**/*.ttf", "**/*.woff", "**/*.woff2", "**/*.svg"],
 

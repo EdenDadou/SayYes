@@ -1,6 +1,7 @@
 node_modules
 
 /.cache
+/.vite-dev-cache
 /build
 .env
 

@@ -1,6 +1,7 @@
 import {
   unstable_parseMultipartFormData,
   unstable_createMemoryUploadHandler,
+  json,
 } from "@remix-run/node";
 import { saveMedia } from "~/server/media.server";
 
@@ -250,83 +251,76 @@ export async function processBentoFiles(
   portfolioId: string,
   bentoData: BentoItem[]
 ): Promise<BentoItem[]> {
-  console.log("🎯 === DÉBUT TRAITEMENT FICHIERS BENTO ===");
+  console.log("🎯 === DÉBUT TRAITEMENT FICHIERS BENTO (SIMPLIFIÉ) ===");
   console.log("📋 Données bento reçues:", JSON.stringify(bentoData, null, 2));
 
   const updatedBento = [...bentoData];
+  let globalFileIndex = 0;
 
-  // Créer une map des fichiers uploadés pour un accès plus facile
-  const uploadedFiles = new Map<string, string>();
+  // Parcourir les données bento et traiter chaque fichier pending de façon synchrone
+  for (let bentoIndex = 0; bentoIndex < updatedBento.length; bentoIndex++) {
+    const bento = updatedBento[bentoIndex];
 
-  // Traiter tous les fichiers bento
-  let foundFiles = 0;
+    for (let lineIndex = 0; lineIndex < bento.lines.length; lineIndex++) {
+      const line = bento.lines[lineIndex];
 
-  for (const [key, value] of formData.entries()) {
-    if (key.startsWith("bentoFile_")) {
-      console.log(`🔍 Fichier bento trouvé: ${key}`);
-      foundFiles++;
+      for (let imgIndex = 0; imgIndex < line.listImage.length; imgIndex++) {
+        const image = line.listImage[imgIndex];
 
-      if (value instanceof File && value.size > 0) {
-        const match = key.match(/bentoFile_(\d+)_(\d+)/);
-        if (match) {
-          const bentoIndex = parseInt(match[1]);
-          const globalIndex = parseInt(match[2]);
+        if (image.startsWith("pending_")) {
+          // Nom de l'input correspondant à ce fichier
+          const inputName = `bentoFile_${bentoIndex}_${globalFileIndex}`;
+          const file = formData.get(inputName) as File | null;
 
-          try {
-            // Sauvegarder le fichier
-            const savedMedia = await saveMedia(
-              value,
-              "portfolio/bento",
-              portfolioId
-            );
+          console.log(
+            `🔍 Recherche du fichier: ${inputName} pour l'image ${image}`
+          );
 
-            const fileKey = `${bentoIndex}_${globalIndex}`;
-            uploadedFiles.set(fileKey, savedMedia.url);
+          if (file && file.size > 0) {
             console.log(
-              `✅ Fichier sauvegardé: ${fileKey} -> ${savedMedia.url}`
+              `📸 Traitement du fichier bento: ${file.name} (${file.size} bytes)`
             );
-          } catch (error) {
-            console.error(`❌ Erreur sauvegarde ${key}:`, error);
+
+            try {
+              // Sauvegarder le fichier exactement comme les autres
+              const savedMedia = await saveMedia(
+                file,
+                "portfolio/bento",
+                portfolioId
+              );
+
+              // Remplacer l'URL pending par l'URL finale
+              updatedBento[bentoIndex].lines[lineIndex].listImage[imgIndex] =
+                savedMedia.url;
+
+              console.log(
+                `✅ Fichier bento sauvegardé: ${inputName} -> ${savedMedia.url}`
+              );
+            } catch (error) {
+              console.error(
+                `❌ Erreur sauvegarde fichier bento ${inputName}:`,
+                error
+              );
+            }
+          } else {
+            console.warn(
+              `❌ Fichier bento non trouvé: ${inputName} pour l'image ${image}`
+            );
+            console.warn(
+              `📋 Fichier reçu:`,
+              file ? `${file.name} (${file.size} bytes)` : "aucun"
+            );
           }
-        } else {
-          console.warn(`⚠️ Format de clé invalide: ${key}`);
+
+          globalFileIndex++;
         }
-      } else {
-        console.warn(`⚠️ Fichier invalide pour ${key}:`, {
-          isFile: value instanceof File,
-          size: value instanceof File ? value.size : "N/A",
-        });
       }
     }
   }
 
-  // CORRECTION PRINCIPALE: Utiliser un index global qui correspond à celui du formulaire
-  let globalFileIndex = 0;
-
-  updatedBento.forEach((bento, bentoIndex) => {
-    bento.lines.forEach((line, lineIndex) => {
-      line.listImage.forEach((image, imgIndex) => {
-        if (image.startsWith("pending_")) {
-          const fileKey = `${bentoIndex}_${globalFileIndex}`;
-          const newUrl = uploadedFiles.get(fileKey);
-
-          if (newUrl) {
-            updatedBento[bentoIndex].lines[lineIndex].listImage[imgIndex] =
-              newUrl;
-          } else {
-            console.warn(
-              `    ❌ Aucun fichier trouvé pour ${fileKey} (image: ${image})`
-            );
-            console.warn(
-              `    📋 Clés disponibles: [${Array.from(uploadedFiles.keys()).join(", ")}]`
-            );
-          }
-          globalFileIndex++;
-        }
-      });
-    });
-  });
-
+  console.log(
+    `🎯 Traitement bento terminé, ${globalFileIndex} fichiers traités`
+  );
   return updatedBento;
 }
 
@@ -439,14 +433,41 @@ export function createJsonResponse(
   data?: any,
   status: number = 200
 ) {
-  return Response.json(
-    {
-      success,
-      message,
-      ...data,
-    },
-    { status }
-  );
+  console.log("🔧 createJsonResponse appelé avec:", {
+    success,
+    message,
+    data,
+    status,
+  });
+
+  try {
+    const response = json(
+      {
+        success,
+        message,
+        ...(data && data),
+      },
+      { status }
+    );
+    console.log("✅ Response créée avec succès");
+    return response;
+  } catch (error) {
+    console.error("❌ Erreur dans createJsonResponse:", error);
+    // Fallback pour éviter les crashes
+    return new Response(
+      JSON.stringify({
+        success,
+        message,
+        ...(data && data),
+      }),
+      {
+        status,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
 }
 
 /**

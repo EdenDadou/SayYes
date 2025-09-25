@@ -35,7 +35,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await requireAuth(request);
     const sessionData = await getSessionData(request);
     const portfolios = await getAllPortfolios();
-    return { sessionData, portfolios };
+
+    // Lire le message flash depuis les cookies
+    const cookies = request.headers.get("Cookie") || "";
+    const flashMessage = cookies.match(/flash-message=([^;]*)/)?.[1];
+
+    return {
+      sessionData,
+      portfolios,
+      flashMessage: flashMessage ? decodeURIComponent(flashMessage) : null,
+    };
   } catch (error) {
     console.error("Erreur dans le loader manage-portfolio:", error);
     // Si c'est une erreur d'authentification, la laisser passer
@@ -44,7 +53,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
     // Pour les autres erreurs, retourner un état vide
     const sessionData = await getSessionData(request);
-    return { sessionData, portfolios: [] };
+    return { sessionData, portfolios: [], flashMessage: null };
   }
 }
 
@@ -52,10 +61,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   try {
     console.log("🚀 Début de la création du portfolio");
+    console.log("📋 Méthode de la requête:", request.method);
+    console.log("📋 Content-Type:", request.headers.get("Content-Type"));
+    console.log("📋 URL de la requête:", request.url);
+
     await requireAuth(request);
 
     // Parse les données du formulaire
     console.log("📝 Parsing des données du formulaire...");
+
+    // Debug: essayons de voir le contenu brut de la requête
+    try {
+      const clonedRequest = request.clone();
+      const rawBody = await clonedRequest.text();
+      console.log(
+        "📋 Corps brut de la requête (premiers 500 caractères):",
+        rawBody.substring(0, 500)
+      );
+    } catch (debugError) {
+      console.log("❌ Impossible de lire le corps brut:", debugError);
+    }
+
     const formData = await parseFormData(request);
 
     // Extraire les données du portfolio
@@ -70,7 +96,15 @@ export async function action({ request }: ActionFunctionArgs) {
     );
     if (errors.length > 0) {
       console.log("❌ Erreurs de validation:", errors);
-      return createJsonResponse(false, errors.join(", "), undefined, 400);
+      console.log("🔧 Appel de createJsonResponse pour erreurs de validation...");
+      try {
+        const errorResponse = createJsonResponse(false, errors.join(", "), undefined, 400);
+        console.log("✅ Response d'erreur créée avec succès");
+        return errorResponse;
+      } catch (error) {
+        console.error("❌ Erreur lors de la création de la response d'erreur:", error);
+        throw error;
+      }
     }
 
     // Créer d'abord le portfolio pour avoir l'ID
@@ -104,9 +138,17 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
     console.log("🎉 Portfolio créé avec succès!");
-    return createJsonResponse(true, "Portfolio créé avec succès!", {
-      portfolioId,
-    });
+    console.log("🔧 Appel de createJsonResponse pour succès...");
+    try {
+      const successResponse = createJsonResponse(true, "Portfolio créé avec succès!", {
+        portfolioId,
+      });
+      console.log("✅ Response de succès créée avec succès");
+      return successResponse;
+    } catch (error) {
+      console.error("❌ Erreur lors de la création de la response de succès:", error);
+      throw error;
+    }
   } catch (error) {
     console.error("❌ Erreur détaillée dans la création du portfolio:", error);
     console.error(
@@ -118,7 +160,8 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function ManagePortfolio() {
-  const { sessionData, portfolios } = useLoaderData<typeof loader>();
+  const { sessionData, portfolios, flashMessage } =
+    useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
 
   const [toast, setToast] = useState<{
@@ -128,6 +171,22 @@ export default function ManagePortfolio() {
   }>({ show: false, message: "", type: "success" });
 
   const [resetTrigger, setResetTrigger] = useState(0);
+
+  // Afficher le message flash au chargement de la page
+  useEffect(() => {
+    if (flashMessage) {
+      setToast({
+        show: true,
+        message: flashMessage,
+        type: "success",
+      });
+
+      // Masquer le toast après 5 secondes
+      setTimeout(() => {
+        setToast({ show: false, message: "", type: "success" });
+      }, 5000);
+    }
+  }, [flashMessage]);
 
   // Afficher le toast quand fetcher.data change après soumission
   useEffect(() => {

@@ -1,105 +1,110 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   usePortfolioFormHandlers,
+  initializeFormData,
   type PortfolioFormData,
   type BentoItem,
   type BentoLine,
   BENTO_FORMATS,
 } from "~/utils/admin/portfolio-form-handlers";
-import {
-  usePortfolioEditFormHandlers,
-  initializeFormData,
-} from "~/utils/admin/portfolio-edit-handlers";
 import { DeleteIcon } from "~/components/icons";
-import InputAdmin, {
-  InputGroup,
-  type FilePreview,
-  type SelectOption,
-} from "~/components/Admin/InputAdmin";
+import InputAdmin, { InputGroup } from "~/components/Admin/InputAdmin";
 
 interface FormulaireAdminProps {
-  onSubmit?: (formData: FormData) => Promise<void>;
   actionData?: any;
   initialData?: Partial<PortfolioFormData>;
   submitButtonText?: string;
   isEditing?: boolean;
   onDelete?: () => void;
   showDeleteButton?: boolean;
-  portfolioSlug?: string;
-  resetTrigger?: number; // Nouveau prop pour déclencher le reset
-  fetcher?: any; // Fetcher pour la soumission sans rechargement
+  resetTrigger?: number;
+  fetcher: any;
 }
 
 export default function FormulaireAdmin({
-  onSubmit,
   actionData,
   initialData,
   submitButtonText = "Créer le Projet",
   isEditing = false,
   onDelete,
   showDeleteButton = false,
-  portfolioSlug,
   resetTrigger,
   fetcher,
 }: FormulaireAdminProps) {
-  // États pour le formulaire
-  const [formData, setFormData] = useState<PortfolioFormData>({
-    titre: initialData?.titre || "",
-    categories: initialData?.categories || [],
-    slug: initialData?.slug || "",
-    photoCouverture: initialData?.photoCouverture || "",
-    photoMain: initialData?.photoMain || "",
-    description: initialData?.description || "",
-    kicker: initialData?.kicker || "",
-    livrable: initialData?.livrable || [],
-    sousTitre: initialData?.sousTitre || "",
-    topTitle: initialData?.topTitle || "",
-    couleur: initialData?.couleur || "",
-    temoignage: {
-      auteur: initialData?.temoignage?.auteur || "",
-      contenu: initialData?.temoignage?.contenu || "",
-      poste: initialData?.temoignage?.poste || "",
-    },
-    bento: initialData?.bento || [],
-  });
+  // Initialisation des données du formulaire
+  const [formData, setFormData] = useState<PortfolioFormData>(() =>
+    initialData
+      ? initializeFormData(initialData)
+      : {
+          titre: "",
+          categories: [],
+          slug: "",
+          photoCouverture: "",
+          photoMain: "",
+          description: "",
+          kicker: "",
+          livrable: [],
+          sousTitre: "",
+          topTitle: "",
+          couleur: "",
+          temoignage: {
+            auteur: "",
+            contenu: "",
+            poste: "",
+          },
+          bento: [],
+        }
+  );
 
+  // États pour la gestion du formulaire
   const [currentLivrable, setCurrentLivrable] = useState("");
-  const [currentBento, setCurrentBento] = useState<BentoItem>({
-    lines: [],
-  });
+  const [currentBento, setCurrentBento] = useState<BentoItem>({ lines: [] });
   const [currentBentoLine, setCurrentBentoLine] = useState<BentoLine>({
     format: "1/3 - 2/3",
     listImage: [],
   });
 
-  // Debug: Log l'état de currentBentoLine à chaque changement
-  useEffect(() => {
-    console.log("currentBentoLine mis à jour:", currentBentoLine);
-  }, [currentBentoLine]);
-
-  // États pour la gestion des uploads
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [photoMainPreview, setPhotoMainPreview] = useState<string | null>(null);
+  // États pour les aperçus et uploads
+  const [previewImage, setPreviewImage] = useState<string | null>(
+    initialData?.photoCouverture || null
+  );
+  const [photoMainPreview, setPhotoMainPreview] = useState<string | null>(
+    initialData?.photoMain || null
+  );
   const [photoMainFile, setPhotoMainFile] = useState<File | null>(null);
   const [bentoPreviewImages, setBentoPreviewImages] = useState<
     { url: string; name: string }[]
   >([]);
   const [bentoFiles, setBentoFiles] = useState<Map<string, File>>(new Map());
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadedCount, setUploadedCount] = useState(0);
   const [totalFiles, setTotalFiles] = useState(0);
 
-  // Référence synchrone pour les fichiers bento (évite les problèmes de timing)
-  const bentoFilesRef = useRef<Map<string, File>>(new Map());
-
-  // Options pour les formats de bento
-  const bentoFormats = BENTO_FORMATS;
+  // Utiliser les handlers du portfolio-form-handlers
+  const handlers = usePortfolioFormHandlers({
+    formData,
+    setFormData,
+    currentLivrable,
+    setCurrentLivrable,
+    currentBento,
+    setCurrentBento,
+    currentBentoLine,
+    setCurrentBentoLine,
+    setPreviewImage,
+    setPhotoMainPreview,
+    setPhotoMainFile,
+    setBentoPreviewImages,
+    setBentoFiles,
+    setIsUploadingFiles,
+    setUploadProgress,
+    setUploadedCount,
+    setTotalFiles,
+  });
 
   // Fonction pour réinitialiser le formulaire
   const resetForm = () => {
-    setFormData({
+    const emptyData: PortfolioFormData = {
       titre: "",
       categories: [],
       slug: "",
@@ -117,7 +122,8 @@ export default function FormulaireAdmin({
         poste: "",
       },
       bento: [],
-    });
+    };
+    setFormData(emptyData);
     setCurrentLivrable("");
     setCurrentBento({ lines: [] });
     setCurrentBentoLine({ format: "1/3 - 2/3", listImage: [] });
@@ -135,60 +141,6 @@ export default function FormulaireAdmin({
     }
   }, [resetTrigger]);
 
-  // Mise à jour du formulaire quand les données initiales changent (mode édition)
-  useEffect(() => {
-    if (initialData && isEditing && !isDataLoaded) {
-      const newFormData = initializeFormData(initialData);
-      setFormData(newFormData);
-      setPreviewImage(initialData.photoCouverture || null);
-      setPhotoMainPreview(initialData.photoMain || null);
-      setIsDataLoaded(true);
-    }
-  }, [initialData, isEditing, isDataLoaded]);
-
-  // Utiliser les handlers centralisés selon le mode
-  console.log("Mode formulaire:", isEditing ? "ÉDITION" : "CRÉATION");
-  const handlers = isEditing
-    ? usePortfolioEditFormHandlers({
-        formData,
-        setFormData,
-        currentLivrable,
-        setCurrentLivrable,
-        currentBento,
-        setCurrentBento,
-        currentBentoLine,
-        setCurrentBentoLine,
-        setPreviewImage,
-        setPhotoMainPreview,
-        setPhotoMainFile,
-        setBentoPreviewImages,
-        setBentoFiles,
-        setIsUploadingFiles,
-        setUploadProgress,
-        setUploadedCount,
-        setTotalFiles,
-        bentoFiles,
-      })
-    : usePortfolioFormHandlers({
-        formData,
-        setFormData,
-        currentLivrable,
-        setCurrentLivrable,
-        currentBento,
-        setCurrentBento,
-        currentBentoLine,
-        setCurrentBentoLine,
-        setPreviewImage,
-        setPhotoMainPreview,
-        setPhotoMainFile,
-        setBentoPreviewImages,
-        setBentoFiles,
-        setIsUploadingFiles,
-        setUploadProgress,
-        setUploadedCount,
-        setTotalFiles,
-      });
-
   const {
     handleInputChange,
     handleFileChange,
@@ -204,140 +156,45 @@ export default function FormulaireAdmin({
     removeBentoImage,
   } = handlers;
 
-  // Handlers spécifiques au mode édition
-  const removeExistingBentoImage = isEditing
-    ? (handlers as any).removeExistingBentoImage
-    : undefined;
-  const removeExistingBentoLine = isEditing
-    ? (handlers as any).removeExistingBentoLine
-    : undefined;
-  const addImagesToExistingBento = isEditing
-    ? (handlers as any).addImagesToExistingBento
-    : undefined;
+  // Fonction pour générer des inputs file pour chaque fichier bento
+  const renderBentoFileInputs = () => {
+    const inputs: React.ReactElement[] = [];
+    let globalFileIndex = 0;
 
-  // Fonction de soumission personnalisée pour gérer les fichiers bento
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    formData.bento.forEach((bento, bentoIndex) => {
+      bento.lines.forEach((line) => {
+        line.listImage.forEach((image) => {
+          if (image.startsWith("pending_")) {
+            const originalName = image.replace("pending_", "");
+            const file = bentoFiles.get(originalName);
+            const inputName = `bentoFile_${bentoIndex}_${globalFileIndex}`;
 
-    const form = e.currentTarget;
-    const submitFormData = new FormData(form);
-
-    // Ajouter le fichier photo main s'il existe
-    if (photoMainFile) {
-      submitFormData.append("photoMainFile", photoMainFile);
-    }
-
-    // CORRECTION TIMING: Utiliser une référence synchrone pour éviter les problèmes de timing
-    // Récupérer les fichiers bento directement depuis les inputs du formulaire comme fallback
-
-    // Créer une Map combinée avec les fichiers de bentoFiles + fallback depuis les inputs du formulaire
-    const allBentoFiles = new Map(bentoFiles);
-
-    // Fallback: récupérer les fichiers depuis les inputs du formulaire si bentoFiles est vide
-    if (allBentoFiles.size === 0) {
-      console.log(
-        "⚠️ bentoFiles Map is empty, trying fallback from form inputs"
-      );
-      const inputs = form.querySelectorAll(
-        'input[type="file"][accept*="image"]'
-      ) as NodeListOf<HTMLInputElement>;
-      inputs.forEach((input) => {
-        if (input.files) {
-          Array.from(input.files).forEach((file) => {
-            if (file.type.startsWith("image/")) {
-              allBentoFiles.set(file.name, file);
-              console.log(`📁 Fallback: Added file ${file.name} from input`);
-            }
-          });
-        }
-      });
-    }
-
-    // Ajouter les fichiers bento avec les noms corrects
-    if (isEditing) {
-      // Mode édition: utiliser Map pour les fichiers bento
-      formData.bento.forEach((bento, bentoIndex) => {
-        let bentoImageIndex = 0;
-        bento.lines.forEach((line, lineIndex) => {
-          line.listImage.forEach((image, imageIndex) => {
-            if (image.startsWith("pending_")) {
-              const fileName = image.replace("pending_", "");
-              const file = allBentoFiles.get(fileName);
-              console.log(
-                `🔍 Debug - Looking for file: ${fileName}, found:`,
-                file ? "YES" : "NO"
+            if (file) {
+              // Créer un input file caché avec le fichier
+              inputs.push(
+                <input
+                  key={inputName}
+                  type="file"
+                  name={inputName}
+                  style={{ display: "none" }}
+                  ref={(input) => {
+                    if (input) {
+                      // Créer une nouvelle FileList avec notre fichier
+                      const dt = new DataTransfer();
+                      dt.items.add(file);
+                      input.files = dt.files;
+                    }
+                  }}
+                />
               );
-              if (file) {
-                submitFormData.append(
-                  `bentoFile_${bentoIndex}_${bentoImageIndex}`,
-                  file
-                );
-                console.log(
-                  `✅ Added bentoFile_${bentoIndex}_${bentoImageIndex}`
-                );
-                bentoImageIndex++;
-              } else {
-                console.warn(
-                  `⚠️ File not found in allBentoFiles Map: ${fileName}`
-                );
-              }
             }
-          });
+            globalFileIndex++;
+          }
         });
       });
+    });
 
-      // Champs cachés pour l'édition
-      submitFormData.set("photoCouvertureUrl", formData.photoCouverture);
-      submitFormData.set("photoMainUrl", formData.photoMain);
-    } else {
-      // Mode création: utiliser Map pour les fichiers bento
-      let globalImageIndex = 0;
-      formData.bento.forEach((bento, bentoIndex) => {
-        bento.lines.forEach((line, lineIndex) => {
-          line.listImage.forEach((image, imageIndex) => {
-            if (image.startsWith("pending_")) {
-              const fileName = image.replace("pending_", "");
-              const file = allBentoFiles.get(fileName);
-              console.log(
-                `🔍 Debug - Looking for file: ${fileName}, found:`,
-                file ? "YES" : "NO"
-              );
-              if (file) {
-                submitFormData.append(
-                  `bentoFile_${bentoIndex}_${globalImageIndex}`,
-                  file
-                );
-                console.log(
-                  `✅ Added bentoFile_${bentoIndex}_${globalImageIndex}`
-                );
-                globalImageIndex++;
-              } else {
-                console.warn(
-                  `⚠️ File not found in allBentoFiles Map: ${fileName}`
-                );
-              }
-            }
-          });
-        });
-      });
-    }
-
-    // Si fetcher est fourni, utiliser fetcher.submit
-    if (fetcher) {
-      e.preventDefault();
-      fetcher.submit(e.currentTarget, { method: "POST" });
-      return;
-    }
-
-    // Appeler la fonction onSubmit si fournie, sinon utiliser la soumission par défaut
-    if (onSubmit) {
-      await onSubmit(submitFormData);
-    } else {
-      // Soumission par défaut : laisser Remix gérer la soumission
-      // Le formulaire HTML se soumettra automatiquement à l'action
-      const form = e.currentTarget;
-      form.submit();
-    }
+    return inputs;
   };
 
   return (
@@ -359,19 +216,9 @@ export default function FormulaireAdmin({
         </div>
       )}
 
-      {/* Indicateur de chargement pour le mode édition */}
-      {isEditing && !isDataLoaded && (
-        <div className="mb-6 p-4 bg-blue-900/50 border border-blue-700 rounded-lg flex items-center">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-300 mr-2"></div>
-          <p className="text-blue-300" style={{ fontFamily: "Jakarta" }}>
-            Chargement des données du portfolio...
-          </p>
-        </div>
-      )}
-
       {/* Formulaire principal */}
-      <form
-        onSubmit={handleSubmit}
+      <fetcher.Form
+        method="post"
         className="space-y-8"
         encType="multipart/form-data"
       >
@@ -380,25 +227,11 @@ export default function FormulaireAdmin({
           name="bento"
           value={JSON.stringify(formData.bento)}
         />
+        {/* Inputs file dynamiques pour les fichiers bento */}
+        {renderBentoFileInputs()}
         {formData.categories.map((category, index) => (
           <input key={index} type="hidden" name="categories" value={category} />
         ))}
-
-        {/* Champs cachés pour les URLs actuelles (mode édition) */}
-        {isEditing && (
-          <>
-            <input
-              type="hidden"
-              name="photoCouvertureUrl"
-              value={formData.photoCouverture}
-            />
-            <input
-              type="hidden"
-              name="photoMainUrl"
-              value={formData.photoMain}
-            />
-          </>
-        )}
 
         <InputGroup title="Informations générales">
           {/* Top Title */}
@@ -846,7 +679,7 @@ export default function FormulaireAdmin({
                         format: value as any,
                       }))
                     }
-                    options={bentoFormats.map((format) => ({
+                    options={BENTO_FORMATS.map((format) => ({
                       value: format,
                       label: format,
                     }))}
@@ -1080,35 +913,13 @@ export default function FormulaireAdmin({
                         ({bento.lines.length} lignes)
                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {/* Bouton pour ajouter des images à ce bento (mode édition) */}
-                      {isEditing && addImagesToExistingBento && (
-                        <label className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors duration-200 cursor-pointer text-sm">
-                          + Images
-                          <input
-                            type="file"
-                            multiple
-                            accept="image/*,.gif"
-                            onChange={(e) =>
-                              e.target.files &&
-                              addImagesToExistingBento(
-                                bentoIndex,
-                                e.target.files,
-                                e.target
-                              )
-                            }
-                            className="hidden"
-                          />
-                        </label>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => removeBento(bentoIndex)}
-                        className="text-red-400 hover:text-red-300 transition-colors duration-200"
-                      >
-                        <DeleteIcon />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeBento(bentoIndex)}
+                      className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                    >
+                      <DeleteIcon />
+                    </button>
                   </div>
 
                   {/* Affichage des lignes du bento avec possibilité de modification en mode édition */}
@@ -1133,100 +944,23 @@ export default function FormulaireAdmin({
                               ({line.listImage.length} images)
                             </span>
                           </div>
-                          {isEditing && removeExistingBentoLine && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeExistingBentoLine(bentoIndex, lineIndex)
-                              }
-                              className="text-red-400 hover:text-red-300 transition-colors duration-200"
-                              title="Supprimer cette ligne"
-                            >
-                              <DeleteIcon className="w-4 h-4" />
-                            </button>
-                          )}
                         </div>
 
-                        {isEditing ? (
-                          /* Grille des images avec possibilité de suppression individuelle */
-                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                            {line.listImage.map((image, imgIndex) => (
-                              <div
-                                key={imgIndex}
-                                className="relative group bg-gray-600/30 rounded-lg overflow-hidden"
-                              >
-                                {/* Affichage de l'image ou du nom du fichier */}
-                                {image.startsWith("pending_") ? (
-                                  <div className="aspect-square bg-gray-700 flex items-center justify-center p-2">
-                                    <span className="text-xs text-gray-300 text-center break-all">
-                                      📎 {image.replace("pending_", "")}
-                                    </span>
-                                  </div>
-                                ) : (
-                                  <div className="aspect-square">
-                                    <img
-                                      src={image}
-                                      alt={`Image ${imgIndex + 1}`}
-                                      className="w-full h-full object-cover"
-                                      onError={(e) => {
-                                        // Si l'image ne charge pas, afficher le nom du fichier
-                                        const target =
-                                          e.target as HTMLImageElement;
-                                        target.style.display = "none";
-                                        const parent = target.parentElement;
-                                        if (parent) {
-                                          parent.innerHTML = `<div class="w-full h-full bg-gray-700 flex items-center justify-center p-2"><span class="text-xs text-gray-300 text-center break-all">📎 ${image.split("/").pop()}</span></div>`;
-                                        }
-                                      }}
-                                    />
-                                  </div>
-                                )}
-
-                                {/* Bouton de suppression */}
-                                {removeExistingBentoImage && (
-                                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        removeExistingBentoImage(
-                                          bentoIndex,
-                                          lineIndex,
-                                          imgIndex
-                                        )
-                                      }
-                                      className="text-red-400 hover:text-red-300 transition-colors duration-200"
-                                      title="Supprimer cette image"
-                                    >
-                                      <DeleteIcon />
-                                    </button>
-                                  </div>
-                                )}
-
-                                {/* Nom du fichier en bas */}
-                                <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1">
-                                  <p className="text-xs text-white truncate">
-                                    {image.startsWith("pending_")
-                                      ? image.replace("pending_", "")
-                                      : image.split("/").pop()}
-                                  </p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          /* Mode création: affichage simple des noms de fichiers */
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                            {line.listImage.map((image, imgIndex) => (
-                              <div
-                                key={imgIndex}
-                                className="text-xs text-gray-300 bg-gray-600/30 p-2 rounded truncate"
-                                style={{ fontFamily: "Jakarta" }}
-                              >
-                                {image}
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        {/* Affichage simple des noms de fichiers */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                          {line.listImage.map((image, imgIndex) => (
+                            <div
+                              key={imgIndex}
+                              className="text-xs text-gray-300 bg-gray-600/30 p-2 rounded truncate"
+                              style={{ fontFamily: "Jakarta" }}
+                            >
+                              📎{" "}
+                              {image.startsWith("pending_")
+                                ? image.replace("pending_", "")
+                                : image.split("/").pop()}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -1281,7 +1015,7 @@ export default function FormulaireAdmin({
             )}
           </button>
         </div>
-      </form>
+      </fetcher.Form>
     </div>
   );
 }

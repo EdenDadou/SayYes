@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import {
   getPortfolioBySlug,
@@ -36,7 +36,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       throw new Response("Portfolio non trouvé", { status: 404 });
     }
 
-    return Response.json({ portfolio, allPortfolios });
+    return json({ portfolio, allPortfolios });
   } catch (error) {
     if (error instanceof Response) {
       throw error;
