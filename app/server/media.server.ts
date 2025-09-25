@@ -3,9 +3,10 @@ import { join, extname } from "path";
 import { prisma } from "./db.server";
 import type { MediaType } from "@prisma/client";
 
-// Configuration des uploads
-const UPLOAD_DIR = process.env.UPLOAD_DIR || "public/uploads";
-const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || "10485760"); // 10MB par défaut
+// Configuration des uploads - adapter selon l'environnement
+const isDev = process.env.NODE_ENV !== "production";
+const UPLOAD_DIR = isDev ? "public/uploads" : "build/client/uploads";
+const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || "40485760"); // 10MB par défaut
 
 // Types MIME autorisés
 const ALLOWED_IMAGE_TYPES = [
