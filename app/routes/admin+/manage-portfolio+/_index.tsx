@@ -16,6 +16,7 @@ import {
   getAllPortfolios,
   updatePortfolio,
   isSlugUnique,
+  deletePortfolioBySlug,
 } from "~/server/portfolio.server";
 import {
   parseFormData,
@@ -60,12 +61,42 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action pour gérer la soumission du formulaire
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    console.log("🚀 Début de la création du portfolio");
+    console.log("🚀 Début de l'action");
     console.log("📋 Méthode de la requête:", request.method);
     console.log("📋 Content-Type:", request.headers.get("Content-Type"));
     console.log("📋 URL de la requête:", request.url);
 
     await requireAuth(request);
+
+    // Gérer la suppression
+    if (request.method === "DELETE") {
+      const formData = await request.formData();
+      const slug = formData.get("slug") as string;
+
+      if (!slug) {
+        console.error("❌ Pas de slug fourni pour la suppression");
+        return createJsonResponse(
+          false,
+          "Slug requis pour la suppression",
+          undefined,
+          400
+        );
+      }
+
+      try {
+        console.log(`🗑️ Suppression du portfolio demandée: ${slug}`);
+        await deletePortfolioBySlug(slug);
+        console.log(`✅ Portfolio ${slug} supprimé avec succès`);
+
+        return createJsonResponse(true, "Portfolio supprimé avec succès!");
+      } catch (error) {
+        console.error(
+          `❌ Erreur lors de la suppression du portfolio ${slug}:`,
+          error
+        );
+        return handleError(error, "la suppression du portfolio");
+      }
+    }
 
     // Parse les données du formulaire
     console.log("📝 Parsing des données du formulaire...");
@@ -96,13 +127,23 @@ export async function action({ request }: ActionFunctionArgs) {
     );
     if (errors.length > 0) {
       console.log("❌ Erreurs de validation:", errors);
-      console.log("🔧 Appel de createJsonResponse pour erreurs de validation...");
+      console.log(
+        "🔧 Appel de createJsonResponse pour erreurs de validation..."
+      );
       try {
-        const errorResponse = createJsonResponse(false, errors.join(", "), undefined, 400);
+        const errorResponse = createJsonResponse(
+          false,
+          errors.join(", "),
+          undefined,
+          400
+        );
         console.log("✅ Response d'erreur créée avec succès");
         return errorResponse;
       } catch (error) {
-        console.error("❌ Erreur lors de la création de la response d'erreur:", error);
+        console.error(
+          "❌ Erreur lors de la création de la response d'erreur:",
+          error
+        );
         throw error;
       }
     }
@@ -140,13 +181,20 @@ export async function action({ request }: ActionFunctionArgs) {
     console.log("🎉 Portfolio créé avec succès!");
     console.log("🔧 Appel de createJsonResponse pour succès...");
     try {
-      const successResponse = createJsonResponse(true, "Portfolio créé avec succès!", {
-        portfolioId,
-      });
+      const successResponse = createJsonResponse(
+        true,
+        "Portfolio créé avec succès!",
+        {
+          portfolioId,
+        }
+      );
       console.log("✅ Response de succès créée avec succès");
       return successResponse;
     } catch (error) {
-      console.error("❌ Erreur lors de la création de la response de succès:", error);
+      console.error(
+        "❌ Erreur lors de la création de la response de succès:",
+        error
+      );
       throw error;
     }
   } catch (error) {
@@ -163,6 +211,7 @@ export default function ManagePortfolio() {
   const { sessionData, portfolios, flashMessage } =
     useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const deleteFetcher = useFetcher<typeof action>();
 
   const [toast, setToast] = useState<{
     show: boolean;
@@ -221,6 +270,39 @@ export default function ManagePortfolio() {
       }, 5000);
     }
   }, [fetcher.data]);
+
+  // Gérer les réponses du deleteFetcher
+  useEffect(() => {
+    if (deleteFetcher.data) {
+      if (deleteFetcher.data.success) {
+        setToast({
+          show: true,
+          message:
+            deleteFetcher.data.message || "Portfolio supprimé avec succès!",
+          type: "success",
+        });
+
+        // Recharger la page après un délai pour actualiser la liste
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        setToast({
+          show: true,
+          message:
+            deleteFetcher.data.message ||
+            deleteFetcher.data.error ||
+            "Erreur lors de la suppression",
+          type: "error",
+        });
+      }
+
+      // Masquer le toast après 5 secondes
+      setTimeout(() => {
+        setToast({ show: false, message: "", type: "success" });
+      }, 5000);
+    }
+  }, [deleteFetcher.data]);
 
   return (
     <div className="min-h-screen bg-black p-8">
@@ -368,37 +450,31 @@ export default function ManagePortfolio() {
                     </Link>
                     <button
                       type="button"
-                      className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200"
-                      onClick={async () => {
+                      className={`text-white text-sm px-3 py-1 rounded transition-colors duration-200 ${
+                        deleteFetcher.state === "submitting"
+                          ? "bg-gray-500 cursor-not-allowed"
+                          : "bg-red-600 hover:bg-red-700"
+                      }`}
+                      disabled={deleteFetcher.state === "submitting"}
+                      onClick={() => {
                         if (
                           confirm(
                             "Êtes-vous sûr de vouloir supprimer ce portfolio ? Cette action est irréversible."
                           )
                         ) {
-                          try {
-                            const response = await fetch(
-                              `/admin/manage-portfolio/${portfolio.slug}`,
-                              {
-                                method: "DELETE",
-                              }
-                            );
+                          // Utiliser deleteFetcher au lieu d'un fetch
+                          const formData = new FormData();
+                          formData.append("slug", portfolio.slug);
 
-                            if (response.ok) {
-                              // Recharger la page pour actualiser la liste
-                              window.location.reload();
-                            } else {
-                              alert(
-                                "Erreur lors de la suppression du portfolio"
-                              );
-                            }
-                          } catch (error) {
-                            console.error("Erreur:", error);
-                            alert("Erreur lors de la suppression du portfolio");
-                          }
+                          deleteFetcher.submit(formData, {
+                            method: "delete",
+                          });
                         }
                       }}
                     >
-                      Supprimer
+                      {deleteFetcher.state === "submitting"
+                        ? "Suppression..."
+                        : "Supprimer"}
                     </button>
                   </div>
                 </div>
