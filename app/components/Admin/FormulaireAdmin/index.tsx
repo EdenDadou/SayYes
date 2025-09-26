@@ -642,7 +642,7 @@ export default function FormulaireAdmin({
                         className="text-gray-400 ml-2"
                         style={{ fontFamily: "Jakarta" }}
                       >
-                        ({line.listImage.length} images)
+                        ({line.listImage.length} médias)
                       </span>
                     </div>
                     <button
@@ -691,8 +691,8 @@ export default function FormulaireAdmin({
                   <div className="flex items-center gap-2 mb-2">
                     <InputAdmin
                       type="file-multiple"
-                      label="Images et GIFs"
-                      accept="image/*,.gif"
+                      label="Images, GIFs et Vidéos"
+                      accept="image/*,video/*"
                       onChange={(value) => {
                         console.log("InputAdmin onChange appelé avec:", value);
                         console.log(
@@ -859,7 +859,7 @@ export default function FormulaireAdmin({
                     style={{ fontFamily: "Jakarta Semi Bold" }}
                   >
                     Ajouter cette ligne ({currentBentoLine.listImage.length}{" "}
-                    images)
+                    médias)
                   </button>
                 </div>
               </div>
@@ -941,7 +941,7 @@ export default function FormulaireAdmin({
                               className="text-gray-400 ml-2"
                               style={{ fontFamily: "Jakarta" }}
                             >
-                              ({line.listImage.length} images)
+                              ({line.listImage.length} médias)
                             </span>
                           </div>
                         </div>

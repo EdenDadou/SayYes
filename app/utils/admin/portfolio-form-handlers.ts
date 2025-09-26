@@ -25,7 +25,7 @@ export interface BentoItem {
 
 export interface BentoLine {
   format: "1/3 - 2/3" | "2/3 - 1/3" | "1/2 - 1/2" | "1/1";
-  listImage: string[];
+  listImage: string[]; // URLs des médias (images et vidéos)
 }
 
 // Options pour les formats de bento (répliqué pour éviter l'import de modules serveur)
@@ -225,7 +225,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
     }
   };
 
-  // Gestion de l'upload de fichiers multiples pour les images bento
+  // Gestion de l'upload de fichiers multiples pour les médias bento (images et vidéos)
   const handleBentoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("🔍 handleBentoFilesChange appelé", e.target.files);
     const files = e.target.files;
@@ -235,21 +235,21 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
       const validFiles: File[] = [];
       const newPreviews: { url: string; name: string }[] = [];
-      const newImageNames: string[] = [];
+      const newMediaNames: string[] = [];
 
       Array.from(files).forEach((file) => {
-        // Vérifier le type de fichier
-        if (file.type.startsWith("image/")) {
+        // Vérifier le type de fichier (images et vidéos)
+        if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
           validFiles.push(file);
-          newImageNames.push(`pending_${file.name}`);
-          console.log(`✅ Valid file added: ${file.name}`);
+          newMediaNames.push(`pending_${file.name}`);
+          console.log(`✅ Valid file added: ${file.name} (${file.type})`);
         }
       });
 
       console.log(`🔍 Total valid files: ${validFiles.length}`);
-      console.log(`🔍 New image names: ${newImageNames.join(", ")}`);
+      console.log(`🔍 New media names: ${newMediaNames.join(", ")}`);
 
-      // Mettre à jour les fichiers et les noms d'images de manière synchrone
+      // Mettre à jour les fichiers et les noms de médias de manière synchrone
       if (validFiles.length > 0) {
         // Initialiser les états de progression
         setTotalFiles(validFiles.length);
@@ -271,7 +271,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
         // Ajouter les placeholders à la ligne bento actuelle immédiatement
         setCurrentBentoLine((prev) => ({
           ...prev,
-          listImage: [...prev.listImage, ...newImageNames],
+          listImage: [...prev.listImage, ...newMediaNames],
         }));
 
         // Créer les aperçus de manière asynchrone avec barre de progression

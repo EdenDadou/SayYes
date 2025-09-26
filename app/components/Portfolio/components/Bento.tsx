@@ -1,5 +1,13 @@
 import { BentoItem } from "~/server/portfolio.server";
 import "~/styles/tailwind.css";
+
+// Fonction pour déterminer si un média est une vidéo
+function isVideoFile(url: string): boolean {
+  const videoExtensions = [".mp4", ".webm", ".ogg", ".mov", ".avi", ".mkv"];
+  const lowerUrl = url.toLowerCase();
+  return videoExtensions.some((ext) => lowerUrl.includes(ext));
+}
+
 export default function Bento({ bento }: { bento: BentoItem }) {
   if (!bento || !bento.lines || bento.lines.length === 0) {
     return null;
@@ -40,14 +48,27 @@ export default function Bento({ bento }: { bento: BentoItem }) {
                           : "aspect-square"
             }`}
           >
-            <img
-              src={image}
-              alt={
-                image.split("/").pop()?.split(".")[0] ||
-                `Image ${imageIndex + 1}`
-              }
-              className="w-full h-full object-cover object-center"
-            />
+            {isVideoFile(image) ? (
+              <video
+                src={image}
+                className="w-full h-full object-cover object-center"
+                muted
+                autoPlay
+                playsInline
+                preload="metadata"
+              >
+                Votre navigateur ne prend pas en charge la lecture de vidéos.
+              </video>
+            ) : (
+              <img
+                src={image}
+                alt={
+                  image.split("/").pop()?.split(".")[0] ||
+                  `Image ${imageIndex + 1}`
+                }
+                className="w-full h-full object-cover object-center"
+              />
+            )}
           </div>
         ))}
     </div>

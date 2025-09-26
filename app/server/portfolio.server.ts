@@ -4,7 +4,7 @@ import { deleteMedia } from "./media.server";
 // Types pour les données du portfolio (repris du fichier existant)
 export interface BentoLine {
   format: "1/3 - 2/3" | "3 carrés" | "banner" | "2 carré" | "full";
-  listImage: string[];
+  listImage: string[]; // URLs des médias (images et vidéos)
 }
 
 export interface BentoItem {

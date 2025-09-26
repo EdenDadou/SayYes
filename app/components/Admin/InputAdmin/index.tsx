@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { DeleteIcon } from "~/components/icons";
 
+// Fonction utilitaire pour détecter les vidéos
+function isVideoFile(filename: string): boolean {
+  return filename.match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i) !== null;
+}
+
 // Types pour les différents types d'inputs
 export type InputType =
   | "text"
@@ -300,12 +305,19 @@ export default function InputAdmin({
                       key={index}
                       className="relative group rounded-lg overflow-hidden ring-2 ring-green-500"
                     >
-                      {/* Vérifier si c'est une image pour l'affichage */}
+                      {/* Vérifier le type de fichier pour l'affichage */}
                       {file.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
                         <img
                           src={file}
                           alt={`Fichier ${index + 1}`}
                           className="w-full h-20 object-cover"
+                        />
+                      ) : isVideoFile(file) ? (
+                        <video
+                          src={file}
+                          className="w-full h-20 object-cover"
+                          muted
+                          preload="metadata"
                         />
                       ) : (
                         <div className="w-full h-20 bg-gray-700 flex items-center justify-center">
@@ -349,12 +361,19 @@ export default function InputAdmin({
                       key={index}
                       className="relative group bg-gray-700/30 rounded-lg overflow-hidden ring-2 ring-blue-500"
                     >
-                      {/* Vérifier si c'est une image pour l'affichage */}
+                      {/* Vérifier le type de fichier pour l'affichage */}
                       {preview.name.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
                         <img
                           src={preview.url}
                           alt={`Preview ${index + 1}`}
                           className="w-full h-20 object-cover"
+                        />
+                      ) : isVideoFile(preview.name) ? (
+                        <video
+                          src={preview.url}
+                          className="w-full h-20 object-cover"
+                          muted
+                          preload="metadata"
                         />
                       ) : (
                         <div className="w-full h-20 bg-gray-700 flex items-center justify-center">
@@ -453,6 +472,13 @@ export default function InputAdmin({
       {type === "file" && accept === "image/*" && (
         <p className="text-xs text-gray-300" style={{ fontFamily: "Jakarta" }}>
           🖼️ Sélectionnez une image (JPG, PNG, GIF, WebP, etc.)
+        </p>
+      )}
+
+      {type === "file-multiple" && accept === "image/*,video/*" && (
+        <p className="text-xs text-gray-300" style={{ fontFamily: "Jakarta" }}>
+          🎬 Sélectionnez des images et vidéos (JPG, PNG, GIF, WebP, MP4, WebM,
+          etc.)
         </p>
       )}
     </div>
