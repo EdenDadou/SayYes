@@ -161,20 +161,6 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
     })(),
   };
 
-  console.log("✅ Données extraites:", {
-    titre: extractedData.titre,
-    categories: extractedData.categories,
-    slug: extractedData.slug,
-    hasPhotoCouverture: !!extractedData.photoCouverture,
-    hasDescription: !!extractedData.description,
-    hasKicker: !!extractedData.kicker,
-    hasSousTitre: !!extractedData.sousTitre,
-    livrableCount: extractedData.livrable.length,
-    temoignageAuteur: extractedData.temoignage.auteur,
-    temoignageContenu: extractedData.temoignage.contenu,
-    bentoCount: extractedData.bento.length,
-  });
-
   return extractedData;
 }
 

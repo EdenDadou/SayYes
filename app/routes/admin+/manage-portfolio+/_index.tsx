@@ -220,6 +220,7 @@ export default function ManagePortfolio() {
   }>({ show: false, message: "", type: "success" });
 
   const [resetTrigger, setResetTrigger] = useState(0);
+  const [activeTab, setActiveTab] = useState<"existing" | "create">("existing");
 
   // Afficher le message flash au chargement de la page
   useEffect(() => {
@@ -249,8 +250,9 @@ export default function ManagePortfolio() {
         // Déclencher le reset du formulaire
         setResetTrigger((prev) => prev + 1);
 
-        // Recharger la page après un délai pour voir le nouveau portfolio
+        // Basculer sur l'onglet "Projets existants" et recharger la page après un délai
         setTimeout(() => {
+          setActiveTab("existing");
           window.location.reload();
         }, 1500);
       } else {
@@ -328,7 +330,9 @@ export default function ManagePortfolio() {
               Gestion Portfolio
             </h1>
             <p className="text-gray-300" style={{ fontFamily: "Jakarta" }}>
-              Créer un nouveau projet
+              {activeTab === "existing"
+                ? "Gérer vos projets existants"
+                : "Créer un nouveau projet"}
             </p>
           </div>
           <Link
@@ -340,146 +344,190 @@ export default function ManagePortfolio() {
           </Link>
         </div>
 
-        {/* Formulaire principal */}
-        <FormulaireAdmin
-          actionData={fetcher.data}
-          submitButtonText={
-            fetcher.state === "submitting"
-              ? "Création en cours..."
-              : "Créer le Projet"
-          }
-          resetTrigger={resetTrigger}
-          fetcher={fetcher}
-        />
-      </div>
-
-      {/* Section des portfolios existants */}
-      <div className="bg-white rounded-lg shadow-lg p-6 mt-8">
-        <h2
-          className="text-2xl font-bold text-gray-900 mb-6"
-          style={{ fontFamily: "Jakarta Bold" }}
-        >
-          Projets existants ({portfolios.length})
-        </h2>
-
-        {portfolios.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">
-            Aucun projets créés pour le moment.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {portfolios.map((portfolio) => (
-              <div
-                key={portfolio.id}
-                className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200"
+        {/* Onglets */}
+        <div className="mb-8">
+          <div className="border-b border-gray-700">
+            <nav className="flex space-x-8">
+              <button
+                onClick={() => setActiveTab("existing")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                  activeTab === "existing"
+                    ? "border-blue-500 text-blue-400"
+                    : "border-transparent text-gray-100 hover:text-gray-300 hover:border-gray-600"
+                }`}
+                style={{ fontFamily: "Jakarta Semi Bold" }}
               >
-                {/* Image de couverture */}
-                {portfolio.photoCouverture && (
-                  <div className="aspect-video bg-gray-100">
-                    <img
-                      src={portfolio.photoCouverture}
-                      alt={portfolio.titre}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
+                Projets existants ({portfolios.length})
+              </button>
+              <button
+                onClick={() => setActiveTab("create")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                  activeTab === "create"
+                    ? "border-blue-500 text-blue-400"
+                    : "border-transparent text-gray-100 hover:text-gray-300 hover:border-gray-600"
+                }`}
+                style={{ fontFamily: "Jakarta Semi Bold" }}
+              >
+                Créer un portfolio
+              </button>
+            </nav>
+          </div>
+        </div>
 
-                {/* Contenu */}
-                <div className="p-4">
-                  <h3
-                    className="font-semibold text-lg text-gray-900 mb-2"
-                    style={{ fontFamily: "Jakarta Semi Bold" }}
+        {/* Contenu des onglets */}
+        {activeTab === "create" && (
+          <div className="mb-8">
+            <FormulaireAdmin
+              actionData={fetcher.data}
+              submitButtonText={
+                fetcher.state === "submitting"
+                  ? "Création en cours..."
+                  : "Créer le Projet"
+              }
+              resetTrigger={resetTrigger}
+              fetcher={fetcher}
+            />
+          </div>
+        )}
+
+        {activeTab === "existing" && (
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <h2
+              className="text-2xl font-bold text-gray-900 mb-6"
+              style={{ fontFamily: "Jakarta Bold" }}
+            >
+              Projets existants ({portfolios.length})
+            </h2>
+
+            {portfolios.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 mb-4">
+                  Aucun projets créés pour le moment.
+                </p>
+                <button
+                  onClick={() => setActiveTab("create")}
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors duration-200"
+                  style={{ fontFamily: "Jakarta Semi Bold" }}
+                >
+                  Créer votre premier projet
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {portfolios.map((portfolio) => (
+                  <div
+                    key={portfolio.id}
+                    className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200"
                   >
-                    {portfolio.titre}
-                  </h3>
+                    {/* Image de couverture */}
+                    {portfolio.photoCouverture && (
+                      <div className="aspect-video bg-gray-100">
+                        <img
+                          src={portfolio.photoCouverture}
+                          alt={portfolio.titre}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
 
-                  {portfolio.kicker && (
-                    <p className="text-sm text-blue-600 mb-2 font-medium">
-                      {portfolio.kicker}
-                    </p>
-                  )}
+                    {/* Contenu */}
+                    <div className="p-4">
+                      <h3
+                        className="font-semibold text-lg text-gray-900 mb-2"
+                        style={{ fontFamily: "Jakarta Semi Bold" }}
+                      >
+                        {portfolio.titre}
+                      </h3>
 
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {portfolio.description}
-                  </p>
+                      {portfolio.kicker && (
+                        <p className="text-sm text-blue-600 mb-2 font-medium">
+                          {portfolio.kicker}
+                        </p>
+                      )}
 
-                  {/* Livrables */}
-                  {portfolio.livrable.length > 0 && (
-                    <div className="mb-3">
-                      <div className="flex flex-wrap gap-1">
-                        {portfolio.livrable
-                          .slice(0, 3)
-                          .map((livrable, index) => (
-                            <span
-                              key={index}
-                              className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-                            >
-                              {livrable}
-                            </span>
-                          ))}
-                        {portfolio.livrable.length > 3 && (
-                          <span className="text-gray-500 text-xs">
-                            +{portfolio.livrable.length - 3} autres
-                          </span>
-                        )}
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        {portfolio.description}
+                      </p>
+
+                      {/* Livrables */}
+                      {portfolio.livrable.length > 0 && (
+                        <div className="mb-3">
+                          <div className="flex flex-wrap gap-1">
+                            {portfolio.livrable
+                              .slice(0, 3)
+                              .map((livrable, index) => (
+                                <span
+                                  key={index}
+                                  className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+                                >
+                                  {livrable}
+                                </span>
+                              ))}
+                            {portfolio.livrable.length > 3 && (
+                              <span className="text-gray-500 text-xs">
+                                +{portfolio.livrable.length - 3} autres
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Métadonnées */}
+                      <div className="flex justify-between items-center text-xs text-gray-500 mb-3">
+                        <span>
+                          Créé le{" "}
+                          {new Date(portfolio.createdAt).toLocaleDateString(
+                            "fr-FR"
+                          )}
+                        </span>
+                        <span>
+                          {portfolio.medias.length} média
+                          {portfolio.medias.length !== 1 ? "s" : ""}
+                        </span>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex gap-2">
+                        <Link
+                          to={`/admin/manage-portfolio/${portfolio.slug}`}
+                          className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200"
+                        >
+                          Modifier
+                        </Link>
+                        <button
+                          type="button"
+                          className={`text-white text-sm px-3 py-1 rounded transition-colors duration-200 ${
+                            deleteFetcher.state === "submitting"
+                              ? "bg-gray-500 cursor-not-allowed"
+                              : "bg-red-600 hover:bg-red-700"
+                          }`}
+                          disabled={deleteFetcher.state === "submitting"}
+                          onClick={() => {
+                            if (
+                              confirm(
+                                "Êtes-vous sûr de vouloir supprimer ce portfolio ? Cette action est irréversible."
+                              )
+                            ) {
+                              // Utiliser deleteFetcher au lieu d'un fetch
+                              const formData = new FormData();
+                              formData.append("slug", portfolio.slug);
+
+                              deleteFetcher.submit(formData, {
+                                method: "delete",
+                              });
+                            }
+                          }}
+                        >
+                          {deleteFetcher.state === "submitting"
+                            ? "Suppression..."
+                            : "Supprimer"}
+                        </button>
                       </div>
                     </div>
-                  )}
-
-                  {/* Métadonnées */}
-                  <div className="flex justify-between items-center text-xs text-gray-500 mb-3">
-                    <span>
-                      Créé le{" "}
-                      {new Date(portfolio.createdAt).toLocaleDateString(
-                        "fr-FR"
-                      )}
-                    </span>
-                    <span>
-                      {portfolio.medias.length} média
-                      {portfolio.medias.length !== 1 ? "s" : ""}
-                    </span>
                   </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <Link
-                      to={`/admin/manage-portfolio/${portfolio.slug}`}
-                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200"
-                    >
-                      Modifier
-                    </Link>
-                    <button
-                      type="button"
-                      className={`text-white text-sm px-3 py-1 rounded transition-colors duration-200 ${
-                        deleteFetcher.state === "submitting"
-                          ? "bg-gray-500 cursor-not-allowed"
-                          : "bg-red-600 hover:bg-red-700"
-                      }`}
-                      disabled={deleteFetcher.state === "submitting"}
-                      onClick={() => {
-                        if (
-                          confirm(
-                            "Êtes-vous sûr de vouloir supprimer ce portfolio ? Cette action est irréversible."
-                          )
-                        ) {
-                          // Utiliser deleteFetcher au lieu d'un fetch
-                          const formData = new FormData();
-                          formData.append("slug", portfolio.slug);
-
-                          deleteFetcher.submit(formData, {
-                            method: "delete",
-                          });
-                        }
-                      }}
-                    >
-                      {deleteFetcher.state === "submitting"
-                        ? "Suppression..."
-                        : "Supprimer"}
-                    </button>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>

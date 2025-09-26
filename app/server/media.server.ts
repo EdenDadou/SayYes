@@ -139,7 +139,11 @@ export async function deleteMedia(mediaId: string): Promise<void> {
 
   // Supprimer le fichier physique
   try {
-    const filePath = join(process.cwd(), "public", media.path);
+    const filePath = join(
+      process.cwd(),
+      isDev ? "public" : "build/client",
+      media.path
+    );
     await unlink(filePath);
   } catch (error) {
     console.error("Erreur lors de la suppression du fichier:", error);
