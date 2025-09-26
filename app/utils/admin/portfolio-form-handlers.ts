@@ -90,6 +90,10 @@ export interface FormHandlers {
   // Handlers pour la photo main
   handlePhotoMainChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 
+  // Handlers pour les aperçus de photos principales
+  removePhotoCouverturePreview: () => void;
+  removePhotoMainPreview: () => void;
+
   // Handlers pour les bentos
   handleBentoFilesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   addBentoLine: () => void;
@@ -109,9 +113,16 @@ export interface FormState {
   setCurrentBento: React.Dispatch<React.SetStateAction<BentoItem>>;
   currentBentoLine: BentoLine;
   setCurrentBentoLine: React.Dispatch<React.SetStateAction<BentoLine>>;
-  setPreviewImage: React.Dispatch<React.SetStateAction<string | null>>;
-  setPhotoMainPreview: React.Dispatch<React.SetStateAction<string | null>>;
-  setPhotoMainFile: React.Dispatch<React.SetStateAction<File | null>>;
+  setPhotoCouverturePreview: React.Dispatch<
+    React.SetStateAction<{ url: string; name: string }[]>
+  >;
+  setPhotoMainPreview: React.Dispatch<
+    React.SetStateAction<{ url: string; name: string }[]>
+  >;
+  setPhotoCouvertureFile: React.Dispatch<
+    React.SetStateAction<Map<string, File>>
+  >;
+  setPhotoMainFile: React.Dispatch<React.SetStateAction<Map<string, File>>>;
   setBentoPreviewImages: React.Dispatch<
     React.SetStateAction<{ url: string; name: string }[]>
   >;
@@ -133,8 +144,9 @@ export function createFormHandlers(state: FormState): FormHandlers {
     setCurrentBento,
     currentBentoLine,
     setCurrentBentoLine,
-    setPreviewImage,
+    setPhotoCouverturePreview,
     setPhotoMainPreview,
+    setPhotoCouvertureFile,
     setPhotoMainFile,
     setBentoPreviewImages,
     setBentoFiles,
@@ -155,15 +167,39 @@ export function createFormHandlers(state: FormState): FormHandlers {
     }));
   };
 
-  // Gestion de l'upload de fichier pour la photo de couverture
+  // Gestion de l'upload de fichier pour la photo de couverture - même technique que bento
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Créer un aperçu de l'image
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0]; // Une seule photo de couverture
+    if (file && file.type.startsWith("image/")) {
+      console.log("🔍 handleFileChange appelé avec:", file.name);
+
+      // Stocker le fichier réel pour l'envoi avec Map
+      setPhotoCouvertureFile((prev) => {
+        const newFiles = new Map(prev);
+        newFiles.clear(); // Une seule photo de couverture à la fois
+        newFiles.set(file.name, file);
+        return newFiles;
+      });
+
+      // Créer l'aperçu de manière asynchrone comme les bento
       const reader = new FileReader();
       reader.onload = (event) => {
-        setPreviewImage(event.target?.result as string);
+        const imageUrl = event.target?.result as string;
+        setPhotoCouverturePreview([{ url: imageUrl, name: file.name }]);
+        console.log("✅ Photo de couverture chargée:", file.name);
       };
+
+      reader.onerror = () => {
+        console.error(
+          "❌ Erreur lors du chargement de la photo de couverture:",
+          file.name
+        );
+        setPhotoCouverturePreview([]);
+      };
+
       reader.readAsDataURL(file);
 
       // Mettre à jour le nom du fichier dans le state
@@ -172,6 +208,9 @@ export function createFormHandlers(state: FormState): FormHandlers {
         photoCouverture: file.name,
       }));
     }
+
+    // Réinitialiser l'input pour permettre de sélectionner le même fichier si nécessaire
+    e.target.value = "";
   };
 
   // Gestion du témoignage
@@ -203,18 +242,39 @@ export function createFormHandlers(state: FormState): FormHandlers {
     }));
   };
 
-  // Gestion de l'upload de fichier pour la photo main
+  // Gestion de l'upload de fichier pour la photo main - même technique que bento
   const handlePhotoMainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      // Stocker le fichier réel pour l'envoi
-      setPhotoMainFile(file);
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
-      // Créer un aperçu de l'image
+    const file = files[0]; // Une seule photo main
+    if (file && file.type.startsWith("image/")) {
+      console.log("🔍 handlePhotoMainChange appelé avec:", file.name);
+
+      // Stocker le fichier réel pour l'envoi avec Map
+      setPhotoMainFile((prev) => {
+        const newFiles = new Map(prev);
+        newFiles.clear(); // Une seule photo main à la fois
+        newFiles.set(file.name, file);
+        return newFiles;
+      });
+
+      // Créer l'aperçu de manière asynchrone comme les bento
       const reader = new FileReader();
       reader.onload = (event) => {
-        setPhotoMainPreview(event.target?.result as string);
+        const imageUrl = event.target?.result as string;
+        setPhotoMainPreview([{ url: imageUrl, name: file.name }]);
+        console.log("✅ Photo main chargée:", file.name);
       };
+
+      reader.onerror = () => {
+        console.error(
+          "❌ Erreur lors du chargement de la photo main:",
+          file.name
+        );
+        setPhotoMainPreview([]);
+      };
+
       reader.readAsDataURL(file);
 
       // Mettre à jour le nom du fichier dans le state
@@ -223,6 +283,28 @@ export function createFormHandlers(state: FormState): FormHandlers {
         photoMain: file.name,
       }));
     }
+
+    // Réinitialiser l'input pour permettre de sélectionner le même fichier si nécessaire
+    e.target.value = "";
+  };
+
+  // Handlers pour supprimer les aperçus de photos principales
+  const removePhotoCouverturePreview = () => {
+    setPhotoCouverturePreview([]);
+    setPhotoCouvertureFile(new Map());
+    setFormData((prev) => ({
+      ...prev,
+      photoCouverture: "",
+    }));
+  };
+
+  const removePhotoMainPreview = () => {
+    setPhotoMainPreview([]);
+    setPhotoMainFile(new Map());
+    setFormData((prev) => ({
+      ...prev,
+      photoMain: "",
+    }));
   };
 
   // Gestion de l'upload de fichiers multiples pour les médias bento (images et vidéos)
@@ -422,6 +504,8 @@ export function createFormHandlers(state: FormState): FormHandlers {
     addLivrable,
     removeLivrable,
     handlePhotoMainChange,
+    removePhotoCouverturePreview,
+    removePhotoMainPreview,
     handleBentoFilesChange,
     addBentoLine,
     removeBentoLine,
