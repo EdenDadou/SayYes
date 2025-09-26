@@ -3,9 +3,9 @@ import { join, extname } from "path";
 import { prisma } from "./db.server";
 import type { MediaType } from "@prisma/client";
 
-// Configuration des uploads - adapter selon l'environnement
-const isDev = process.env.NODE_ENV !== "production";
-const UPLOAD_DIR = isDev ? "public/uploads" : "build/client/uploads";
+// Configuration des uploads - toujours utiliser public/uploads pour que Nginx puisse servir les fichiers
+// Le serveur s'exécute toujours depuis la racine du projet (process.cwd() = /var/www/remix/)
+const UPLOAD_DIR = "public/uploads";
 const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || "40485760"); // 10MB par défaut
 
 // Types MIME autorisés
@@ -162,11 +162,7 @@ export async function deleteMedia(mediaId: string): Promise<void> {
 
   // Supprimer le fichier physique
   try {
-    const filePath = join(
-      process.cwd(),
-      isDev ? "public" : "build/client",
-      media.path
-    );
+    const filePath = join(process.cwd(), "public", media.path);
     await unlink(filePath);
   } catch (error) {
     console.error("Erreur lors de la suppression du fichier:", error);
