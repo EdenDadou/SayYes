@@ -5,14 +5,6 @@ import "~/styles/tailwind.css";
 function isVideoFile(url: string): boolean {
   // Utiliser une regex pour vérifier l'extension à la fin de l'URL, avant d'éventuels paramètres
   const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv)(\?.*)?$/i.test(url);
-  if (process.env.NODE_ENV !== "production") {
-    console.log(
-      "🎬 Détection vidéo:",
-      url,
-      "→",
-      isVideo ? "✅ VIDÉO" : "❌ IMAGE"
-    );
-  }
   return isVideo;
 }
 
