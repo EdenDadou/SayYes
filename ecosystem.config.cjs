@@ -8,6 +8,7 @@ module.exports = {
         NODE_ENV: "production",
         PORT: 4000,
         DATABASE_URL: "file:./prisma/dev.db",
+        MAX_FILE_SIZE: "40485760", // 40MB pour les vidéos
       },
       // Configuration pour la gestion des erreurs et redémarrages
       max_memory_restart: "1G",

@@ -20,8 +20,19 @@ export default defineConfig({
     process.env.NODE_ENV === "development"
       ? ".vite-dev-cache"
       : "node_modules/.vite",
-  // Inclure des fichiers spécifiques (par exemple, les polices)
-  assetsInclude: ["**/*.ttf", "**/*.woff", "**/*.woff2", "**/*.svg"],
+  // Inclure des fichiers spécifiques (polices, vidéos)
+  assetsInclude: [
+    "**/*.ttf",
+    "**/*.woff",
+    "**/*.woff2",
+    "**/*.svg",
+    "**/*.mp4",
+    "**/*.webm",
+    "**/*.ogg",
+    "**/*.mov",
+    "**/*.avi",
+    "**/*.mkv",
+  ],
 
   // Configuration pour optimiser le bundling et le cache
   build: {

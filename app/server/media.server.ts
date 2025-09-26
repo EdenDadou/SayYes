@@ -47,11 +47,15 @@ function getMediaType(mimetype: string): MediaType {
 
 // Fonction pour valider un fichier
 export function validateFile(file: File): void {
+  console.log(
+    `🔍 Validation fichier: ${file.name} (${file.size} bytes, type: "${file.type}")`
+  );
+
   // Vérifier la taille
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error(
-      `Fichier trop volumineux. Taille maximale: ${MAX_FILE_SIZE / 1024 / 1024}MB`
-    );
+    const error = `Fichier trop volumineux. Taille: ${(file.size / 1024 / 1024).toFixed(2)}MB > Max: ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(2)}MB`;
+    console.error(`❌ ${error}`);
+    throw new Error(error);
   }
 
   // Vérifier le type MIME
@@ -61,8 +65,12 @@ export function validateFile(file: File): void {
     ...ALLOWED_DOCUMENT_TYPES,
   ];
   if (!allAllowedTypes.includes(file.type)) {
-    throw new Error(`Type de fichier non supporté: ${file.type}`);
+    const error = `Type de fichier non supporté: "${file.type}". Types autorisés: ${allAllowedTypes.join(", ")}`;
+    console.error(`❌ ${error}`);
+    throw new Error(error);
   }
+
+  console.log(`✅ Fichier validé: ${file.name}`);
 }
 
 // Fonction pour générer un nom de fichier unique
@@ -82,6 +90,11 @@ export async function saveMedia(
   folder: string = "general",
   portfolioId?: string
 ): Promise<UploadedFileInfo> {
+  const isProduction = process.env.NODE_ENV === "production";
+  console.log(
+    `🔧 saveMedia() - Env: ${isProduction ? "PROD" : "DEV"}, File: ${file.name} (${file.size} bytes, ${file.type})`
+  );
+
   // Valider le fichier
   validateFile(file);
 
@@ -92,16 +105,24 @@ export async function saveMedia(
   const relativePath = `uploads/${folder}/${filename}`;
   const publicUrl = `/${relativePath}`;
 
+  console.log(`📂 Chemin upload: ${folderPath}`);
+  console.log(`📄 Fichier final: ${filePath}`);
+
   // Créer le dossier s'il n'existe pas
   await mkdir(folderPath, { recursive: true });
+  console.log(`✅ Dossier créé/vérifié: ${folderPath}`);
 
   // Sauvegarder le fichier
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   await writeFile(filePath, buffer);
 
+  console.log(`💾 Fichier écrit: ${filePath} (${buffer.length} bytes)`);
+
   // Enregistrer en base de données
   const mediaType = getMediaType(file.type);
+  console.log(`📊 Enregistrement BDD - Type: ${mediaType}, URL: ${publicUrl}`);
+
   const media = await prisma.media.create({
     data: {
       filename,
@@ -114,6 +135,8 @@ export async function saveMedia(
       portfolioId: portfolioId || null,
     },
   });
+
+  console.log(`✅ Média enregistré en BDD - ID: ${media.id}`);
 
   return {
     id: media.id,

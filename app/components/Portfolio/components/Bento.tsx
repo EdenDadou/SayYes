@@ -3,9 +3,17 @@ import "~/styles/tailwind.css";
 
 // Fonction pour déterminer si un média est une vidéo
 function isVideoFile(url: string): boolean {
-  const videoExtensions = [".mp4", ".webm", ".ogg", ".mov", ".avi", ".mkv"];
-  const lowerUrl = url.toLowerCase();
-  return videoExtensions.some((ext) => lowerUrl.includes(ext));
+  // Utiliser une regex pour vérifier l'extension à la fin de l'URL, avant d'éventuels paramètres
+  const isVideo = /\.(mp4|webm|ogg|mov|avi|mkv)(\?.*)?$/i.test(url);
+  if (process.env.NODE_ENV !== "production") {
+    console.log(
+      "🎬 Détection vidéo:",
+      url,
+      "→",
+      isVideo ? "✅ VIDÉO" : "❌ IMAGE"
+    );
+  }
+  return isVideo;
 }
 
 export default function Bento({ bento }: { bento: BentoItem }) {
@@ -56,6 +64,12 @@ export default function Bento({ bento }: { bento: BentoItem }) {
                 autoPlay
                 playsInline
                 preload="metadata"
+                onError={(e) => {
+                  console.error("❌ Erreur chargement vidéo:", image);
+                }}
+                onCanPlay={() => {
+                  console.log("✅ Vidéo prête:", image);
+                }}
               >
                 Votre navigateur ne prend pas en charge la lecture de vidéos.
               </video>

@@ -28,10 +28,15 @@ export async function action({ request }: ActionFunctionArgs) {
     await requireAuth(request);
 
     if (request.method === "POST") {
-      // Upload de fichier
+      console.log("📤 Début upload média...");
+
+      // Upload de fichier avec limite augmentée pour les vidéos
+      const maxSize = parseInt(process.env.MAX_FILE_SIZE || "40485760"); // 40MB par défaut
       const uploadHandler = unstable_createMemoryUploadHandler({
-        maxPartSize: 10 * 1024 * 1024, // 10MB
+        maxPartSize: maxSize,
       });
+
+      console.log(`⚙️  Limite upload configurée: ${maxSize / 1024 / 1024}MB`);
 
       const formData = await unstable_parseMultipartFormData(
         request,
@@ -42,14 +47,29 @@ export async function action({ request }: ActionFunctionArgs) {
       const folder = (formData.get("folder") as string) || "general";
       const portfolioId = formData.get("portfolioId") as string | null;
 
+      console.log(
+        "📄 Fichier reçu:",
+        file?.name,
+        `(${file?.size} bytes, ${file?.type})`
+      );
+
       if (!file || file.size === 0) {
+        console.error("❌ Aucun fichier valide reçu");
         return json({ error: "Fichier requis" }, { status: 400 });
       }
+
+      console.log(`📁 Dossier: ${folder}, Portfolio: ${portfolioId || "none"}`);
 
       const savedMedia = await saveMedia(
         file,
         folder,
         portfolioId || undefined
+      );
+
+      console.log(
+        "✅ Média sauvegardé:",
+        savedMedia.filename,
+        `(${savedMedia.type})`
       );
 
       return json({
