@@ -4,10 +4,10 @@ import { createReadStream, statSync } from "fs";
 import { join } from "path";
 
 /**
- * Route pour servir les fichiers uploadés en production
+ * Route pour servir les fichiers uploadés avec support des Range requests pour les vidéos
  * Gère les URLs comme /uploads/portfolio/file.mp4
  */
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   try {
     const { "*": splat } = params;
 
@@ -56,23 +56,66 @@ export async function loader({ params }: LoaderFunctionArgs) {
     };
 
     const contentType = mimeTypes[ext] || "application/octet-stream";
+    const fileSize = stats.size;
 
-    // Créer le stream de lecture
+    // Gestion des Range requests pour les vidéos
+    const range = request.headers.get("range");
+    const isVideo = contentType.startsWith("video/");
+
+    if (range && isVideo) {
+      console.log(`🎬 Requête Range pour vidéo: ${range}`);
+
+      // Parser le Range header (format: bytes=start-end)
+      const parts = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+      if (start >= fileSize || end >= fileSize) {
+        return new Response("Range Not Satisfiable", {
+          status: 416,
+          headers: {
+            "Content-Range": `bytes */${fileSize}`,
+          },
+        });
+      }
+
+      const chunksize = end - start + 1;
+      const stream = createReadStream(filePath, { start, end });
+      const readableStream = createReadableStreamFromReadable(stream);
+
+      console.log(
+        `✅ Service partiel du fichier: ${splat} (${start}-${end}/${fileSize})`
+      );
+
+      return new Response(readableStream, {
+        status: 206, // Partial Content
+        headers: {
+          "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+          "Accept-Ranges": "bytes",
+          "Content-Length": chunksize.toString(),
+          "Content-Type": contentType,
+          "Cache-Control": "public, max-age=31536000",
+          ETag: `"${stats.mtime.getTime()}"`,
+        },
+      });
+    }
+
+    // Service complet du fichier (sans Range)
     const stream = createReadStream(filePath);
     const readableStream = createReadableStreamFromReadable(stream);
 
-    console.log(`✅ Service du fichier: ${splat} (${contentType})`);
+    console.log(`✅ Service du fichier complet: ${splat} (${contentType})`);
 
     // Retourner la réponse avec les headers appropriés
     return new Response(readableStream, {
       status: 200,
       headers: {
         "Content-Type": contentType,
-        "Content-Length": stats.size.toString(),
+        "Content-Length": fileSize.toString(),
         "Cache-Control": "public, max-age=31536000", // Cache 1 an
         ETag: `"${stats.mtime.getTime()}"`,
         // Headers spéciaux pour les vidéos
-        ...(contentType.startsWith("video/") && {
+        ...(isVideo && {
           "Accept-Ranges": "bytes",
         }),
       },
