@@ -307,6 +307,17 @@ export default function FormulaireAdmin({
           name="bento"
           value={JSON.stringify(formData.bento)}
         />
+        {/* Inputs cachés pour les URLs existantes des photos */}
+        {isEditing && formData.photoCouverture && (
+          <input
+            type="hidden"
+            name="photoCouvertureUrl"
+            value={formData.photoCouverture}
+          />
+        )}
+        {isEditing && formData.photoMain && (
+          <input type="hidden" name="photoMainUrl" value={formData.photoMain} />
+        )}
         {/* Inputs file dynamiques pour les fichiers bento */}
         {renderBentoFileInputs()}
         {/* Inputs file dynamiques pour les photos principales */}

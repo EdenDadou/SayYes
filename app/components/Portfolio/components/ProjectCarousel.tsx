@@ -34,12 +34,12 @@ export default function ProjectCarousel({
 
   const nextSlide = () => {
     setDirection(1);
-    setCurrentIndex((prevIndex) => (prevIndex >= maxIndex ? 0 : prevIndex + 1));
+    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maxIndex));
   };
 
   const prevSlide = () => {
     setDirection(-1);
-    setCurrentIndex((prevIndex) => (prevIndex <= 0 ? maxIndex : prevIndex - 1));
+    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
 
   const slideVariants = {
@@ -76,7 +76,9 @@ export default function ProjectCarousel({
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"
+          className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
+            currentIndex === 0 ? "opacity-0 invisible" : "opacity-100 visible"
+          }`}
           aria-label="Projet précédent"
         >
           <ArrowLight className="w-12 h-12 text-white rotate-180 group-hover:scale-110 transition-transform" />
@@ -84,7 +86,11 @@ export default function ProjectCarousel({
 
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"
+          className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
+            currentIndex >= maxIndex
+              ? "opacity-0 invisible"
+              : "opacity-100 visible"
+          }`}
           aria-label="Projet suivant"
         >
           <ArrowLight className="w-12 h-12 text-white group-hover:scale-110 transition-transform" />
@@ -116,7 +122,13 @@ export default function ProjectCarousel({
                   prevSlide();
                 }
               }}
-              className="absolute inset-0 flex items-center justify-center"
+              className={`absolute inset-0 flex items-center gap-4 ${
+                currentIndex === 0
+                  ? "pl-32"
+                  : currentIndex >= maxIndex
+                    ? "pr-32 justify-end"
+                    : "justify-center"
+              }`}
             >
               {portfolios
                 .slice(currentIndex, currentIndex + itemsPerView)

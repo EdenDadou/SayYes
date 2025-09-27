@@ -31,16 +31,19 @@ export default function ContentPortfolio({
       }}
     >
       <div
-        className={imageClasses}
         style={{
           backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
-      />
+        className={`${imageClasses}`}
+      >
+        {/* Gradient overlay - seulement sur l'image */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/70 to-black/90 rounded-[15px]" />
+      </div>
       <div className="size-full absolute top-0 left-0 bottom-0">
-        <div className="flex flex-col items-center justify-end w-full h-full p-4 bg-gradient-to-b from-transparent via-black/70 to-black/90">
+        <div className="flex flex-col items-center justify-end w-full h-full p-4">
           <div className="flex flex-row items-center justify-between w-full p-4 ">
             <div className="flex flex-row justify-center items-center">
               <div className="h-[3px] w-14 holographic-bg rotate-90" />
