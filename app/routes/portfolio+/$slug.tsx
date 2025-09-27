@@ -103,9 +103,15 @@ export default function PortfolioSlug() {
             </div>
             <div className="md:col-span-1">
               <div className="flex flex-col gap-4">
-                <p className="text-gray-300 text-lg leading-relaxed">
-                  {portfolio.kicker}
-                </p>
+                <p
+                  className="text-black text-lg leading-relaxed font-jakarta"
+                  dangerouslySetInnerHTML={{
+                    __html: portfolio.kicker.replaceAll(
+                      "<b>",
+                      "<b class='font-jakarta-bold'>"
+                    ),
+                  }}
+                />
               </div>
             </div>
           </section>
@@ -138,9 +144,9 @@ export default function PortfolioSlug() {
               className="absolute top-0 left-0 right-0 w-screen"
             />
             <div className="relative z-50">
-              <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font jakarta mb-12 z-50">
+              <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-bold mb-12 z-50">
                 <Star className="w-5 h-5" fill="black" />
-                {portfolio.sousTitre.split(" ").slice(0, 3).join(" ")}{" "}
+                {portfolio.sousTitre.split(" ").slice(0, 3).join(" ")}
                 <span style={{ color: portfolio.couleur }}>
                   {portfolio.sousTitre.split(" ").slice(3).join(" ")}
                 </span>
@@ -163,10 +169,7 @@ export default function PortfolioSlug() {
                 </blockquote>
                 <div className="flex flex-col gap-1">
                   <cite className="text-white font-jakarta-bold">
-                    {portfolio.temoignage.auteur}
-                    {portfolio.temoignage.poste}
-                    {portfolio.temoignage.entreprise &&
-                      ` chez ${portfolio.temoignage.entreprise}`}
+                    {portfolio.temoignage.auteur} - {portfolio.temoignage.poste}
                   </cite>
                 </div>
               </div>

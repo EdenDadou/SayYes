@@ -2,17 +2,11 @@ import {
   type FormHandlers,
   createFormHandlers,
   type FormState,
-  type PortfolioFormData,
-  type BentoItem,
-  type BentoLine,
 } from "./portfolio-form-handlers";
 
 // Ré-exporter les types, constantes et fonctions pour faciliter l'import
 export {
   type PortfolioFormData,
-  type BentoItem,
-  type BentoLine,
-  BENTO_FORMATS,
   initializeFormData,
 } from "./portfolio-form-handlers";
 

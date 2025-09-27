@@ -1,3 +1,5 @@
+import { BentoItem, BentoLine } from "~/server";
+
 // Types répliqués pour éviter l'import de modules serveur
 export interface PortfolioFormData {
   titre: string;
@@ -18,25 +20,6 @@ export interface PortfolioFormData {
   };
   bento: BentoItem[];
 }
-
-export interface BentoItem {
-  lines: BentoLine[];
-}
-
-export interface BentoLine {
-  format: "1/3 - 2/3" | "2/3 - 1/3" | "1/2 - 1/2" | "1/1";
-  listImage: string[]; // URLs des médias (images et vidéos)
-}
-
-// Options pour les formats de bento (répliqué pour éviter l'import de modules serveur)
-export const BENTO_FORMATS = [
-  "1/3 - 2/3",
-  "2/3 - 1/3",
-  "3 carrés",
-  "banner",
-  "2 carré",
-  "full",
-] as const;
 
 // Fonction utilitaire pour parser les champs JSON (client-safe)
 function parseJsonField<T>(field: any, defaultValue: T): T {

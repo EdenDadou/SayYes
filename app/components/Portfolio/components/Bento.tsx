@@ -13,15 +13,17 @@ export default function Bento({ bento }: { bento: BentoItem }) {
     return null;
   }
 
+  console.log(bento);
+
   return bento.lines.map((line, lineIndex) => (
     <div
       key={lineIndex}
-      className={`grid gap-4 ${
+      className={`grid gap-4 max-w-[1000px]${
         line.format === "1/3 - 2/3"
           ? "grid-cols-5"
-          : line.format === "3 carrés"
+          : line.format === "3 square"
             ? "grid-cols-3"
-            : line.format === "2 carré"
+            : line.format === "2 square"
               ? "grid-cols-2"
               : line.format === "banner"
                 ? "grid-cols-1"
@@ -39,9 +41,9 @@ export default function Bento({ bento }: { bento: BentoItem }) {
                   ? "col-span-2 h-[468px] rounded-3xl"
                   : line.format === "banner"
                     ? "aspect-[21/9]"
-                    : line.format === "3 carrés"
+                    : line.format === "3 square"
                       ? "grid-cols-3"
-                      : line.format === "2 carré"
+                      : line.format === "2 square"
                         ? "grid-cols-2"
                         : line.format === "full"
                           ? "h-[560px] w-full"

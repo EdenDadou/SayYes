@@ -4,43 +4,15 @@ import {
   json,
 } from "@remix-run/node";
 import { saveMedia } from "~/server/media.server";
-
-// Types pour les données du portfolio
-export interface BentoLine {
-  format: "1/3 - 2/3" | "3 carrés" | "banner" | "2 carré" | "full";
-  listImage: string[]; // URLs des médias (images et vidéos)
-}
-
-export interface BentoItem {
-  lines: BentoLine[];
-}
-
-export interface PortfolioFormData {
-  titre: string;
-  categories: string[];
-  slug: string;
-  photoCouverture: string;
-  photoMain: string;
-  description: string;
-  kicker: string;
-  livrable: string[];
-  sousTitre: string;
-  topTitle: string;
-  couleur: string;
-  temoignage: {
-    auteur: string;
-    contenu: string;
-    poste?: string;
-  };
-  bento: BentoItem[];
-}
+import { PortfolioFormData } from "./portfolio-form-handlers";
+import { BentoItem } from "~/server";
 
 // Options pour les formats de bento
 export const BENTO_FORMATS = [
   "1/3 - 2/3",
-  "3 carrés",
+  "3 square",
   "banner",
-  "2 carré",
+  "2 square",
   "full",
 ] as const;
 
@@ -96,17 +68,15 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
     console.log("⚠️ Aucune catégorie trouvée dans FormData");
   }
 
-  // Traitement des livrables - peut être envoyé différemment
-  const livrableValue = formData.get("livrable") as string;
+  // Traitement des livrables - récupérer tous les éléments avec le nom "livrable"
+  const livrableValues = formData.getAll("livrable") as string[];
   let livrable: string[] = [];
-  if (livrableValue) {
-    try {
-      livrable = JSON.parse(livrableValue);
-      console.log("📦 Livrables extraits (JSON):", livrable);
-    } catch {
-      livrable = [livrableValue];
-      console.log("📦 Livrables extraits (string):", livrable);
-    }
+  if (livrableValues.length > 0) {
+    // Filtrer les valeurs vides et les trimmer
+    livrable = livrableValues.filter(
+      (value) => value && value.trim().length > 0
+    );
+    console.log("📦 Livrables extraits:", livrable);
   } else {
     console.log("⚠️ Aucun livrable trouvé dans FormData");
   }

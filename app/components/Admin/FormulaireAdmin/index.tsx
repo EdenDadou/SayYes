@@ -3,12 +3,11 @@ import {
   usePortfolioFormHandlers,
   initializeFormData,
   type PortfolioFormData,
-  type BentoItem,
-  type BentoLine,
-  BENTO_FORMATS,
 } from "~/utils/admin/portfolio-form-handlers";
 import { DeleteIcon } from "~/components/icons";
 import InputAdmin, { InputGroup } from "~/components/Admin/InputAdmin";
+import { BENTO_FORMATS } from "~/utils/admin/manage-portfolio";
+import { BentoItem, BentoLine } from "~/server";
 
 interface FormulaireAdminProps {
   actionData?: any;
