@@ -4,10 +4,17 @@ import {
   initializeFormData,
   type PortfolioFormData,
 } from "~/utils/admin/portfolio-form-handlers";
+import {
+  usePortfolioEditFormHandlers,
+  type EditFormHandlers,
+} from "~/utils/admin/portfolio-edit-handlers";
 import { DeleteIcon } from "~/components/icons";
 import InputAdmin, { InputGroup } from "~/components/Admin/InputAdmin";
-import { BENTO_FORMATS } from "~/utils/admin/manage-portfolio";
-import { BentoItem, BentoLine } from "~/server";
+import {
+  BENTO_FORMATS,
+  BentoItem,
+  BentoLine,
+} from "~/utils/admin/manage-portfolio-types";
 
 interface FormulaireAdminProps {
   actionData?: any;
@@ -93,8 +100,8 @@ export default function FormulaireAdmin({
   const [uploadedCount, setUploadedCount] = useState(0);
   const [totalFiles, setTotalFiles] = useState(0);
 
-  // Utiliser les handlers du portfolio-form-handlers
-  const handlers = usePortfolioFormHandlers({
+  // Utiliser les handlers appropriés selon le mode
+  const baseHandlerState = {
     formData,
     setFormData,
     currentLivrable,
@@ -113,7 +120,15 @@ export default function FormulaireAdmin({
     setUploadProgress,
     setUploadedCount,
     setTotalFiles,
-  });
+  };
+
+  const handlers = isEditing
+    ? usePortfolioEditFormHandlers({
+        ...baseHandlerState,
+        bentoFiles,
+        setBentoFiles,
+      })
+    : usePortfolioFormHandlers(baseHandlerState);
 
   // Fonction pour réinitialiser le formulaire
   const resetForm = () => {
@@ -910,7 +925,21 @@ export default function FormulaireAdmin({
                       </div>
                       <button
                         type="button"
-                        onClick={() => removeBento(bentoIndex)}
+                        onClick={() => {
+                          console.log(
+                            "🗑️ Tentative suppression bento",
+                            bentoIndex
+                          );
+                          console.log(
+                            "🔍 Handler removeBento existe?",
+                            "removeBento" in handlers
+                          );
+                          console.log(
+                            "🔍 Bento avant suppression:",
+                            formData.bento.length
+                          );
+                          removeBento(bentoIndex);
+                        }}
                         className="text-red-400 hover:text-red-300 transition-colors duration-200"
                         title="Supprimer ce bento"
                       >
@@ -943,7 +972,11 @@ export default function FormulaireAdmin({
                               .map((image, imgIndex) => (
                                 <div
                                   key={imgIndex}
-                                  className="text-xs text-green-200 bg-green-800/20 p-1 rounded text-center truncate"
+                                  className={`text-xs p-1 rounded text-center truncate relative group ${
+                                    isEditing
+                                      ? "bg-green-800/20 text-green-200 hover:bg-green-700/30"
+                                      : "bg-green-800/20 text-green-200"
+                                  }`}
                                   style={{ fontFamily: "Jakarta" }}
                                   title={
                                     image.startsWith("pending_")
@@ -958,9 +991,83 @@ export default function FormulaireAdmin({
                                   ) : (
                                     <>🖼️ {imgIndex + 1}</>
                                   )}
+
+                                  {/* Bouton de suppression en mode édition */}
+                                  {isEditing && imgIndex < 5 && (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (
+                                          "removeExistingBentoImage" in handlers
+                                        ) {
+                                          (
+                                            handlers as EditFormHandlers
+                                          ).removeExistingBentoImage(
+                                            bentoIndex,
+                                            lineIndex,
+                                            imgIndex
+                                          );
+                                        }
+                                      }}
+                                      className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                      <span className="text-white text-xs">
+                                        ×
+                                      </span>
+                                    </button>
+                                  )}
                                 </div>
                               ))}
                           </div>
+
+                          {/* Actions pour mode édition */}
+                          {isEditing && (
+                            <div className="flex gap-2 mt-2">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if ("removeExistingBentoLine" in handlers) {
+                                    (
+                                      handlers as EditFormHandlers
+                                    ).removeExistingBentoLine(
+                                      bentoIndex,
+                                      lineIndex
+                                    );
+                                  }
+                                }}
+                                className="text-xs bg-red-600/20 hover:bg-red-600/30 text-red-300 px-2 py-1 rounded border border-red-600/30"
+                              >
+                                🗑️ Supprimer ligne
+                              </button>
+                              <input
+                                type="file"
+                                multiple
+                                accept="image/*,video/*"
+                                onChange={(e) => {
+                                  if (
+                                    e.target.files &&
+                                    "addImagesToExistingBento" in handlers
+                                  ) {
+                                    (
+                                      handlers as EditFormHandlers
+                                    ).addImagesToExistingBento(
+                                      bentoIndex,
+                                      e.target.files,
+                                      e.target
+                                    );
+                                  }
+                                }}
+                                className="hidden"
+                                id={`add-to-bento-${bentoIndex}-${lineIndex}`}
+                              />
+                              <label
+                                htmlFor={`add-to-bento-${bentoIndex}-${lineIndex}`}
+                                className="text-xs bg-green-600/20 hover:bg-green-600/30 text-green-300 px-2 py-1 rounded border border-green-600/30 cursor-pointer"
+                              >
+                                📁 Ajouter images
+                              </label>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

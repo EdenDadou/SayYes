@@ -13,7 +13,6 @@ export {
 // Interface étendue pour les handlers d'édition
 export interface EditFormHandlers extends FormHandlers {
   // Handlers supplémentaires pour l'édition
-  removeBentoImage: (index: number) => void;
   removeExistingBentoImage: (
     bentoIndex: number,
     lineIndex: number,
@@ -25,7 +24,6 @@ export interface EditFormHandlers extends FormHandlers {
     files: FileList,
     inputElement?: HTMLInputElement
   ) => void;
-  handleBentoFilesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 // Interface étendue pour les états d'édition
@@ -52,8 +50,10 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
     setTotalFiles,
   } = state;
 
-  // Gestion de l'upload de fichiers multiples pour les images bento (version édition)
-  const handleBentoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Version édition de handleBentoFilesChange (surcharge la version de base)
+  const handleBentoFilesChangeEdit = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     console.log("handleBentoFilesChange EDITION appelé", e.target.files);
     const files = e.target.files;
     if (files) {
@@ -165,26 +165,6 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
       // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
       e.target.value = "";
     }
-  };
-
-  const removeBentoImage = (index: number) => {
-    setCurrentBentoLine((prev) => ({
-      ...prev,
-      listImage: prev.listImage.filter((_, i) => i !== index),
-    }));
-    // Supprimer aussi l'aperçu et le fichier correspondants
-    setBentoPreviewImages((prev) => {
-      const imageToRemove = prev[index];
-      if (imageToRemove) {
-        // Supprimer aussi le fichier correspondant de la Map
-        setBentoFiles((prevFiles) => {
-          const newFiles = new Map(prevFiles);
-          newFiles.delete(imageToRemove.name);
-          return newFiles;
-        });
-      }
-      return prev.filter((_, i) => i !== index);
-    });
   };
 
   // Fonction pour supprimer une image d'un bento existant
@@ -306,11 +286,14 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
 
   return {
     ...baseHandlers,
-    removeBentoImage,
+    handleBentoFilesChange: handleBentoFilesChangeEdit, // Utiliser la version édition
     removeExistingBentoImage,
     removeExistingBentoLine,
     addImagesToExistingBento,
-    handleBentoFilesChange,
+    // S'assurer que les fonctions de base sont bien accessibles
+    removeBento: baseHandlers.removeBento,
+    addBento: baseHandlers.addBento,
+    removeBentoImage: baseHandlers.removeBentoImage,
   };
 }
 

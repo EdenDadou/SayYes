@@ -3,7 +3,13 @@ import { deleteMedia } from "./media.server";
 
 // Types pour les données du portfolio (repris du fichier existant)
 export interface BentoLine {
-  format: "1/3 - 2/3" | "3 square" | "banner" | "2 square" | "full";
+  format:
+    | "1/3 - 2/3"
+    | "2/3 - 1/3"
+    | "3 square"
+    | "banner"
+    | "2 square"
+    | "full";
   listImage: string[]; // URLs des médias (images et vidéos)
 }
 

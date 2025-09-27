@@ -16,37 +16,24 @@ export default function Bento({ bento }: { bento: BentoItem }) {
   console.log(bento);
 
   return bento.lines.map((line, lineIndex) => (
-    <div
-      key={lineIndex}
-      className={`grid gap-4 max-w-[1000px]${
-        line.format === "1/3 - 2/3"
-          ? "grid-cols-5"
-          : line.format === "3 square"
-            ? "grid-cols-3"
-            : line.format === "2 square"
-              ? "grid-cols-2"
-              : line.format === "banner"
-                ? "grid-cols-1"
-                : "grid-cols-1"
-      }`}
-    >
+    <div key={lineIndex} className="gap-4 max-w-[990px] flex m-auto">
       {line.listImage &&
         line.listImage.map((image, imageIndex) => (
           <div
             key={imageIndex}
             className={`relative rounded-3xl h-[full] overflow-hidden ${
-              line.format === "1/3 - 2/3" && imageIndex === 1
-                ? "col-span-3 h-[468px] rounded-3xl"
-                : line.format === "1/3 - 2/3"
-                  ? "col-span-2 h-[468px] rounded-3xl"
+              line.format === "1/3 - 2/3"
+                ? `${imageIndex === 1 ? "col-span-3" : "col-span-2"} h-[468px] rounded-3xl`
+                : line.format === "2/3 - 1/3"
+                  ? `${imageIndex === 0 ? "col-span-3" : "col-span-2"} h-[468px] rounded-3xl`
                   : line.format === "banner"
-                    ? "aspect-[21/9]"
+                    ? "h-[340px] w-full"
                     : line.format === "3 square"
                       ? "grid-cols-3"
                       : line.format === "2 square"
                         ? "grid-cols-2"
                         : line.format === "full"
-                          ? "h-[560px] w-full"
+                          ? "h-[557px] w-full"
                           : "aspect-square"
             }`}
           >

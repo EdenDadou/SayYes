@@ -1,4 +1,4 @@
-import { BentoItem, BentoLine } from "~/server";
+import { BentoItem, BentoLine } from "./manage-portfolio-types";
 
 // Types répliqués pour éviter l'import de modules serveur
 export interface PortfolioFormData {
@@ -474,10 +474,16 @@ export function createFormHandlers(state: FormState): FormHandlers {
   };
 
   const removeBento = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      bento: prev.bento.filter((_, i) => i !== index),
-    }));
+    console.log("🗑️ removeBento appelé avec index:", index);
+    console.log("🗑️ Nombre de bentos avant:", formData.bento.length);
+    setFormData((prev) => {
+      const newBento = prev.bento.filter((_, i) => i !== index);
+      console.log("🗑️ Nombre de bentos après:", newBento.length);
+      return {
+        ...prev,
+        bento: newBento,
+      };
+    });
   };
 
   return {

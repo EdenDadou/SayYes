@@ -10,6 +10,7 @@ import { BentoItem } from "~/server";
 // Options pour les formats de bento
 export const BENTO_FORMATS = [
   "1/3 - 2/3",
+  "2/3 - 1/3",
   "3 square",
   "banner",
   "2 square",
