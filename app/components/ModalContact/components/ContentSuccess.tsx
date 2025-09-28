@@ -5,6 +5,8 @@ import ArrowLight from "~/assets/icons/ArrowLight";
 import "~/styles/tailwind.css";
 import Coche from "~/assets/icons/Coche";
 import ArrowFull from "~/assets/icons/ArrowFull";
+import Masque from "~/components/Card/components/Solution/Masque";
+import MasqueGif from "~/components/404/MasqueGif";
 
 interface ContentSuccessProps {
   close: () => void;
@@ -26,15 +28,18 @@ export default function ContentSuccess({
       height="85%"
     >
       <div
-        className="relative w-full h-full rounded-xl flex flex-row overflow-hidden px-20"
-        // style={{
-        //   backgroundImage: 'url("images/404/404.gif")',
-        //   backgroundSize: "100% 100%",
-        //   backgroundRepeat: "no-repeat",
-        //   backgroundPosition: "right center",
-        // }}
-      >
-        <BackgroundModal className="absolute inset-0 w-full h-full z-0 rounded-[20px]" />
+        className="absolute right-4 w-[753px] h-[489px]"
+        style={{
+          backgroundImage: 'url("images/404/404.gif")',
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "right center",
+        }}
+      />
+      <MasqueGif height="96%" width="800px" right={12} rounded bold />
+
+      <div className="relative w-full h-full rounded-xl flex flex-row overflow-hidden px-20">
+        <Masque className="absolute inset-0 w-full h-full object-cover rounded-xl z-10 bg-black/10" />
         <button
           className="absolute top-4 right-4 text-white cursor-pointer z-30 hover:opacity-70"
           onClick={handleClose}

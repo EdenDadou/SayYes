@@ -8,6 +8,7 @@ import SvgBtnYoutube from "../Footer/components/BtnYoutube";
 import SvgBtnInstagram from "../Footer/components/BtnInstagram";
 import Background404 from "./Background404";
 import ArrowFull from "~/assets/icons/ArrowFull";
+import MasqueGif from "./MasqueGif";
 
 export default function Page404() {
   const navigate = useNavigate();
@@ -23,58 +24,16 @@ export default function Page404() {
     <Desktoplayout footer={false}>
       <main className="relative w-screen h-screen flex items-center justify-start px-36 -mt-10">
         <div
-          className="absolute right-0 w-[55vw] h-full z-0"
+          className="absolute right-10 w-[700px] h-[480px] z-0"
           style={{
             backgroundImage: 'url("images/404/404.gif")',
-            backgroundSize: "60vw 60vh",
+            backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right center",
           }}
         />
 
-        <div
-          className="absolute z-10"
-          style={{
-            right: 0,
-            top: "20vh", // Center vertically: (100vh - 70vh) / 2
-            width: "55vw", // Match the parent container width
-            height: "70vh",
-          }}
-        >
-          <div
-            className="absolute left-0 top-0 w-20 h-full"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(0, 0, 0, 1), transparent)",
-            }}
-          />
-
-          <div
-            className="absolute right-0 top-0 w-56 h-full"
-            style={{
-              background:
-                "linear-gradient(to left, rgba(0, 0, 0, 1), transparent)",
-            }}
-          />
-
-          {/* Top blur overlay */}
-          <div
-            className="absolute top-0 left-0 w-full h-56"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(0, 0, 0, 1), transparent)",
-            }}
-          />
-
-          {/* Bottom blur overlay */}
-          <div
-            className="absolute bottom-0 left-0 w-full h-48"
-            style={{
-              background:
-                "linear-gradient(to top, rgba(0, 0, 0, 1), transparent)",
-            }}
-          />
-        </div>
+        <MasqueGif height="480px" width="700px" right={40} />
         <Background404 className="absolute inset-0 w-full h-screen z-10" />
 
         <div className="flex flex-row items-center justify-center gap-8 z-20">

@@ -1,11 +1,12 @@
-import * as React from "react";
 import type { SVGProps } from "react";
-const SvgMasque = (props: SVGProps<SVGSVGElement>) => (
+const Masque = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={762}
-    height={540}
+    width="100%"
+    height="100%"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 769 556"
+    preserveAspectRatio="xMidYMid slice"
     {...props}
   >
     <g clipPath="url(#clip0_390_3846)">
@@ -175,4 +176,4 @@ const SvgMasque = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
-export default SvgMasque;
+export default Masque;
