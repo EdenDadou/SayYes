@@ -15,7 +15,7 @@ export default function Card({
   children,
 }: CardProps) {
   const containerClasses = cn(
-    "border-custom w-full rounded-[25px]",
+    "md:border-custom border-custom-mobile w-full rounded-[25px]",
     borderClass
   );
 

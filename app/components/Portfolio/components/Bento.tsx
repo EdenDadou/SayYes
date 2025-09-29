@@ -23,13 +23,13 @@ export default function Bento({ bento }: { bento: BentoItem }) {
             key={imageIndex}
             className={`relative rounded-3xl h-[full] overflow-hidden ${
               line.format === "1/3 - 2/3"
-                ? `${imageIndex === 1 ? "col-span-3" : "col-span-2"} h-[468px] rounded-3xl`
+                ? `${imageIndex === 1 ? "w-[570px]" : "w-[400px]"} h-[468px] rounded-3xl`
                 : line.format === "2/3 - 1/3"
-                  ? `${imageIndex === 0 ? "col-span-3" : "col-span-2"} h-[468px] rounded-3xl`
+                  ? `${imageIndex === 0 ? "w-[570px]" : "w-[400px]"} h-[468px] rounded-3xl`
                   : line.format === "banner"
                     ? "h-[340px] w-full"
                     : line.format === "3 square"
-                      ? "grid-cols-3"
+                      ? "w-[319px] h-[319px]"
                       : line.format === "2 square"
                         ? "grid-cols-2"
                         : line.format === "full"
