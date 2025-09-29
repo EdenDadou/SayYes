@@ -124,11 +124,11 @@ export default function PortfolioSlug() {
               <Star className="w-6 h-6" fill="black" />
               Nos Livrables
             </h3>
-            <div className="flex flex-row gap-6 w-full">
+            <div className="flex flex-row gap-5 w-full">
               {portfolio.livrable.map((item: string, index: number) => (
                 <span
                   key={index}
-                  className="flex flex-row items-center gap-6 px-3 py-3 rounded-full text-sm border font-jakarta-bold"
+                  className="flex flex-row items-center gap-2 px-3 py-4 rounded-full text-sm border font-jakarta-bold"
                   style={{
                     color: portfolio.couleur,
                     borderColor: portfolio.couleur,

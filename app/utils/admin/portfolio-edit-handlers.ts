@@ -61,23 +61,25 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
       setIsUploadingFiles(true);
 
       const validFiles: File[] = [];
-      const newImageNames: string[] = [];
+      const newMediaNames: string[] = [];
 
       Array.from(files).forEach((file) => {
-        // Vérifier le type de fichier
-        if (file.type.startsWith("image/")) {
+        // Vérifier le type de fichier (images et vidéos)
+        if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
           // Générer un ID unique pour éviter les conflits de noms
           const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${file.name}`;
           validFiles.push(file);
-          newImageNames.push(`pending_${fileId}`);
-          console.log(`✅ Valid file added: ${file.name} with ID: ${fileId}`);
+          newMediaNames.push(`pending_${fileId}`);
+          console.log(
+            `✅ Valid file added: ${file.name} with ID: ${fileId} (${file.type})`
+          );
         }
       });
 
       console.log(`🔍 Total valid files: ${validFiles.length}`);
-      console.log(`🔍 New image names: ${newImageNames.join(", ")}`);
+      console.log(`🔍 New media names: ${newMediaNames.join(", ")}`);
 
-      // Mettre à jour les fichiers et les noms d'images de manière synchrone
+      // Mettre à jour les fichiers et les noms de médias de manière synchrone
       if (validFiles.length > 0) {
         // Initialiser les états de progression
         setTotalFiles(validFiles.length);
@@ -89,7 +91,7 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
           const newFiles = new Map(prev);
           validFiles.forEach((file, index) => {
             // Extraire l'ID unique du nom généré
-            const fileId = newImageNames[index].replace("pending_", "");
+            const fileId = newMediaNames[index].replace("pending_", "");
             newFiles.set(fileId, file);
             console.log(
               `✅ Added to bentoFiles Map (EDITION): ${file.name} with unique ID: ${fileId}`
@@ -101,7 +103,7 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
         // Ajouter les placeholders à la ligne bento actuelle immédiatement
         setCurrentBentoLine((prev) => ({
           ...prev,
-          listImage: [...prev.listImage, ...newImageNames],
+          listImage: [...prev.listImage, ...newMediaNames],
         }));
 
         // Créer les aperçus de manière asynchrone avec barre de progression

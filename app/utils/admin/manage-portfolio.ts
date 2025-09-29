@@ -236,10 +236,6 @@ export async function processBentoFiles(
           // Extraire le nom original du fichier depuis l'ID unique
           const originalFileName = fileId.split("_").slice(2).join("_"); // Récupérer tout après timestamp_random_
 
-          console.log(
-            `🔍 Recherche du fichier: ${inputName} pour l'image ${image} (ID: ${fileId}, nom original: ${originalFileName})`
-          );
-
           if (file && file.size > 0) {
             console.log(
               `📸 Traitement du fichier bento: ${file.name} (${file.size} bytes)`
