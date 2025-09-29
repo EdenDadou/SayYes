@@ -208,13 +208,15 @@ export async function processBentoFiles(
   portfolioId: string,
   bentoData: BentoItem[]
 ): Promise<BentoItem[]> {
-  console.log("🎯 === DÉBUT TRAITEMENT FICHIERS BENTO (SIMPLIFIÉ) ===");
+  console.log(
+    "🎯 === DÉBUT TRAITEMENT FICHIERS BENTO (BASÉ SUR NOM FICHIER) ==="
+  );
   console.log("📋 Données bento reçues:", JSON.stringify(bentoData, null, 2));
 
   const updatedBento = [...bentoData];
-  let globalFileIndex = 0;
+  let processedFiles = 0;
 
-  // Parcourir les données bento et traiter chaque fichier pending de façon synchrone
+  // Parcourir les données bento et traiter chaque fichier pending
   for (let bentoIndex = 0; bentoIndex < updatedBento.length; bentoIndex++) {
     const bento = updatedBento[bentoIndex];
 
@@ -225,12 +227,17 @@ export async function processBentoFiles(
         const image = line.listImage[imgIndex];
 
         if (image.startsWith("pending_")) {
-          // Nom de l'input correspondant à ce fichier
-          const inputName = `bentoFile_${bentoIndex}_${globalFileIndex}`;
+          // Extraire l'ID unique (timestamp + random + nom original)
+          const fileId = image.replace("pending_", "");
+          // Utiliser le même format que dans renderBentoFileInputs
+          const inputName = `bentoFile_${fileId.replace(/[^a-zA-Z0-9]/g, "_")}`;
           const file = formData.get(inputName) as File | null;
 
+          // Extraire le nom original du fichier depuis l'ID unique
+          const originalFileName = fileId.split("_").slice(2).join("_"); // Récupérer tout après timestamp_random_
+
           console.log(
-            `🔍 Recherche du fichier: ${inputName} pour l'image ${image}`
+            `🔍 Recherche du fichier: ${inputName} pour l'image ${image} (ID: ${fileId}, nom original: ${originalFileName})`
           );
 
           if (file && file.size > 0) {
@@ -250,8 +257,10 @@ export async function processBentoFiles(
               updatedBento[bentoIndex].lines[lineIndex].listImage[imgIndex] =
                 savedMedia.url;
 
+              processedFiles++;
+
               console.log(
-                `✅ Fichier bento sauvegardé: ${inputName} -> ${savedMedia.url}`
+                `✅ Fichier bento sauvegardé: ${originalFileName} -> ${savedMedia.url}`
               );
             } catch (error) {
               console.error(
@@ -267,16 +276,23 @@ export async function processBentoFiles(
               `📋 Fichier reçu:`,
               file ? `${file.name} (${file.size} bytes)` : "aucun"
             );
-          }
 
-          globalFileIndex++;
+            // Afficher tous les noms d'inputs disponibles pour déboguer
+            const allInputs: string[] = [];
+            for (const [key] of formData.entries()) {
+              if (key.startsWith("bentoFile_")) {
+                allInputs.push(key);
+              }
+            }
+            console.warn(`📋 Inputs bento disponibles:`, allInputs);
+          }
         }
       }
     }
   }
 
   console.log(
-    `🎯 Traitement bento terminé, ${globalFileIndex} fichiers traités`
+    `🎯 Traitement bento terminé, ${processedFiles} fichiers traités avec succès`
   );
   return updatedBento;
 }

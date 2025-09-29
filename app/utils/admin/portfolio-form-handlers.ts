@@ -305,9 +305,13 @@ export function createFormHandlers(state: FormState): FormHandlers {
       Array.from(files).forEach((file) => {
         // Vérifier le type de fichier (images et vidéos)
         if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
+          // Générer un ID unique pour éviter les conflits de noms
+          const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${file.name}`;
           validFiles.push(file);
-          newMediaNames.push(`pending_${file.name}`);
-          console.log(`✅ Valid file added: ${file.name} (${file.type})`);
+          newMediaNames.push(`pending_${fileId}`);
+          console.log(
+            `✅ Valid file added: ${file.name} with ID: ${fileId} (${file.type})`
+          );
         }
       });
 
@@ -321,13 +325,17 @@ export function createFormHandlers(state: FormState): FormHandlers {
         setUploadedCount(0);
         setUploadProgress(0);
 
-        // Stocker les fichiers réels pour l'envoi avec Map
+        // Stocker les fichiers réels pour l'envoi avec Map en utilisant l'ID unique
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
           console.log(`🔍 Previous bentoFiles size: ${prev.size}`);
-          validFiles.forEach((file) => {
-            newFiles.set(file.name, file);
-            console.log(`✅ Added to bentoFiles Map: ${file.name}`);
+          validFiles.forEach((file, index) => {
+            // Extraire l'ID unique du nom généré
+            const fileId = newMediaNames[index].replace("pending_", "");
+            newFiles.set(fileId, file);
+            console.log(
+              `✅ Added to bentoFiles Map: ${file.name} with unique ID: ${fileId}`
+            );
           });
           console.log(`🔍 New bentoFiles size: ${newFiles.size}`);
           return newFiles;
@@ -408,23 +416,29 @@ export function createFormHandlers(state: FormState): FormHandlers {
   };
 
   const removeBentoImage = (index: number) => {
+    // Récupérer l'image à supprimer pour obtenir son ID unique
+    const imageToRemove = currentBentoLine.listImage[index];
+
     setCurrentBentoLine((prev) => ({
       ...prev,
       listImage: prev.listImage.filter((_, i) => i !== index),
     }));
+
     // Supprimer aussi l'aperçu et le fichier correspondants
     setBentoPreviewImages((prev) => {
-      const imageToRemove = prev[index];
-      if (imageToRemove) {
-        // Supprimer aussi le fichier correspondant de la Map
-        setBentoFiles((prevFiles) => {
-          const newFiles = new Map(prevFiles);
-          newFiles.delete(imageToRemove.name);
-          return newFiles;
-        });
-      }
       return prev.filter((_, i) => i !== index);
     });
+
+    // Supprimer le fichier de la Map en utilisant l'ID unique
+    if (imageToRemove && imageToRemove.startsWith("pending_")) {
+      const fileId = imageToRemove.replace("pending_", "");
+      setBentoFiles((prevFiles) => {
+        const newFiles = new Map(prevFiles);
+        newFiles.delete(fileId);
+        console.log(`🗑️ Fichier supprimé de la Map: ${fileId}`);
+        return newFiles;
+      });
+    }
   };
 
   // Gestion des lignes de bento

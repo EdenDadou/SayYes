@@ -17,6 +17,7 @@ export default {
       fontFamily: {
         jakarta: "Jakarta",
         "jakarta-bold": '"Jakarta Bold"',
+        "jakarta-semi-bold": '"Jakarta Semi Bold"',
         "jakarta-extra-bold": '"Jakarta Extra Bold"',
         "made-brush": "MADE Soulmaze Brush",
         made: "MADE",

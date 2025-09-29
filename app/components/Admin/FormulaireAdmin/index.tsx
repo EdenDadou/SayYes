@@ -194,15 +194,16 @@ export default function FormulaireAdmin({
   // Fonction pour générer des inputs file pour chaque fichier bento
   const renderBentoFileInputs = () => {
     const inputs: React.ReactElement[] = [];
-    let globalFileIndex = 0;
 
     formData.bento.forEach((bento, bentoIndex) => {
       bento.lines.forEach((line) => {
         line.listImage.forEach((image) => {
           if (image.startsWith("pending_")) {
-            const originalName = image.replace("pending_", "");
-            const file = bentoFiles.get(originalName);
-            const inputName = `bentoFile_${bentoIndex}_${globalFileIndex}`;
+            // Extraire l'ID unique (qui contient maintenant timestamp + random + nom original)
+            const fileId = image.replace("pending_", "");
+            const file = bentoFiles.get(fileId);
+            // Utiliser l'ID unique comme nom d'input (sécurisé pour HTML)
+            const inputName = `bentoFile_${fileId.replace(/[^a-zA-Z0-9]/g, "_")}`;
 
             if (file) {
               // Créer un input file caché avec le fichier
@@ -223,7 +224,6 @@ export default function FormulaireAdmin({
                 />
               );
             }
-            globalFileIndex++;
           }
         });
       });

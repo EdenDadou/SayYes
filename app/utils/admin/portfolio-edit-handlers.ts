@@ -66,9 +66,11 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
       Array.from(files).forEach((file) => {
         // Vérifier le type de fichier
         if (file.type.startsWith("image/")) {
+          // Générer un ID unique pour éviter les conflits de noms
+          const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${file.name}`;
           validFiles.push(file);
-          newImageNames.push(`pending_${file.name}`);
-          console.log(`✅ Valid file added: ${file.name}`);
+          newImageNames.push(`pending_${fileId}`);
+          console.log(`✅ Valid file added: ${file.name} with ID: ${fileId}`);
         }
       });
 
@@ -82,11 +84,16 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
         setUploadedCount(0);
         setUploadProgress(0);
 
-        // Stocker les fichiers réels pour l'envoi avec Map
+        // Stocker les fichiers réels pour l'envoi avec Map en utilisant l'ID unique
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
-          validFiles.forEach((file) => {
-            newFiles.set(file.name, file);
+          validFiles.forEach((file, index) => {
+            // Extraire l'ID unique du nom généré
+            const fileId = newImageNames[index].replace("pending_", "");
+            newFiles.set(fileId, file);
+            console.log(
+              `✅ Added to bentoFiles Map (EDITION): ${file.name} with unique ID: ${fileId}`
+            );
           });
           return newFiles;
         });
@@ -180,10 +187,11 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
 
       // Si c'est une image pending, supprimer le fichier correspondant
       if (imageToRemove && imageToRemove.startsWith("pending_")) {
-        const fileName = imageToRemove.replace("pending_", "");
+        const fileId = imageToRemove.replace("pending_", "");
         setBentoFiles((prevFiles) => {
           const newFiles = new Map(prevFiles);
-          newFiles.delete(fileName);
+          newFiles.delete(fileId);
+          console.log(`🗑️ Fichier supprimé de la Map (EDITION): ${fileId}`);
           return newFiles;
         });
       }
@@ -245,10 +253,16 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
   ) => {
     Array.from(files).forEach((file) => {
       if (file.type.startsWith("image/")) {
-        // Stocker le fichier réel pour l'envoi avec son nom comme clé
+        // Générer un ID unique pour éviter les conflits de noms
+        const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${file.name}`;
+
+        // Stocker le fichier réel pour l'envoi avec l'ID unique comme clé
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
-          newFiles.set(file.name, file);
+          newFiles.set(fileId, file);
+          console.log(
+            `✅ Added to existing bento: ${file.name} with unique ID: ${fileId}`
+          );
           return newFiles;
         });
 
@@ -260,13 +274,13 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
           if (newBento[bentoIndex].lines.length === 0) {
             newBento[bentoIndex].lines.push({
               format: "1/3 - 2/3",
-              listImage: [`pending_${file.name}`],
+              listImage: [`pending_${fileId}`],
             });
           } else {
             // Ajouter à la dernière ligne
             const lastLineIndex = newBento[bentoIndex].lines.length - 1;
             newBento[bentoIndex].lines[lastLineIndex].listImage.push(
-              `pending_${file.name}`
+              `pending_${fileId}`
             );
           }
 

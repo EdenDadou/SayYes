@@ -147,7 +147,7 @@ export default function PortfolioSlug() {
               className="absolute top-0 left-0 right-0 w-screen"
             />
             <div className="relative z-50">
-              <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-bold mb-12 z-50">
+              <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-semi-bold mb-12 z-50">
                 <Star className="w-5 h-5" fill="black" />
                 {portfolio.sousTitre.split(" ").slice(0, 3).join(" ")}
                 <span style={{ color: portfolio.couleur }}>
