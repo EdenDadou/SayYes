@@ -48,7 +48,7 @@ export default function PortfolioSlug() {
   const { portfolio, allPortfolios } = useLoaderData<typeof loader>();
   const isMobile = useViewport();
 
-  console.log(isMobile);
+  console.log(portfolio.bento);
 
   return isMobile ? (
     <PortfolioProjectMobile portfolio={portfolio} />
