@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Card from "~/components/Card";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
@@ -23,7 +23,26 @@ export default function ProjectCarousel({
 }: ProjectCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [dynamicPadding, setDynamicPadding] = useState(128); // 32 * 4 = 128px (fallback initial)
   const itemsPerView = 4; // Affiche 4 cartes: 2 complètes au centre + 2 bouts sur les côtés
+
+  // Calculate dynamic padding based on viewport width
+  useEffect(() => {
+    const calculatePadding = () => {
+      const viewportWidth = window.innerWidth;
+      const calculatedPadding = Math.max(0, (viewportWidth - 990) / 2);
+      setDynamicPadding(calculatedPadding);
+    };
+
+    // Calculate initial padding
+    calculatePadding();
+
+    // Add resize listener
+    window.addEventListener("resize", calculatePadding);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", calculatePadding);
+  }, []);
 
   // If no portfolios, don't render anything
   if (!portfolios || portfolios.length === 0) {
@@ -67,9 +86,11 @@ export default function ProjectCarousel({
   return (
     <div className={`relative w-full pt-16 gap-12 z-10 ${className}`}>
       {/* Title Section */}
-      <h2 className="flex flex-row items-center gap-4 text-3xl font-bold text-white font-jakarta mb-4 px-32">
-        <Star className="w-8 h-8 text-white" /> Nos Love Stories
-      </h2>
+      <div className="max-w-[990px] m-auto">
+        <h2 className="flex flex-row items-center gap-4 text-3xl font-bold text-white font-jakarta mb-4">
+          <Star className="w-8 h-8 text-white" /> Nos Love Stories
+        </h2>
+      </div>
 
       {/* Carousel Container */}
       <div className="relative w-full overflow-hidden">
@@ -124,11 +145,17 @@ export default function ProjectCarousel({
               }}
               className={`absolute inset-0 flex items-center gap-4 ${
                 currentIndex === 0
-                  ? "pl-32"
+                  ? ""
                   : currentIndex >= maxIndex
-                    ? "pr-32 justify-end"
+                    ? "justify-end"
                     : "justify-center"
               }`}
+              style={{
+                paddingLeft:
+                  currentIndex === 0 ? `${dynamicPadding}px` : undefined,
+                paddingRight:
+                  currentIndex >= maxIndex ? `${dynamicPadding}px` : undefined,
+              }}
             >
               {portfolios
                 .slice(currentIndex, currentIndex + itemsPerView)

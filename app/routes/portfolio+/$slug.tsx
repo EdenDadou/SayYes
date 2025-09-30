@@ -6,7 +6,6 @@ import {
 } from "~/server/portfolio.server";
 import { useViewport } from "~/utils/hooks/useViewport";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import Star from "~/assets/icons/Star";
 
 import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
 import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
@@ -18,6 +17,8 @@ import "~/styles/tailwind.css";
 import BackgroundProject3 from "~/components/PortfolioProject/BackgroundProject3";
 import PortfolioProjectMobile from "~/components/PortfolioProject/mobile/PortfolioProjectMobile";
 import Coche from "~/assets/icons/Coche";
+import NoteStar from "~/assets/icons/NoteStar";
+import Star from "~/assets/icons/Star";
 
 // Loader pour récupérer le portfolio par slug
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -48,8 +49,6 @@ export default function PortfolioSlug() {
   const { portfolio, allPortfolios } = useLoaderData<typeof loader>();
   const isMobile = useViewport();
 
-  console.log(portfolio.bento);
-
   return isMobile ? (
     <PortfolioProjectMobile portfolio={portfolio} />
   ) : (
@@ -60,31 +59,37 @@ export default function PortfolioSlug() {
       />
       <main className="w-screen h-fit relative pb-20">
         {/* Main Content */}
-        <div className="relative z-10 pt-12 flex flex-col ">
+        <div className="relative z-10 pt-12 flex flex-col">
           {/* Hero Section */}
-          <section className="py-12 px-20 flex flex-col gap-12">
+          <section className="pt-12 px-20 flex flex-col gap-10 pb-6">
             {/* Title and Kicker */}
-            <div className="flex flex-row justify-between items-end pl-16">
-              <div className="flex flex-col gap-12">
-                <div className="h-[3px] w-28 holographic-bg" />
+            <div className="flex flex-row justify-between items-end px-12">
+              <div className="flex flex-col gap-10 w-full">
+                <div className="h-[3px] w-24 holographic-bg" />
 
-                <div className="flex flex-col">
-                  {/* Top Title si disponible */}
-                  {portfolio.topTitle ? (
-                    <p
-                      className="text-7xl font-bold text-white flex flex-row items-center
-                  font-jakarta mb-2"
+                <div className="flex flex-row justify-between items-end w-full">
+                  <div className="flex flex-col">
+                    {/* Top Title si disponible */}
+                    {portfolio.topTitle ? (
+                      <p
+                        className="text-7xl text-white flex flex-row items-center
+                    font-jakarta-semi-bold tracking-[-2px]"
+                      >
+                        {portfolio.topTitle}
+                      </p>
+                    ) : null}
+                    <h1
+                      className="text-7xl font-bold text-white flex flex-row items-center gap-6 font-jakarta leading-[60px] tracking-[-2px]"
+                      style={{ color: portfolio.couleur }}
                     >
-                      {portfolio.topTitle}
-                    </p>
-                  ) : null}
-                  <h1
-                    className="text-7xl font-bold text-white flex flex-row items-center gap-6 font-jakarta leading-[60px]"
-                    style={{ color: portfolio.couleur }}
-                  >
-                    <ArrowLight className="w-20 h-20" />
-                    {portfolio.titre}
-                  </h1>
+                      <ArrowLight className="w-20 h-20" />
+                      {portfolio.titre}
+                    </h1>
+                  </div>
+                  <p className="flex flex-row items-center gap-2 text-white text-2xl font-jakarta-semi-bold">
+                    <NoteStar className="w-6 h-6" fill="black" /> Sortlist 4.9 I
+                    5
+                  </p>
                 </div>
               </div>
             </div>
@@ -97,21 +102,21 @@ export default function PortfolioSlug() {
           </section>
 
           {/* Content Grid */}
-          <section className="grid grid-cols-2 gap-32 py-12 bg-white px-36">
-            {/* Description */}
-            <div className="col-span-1">
-              <p className="text-black text-[30px] font-jakarta leading-relaxed">
-                {portfolio.description}
-              </p>
-            </div>
-            <div className="col-span-1">
-              <div className="flex flex-col gap-4">
+          <section className="flex justify-center py-12 bg-white px-8">
+            <div className="w-[990px] flex flex-row">
+              {/* Description */}
+              <div className="w-[487px] pr-10">
+                <p className="text-black text-[26px] font-jakarta leading-relaxed">
+                  {portfolio.description}
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 w-[495px]">
                 <p
-                  className="text-black text-lg leading-relaxed font-jakarta"
+                  className="text-black text-[14px] leading-relaxed font-jakarta"
                   dangerouslySetInnerHTML={{
                     __html: portfolio.kicker.replaceAll(
                       "<b>",
-                      "<b class='font-jakarta-bold'>"
+                      "<b class='font-jakarta-bold text-[18px]'>"
                     ),
                   }}
                 />
@@ -119,41 +124,43 @@ export default function PortfolioSlug() {
             </div>
           </section>
           {/* Deliverables */}
-          <div className="flex flex-col items-start justify-between w-full px-36 bg-white py-12">
-            <h3 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-bold">
-              <Star className="w-6 h-6" fill="black" />
-              Nos Livrables
-            </h3>
-            <div className="flex flex-row gap-5 w-full">
-              {portfolio.livrable.map((item: string, index: number) => (
-                <span
-                  key={index}
-                  className="flex flex-row items-center gap-2 px-3 py-4 rounded-full text-sm border font-jakarta-bold"
-                  style={{
-                    color: portfolio.couleur,
-                    borderColor: portfolio.couleur,
-                  }}
-                >
-                  <Coche className="w-4 h-4" />
-                  {item}
-                </span>
-              ))}
+          <div className="flex justify-center pb-12 bg-white px-8">
+            <div className="w-[990px] flex flex-col">
+              <h3 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-semi-bold tracking-[-1px]">
+                <Star className="w-6 h-6" fill="black" />
+                Notre accompagnement
+              </h3>
+              <div className="flex flex-row gap-5 w-full">
+                {portfolio.livrable.map((item: string, index: number) => (
+                  <span
+                    key={index}
+                    className="flex flex-row items-center gap-2 px-4 py-3 rounded-full text-[13px] border font-jakarta-bold"
+                    style={{
+                      color: portfolio.couleur,
+                      borderColor: portfolio.couleur,
+                    }}
+                  >
+                    <Coche className="w-4 h-4" />
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
-          <section className="mb-16 relative px-32">
+          <section className="relative px-32">
             <BackgroundProject2
               fill={portfolio.couleur}
               className="absolute top-0 left-0 right-0 w-screen"
             />
             <div className="relative z-50">
-              <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-semi-bold mb-12 z-50">
-                <Star className="w-5 h-5" fill="black" />
+              <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-semi-bold mb-12 z-50 tracking-[-2px]">
+                <Star className="w-5 h-5" fill={portfolio.couleur} />
                 {portfolio.sousTitre.split(" ").slice(0, 3).join(" ")}
                 <span style={{ color: portfolio.couleur }}>
                   {portfolio.sousTitre.split(" ").slice(3).join(" ")}
                 </span>
-                <Star className="w-5 h-5" fill="black" />
+                <Star className="w-5 h-5" fill={portfolio.couleur} />
               </h2>
             </div>
 
@@ -162,16 +169,16 @@ export default function PortfolioSlug() {
             </div>
           </section>
 
-          <section className="flex flex-col items-center justify-center py-12 px-60">
+          <section className="flex flex-col items-center justify-center py-[100px] w-[814px] self-center">
             <div className="h-[3px] w-28 holographic-bg" />
             {/* Témoignage */}
             {portfolio.temoignage && portfolio.temoignage.contenu ? (
-              <div className="p-8 flex flex-col items-center justify-center gap-8 ">
-                <blockquote className="text-white text-xl leading-relaxed text-center font-jakarta">
+              <div className="pt-8 flex flex-col items-center justify-center gap-8 ">
+                <blockquote className="text-white text-[22px] leading-[32px] text-center font-jakarta">
                   {portfolio.temoignage.contenu}
                 </blockquote>
                 <div className="flex flex-col gap-1">
-                  <cite className="text-white font-jakarta-bold">
+                  <cite className="text-white font-jakarta-bold text-[18px]">
                     {portfolio.temoignage.auteur} - {portfolio.temoignage.poste}
                   </cite>
                 </div>
