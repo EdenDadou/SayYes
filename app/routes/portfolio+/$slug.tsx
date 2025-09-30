@@ -151,7 +151,7 @@ export default function PortfolioSlug() {
           <section className="relative px-32">
             <BackgroundProject2
               fill={portfolio.couleur}
-              className="absolute top-0 left-0 right-0 w-screen"
+              className="absolute -top-[150px] left-0 right-0 w-screen"
             />
             <div className="relative z-50">
               <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-semi-bold mb-12 z-50 tracking-[-2px]">

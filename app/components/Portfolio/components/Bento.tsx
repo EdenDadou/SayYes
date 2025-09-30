@@ -43,6 +43,7 @@ export default function Bento({ bento }: { bento: BentoItem }) {
                 className="w-full h-full object-cover object-center"
                 muted
                 autoPlay
+                loop
                 playsInline
                 preload="metadata"
                 onError={(e) => {

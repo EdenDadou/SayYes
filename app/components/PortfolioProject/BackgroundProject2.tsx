@@ -1,156 +1,71 @@
 import type { SVGProps } from "react";
 const BackgroundProject2 = (props: SVGProps<SVGSVGElement>) => {
-  // Fonction pour calculer une couleur plus sombre basée sur la couleur principale
-  const getDarkerColor = (baseColor: string) => {
-    // Couleur par défaut si pas de couleur fournie
-    if (!baseColor) return "#0A2A62";
-
-    // Extraire les valeurs RGB de la couleur hex
-    const hex = baseColor.replace("#", "");
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
-
-    // Appliquer la même réduction que entre #1255CB et #0A2A62
-    // Réduction d'environ 44% pour R, 51% pour G, 52% pour B
-    const newR = Math.round(r * 0.56);
-    const newG = Math.round(g * 0.49);
-    const newB = Math.round(b * 0.48);
-
-    // Convertir en hex
-    const toHex = (n: number) => n.toString(16).padStart(2, "0");
-    return `#${toHex(newR)}${toHex(newG)}${toHex(newB)}`;
-  };
-
-  const baseColor = props.fill || "#1255CB";
-  const darkerColor = getDarkerColor(baseColor);
-
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
       viewBox="0 0 1280 1044"
-      aria-hidden="true"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g clipPath="url(#a)">
-        <path fill="currentColor" d="M0 0h1280v1044H0z" />
-        <g clipPath="url(#b)">
-          <path fill="#FFF" d="M.188 0h1280v729H.188z" />
-          <mask
-            id="c"
-            width={1281}
-            height={704}
-            x={0}
-            y={0}
-            maskUnits="userSpaceOnUse"
-            style={{
-              maskType: "alpha",
-            }}
-          >
-            <path fill="currentColor" d="M.188 0h1280v704H.188z" />
-          </mask>
-          <g filter="url(#d)" mask="url(#c)">
-            <ellipse
-              cx={152.646}
-              cy={781.921}
-              fill={props.fill || "#1255CB"}
-              rx={152.646}
-              ry={781.921}
-              transform="matrix(-.52678 .85 .7861 .61811 -356.828 -9.07)"
-            />
-          </g>
-        </g>
-        <g filter="url(#e)">
-          <path
-            fill={darkerColor}
-            d="M-226.515 218.584c25.703-198.081 165.722 225.868 811.554 387.791 530.061 151.46 921.211-144.56 895.511 53.521S1101.82 1376.83 513.081 1227.6-252.218 416.666-226.515 218.584"
-          />
-        </g>
-        <g filter="url(#f)">
-          <path
-            fill={props.fill || "#1255CB"}
-            d="M-227.445 310.023c27.367-210.9 164.227 237.387 810.074 399.198 529.921 152.532 924.281-168.247 896.921 42.654-27.37 210.9-385.34 767.865-974.078 618.635-588.74-149.23-760.283-849.587-732.917-1060.487"
-          />
-        </g>
-        <g filter="url(#g)">
-          <path
-            fill="#000"
-            d="M-382.81 885.501c12.557-270.696 393.198-114.418 905.36-71.661 512.16 42.756 961.9-44.201 949.34 226.49-12.55 270.7-437.92 455.48-950.085 412.73C9.642 1410.3-395.368 1156.2-382.81 885.501"
-          />
-        </g>
+      <g filter="url(#filter0_f_1172_4477)">
+        <path
+          d="M-685.219 -82.2274C-672.82 -249.815 -311.945 93.7794 1002.55 179.18C2085.04 264.791 2804.26 -12.9494 2791.86 154.638C2779.46 322.226 2179.46 783.305 980.853 704.099C-217.756 624.893 -697.618 85.3602 -685.219 -82.2274Z"
+          fill={props.fill || "#1255CB"}
+        />
       </g>
+      <g filter="url(#filter1_f_1172_4477)">
+        <path
+          d="M-637.087 -243.739C-584.76 -378.096 -174.934 -151.507 400.064 67.2411C975.063 285.989 1497.49 414.062 1445.17 548.419C1392.84 682.776 884.292 614.364 309.293 395.615C-265.705 176.867 -689.414 -109.382 -637.087 -243.739Z"
+          fill="white"
+        />
+      </g>
+      <path
+        d="M0 -526.549L1282 -526.549V510.451L0 147.428V-526.549Z"
+        fill="white"
+      />
       <defs>
         <filter
-          id="d"
-          width={2339.05}
-          height={2100.21}
-          x={-992.101}
-          y={-446.113}
-          colorInterpolationFilters="sRGB"
+          id="filter0_f_1172_4477"
+          x={-789.534}
+          y={-231.752}
+          width={3685.63}
+          height={1049}
           filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
         >
           <feFlood floodOpacity={0} result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"
+          />
           <feGaussianBlur
-            result="effect1_foregroundBlur_383_3639"
-            stdDeviation={274.777}
+            stdDeviation={52.0407}
+            result="effect1_foregroundBlur_1172_4477"
           />
         </filter>
         <filter
-          id="e"
-          width={1885.26}
-          height={1261.87}
-          x={-316.214}
-          y={79.613}
-          colorInterpolationFilters="sRGB"
+          id="filter1_f_1172_4477"
+          x={-745.538}
+          y={-388.13}
+          width={2298.41}
+          height={1109.44}
           filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
         >
           <feFlood floodOpacity={0} result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"
+          />
           <feGaussianBlur
-            result="effect1_foregroundBlur_383_3639"
-            stdDeviation={43.65}
+            stdDeviation={52.0407}
+            result="effect1_foregroundBlur_1172_4477"
           />
         </filter>
-        <filter
-          id="f"
-          width={1985.69}
-          height={1415.51}
-          x={-367.503}
-          y={117.367}
-          colorInterpolationFilters="sRGB"
-          filterUnits="userSpaceOnUse"
-        >
-          <feFlood floodOpacity={0} result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur
-            result="effect1_foregroundBlur_383_3639"
-            stdDeviation={68.65}
-          />
-        </filter>
-        <filter
-          id="g"
-          width={2029.84}
-          height={903.678}
-          x={-470.394}
-          y={642.827}
-          colorInterpolationFilters="sRGB"
-          filterUnits="userSpaceOnUse"
-        >
-          <feFlood floodOpacity={0} result="BackgroundImageFix" />
-          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur
-            result="effect1_foregroundBlur_383_3639"
-            stdDeviation={43.65}
-          />
-        </filter>
-        <clipPath id="a">
-          <path fill="#fff" d="M0 0h1280v1044H0z" />
-        </clipPath>
-        <clipPath id="b">
-          <path fill="#fff" d="M.188 0h1280v729H.188z" />
-        </clipPath>
       </defs>
     </svg>
   );
