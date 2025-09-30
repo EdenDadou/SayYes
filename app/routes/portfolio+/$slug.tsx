@@ -124,7 +124,7 @@ export default function PortfolioSlug() {
             </div>
           </section>
           {/* Deliverables */}
-          <div className="flex justify-center pb-12 bg-white px-8">
+          <div className="flex justify-center pb-[100px] bg-white px-8 z-20">
             <div className="w-[990px] flex flex-col">
               <h3 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-semi-bold tracking-[-1px]">
                 <Star className="w-6 h-6" fill="black" />
@@ -151,7 +151,7 @@ export default function PortfolioSlug() {
           <section className="relative px-32">
             <BackgroundProject2
               fill={portfolio.couleur}
-              className="absolute -top-[150px] left-0 right-0 w-screen"
+              className="absolute -top-[150px] left-0 right-0 w-screen z-0"
             />
             <div className="relative z-50">
               <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-semi-bold mb-12 z-50 tracking-[-2px]">
