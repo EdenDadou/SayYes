@@ -1,4 +1,3 @@
-import SolutionTitle from "~/components/Solutions/components/SolutionTitle";
 import Card from "~/components/Card";
 import { solutionsCards } from "~/components/Solutions/data";
 import { useViewport } from "~/utils/hooks/useViewport";
@@ -9,6 +8,7 @@ import BackgroundMobile from "~/assets/icons/BackgroundMobile";
 import Background from "~/assets/icons/Background";
 import MobileLayout from "~/components/Layout/Mobile";
 import "~/styles/tailwind.css";
+import SolutionTitle from "~/components/Solutions/components/SolutionTitle";
 
 export default function Solutions() {
   const isMobile = useViewport();
@@ -35,9 +35,8 @@ export default function Solutions() {
     </MobileLayout>
   ) : (
     <Desktoplayout>
-      <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
-      <section className="relative z-10 px-36 flex flex-col gap-6 justify-center items-start pt-20 mb-10">
-        <div className="h-[3px] w-28 holographic-bg my-6 rounded-full" />
+      <Background className="absolute -top-40 left-0 w-full h-auto z-0 opacity-80" />
+      <section className="relative z-10 px-36 flex flex-col gap-14 justify-center items-start pt-20 mb-10">
         <SolutionTitle />
         {solutionsCards.map((card, index) => (
           <Card

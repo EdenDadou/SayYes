@@ -33,7 +33,7 @@ export default function Portfolio() {
 
   return (
     <Desktoplayout>
-      <div className="w-screen h-fit relative top-20">
+      <div className="w-screen h-fit relative pt-20">
         {isMobile ? (
           <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
         ) : (
@@ -71,9 +71,9 @@ export default function Portfolio() {
         </section>
 
         {/* Section avec image sticky et cartes qui passent par-dessus */}
-        <div className="relative z-10">
-          {/* Image ClientsWall - sticky au scroll */}
-          {/* <div
+        {/* <div className="relative z-10"> */}
+        {/* Image ClientsWall - sticky au scroll */}
+        {/* <div
           className={`w-screen h-screen ${
             isImageFixed ? "sticky top-0 z-0" : "relative"
           }`}
@@ -92,8 +92,8 @@ export default function Portfolio() {
           />
         </div> */}
 
-          {/* Cartes du bas */}
-          {/* <div className="relative z-10 bg-transparent min-h-screen">
+        {/* Cartes du bas */}
+        {/* <div className="relative z-10 bg-transparent min-h-screen">
             <div className="pt-32 pb-32">
               <section className="md:px-36 px-4 flex flex-col gap-8">
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -115,7 +115,7 @@ export default function Portfolio() {
               </section>
             </div>
           </div> */}
-        </div>
+        {/* </div> */}
       </div>
     </Desktoplayout>
   );
