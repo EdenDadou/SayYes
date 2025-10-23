@@ -21,11 +21,11 @@ export default function Bento({ bento }: { bento: BentoItem }) {
         line.listImage.map((image, imageIndex) => (
           <div
             key={imageIndex}
-            className={`relative rounded-3xl h-[full] overflow-hidden ${
+            className={`relative rounded-2xl h-[full] overflow-hidden ${
               line.format === "1/3 - 2/3"
-                ? `${imageIndex === 1 ? "w-[570px]" : "w-[400px]"} h-[468px] rounded-3xl`
+                ? `${imageIndex === 1 ? "w-[570px]" : "w-[400px]"} h-[468px]`
                 : line.format === "2/3 - 1/3"
-                  ? `${imageIndex === 0 ? "w-[570px]" : "w-[400px]"} h-[468px] rounded-3xl`
+                  ? `${imageIndex === 0 ? "w-[570px]" : "w-[400px]"} h-[468px]`
                   : line.format === "banner"
                     ? "h-[340px] w-full"
                     : line.format === "3 square"

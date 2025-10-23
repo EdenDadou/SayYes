@@ -35,7 +35,7 @@ export default function ModalContactMobile({
         </button>
 
         <div className="flex flex-col items-center justify-center gap-1">
-          <div className="h-[3px] w-20 holographic-bg mb-6" />
+          <div className="h-[3px] w-20 holographic-bg mb-6 rounded-full" />
           <p className="text-4xl text-white font-jakarta-bold">
             Une idée, un projet,{" "}
           </p>

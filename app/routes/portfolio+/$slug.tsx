@@ -61,9 +61,9 @@ export default function PortfolioSlug() {
         {/* Main Content */}
         <div className="relative z-10 pt-12 flex flex-col">
           {/* Hero Section */}
-          <section className="pt-12 px-20 flex flex-col gap-10 pb-6">
+          <section className="pt-12 px-20 flex flex-col gap-10 pb-6 justify-center items-center">
             {/* Title and Kicker */}
-            <div className="flex flex-row justify-between items-end px-12">
+            <div className="flex flex-row justify-between items-end w-[990px]">
               <div className="flex flex-col gap-10 w-full">
                 <div className="h-[3px] w-24 holographic-bg" />
 
@@ -104,7 +104,6 @@ export default function PortfolioSlug() {
           {/* Content Grid */}
           <section className="flex justify-center py-12 bg-white px-8">
             <div className="w-[990px] flex flex-row">
-              {/* Description */}
               <div className="w-[487px] pr-10">
                 <p className="text-black text-[26px] font-jakarta leading-relaxed">
                   {portfolio.description}
@@ -164,9 +163,9 @@ export default function PortfolioSlug() {
               </h2>
             </div>
 
-            <div className="space-y-6">
+            {/* <div className="space-y-4">
               {portfolio.bento[0] && <Bento bento={portfolio.bento[0]} />}
-            </div>
+            </div> */}
           </section>
 
           <section className="flex flex-col items-center justify-center py-[100px] w-[814px] self-center">
@@ -179,14 +178,14 @@ export default function PortfolioSlug() {
                 </blockquote>
                 <div className="flex flex-col gap-1">
                   <cite className="text-white font-jakarta-bold text-[18px]">
-                    {portfolio.temoignage.auteur} - {portfolio.temoignage.poste}
+                    {`${portfolio.temoignage.auteur} ${portfolio.temoignage.poste ? ` - ${portfolio.temoignage.poste}` : ""}`}
                   </cite>
                 </div>
               </div>
             ) : null}
           </section>
           <section className="mb-16 relative px-32 z-10">
-            <div className="space-y-6">
+            <div className="space-y-4">
               {portfolio.bento[1] && <Bento bento={portfolio.bento[1]} />}
             </div>
           </section>

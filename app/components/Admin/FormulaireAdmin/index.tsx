@@ -655,7 +655,6 @@ export default function FormulaireAdmin({
             onChange={(value) =>
               handleTemoignageChange("auteur", value as string)
             }
-            required
           />
 
           {/* Poste */}
@@ -684,7 +683,6 @@ export default function FormulaireAdmin({
                 handleTemoignageChange("contenu", value as string)
               }
               rows={4}
-              required
             />
           </div>
         </InputGroup>

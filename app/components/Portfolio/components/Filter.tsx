@@ -20,29 +20,43 @@ const Filter = () => {
         {filterList.map((filter) => (
           <button
             key={filter.value}
-            className={`group flex flex-row gap-3 items-center font-jakarta text-sm py-3 px-4 rounded-full border-custom border-[0.5px] transition-all duration-200 hover:bg-white hover:text-black whitespace-nowrap ${selectedFilter === filter.value ? "bg-white text-black" : "text-white"}`}
+            className={`flex flex-row gap-2 items-center font-jakarta text-sm py-3 px-4 rounded-full border-[0.5px] whitespace-nowrap ${selectedFilter === filter.value ? "bg-white text-dark-blue" : "text-white hover:bg-white hover:text-dark-blue"}`}
             onClick={() => setSelectedFilter(filter.value)}
+            style={{ transition: "none", transitionDuration: "0s" }}
           >
             <Coche
-              className={`transition-all duration-200 ${selectedFilter === filter.value ? "text-black" : "text-white group-hover:text-black"}`}
+              className={`${selectedFilter === filter.value ? "text-dark-blue" : ""}`}
+              style={{ transition: "none" }}
             />
-            {filter.label}
+            <span
+              className={`after:content-[attr(data-text)] after:block after:font-jakarta-semi-bold after:h-0 after:overflow-hidden after:invisible ${selectedFilter === filter.value ? "font-jakarta-semi-bold" : ""}`}
+              data-text={filter.label}
+            >
+              {filter.label}
+            </span>
           </button>
         ))}
       </div>
     </div>
   ) : (
-    <div className="flex flex-row justify-between py-4 gap-4">
+    <div className="flex flex-row justify-center gap-4">
       {filterList.map((filter) => (
         <button
           key={filter.value}
-          className={`group flex flex-row gap-3 items-center font-jakarta text-md py-3 px-5 rounded-full border-custom border-[0.5px] transition-all duration-200 hover:bg-white hover:text-black ${selectedFilter === filter.value ? "bg-white text-black" : "text-white"}`}
+          className={`flex flex-row gap-3 items-center font-jakarta text-sm py-2 px-4 rounded-full border-[0.5px] ${selectedFilter === filter.value ? "bg-white text-dark-blue" : "text-white hover:bg-white hover:text-dark-blue"}`}
           onClick={() => setSelectedFilter(filter.value)}
+          style={{ transition: "none", transitionDuration: "0s" }}
         >
           <Coche
-            className={`transition-all duration-200 ${selectedFilter === filter.value ? "text-black" : "text-white group-hover:text-black"}`}
+            className={`${selectedFilter === filter.value ? "text-dark-blue" : ""}`}
+            style={{ transition: "none" }}
           />
-          {filter.label}
+          <span
+            className={`after:content-[attr(data-text)] after:block after:font-jakarta-semi-bold after:h-0 after:overflow-hidden after:invisible ${selectedFilter === filter.value ? "font-jakarta-semi-bold" : ""}`}
+            data-text={filter.label}
+          >
+            {filter.label}
+          </span>
         </button>
       ))}
     </div>

@@ -9,6 +9,7 @@ interface PropsContent {
   imageUrl?: string;
   videoUrl?: string;
   titre?: string;
+  topTitle?: string;
   slug?: string;
 }
 
@@ -16,6 +17,7 @@ export default function ContentPortfolio({
   imageUrl,
   videoUrl,
   titre,
+  topTitle,
   slug,
 }: PropsContent) {
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ export default function ContentPortfolio({
 
   return (
     <div
-      className="size-full relative overflow-hidden rounded-[15px] hover:rounded-[25px] md:p-4 p-2 cursor-pointer"
+      className="size-full relative overflow-hidden rounded-[15px] hover:rounded-[25px] md:p-[9px] p-2 cursor-pointer"
       onClick={() => {
         navigate(`/portfolio/${slug}`);
       }}
@@ -39,17 +41,17 @@ export default function ContentPortfolio({
         }}
         className={`${imageClasses}`}
       >
-        {/* Gradient overlay - seulement sur l'image */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/70 to-black/90 rounded-[15px]" />
+        {/* Gradient overlay - seulement sur les 20% inférieurs */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] rounded-[15px]" />
       </div>
       <div className="size-full absolute top-0 left-0 bottom-0">
         <div className="flex flex-col items-center justify-end w-full h-full p-4">
           <div className="flex flex-row items-center justify-between w-full p-4 ">
             <div className="flex flex-row justify-center items-center">
-              <div className="h-[3px] w-14 holographic-bg rotate-90" />
+              <div className="h-[3px] w-14 holographic-bg rotate-90 rounded-full" />
               <div className="flex flex-col items-start justify-center">
                 <span className="text-white text-3xl font-jakarta-bold">
-                  {titre}
+                  {topTitle}
                 </span>
                 <span className="text-white text-2xl font-jakarta">
                   {titre}

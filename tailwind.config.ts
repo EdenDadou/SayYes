@@ -46,6 +46,7 @@ export default {
         "gray-400": "#1d1d1d",
         "gray-500": "#1B1B1B",
         "gray-600": "#121212",
+        "dark-blue": "#1A1750",
       },
       textShadow: {
         sm: "0 1px 2px var(--tw-shadow-color)",

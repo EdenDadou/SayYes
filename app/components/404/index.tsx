@@ -37,7 +37,7 @@ export default function Page404() {
         <Background404 className="absolute inset-0 w-full h-screen z-10" />
 
         <div className="flex flex-row items-center justify-center gap-8 z-20">
-          <div className="self-stretch w-[3px] holographic-bg-vertical" />
+          <div className="self-stretch w-[3px] holographic-bg-vertical rounded-full" />
           <div className="flex flex-col items-start justify-center gap-4 relative">
             <div
               className="w-[608px] h-[359px]"

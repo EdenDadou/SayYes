@@ -32,7 +32,7 @@ export default function Portfolio() {
 
   // Diviser les portfolios en deux groupes pour l'affichage
   const portfolioTopCards = portfolios.slice(0, 4);
-  const portfolioBottomCards = portfolios.slice(4);
+  // const portfolioBottomCards = portfolios.slice(4);
 
   return (
     <Desktoplayout>
@@ -43,9 +43,9 @@ export default function Portfolio() {
           <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
         )}
         {/* Contenu par-dessus */}
-        <section className="relative z-10 px-4 md:px-36 flex flex-col justify-center overflow-hidden gap-8">
-          <div className="flex flex-col md:items-start items-center gap-8">
-            <div className="h-[3px] md:w-28 w-20 holographic-bg my-6" />
+        <section className="relative z-10 px-4 md:px-36 flex flex-col justify-center  items-center overflow-hidden gap-10">
+          <div className="flex flex-col md:items-start items-center gap-8 w-[1000px] justify-center">
+            <div className="h-[3px] md:w-28 w-20 holographic-bg my-6 rounded-full" />
             {isMobile ? (
               <PortfolioTitleMobile className="px-6" />
             ) : (
@@ -53,20 +53,22 @@ export default function Portfolio() {
             )}
           </div>
           <Filter />
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+          <div className="flex flex-wrap justify-start gap-[14px] w-[996px] m-auto">
             {portfolioTopCards.map((portfolio, index) => (
-              <Card
-                key={portfolio.id}
-                height="370px"
-                content={
-                  <ContentPortfolio
-                    imageUrl={portfolio.photoCouverture}
-                    titre={portfolio.titre}
-                    slug={portfolio.slug}
-                  />
-                }
-                borderClass="card-hover colspan-1"
-              />
+              <div key={portfolio.id} className="w-[490px] flex-shrink-0">
+                <Card
+                  height="370px"
+                  content={
+                    <ContentPortfolio
+                      imageUrl={portfolio.photoCouverture}
+                      titre={portfolio.titre}
+                      topTitle={portfolio.topTitle}
+                      slug={portfolio.slug}
+                    />
+                  }
+                  borderClass="card-hover colspan-1"
+                />
+              </div>
             ))}
           </div>
         </section>
@@ -94,7 +96,7 @@ export default function Portfolio() {
         </div> */}
 
           {/* Cartes du bas */}
-          <div className="relative z-10 bg-transparent min-h-screen">
+          {/* <div className="relative z-10 bg-transparent min-h-screen">
             <div className="pt-32 pb-32">
               <section className="md:px-36 px-4 flex flex-col gap-8">
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
@@ -115,7 +117,7 @@ export default function Portfolio() {
                 </div>
               </section>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </Desktoplayout>

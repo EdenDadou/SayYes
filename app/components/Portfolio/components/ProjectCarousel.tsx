@@ -4,6 +4,8 @@ import Card from "~/components/Card";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
+import { loader } from "~/routes/portfolio+/$slug";
+import { useLoaderData } from "@remix-run/react";
 
 interface Portfolio {
   id: string;
@@ -21,6 +23,7 @@ export default function ProjectCarousel({
   portfolios,
   className = "",
 }: ProjectCarouselProps) {
+  const { portfolio } = useLoaderData<typeof loader>();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [dynamicPadding, setDynamicPadding] = useState(128); // 32 * 4 = 128px (fallback initial)
@@ -93,29 +96,31 @@ export default function ProjectCarousel({
       </div>
 
       {/* Carousel Container */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden flex items-center">
         {/* Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
-            currentIndex === 0 ? "opacity-0 invisible" : "opacity-100 visible"
-          }`}
-          aria-label="Projet précédent"
-        >
-          <ArrowLight className="w-12 h-12 text-white rotate-180 group-hover:scale-110 transition-transform" />
-        </button>
+        <div className="absolute w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20">
+          <button
+            onClick={prevSlide}
+            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
+              currentIndex === 0 ? "opacity-0 invisible" : "opacity-100 visible"
+            }`}
+            aria-label="Projet précédent"
+          >
+            <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
+          </button>
 
-        <button
-          onClick={nextSlide}
-          className={`absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
-            currentIndex >= maxIndex
-              ? "opacity-0 invisible"
-              : "opacity-100 visible"
-          }`}
-          aria-label="Projet suivant"
-        >
-          <ArrowLight className="w-12 h-12 text-white group-hover:scale-110 transition-transform" />
-        </button>
+          <button
+            onClick={nextSlide}
+            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
+              currentIndex >= maxIndex
+                ? "opacity-0 invisible"
+                : "opacity-100 visible"
+            }`}
+            aria-label="Projet suivant"
+          >
+            <ArrowLight className="w-[77px] h-[77px] text-white group-hover:scale-110 transition-transform" />
+          </button>
+        </div>
 
         {/* Carousel Content */}
         <div className="relative h-[400px] overflow-visible">
@@ -159,6 +164,7 @@ export default function ProjectCarousel({
             >
               {portfolios
                 .slice(currentIndex, currentIndex + itemsPerView)
+                .filter((project) => project.id !== portfolio.id)
                 .map((project, index) => (
                   <div key={project.id} className="w-[490px] flex-shrink-0">
                     <Card
@@ -167,6 +173,7 @@ export default function ProjectCarousel({
                         <ContentPortfolio
                           imageUrl={project.photoCouverture}
                           titre={project.titre}
+                          topTitle={portfolio.topTitle}
                           slug={project.slug}
                         />
                       }

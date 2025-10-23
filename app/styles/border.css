@@ -52,12 +52,9 @@
   background-image: conic-gradient(
     from var(--angle),
     transparent 0%,
-    #4ffff5 5%,
-    #fe77b7 10%,
-    #feab71 20%,
-    #e6ff9c 30%,
-    #b7eeef 35%,
-    #000000 50%,
+    transparent 50%,
+    #dcc4ff 70%,
+    #b3f1ff 90%,
     transparent 100%
   );
   background-origin: border-box;
@@ -76,19 +73,16 @@
   .card-hover:hover::before {
     background-image: conic-gradient(
       transparent 0%,
-      #4ffff5 5%,
-      #fe77b7 10%,
-      #feab71 20%,
-      #e6ff9c 30%,
-      #b7eeef 35%,
-      #000000 50%,
+      transparent 50%,
+      #dcc4ff 70%,
+      #b3f1ff 90%,
       transparent 100%
     );
   }
 }
 
 .light-border {
-  --border-width: 2px;
+  --border-width: 1px;
   --radius: 24px;
 
   position: relative;
@@ -106,12 +100,9 @@
   background-image: conic-gradient(
     from var(--angle),
     transparent 0%,
-    #4ffff5 5%,
-    #fe77b7 10%,
-    #feab71 20%,
-    #e6ff9c 30%,
-    #b7eeef 35%,
-    #000000 50%,
+    transparent 50%,
+    #dcc4ff 70%,
+    #b3f1ff 90%,
     transparent 100%
   );
   background-origin: border-box;
@@ -130,12 +121,9 @@
   .light-border::before {
     background-image: conic-gradient(
       transparent 0%,
-      #4ffff5 5%,
-      #fe77b7 10%,
-      #feab71 20%,
-      #e6ff9c 30%,
-      #b7eeef 35%,
-      #000000 50%,
+      transparent 50%,
+      #dcc4ff 70%,
+      #b3f1ff 90%,
       transparent 100%
     );
   }

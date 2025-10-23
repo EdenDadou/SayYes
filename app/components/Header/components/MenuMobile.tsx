@@ -29,7 +29,7 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
 
         <Button label="Solutions" onClick={() => navigate("/solutions")} />
         <Button label="Portfolio" onClick={() => navigate("/portfolio")} />
-        <div className="h-[3px] w-20 holographic-bg mb-6" />
+        <div className="h-[3px] w-20 holographic-bg mb-6 rounded-full" />
 
         {/* 
         TODO Add Social Icons
