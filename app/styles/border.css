@@ -110,7 +110,7 @@ rgba(255, 255, 255, 0) 170%
 
 .light-border {
   --border-width: 1px;
-  --radius: 24px;
+  --radius: 28px;
 
   position: relative;
   border-radius: var(--radius);

@@ -1,12 +1,16 @@
 import ArrowFull from "~/assets/icons/ArrowFull";
 import Card from "~/components/Card";
-import BackgroundModal from "../assets/BackgroundModal";
 import Close from "~/assets/icons/Close";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Tel from "~/assets/icons/Tel";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
 import "~/styles/tailwind.css";
+import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
+import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
+import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
+import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
+import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 
 interface IContentContactProps {
   setSuccess: (success: boolean) => void;
@@ -21,8 +25,15 @@ export default function ContentContact({
       borderClass="light-border flex justify-center items-center w-[90%] max-w-6xl p-3"
       height="85%"
     >
-      <div className="relative w-full h-full rounded-xl flex flex-row overflow-hidden px-20">
-        <BackgroundModal className="absolute inset-0 w-full h-full z-0 rounded-[20px]" />
+      <div
+        className="relative w-full h-full rounded-[16px] flex flex-row overflow-hidden px-20"
+        style={{
+          backgroundImage: "url(/images/ModalBg.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* <BackgroundModal className="absolute inset-0 w-full h-full z-0 rounded-[20px]" /> */}
 
         <button
           className="absolute top-4 right-4 text-white cursor-pointer z-30 hover:opacity-70"
@@ -31,55 +42,53 @@ export default function ContentContact({
           <Close />
         </button>
 
-        <div className="relative z-10 w-[55%] flex flex-col justify-center gap-10">
-          <div className="flex flex-col gap-8">
-            <div className="h-[3px] w-28 holographic-bg" />
+        <div className="relative z-10 w-[60%] flex flex-col justify-center pl-4 gap-8">
+          <div className="h-[3px] w-28 holographic-bg" />
 
-            <div className="flex flex-col gap-1">
-              <p className="text-5xl text-white font-jakarta-bold">
-                Une idée, un projet,{" "}
-              </p>
-              <p className="text-5xl text-white font-jakarta-bold">
-                un évènement ?
-              </p>
-              <h1 className="text-5xl text-white flex flex-row items-center gap-4 font-jakarta-bold leading-tight holographic-text mt-2">
-                <ArrowLight className="w-12 h-12" />
-                Contactez-nous !
-              </h1>
-            </div>
+          <div className="flex flex-col gap-1">
+            <p className="text-[50px] leading-[50px] text-white font-jakarta-bold tracking-[-2px]">
+              Une idée, un projet,{" "}
+            </p>
+            <p className="text-[50px] leading-[50px] text-white font-jakarta-bold tracking-[-2px]">
+              un évènement ?
+            </p>
+            <h1 className="text-[50px] leading-[50px] text-white flex flex-row items-center gap-2 font-jakarta-semi-bold tracking-[-2px] holographic-text">
+              <ArrowLight className="w-12 h-12" />
+              Contactez-nous !
+            </h1>
           </div>
 
           {/* Contact Information */}
           <div className="flex flex-col gap-2 text-white">
             <div className="flex items-center gap-3">
-              <Tel color="white" />
+              <Tel color="rgb(255 255 255 / 0.6)" />
               <span className="text-lg font-jakarta">07 82 45 68</span>
             </div>
             <div className="flex items-center gap-3">
-              <ChatBuble color="white" />
+              <ChatBuble color="rgb(255 255 255 / 0.6)" />
               <span className="text-lg font-jakarta">hello@say_yes.com</span>
             </div>
             <div className="flex items-center gap-3">
-              <Localisation color="white" />
+              <Localisation color="rgb(255 255 255 / 0.6)" />
               <span className="text-lg font-jakarta">
                 40 Rue Sèvres - 75015 Paris
               </span>
             </div>
           </div>
           {/* Social Icons */}
-          {/* 
-          TODO Add social icons
+
+          {/* TODO Add social icons */}
           <div className="flex flex-row h-5 gap-3">
             <SvgBtnLinkedin className="w-8 h-8" />
             <SvgBtnFacebook className="w-8 h-8" />
             <SvgBtnInstagram className="w-8 h-8" />
             <SvgBtnTiktok className="w-8 h-8" />
             <SvgBtnYoutube className="w-8 h-8" />
-          </div> */}
+          </div>
         </div>
 
         <form
-          className="relative w-[45%] h-full flex flex-col gap-3 justify-center"
+          className="relative w-[40%] h-full flex flex-col gap-3 justify-center"
           method="post"
           action="https://formspree.io/f/xqknqjzp"
         >
@@ -93,9 +102,7 @@ export default function ContentContact({
               className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
               style={{
                 background: "rgba(255, 255, 255, 0.10)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow:
-                  "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
+                borderBottom: "1px solid #9C9C9C",
               }}
               placeholder="Nom et prénom"
             />
@@ -111,9 +118,7 @@ export default function ContentContact({
               className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
               style={{
                 background: "rgba(255, 255, 255, 0.10)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow:
-                  "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
+                borderBottom: "1px solid #9C9C9C",
               }}
               placeholder="exemple@gmail.com"
             />
@@ -129,9 +134,7 @@ export default function ContentContact({
               className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
               style={{
                 background: "rgba(255, 255, 255, 0.10)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow:
-                  "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
+                borderBottom: "1px solid #9C9C9C",
               }}
               placeholder="+33 6 00 00 00"
             />
@@ -147,9 +150,7 @@ export default function ContentContact({
               className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
               style={{
                 background: "rgba(255, 255, 255, 0.10)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow:
-                  "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
+                borderBottom: "1px solid #9C9C9C",
               }}
               placeholder="Entreprise"
             />
@@ -165,9 +166,7 @@ export default function ContentContact({
               className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
               style={{
                 background: "rgba(255, 255, 255, 0.10)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow:
-                  "inset 2px 2px 6px rgba(0, 0, 0, 0.5), inset -1px -1px 3px rgba(255, 255, 255, 0.1)",
+                borderBottom: "1px solid #9C9C9C",
               }}
               placeholder="Bonjour, je vous contacte pour..."
             ></textarea>
@@ -182,7 +181,7 @@ export default function ContentContact({
               //   type="submit"
               onClick={() => setSuccess(true)}
               type="button"
-              className="text-white px-6 py-3 font-jakarta flex items-center gap-3 text-lg rounded-full hover:scale-105 transition-all"
+              className="text-white px-3 py-2 font-jakarta flex items-center gap-2 text-[14px] rounded-full hover:scale-105 transition-all"
               style={{
                 border: "0.3px solid rgba(255, 255, 255, 0.30)",
                 boxShadow:
