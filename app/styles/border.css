@@ -1,17 +1,44 @@
 .border-custom {
-  border: 1px solid rgba(255, 255, 255, 1);
+  position: relative;
+  border-radius: 78px;
+  backdrop-filter: blur(30px);
   background: linear-gradient(
     157deg,
-    rgba(255, 255, 255, 0.01) 20.12%,
-    rgba(78, 78, 78, 0.14) 101.01%
+    rgba(255, 255, 255, 0) -14.12%,
+    rgba(78, 78, 78, 0.4) 101.01%
   );
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(31.280344009399414px);
   inset: 8;
   box-shadow:
     0 0 1px rgba(255, 255, 255, 0.3),
     0 0 1px rgba(255, 255, 255, 0.2),
     0 0 1px rgba(255, 255, 255, 0.1),
     0 0 1px rgba(79, 255, 245, 0.15);
+}
+
+/* rgba(78, 78, 78, 0.14) 101.01%, 
+rgba(255, 255, 255, 0) 170%
+ */
+
+.border-custom::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* couvre tout l’élément */
+  padding: 1px; /* épaisseur de la bordure */
+  border-radius: inherit;
+  background-image: conic-gradient(
+    from 267deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 2%,
+    rgba(255, 255, 255, 1) 30%,
+    transparent 55%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
 .border-custom-mobile {

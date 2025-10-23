@@ -48,7 +48,7 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
       }}
     >
       {/* Section gauche */}
-      <div className="flex flex-row items-center gap-8 pl-8 justify-between w-[35%]">
+      <div className="flex flex-row items-center gap-8 pl-8 justify-between w-[35%] z-20">
         <div className="font-jakarta text-lg">Communication visuelle*</div>
         <Button
           label="Solutions"
@@ -66,7 +66,7 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
       />
 
       {/* Section droite */}
-      <div className="flex flex-row items-center gap-8 justify-between w-[35%]">
+      <div className="flex flex-row items-center gap-8 justify-between w-[35%] z-20">
         <Button
           label="Portfolio"
           leftIcon={<Coeur />}

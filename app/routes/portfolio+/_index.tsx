@@ -1,9 +1,6 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { useScrollProgress } from "~/utils/hooks/useScrollProgress";
 import { useViewport } from "~/utils/hooks/useViewport";
-import Header from "~/components/Header";
-import Footer from "~/components/Footer";
 import Card from "~/components/Card";
 import PortfolioTitle from "~/components/Portfolio/components/PortfolioTitle";
 import PortfolioTitleMobile from "~/components/Portfolio/components/PortfolioTitleMobile";

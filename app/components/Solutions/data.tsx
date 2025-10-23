@@ -11,12 +11,10 @@ export const solutionsCards = [
         title1="Définir vos"
         title2="objectifs"
         bulletPoints={[
-          "Créer ou moderniser mon branding",
-          "Se démarquer de mes concurrents",
-          "Optimiser une campagne de communication",
-          "Valorisez mon évènement",
-          "Améliorer ma présence digitale",
-          "Rassembler mes collaborateurs",
+          "Crée votre identité visuelle",
+          "Fait rayonner votre évènement",
+          "Développe votre stratégie digitale",
+          "Optimise votre campagne de communication",
         ]}
       />
     ),
@@ -32,11 +30,9 @@ export const solutionsCards = [
         title2="identité visuelle"
         bulletPoints={[
           "Direction artistique",
-          "Brand book",
-          "Logo",
-          "Charte graphique",
-          "Illustration & iconographie",
-          "Office branding",
+          "Logo et charte graphique",
+          "Fresque murale",
+          "Illustration et iconographie",
         ]}
       />
     ),
@@ -48,17 +44,15 @@ export const solutionsCards = [
       <ContentSolution
         imageUrl="/images/solutions/Card3.png"
         subtitle="Étape N°3"
-        title1="Décliner sur tous"
-        title2="vos supports"
+        title1="Décliner vos"
+        title2="supports"
         bulletPoints={[
-          "Site web & application",
+          "Site web et application",
+          "Vidéo",
+          "Print",
           "Slide de présentation",
           "Live sketching",
-          "Assets marketing",
-          "Stand & kakémono",
-          "Document print",
-          "Vidéo",
-          "Décoration de locaux",
+          "Stand et kakémono",
         ]}
       />
     ),
@@ -70,15 +64,13 @@ export const solutionsCards = [
       <ContentSolution
         imageUrl="/images/solutions/Card4.png"
         subtitle="Étape N°4"
-        title1="Pour tous"
-        title2="vos canaux"
+        title1="Enrichit vos"
+        title2="canaux"
         bulletPoints={[
-          "Com' interne & externe",
           "Web & réseaux sociaux",
           "Affichage publicitaire",
           "Évènement & salon",
-          "Télévision",
-          "Espace intérieur & extérieur",
+          "Emission TV",
         ]}
       />
     ),
@@ -89,13 +81,13 @@ export const solutionsCards = [
     content: (
       <ContentSolution
         imageUrl="/images/solutions/Card5.png"
-        subtitle="Mission accomplie !"
-        title1="Votre branding"
-        title2="est impeccable"
+        subtitle="last"
+        title1="Say Yes vous"
+        title2="accompagne pour :"
         bulletPoints={[
-          "Une identité forte & reconnaissable immédiatement",
-          "De la cohérence sur tous vos supports & canaux",
-          "Aligner votre stratégie d’entreprise & votre communication",
+          "Une identité forte",
+          "Rendre cohérent vos supports et canaux",
+          "Aligner la stratégie d’entreprise et la communication",
           "Fédérer vos collaborateurs autour d’une vision commune",
         ]}
       />

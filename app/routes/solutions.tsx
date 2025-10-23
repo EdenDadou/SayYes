@@ -36,12 +36,9 @@ export default function Solutions() {
   ) : (
     <Desktoplayout>
       <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
-      <section className="relative z-10 px-36 flex flex-col gap-6 justify-center items-start pt-20">
+      <section className="relative z-10 px-36 flex flex-col gap-6 justify-center items-start pt-20 mb-10">
         <div className="h-[3px] w-28 holographic-bg my-6 rounded-full" />
         <SolutionTitle />
-        <h2 className="flex flex-row items-center justify-start gap-2 text-xl font-jakarta pb-6">
-          <Star className="w-4 h-4" />5 étapes pour un branding impeccable :
-        </h2>
         {solutionsCards.map((card, index) => (
           <Card
             key={index}
