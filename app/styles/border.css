@@ -5,9 +5,8 @@
   background: linear-gradient(
     157deg,
     rgba(255, 255, 255, 0) -14.12%,
-    rgba(78, 78, 78, 0.4) 101.01%
+    rgba(78, 78, 78, 0.2) 101.01%
   );
-  backdrop-filter: blur(31.280344009399414px);
   inset: 8;
   box-shadow:
     0 0 1px rgba(255, 255, 255, 0.3),

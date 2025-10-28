@@ -96,7 +96,7 @@ section {
 /* Header personnalisé */
 .header-custom {
   border-radius: 78px;
-  -webkit-backdrop-filter: blur(31.280344009399414px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 50;
   position: sticky;
   top: 35px;
