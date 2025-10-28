@@ -68,7 +68,7 @@ ${message || "Aucun message"}
     // Envoi de l'email
     await transporter.sendMail({
       from: `"La Sainte Paire" <javier@lasaintepaire.com>`, // Utilise l'adresse du compte Brevo
-      to: "edenw@hotmail.fr", // adresse de destination
+      to: "javier@lasaintepaire.com", // adresse de destination
       replyTo: email, // L'email du client pour pouvoir répondre directement
       subject: `Nouvelle demande de contact - ${name}`,
       text: emailContent,

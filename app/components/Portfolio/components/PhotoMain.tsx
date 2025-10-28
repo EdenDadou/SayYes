@@ -22,7 +22,7 @@ export default function PhotoMain({
   // Transform le scroll en valeur de scale (zoom)
   // Quand on scroll vers le bas: l'image zoom vers l'avant (agrandit)
   // Début: scale 1 (normal) -> Fin: scale 1.3 (zoomé vers l'avant)
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 2]);
+  const scale = useTransform(scrollYProgress, [0.2, 1], [1, 1.5]);
 
   if (!photo) {
     return null;

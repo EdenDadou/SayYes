@@ -50,7 +50,10 @@ export default function PortfolioSlug() {
   const isMobile = useViewport();
 
   return isMobile ? (
-    <PortfolioProjectMobile portfolio={portfolio} />
+    <PortfolioProjectMobile
+      portfolio={portfolio}
+      allPortfolios={allPortfolios}
+    />
   ) : (
     <Desktoplayout>
       <BackgroundProject1

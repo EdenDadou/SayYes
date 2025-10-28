@@ -15,8 +15,8 @@ const Filter = () => {
   const isMobile = useViewport();
 
   return isMobile ? (
-    <div className="w-screen pr-8">
-      <div className="flex flex-row justify-between py-4 overflow-x-scroll gap-4 scrollbar-hide">
+    <div className="w-full">
+      <div className="flex flex-row justify-between overflow-x-scroll gap-4 scrollbar-hide px-4">
         {filterList.map((filter) => (
           <button
             key={filter.value}

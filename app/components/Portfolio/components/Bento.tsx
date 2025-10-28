@@ -13,8 +13,6 @@ export default function Bento({ bento }: { bento: BentoItem }) {
     return null;
   }
 
-  console.log(bento);
-
   return bento.lines.map((line, lineIndex) => (
     <div key={lineIndex} className="gap-4 max-w-[990px] flex m-auto">
       {line.listImage &&

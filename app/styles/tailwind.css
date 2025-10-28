@@ -87,6 +87,12 @@ body::-webkit-scrollbar {
   overflow: hidden;
 }
 
+/* Reset des borders par défaut pour les sections */
+section {
+  border: 0 !important;
+  border-bottom: 0 !important;
+}
+
 /* Header personnalisé */
 .header-custom {
   border-radius: 78px;

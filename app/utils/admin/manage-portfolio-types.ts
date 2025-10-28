@@ -15,6 +15,7 @@ export interface BentoItem {
 }
 
 export interface PortfolioData {
+  id: string;
   titre: string;
   categories: string[];
   slug: string;

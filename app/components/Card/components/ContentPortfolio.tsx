@@ -44,16 +44,16 @@ export default function ContentPortfolio({
         {/* Gradient overlay - seulement sur les 20% inférieurs */}
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] rounded-[15px]" />
       </div>
-      <div className="size-full absolute top-0 left-0 bottom-0">
+      <div className="size-full absolute top-0 left-0 bottom-0 md:p-4 p-2">
         <div className="flex flex-col items-center justify-end w-full h-full p-4">
-          <div className="flex flex-row items-center justify-between w-full p-4 ">
+          <div className="flex flex-row items-center justify-between w-full md:p-4">
             <div className="flex flex-row justify-center items-center">
-              <div className="h-[3px] w-14 holographic-bg rotate-90 rounded-full" />
+              <div className="self-stretch w-[3px] holographic-bg-vertical rounded-full mr-4" />
               <div className="flex flex-col items-start justify-center">
-                <span className="text-white text-3xl font-jakarta-bold">
+                <span className="text-white md:text-3xl text-2xl font-jakarta-bold">
                   {topTitle}
                 </span>
-                <span className="text-white text-2xl font-jakarta">
+                <span className="text-white md:text-2xl text-xl font-jakarta">
                   {titre}
                 </span>
               </div>

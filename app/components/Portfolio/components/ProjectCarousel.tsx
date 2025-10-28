@@ -6,16 +6,10 @@ import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import { loader } from "~/routes/portfolio+/$slug";
 import { useLoaderData } from "@remix-run/react";
-
-interface Portfolio {
-  id: string;
-  titre: string;
-  slug: string;
-  photoCouverture: string;
-}
+import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
 interface ProjectCarouselProps {
-  portfolios: Portfolio[];
+  portfolios: PortfolioData[];
   className?: string;
 }
 

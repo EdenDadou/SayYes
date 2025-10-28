@@ -22,9 +22,7 @@ export default function Footer({ setIsOpenModalContact }: IFooterProps) {
   const isMobile = useViewport();
   const { footerRef, opacity, opacitySecondary } = useFooterMotion();
 
-  return isMobile ? (
-    <FooterMobile />
-  ) : (
+  return (
     <div
       ref={footerRef}
       className="relative w-full flex flex-col justify-center items-center filter pt-40"
