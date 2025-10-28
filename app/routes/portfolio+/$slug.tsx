@@ -167,9 +167,9 @@ export default function PortfolioSlug() {
               </h2>
             </div>
 
-            {/* <div className="space-y-4">
+            <div className="space-y-4">
               {portfolio.bento[0] && <Bento bento={portfolio.bento[0]} />}
-            </div> */}
+            </div>
           </section>
 
           <section className="flex flex-col items-center justify-center py-[100px] w-[814px] self-center">
