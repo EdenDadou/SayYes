@@ -159,10 +159,12 @@ export default function PortfolioProjectMobile({
             </div>
           </section>
         </div>
-        <BackgroundProject3
-          fill={portfolio.couleur}
-          className="absolute left-0 right-0 w-screen h-[500px] z-0"
-        />
+        <div className="absolute left-0 right-0 -bottom-28 h-[120vh] w-screen z-0 object-cover">
+          <BackgroundProject3
+            fill={portfolio.couleur}
+            className="w-screen h-full"
+          />
+        </div>
         <ProjectCarouselMobile portfolios={allPortfolios} />
       </main>
     </MobileLayout>

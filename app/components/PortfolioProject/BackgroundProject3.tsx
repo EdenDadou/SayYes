@@ -30,6 +30,7 @@ const BackgroundProject3 = (props: SVGProps<SVGSVGElement>) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
+      preserveAspectRatio="none"
       {...props}
     >
       <g clipPath="url(#clip0_1172_4458)">

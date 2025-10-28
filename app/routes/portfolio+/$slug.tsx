@@ -6,6 +6,7 @@ import {
 } from "~/server/portfolio.server";
 import { useViewport } from "~/utils/hooks/useViewport";
 import ArrowLight from "~/assets/icons/ArrowLight";
+import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
 import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
 import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
@@ -52,7 +53,7 @@ export default function PortfolioSlug() {
   return isMobile ? (
     <PortfolioProjectMobile
       portfolio={portfolio}
-      allPortfolios={allPortfolios}
+      allPortfolios={allPortfolios as PortfolioData[]}
     />
   ) : (
     <Desktoplayout>
@@ -193,7 +194,7 @@ export default function PortfolioSlug() {
             </div>
           </section>
         </div>
-        <ProjectCarousel portfolios={allPortfolios} />
+        <ProjectCarousel portfolios={allPortfolios as PortfolioData[]} />
       </main>
       <BackgroundProject3
         fill={portfolio.couleur}
