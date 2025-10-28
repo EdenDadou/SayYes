@@ -30,8 +30,7 @@ export default function Portfolio() {
   const isMobile = useViewport();
 
   // Diviser les portfolios en deux groupes pour l'affichage
-  const portfolioTopCards = portfolios.slice(0, 4);
-  // const portfolioBottomCards = portfolios.slice(4);
+  const portfolioTopCards = portfolios.slice(0, 20);
 
   return isMobile ? (
     <MobileLayout>
