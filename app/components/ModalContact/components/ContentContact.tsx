@@ -24,7 +24,7 @@ export default function ContentContact({
   setSuccess,
   close,
 }: IContentContactProps) {
-  const fetcher = useFetcher();
+  const fetcher: any = useFetcher();
 
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data?.success) {

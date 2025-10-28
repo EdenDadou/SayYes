@@ -24,8 +24,6 @@ export default function ContentSolutionMobile({
   title2,
   bulletPoints,
 }: PropsContent) {
-  const isMobile = useViewport();
-
   const imageClasses = cn(
     "h-full flex items-center justify-center rounded-[15px] relative"
   );
@@ -52,9 +50,9 @@ export default function ContentSolutionMobile({
             className={imageClasses}
             style={{
               backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
-              backgroundSize: "100% 60%",
+              backgroundSize: "200% 60%",
               backgroundRepeat: "no-repeat",
-              backgroundPosition: "top",
+              backgroundPosition: "top right",
               position: "absolute",
               top: 0,
               left: 0,

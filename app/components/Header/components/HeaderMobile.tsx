@@ -50,7 +50,7 @@ const HeaderMobile = ({
       }}
     >
       {/* Section gauche */}
-      <div className="flex justify-start">
+      <div className="flex justify-start z-10 relative">
         <Button
           leftIcon={
             <AnimatedBurgerMenu
@@ -70,14 +70,14 @@ const HeaderMobile = ({
 
       {/* Logo centré */}
       <LogoSayYes
-        className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[5px]"
+        className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[5px] z-0"
         onClick={() => navigate("/")}
         width={98}
         height={80}
       />
 
       {/* Section droite */}
-      <div className="flex justify-end">
+      <div className="flex justify-end z-10 relative">
         <Button
           leftIcon={<ChatBuble />}
           type="mobile"

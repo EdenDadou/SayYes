@@ -37,7 +37,7 @@ const Button = ({
             : type === "mobile"
               ? "bg-white rounded-full p-3"
               : type === "border"
-                ? "font-jakarta flex items-center gap-2 rounded-full transition-all relative pl-3 pr-5 py-3"
+                ? `font-jakarta flex items-center gap-2 rounded-full transition-all relative ${textSize === "S" ? "pl-2 pr-4 py-2" : "pl-3 pr-5 py-3"}`
                 : "bg-white rounded-full px-3 holographic-bg-hover"
         }`}
       >

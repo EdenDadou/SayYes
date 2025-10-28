@@ -41,7 +41,9 @@ export default function MobileLayout({
         isOpenMenu={isOpenMenu}
       />
       {children}
-      {footer ? <FooterMobile /> : null}
+      {footer ? (
+        <FooterMobile setIsOpenModalContact={setIsOpenModalContact} />
+      ) : null}
     </main>
   );
 }

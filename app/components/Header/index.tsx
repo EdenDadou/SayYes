@@ -33,9 +33,7 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
     setLastScrollY(latest);
   });
 
-  return isMobile ? (
-    <HeaderMobile setIsOpenModalContact={setIsOpenModalContact} />
-  ) : (
+  return (
     <motion.div
       className="header-custom border-custom flex flex-row justify-between items-center mx-24 h-[74px]"
       initial={{ y: 0 }}
