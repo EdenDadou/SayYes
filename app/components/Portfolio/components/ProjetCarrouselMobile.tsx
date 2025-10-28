@@ -37,7 +37,7 @@ export default function ProjectCarouselMobile({
 
       {/* Scrollable Container */}
       <div className="relative w-full overflow-x-auto scrollbar-hide">
-        <div className="flex gap-4 px-4 pb-4">
+        <div className="flex gap-2 px-4 pb-4">
           {filteredPortfolios.map((project) => (
             <div key={project.id} className="w-[280px] flex-shrink-0">
               <Card
