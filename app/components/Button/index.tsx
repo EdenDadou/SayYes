@@ -4,6 +4,8 @@ interface IButtonProps {
   type?: "plain" | "transparent" | "mobile" | "border";
   onClick?: () => void;
   textSize?: "S" | "M" | "L";
+  htmlType?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -12,16 +14,20 @@ const Button = ({
   type = "transparent",
   onClick,
   textSize = "M",
+  htmlType = "button",
+  disabled = false,
 }: IButtonProps) => {
   return (
     <button
+      type={htmlType}
+      disabled={disabled}
       className={`w-fit cursor-pointer bg-transparent rounded-full ${
         type === "plain"
           ? "border-custom h-[74px] p-2 "
           : type === "border"
-            ? "border-grey-animed  hover:scale-105 transition-all backdrop-blur-xl"
+            ? "border-grey-animed  hover:scale-105 transition-all backdrop-blur-xl bg-white/5"
             : ""
-      }`}
+      } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={onClick}
     >
       <div
@@ -40,7 +46,7 @@ const Button = ({
           <span
             className={`${
               type === "transparent" || type === "border"
-                ? "text-white text-shadow-base shadow-black font-jakarta-semi-bold"
+                ? "text-white text-shadow-base shadow-black font-jakarta"
                 : "text-black font-jakarta-bold py-4 text-md"
             } ${textSize === "L" ? "text-[20px]" : "text-[14px]"} `}
           >

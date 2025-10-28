@@ -9,6 +9,7 @@ import SvgBtnInstagram from "../Footer/components/BtnInstagram";
 import Background404 from "./Background404";
 import ArrowFull from "~/assets/icons/ArrowFull";
 import MasqueGif from "./MasqueGif";
+import Button from "../Button";
 
 export default function Page404() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function Page404() {
         />
 
         <MasqueGif height="480px" width="700px" right={40} />
-        <Background404 className="absolute inset-0 w-full h-screen z-10" />
+        <Background404 className="absolute inset-0 w-full h-screen z-10 " />
 
         <div className="flex flex-row items-center justify-center gap-8 z-20">
           <div className="self-stretch w-[3px] holographic-bg-vertical rounded-full" />
@@ -47,29 +48,23 @@ export default function Page404() {
                 backgroundSize: "608px 359px",
               }}
             />
-            <button
-              //   type="submit"
-              onClick={() => navigate(`/`)}
-              type="button"
-              className="absolute bottom-0 right-0 text-white px-6 py-3 font-jakarta flex items-center gap-3 text-lg rounded-full hover:scale-105 transition-all"
-              style={{
-                border: "0.3px solid rgba(255, 255, 255, 0.30)",
-                boxShadow:
-                  "0 2px 10px 0 rgba(0, 0, 0, 0.20), 0 0 2px 0 rgba(255, 255, 255, 0.50) inset",
-              }}
-            >
-              <ArrowFull className="w-6 h-6" />
-              Acceuil
-            </button>
-            {/* 
-            //TODO : Add social icons
+            <div className="absolute bottom-10 right-0">
+              <Button
+                type="border"
+                onClick={() => navigate(`/`)}
+                leftIcon={<ArrowFull className="w-6 h-6" />}
+                label="Accueil"
+                textSize="L"
+              />
+            </div>
+
             <div className="flex flex-row gap-3">
               <SvgBtnLinkedin className="w-8 h-8" />
               <SvgBtnFacebook className="w-8 h-8" />
               <SvgBtnInstagram className="w-8 h-8" />
               <SvgBtnTiktok className="w-8 h-8" />
               <SvgBtnYoutube className="w-8 h-8" />
-            </div> */}
+            </div>
           </div>
         </div>
       </main>

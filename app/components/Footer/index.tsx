@@ -33,7 +33,7 @@ export default function Footer({ setIsOpenModalContact }: IFooterProps) {
         Ça vous inspire ? <br />
         <span className="holographic-text">Parlons design !</span>
       </span>
-      <div className="relative z-10 w-full h-[220px] flex justify-center items-center">
+      <div className="relative z-10 w-full h-[230px] flex justify-center items-center">
         <SayYesFooter className="w-full h-[300px] absolute pointer-events-none" />
         <Button
           label="On en discute"
@@ -79,7 +79,7 @@ export default function Footer({ setIsOpenModalContact }: IFooterProps) {
           <div className="flex flex-col gap-4 w-1/3">
             <p className="text-md font-jakarta">
               L’agence de communication
-              <br /> visuelle qui qui met tout le
+              <br /> visuelle qui met tout le
               <br /> monde d’accord !
             </p>
             {/* 

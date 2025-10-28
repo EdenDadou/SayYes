@@ -21,10 +21,10 @@ export default function MasqueGif({
       }}
     >
       <div
-        className="absolute left-0 top-0 w-40 h-full"
+        className="absolute left-0 top-0 w-60 h-full"
         style={{
           background:
-            "linear-gradient(to right, rgba(0, 0, 0, 1), transparent)",
+            "linear-gradient(to right, rgba(0, 0, 0, 1) 15%, transparent)",
         }}
       />
 
@@ -37,7 +37,7 @@ export default function MasqueGif({
 
       {/* Top blur overlay */}
       <div
-        className={`absolute top-0 left-0 w-full ${rounded ? "rounded-r-2xl" : ""} ${bold ? "h-80" : "h-40"}`}
+        className={`absolute top-0 left-0 w-full ${rounded ? "rounded-r-2xl" : ""} ${bold ? "h-80" : "h-32"}`}
         style={{
           background:
             "linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, transparent)",
@@ -46,7 +46,7 @@ export default function MasqueGif({
 
       {/* Bottom blur overlay */}
       <div
-        className={`absolute bottom-0 left-0 w-full h-60 ${rounded ? "rounded-r-2xl" : ""}`}
+        className={`absolute bottom-0 left-0 w-full h-40 ${rounded ? "rounded-r-2xl" : ""}`}
         style={{
           background:
             "linear-gradient(to top, rgba(0, 0, 0, 1) 15%, transparent)",

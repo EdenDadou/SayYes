@@ -13,6 +13,8 @@ import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "~/components/Button";
+import { useFetcher } from "@remix-run/react";
+import { useEffect } from "react";
 
 interface IContentContactProps {
   setSuccess: (success: boolean) => void;
@@ -22,6 +24,14 @@ export default function ContentContact({
   setSuccess,
   close,
 }: IContentContactProps) {
+  const fetcher = useFetcher();
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      setSuccess(true);
+    }
+  }, [fetcher.state, fetcher.data, setSuccess]);
+
   return (
     <Card
       borderClass="light-border flex justify-center items-center w-[90%] max-w-6xl p-3"
@@ -96,10 +106,10 @@ export default function ContentContact({
             </div>
           </div>
 
-          <form
+          <fetcher.Form
             className="relative w-[40%] h-full flex flex-col gap-3 justify-center"
             method="post"
-            action="https://formspree.io/f/xqknqjzp"
+            action="/api/contact"
           >
             <label className="block">
               <span className="text-sm text-white font-bold mb-2 block">
@@ -188,12 +198,17 @@ export default function ContentContact({
 
               <Button
                 type="border"
-                label="Envoyer ma demande"
-                onClick={() => setSuccess(true)}
+                label={
+                  fetcher.state === "submitting"
+                    ? "Envoi en cours..."
+                    : "Envoyer ma demande"
+                }
+                htmlType="submit"
+                disabled={fetcher.state === "submitting"}
                 leftIcon={<ArrowFull className="w-6 h-6" />}
               />
             </div>
-          </form>
+          </fetcher.Form>
         </motion.div>
       </div>
     </Card>
