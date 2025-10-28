@@ -39,9 +39,9 @@
   backdrop-filter: blur(30px);
   inset: 8;
   box-shadow:
-    0 0 0.1px rgba(255, 255, 255, 0),
+    0 0 0.1px rgba(255, 255, 255, 0, 1),
     0 0 0.5px rgba(255, 255, 255, 0.4),
-    0 0 1px rgba(255, 255, 255, 0.2),
+    0 0 1px rgba(255, 255, 255, 0.4),
     0 0 0.3px rgba(79, 255, 245, 0.3);
 }
 

@@ -16,7 +16,7 @@ const Filter = () => {
 
   return isMobile ? (
     <div className="w-full">
-      <div className="flex flex-row justify-between overflow-x-scroll gap-4 scrollbar-hide px-4">
+      <div className="flex flex-row justify-between overflow-x-scroll md:gap-4 gap-2 scrollbar-hide px-4">
         {filterList.map((filter) => (
           <button
             key={filter.value}
