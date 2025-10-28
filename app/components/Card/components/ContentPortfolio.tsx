@@ -27,7 +27,7 @@ export default function ContentPortfolio({
 
   return (
     <div
-      className="size-full relative overflow-hidden md:rounded-[15px] rounded-[10px] hover:rounded-[25px] md:p-[9px] p-1 cursor-pointer
+      className="size-full relative overflow-hidden md:rounded-[15px] rounded-[10px] hover:rounded-[25px] md:p-2 p-1 cursor-pointer
       shadow-lg"
       onClick={() => {
         navigate(`/portfolio/${slug}`);

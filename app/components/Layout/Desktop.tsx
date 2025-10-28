@@ -4,6 +4,7 @@ import { useState } from "react";
 import ModalContact from "~/components/ModalContact";
 import Footer from "~/components/Footer";
 import "~/styles/tailwind.css";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,7 +31,16 @@ export default function Desktoplayout({
         close={() => setIsOpenModalContact(false)}
       />
       <Header setIsOpenModalContact={setIsOpenModalContact} />
-      {children}
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
       {footer ? <Footer setIsOpenModalContact={setIsOpenModalContact} /> : null}
     </main>
   );

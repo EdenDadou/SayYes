@@ -4,6 +4,7 @@ import "~/styles/tailwind.css";
 import FooterMobile from "../Footer/mobile/FooterMobile";
 import ModalContactMobile from "../ModalContact/ModalContactMobile";
 import MenuMobile from "../Header/components/MenuMobile";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -40,7 +41,16 @@ export default function MobileLayout({
         isOpenModalContact={isOpenModalContact}
         isOpenMenu={isOpenMenu}
       />
-      {children}
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
       {footer ? (
         <FooterMobile setIsOpenModalContact={setIsOpenModalContact} />
       ) : null}
