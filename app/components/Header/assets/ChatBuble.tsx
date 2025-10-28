@@ -1,10 +1,10 @@
 import type { SVGProps } from "react";
 const ChatBuble = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={23}
-    height={22}
+    viewBox="0 0 23 22"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="w-6 h-6"
     {...props}
   >
     <path

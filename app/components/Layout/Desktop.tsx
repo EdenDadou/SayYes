@@ -31,7 +31,7 @@ export default function Desktoplayout({
       />
       <Header setIsOpenModalContact={setIsOpenModalContact} />
       {children}
-      {footer ? <Footer /> : null}
+      {footer ? <Footer setIsOpenModalContact={setIsOpenModalContact} /> : null}
     </main>
   );
 }

@@ -14,7 +14,11 @@ import LogoSayYesHolo from "./components/LogoSayYesHolo";
 import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
 
-export default function Footer() {
+interface IFooterProps {
+  setIsOpenModalContact: (value: boolean) => void;
+}
+
+export default function Footer({ setIsOpenModalContact }: IFooterProps) {
   const isMobile = useViewport();
   const { footerRef, opacity, opacitySecondary } = useFooterMotion();
 
@@ -25,30 +29,36 @@ export default function Footer() {
       ref={footerRef}
       className="relative w-full flex flex-col justify-center items-center filter pt-40"
     >
-      <span className="font-jakarta text-[60px] leading-[60px]">
+      <span className="font-jakarta-semi-bold text-[60px] leading-[60px] text-center">
         Ça vous inspire ? <br />
         <span className="holographic-text">Parlons design !</span>
       </span>
-      <div className="relative z-10 w-full h-full">
-        <SayYesFooter className="w-full h-full" />
-        <Button label="On en dicute" />
+      <div className="relative z-10 w-full h-[220px] flex justify-center items-center">
+        <SayYesFooter className="w-full h-[300px] absolute pointer-events-none" />
+        <Button
+          label="On en discute"
+          type="border"
+          leftIcon={<ChatBuble color="white" />}
+          textSize="L"
+          onClick={() => setIsOpenModalContact(true)}
+        />
         <motion.img
           src="/images/footer/Halo.png"
           alt="footer"
-          className="w-full h-full absolute top-0 left-0"
+          className="w-full h-full absolute top-0 left-0 pointer-events-none"
           style={{ opacity }}
         />
         <motion.img
           src="/images/footer/HaloBottom.png"
           alt="footer"
-          className="w-full h-full absolute bottom-0 left-0"
+          className="w-full h-full absolute bottom-0 left-0 pointer-events-none"
           style={{ opacity: opacitySecondary }}
         />
       </div>
       <div className="flex flex-col w-screen px-20 footer">
         <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
           <div className="flex flex-row items-center gap-8 ">
-            <LogoSayYesHolo width={110} height={108} className="rotate-2" />
+            <LogoSayYesHolo width={110} height={108} />
 
             <div className="holographic-text font-jakarta-bold text-xl">
               Communication visuelle*
