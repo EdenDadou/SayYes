@@ -76,20 +76,20 @@ export default function Portfolio() {
           </motion.div>
         </AnimatePresence>
         {/* Contenu par-dessus */}
-        <section className="relative z-10 px-4 md:px-36 flex flex-col justify-center  items-center overflow-hidden gap-10">
-          <div className="flex flex-col items-start gap-8 w-[1000px] justify-center">
+        <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center  items-center overflow-hidden gap-10">
+          <div className="flex flex-col items-start gap-8 w-[988px] justify-center">
             <div className="h-[3px] md:w-28 w-20 holographic-bg my-6 rounded-full" />
             <PortfolioTitle />
           </div>
           <Filter />
-          <div className="flex flex-wrap justify-start gap-[14px] w-[996px] m-auto">
+          <div className="flex flex-wrap justify-start gap-[24px] w-[996px] m-auto">
             {portfolioTopCards.map((portfolio, index) => (
               <div
                 key={portfolio.id}
-                className="w-[490px] flex-shrink-0 border-custom-thin rounded-[25px]"
+                className="w-[482px] flex-shrink-0 border-custom-thin rounded-[24px]"
               >
                 <Card
-                  height="370px"
+                  height="364px"
                   content={
                     <ContentPortfolio
                       imageUrl={portfolio.photoCouverture}

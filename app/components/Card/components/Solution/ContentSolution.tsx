@@ -28,7 +28,7 @@ export default function ContentSolution({
   const isMobile = useViewport();
 
   const imageClasses = cn(
-    "h-full flex items-center justify-center rounded-[15px] relative "
+    "h-full flex items-center justify-center rounded-[16px] relative "
   );
 
   return isMobile ? (
@@ -41,7 +41,7 @@ export default function ContentSolution({
       bulletPoints={bulletPoints}
     />
   ) : (
-    <div className="size-full md:p-4 p-2">
+    <div className="size-full md:p-3 p-2">
       <div
         className={imageClasses}
         style={{

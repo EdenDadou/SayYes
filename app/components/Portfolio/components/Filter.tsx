@@ -43,7 +43,7 @@ const Filter = () => {
       {filterList.map((filter) => (
         <button
           key={filter.value}
-          className={`flex flex-row gap-3 items-center font-jakarta text-sm py-2 px-4 rounded-full border-[0.5px] ${selectedFilter === filter.value ? "bg-white text-dark-blue" : "text-white hover:bg-white hover:text-dark-blue"}`}
+          className={`flex flex-row gap-3 items-center font-jakarta text-sm py-2 px-3 rounded-full border-custom-thin ${selectedFilter === filter.value ? "bg-white text-dark-blue" : "text-white hover:bg-white hover:text-dark-blue"}`}
           onClick={() => setSelectedFilter(filter.value)}
           style={{ transition: "none", transitionDuration: "0s" }}
         >

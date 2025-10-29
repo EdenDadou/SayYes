@@ -45,6 +45,30 @@
     0 0 0.3px rgba(79, 255, 245, 0.3);
 }
 
+.border-custom-thin::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* couvre tout l’élément */
+  padding: 0.5px; /* épaisseur de la bordure */
+  border-radius: inherit;
+  background-image: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.3) 25%,
+    rgba(255, 255, 255, 0.5) 30%,
+    transparent 55%,
+    rgba(255, 255, 255, 0.3) 70%,
+    rgba(255, 255, 255, 0.5) 80%,
+    rgba(255, 255, 255, 0.1) 90%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
 .border-custom-mobile {
   background: linear-gradient(
     157deg,

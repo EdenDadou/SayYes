@@ -7,7 +7,6 @@ import {
 import { useViewport } from "~/utils/hooks/useViewport";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
-
 import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
 import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
 import PhotoMain from "~/components/Portfolio/components/PhotoMain";
@@ -15,11 +14,11 @@ import Desktoplayout from "~/components/Layout/Desktop";
 import Bento from "~/components/Portfolio/components/Bento";
 import ProjectCarousel from "~/components/Portfolio/components/ProjectCarousel";
 import "~/styles/tailwind.css";
-import BackgroundProject3 from "~/components/PortfolioProject/BackgroundProject3";
 import PortfolioProjectMobile from "~/components/PortfolioProject/mobile/PortfolioProjectMobile";
 import Coche from "~/assets/icons/Coche";
 import NoteStar from "~/assets/icons/NoteStar";
 import Star from "~/assets/icons/Star";
+import BackgroundProject3 from "~/components/PortfolioProject/BackgroundProject3";
 
 // Loader pour récupérer le portfolio par slug
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -67,7 +66,7 @@ export default function PortfolioSlug() {
           {/* Hero Section */}
           <section className="pt-12 px-20 flex flex-col gap-10 pb-6 justify-center items-center">
             {/* Title and Kicker */}
-            <div className="flex flex-row justify-between items-end w-[990px]">
+            <div className="flex flex-row justify-between items-end w-[988px]">
               <div className="flex flex-col gap-10 w-full">
                 <div className="h-[3px] w-24 holographic-bg" />
 

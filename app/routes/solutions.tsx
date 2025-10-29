@@ -47,7 +47,7 @@ export default function Solutions() {
           <Background className="absolute -top-40 left-0 w-full h-auto z-0 opacity-80" />
         </motion.div>
       </AnimatePresence>
-      <section className="relative z-10 px-36 flex flex-col gap-14 justify-center items-start pt-20 mb-10">
+      <section className="relative z-10 w-[988px] mx-auto flex flex-col gap-14 justify-center items-start pt-20 mb-10">
         <SolutionTitle />
         {solutionsCards.map((card, index) => (
           <Card
