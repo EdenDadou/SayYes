@@ -15,6 +15,7 @@ import {
   BentoItem,
   BentoLine,
 } from "~/utils/admin/manage-portfolio-types";
+import BentoEditor from "~/components/Admin/BentoEditor";
 
 interface FormulaireAdminProps {
   actionData?: any;
@@ -913,174 +914,107 @@ export default function FormulaireAdmin({
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {formData.bento.map((bento, bentoIndex) => (
-                  <div
-                    key={bentoIndex}
-                    className="bg-green-800/10 border border-green-600/20 rounded-lg p-4"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-green-600 rounded text-white text-xs flex items-center justify-center font-bold">
-                          {bentoIndex + 1}
+                  isEditing ? (
+                    <BentoEditor
+                      key={bentoIndex}
+                      bento={bento}
+                      bentoIndex={bentoIndex}
+                      handlers={handlers as EditFormHandlers}
+                      onRemoveBento={removeBento}
+                      bentoPreviewImages={bentoPreviewImages}
+                    />
+                  ) : (
+                    <div
+                      key={bentoIndex}
+                      className="bg-green-800/10 border border-green-600/20 rounded-lg p-4"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 bg-green-600 rounded text-white text-xs flex items-center justify-center font-bold">
+                            {bentoIndex + 1}
+                          </div>
+                          <span
+                            className="text-white font-semibold"
+                            style={{ fontFamily: "Jakarta Semi Bold" }}
+                          >
+                            Bento {bentoIndex + 1}
+                          </span>
+                          <span className="text-green-300 text-sm">
+                            {bento.lines.length} lignes
+                          </span>
                         </div>
-                        <span
-                          className="text-white font-semibold"
-                          style={{ fontFamily: "Jakarta Semi Bold" }}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            console.log(
+                              "🗑️ Tentative suppression bento",
+                              bentoIndex
+                            );
+                            console.log(
+                              "🔍 Handler removeBento existe?",
+                              "removeBento" in handlers
+                            );
+                            console.log(
+                              "🔍 Bento avant suppression:",
+                              formData.bento.length
+                            );
+                            removeBento(bentoIndex);
+                          }}
+                          className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                          title="Supprimer ce bento"
                         >
-                          Bento {bentoIndex + 1}
-                        </span>
-                        <span className="text-green-300 text-sm">
-                          {bento.lines.length} lignes
-                        </span>
+                          <DeleteIcon className="w-4 h-4" />
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          console.log(
-                            "🗑️ Tentative suppression bento",
-                            bentoIndex
-                          );
-                          console.log(
-                            "🔍 Handler removeBento existe?",
-                            "removeBento" in handlers
-                          );
-                          console.log(
-                            "🔍 Bento avant suppression:",
-                            formData.bento.length
-                          );
-                          removeBento(bentoIndex);
-                        }}
-                        className="text-red-400 hover:text-red-300 transition-colors duration-200"
-                        title="Supprimer ce bento"
-                      >
-                        <DeleteIcon className="w-4 h-4" />
-                      </button>
-                    </div>
 
-                    <div className="space-y-2">
-                      {bento.lines.map((line, lineIndex) => (
-                        <div
-                          key={lineIndex}
-                          className="bg-green-700/10 border border-green-600/20 rounded-lg p-3"
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <span
-                              className="text-white font-medium text-sm"
-                              style={{ fontFamily: "Jakarta Medium" }}
-                            >
-                              📐 {line.format}
-                            </span>
-                            <span className="text-green-300 text-xs">
-                              {line.listImage.length} médias
-                            </span>
-                          </div>
-
-                          {/* Aperçu des médias en grille */}
-                          <div className="grid grid-cols-3 gap-1">
-                            {line.listImage
-                              .slice(0, 6)
-                              .map((image, imgIndex) => (
-                                <div
-                                  key={imgIndex}
-                                  className={`text-xs p-1 rounded text-center truncate relative group ${
-                                    isEditing
-                                      ? "bg-green-800/20 text-green-200 hover:bg-green-700/30"
-                                      : "bg-green-800/20 text-green-200"
-                                  }`}
-                                  style={{ fontFamily: "Jakarta" }}
-                                  title={
-                                    image.startsWith("pending_")
-                                      ? image.replace("pending_", "")
-                                      : image.split("/").pop()
-                                  }
-                                >
-                                  {imgIndex < 5 ? (
-                                    <>🖼️ {imgIndex + 1}</>
-                                  ) : line.listImage.length > 6 ? (
-                                    <>+{line.listImage.length - 5}</>
-                                  ) : (
-                                    <>🖼️ {imgIndex + 1}</>
-                                  )}
-
-                                  {/* Bouton de suppression en mode édition */}
-                                  {isEditing && imgIndex < 5 && (
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        if (
-                                          "removeExistingBentoImage" in handlers
-                                        ) {
-                                          (
-                                            handlers as EditFormHandlers
-                                          ).removeExistingBentoImage(
-                                            bentoIndex,
-                                            lineIndex,
-                                            imgIndex
-                                          );
-                                        }
-                                      }}
-                                      className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                      <span className="text-white text-xs">
-                                        ×
-                                      </span>
-                                    </button>
-                                  )}
-                                </div>
-                              ))}
-                          </div>
-
-                          {/* Actions pour mode édition */}
-                          {isEditing && (
-                            <div className="flex gap-2 mt-2">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if ("removeExistingBentoLine" in handlers) {
-                                    (
-                                      handlers as EditFormHandlers
-                                    ).removeExistingBentoLine(
-                                      bentoIndex,
-                                      lineIndex
-                                    );
-                                  }
-                                }}
-                                className="text-xs bg-red-600/20 hover:bg-red-600/30 text-red-300 px-2 py-1 rounded border border-red-600/30"
+                      <div className="space-y-2">
+                        {bento.lines.map((line, lineIndex) => (
+                          <div
+                            key={lineIndex}
+                            className="bg-green-700/10 border border-green-600/20 rounded-lg p-3"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <span
+                                className="text-white font-medium text-sm"
+                                style={{ fontFamily: "Jakarta Medium" }}
                               >
-                                🗑️ Supprimer ligne
-                              </button>
-                              <input
-                                type="file"
-                                multiple
-                                accept="image/*,video/*"
-                                onChange={(e) => {
-                                  if (
-                                    e.target.files &&
-                                    "addImagesToExistingBento" in handlers
-                                  ) {
-                                    (
-                                      handlers as EditFormHandlers
-                                    ).addImagesToExistingBento(
-                                      bentoIndex,
-                                      e.target.files,
-                                      e.target
-                                    );
-                                  }
-                                }}
-                                className="hidden"
-                                id={`add-to-bento-${bentoIndex}-${lineIndex}`}
-                              />
-                              <label
-                                htmlFor={`add-to-bento-${bentoIndex}-${lineIndex}`}
-                                className="text-xs bg-green-600/20 hover:bg-green-600/30 text-green-300 px-2 py-1 rounded border border-green-600/30 cursor-pointer"
-                              >
-                                📁 Ajouter images
-                              </label>
+                                📐 {line.format}
+                              </span>
+                              <span className="text-green-300 text-xs">
+                                {line.listImage.length} médias
+                              </span>
                             </div>
-                          )}
-                        </div>
-                      ))}
+
+                            {/* Aperçu des médias en grille */}
+                            <div className="grid grid-cols-3 gap-1">
+                              {line.listImage
+                                .slice(0, 6)
+                                .map((image, imgIndex) => (
+                                  <div
+                                    key={imgIndex}
+                                    className="text-xs p-1 rounded text-center truncate relative group bg-green-800/20 text-green-200"
+                                    style={{ fontFamily: "Jakarta" }}
+                                    title={
+                                      image.startsWith("pending_")
+                                        ? image.replace("pending_", "")
+                                        : image.split("/").pop()
+                                    }
+                                  >
+                                    {imgIndex < 5 ? (
+                                      <>🖼️ {imgIndex + 1}</>
+                                    ) : line.listImage.length > 6 ? (
+                                      <>+{line.listImage.length - 5}</>
+                                    ) : (
+                                      <>🖼️ {imgIndex + 1}</>
+                                    )}
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )
                 ))}
               </div>
             </div>

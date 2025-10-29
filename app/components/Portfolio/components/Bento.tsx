@@ -14,7 +14,12 @@ export default function Bento({ bento }: { bento: BentoItem }) {
   }
 
   return bento.lines.map((line, lineIndex) => (
-    <div key={lineIndex} className="gap-4 max-w-[990px] flex m-auto">
+    <div
+      key={lineIndex}
+      className={`gap-4 max-w-[990px] m-auto ${
+        line.format === "2 square" ? "grid grid-cols-2" : "flex"
+      }`}
+    >
       {line.listImage &&
         line.listImage.map((image, imageIndex) => (
           <div
@@ -29,7 +34,7 @@ export default function Bento({ bento }: { bento: BentoItem }) {
                     : line.format === "3 square"
                       ? "w-[319px] h-[319px]"
                       : line.format === "2 square"
-                        ? "grid-cols-2"
+                        ? "w-[483px] h-[483px]"
                         : line.format === "full"
                           ? "h-[557px] w-full"
                           : "aspect-square"
