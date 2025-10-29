@@ -85,7 +85,7 @@ export default function ModalContactMobile({
         >
           <BackgroundModalMobile className="absolute inset-0  w-full h-full z-0 rounded-[20px] object-contain" />
 
-          <form className="relative w-full h-full flex flex-col gap-4 justify-center text-center">
+          <form className="relative w-full h-full flex flex-col gap-4 justify-center text-center z-20">
             <label className="block">
               <span className="text-sm text-white font-jakarta mb-2 block">
                 Nom et prénom*

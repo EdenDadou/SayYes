@@ -43,17 +43,17 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
             initial={{ scaleY: 0, opacity: 0 }}
             animate={{ scaleY: 1, opacity: 1 }}
             exit={{ scaleY: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             className="w-full h-full inset-0 absolute z-0"
             style={{ transformOrigin: "top center" }}
           >
             <BackgroundMenuMobile className="w-full h-full" />
           </motion.div>
           <motion.div
-            initial={{ y: -40, scaleY: 0.95 }}
-            animate={{ y: 0, scaleY: 1 }}
-            exit={{ y: -40, scaleY: 0.95 }}
-            transition={{ duration: 0.1, delay: 0.2, ease: "easeOut" }}
+            initial={{ scaleY: 0.95 }}
+            animate={{ scaleY: 1 }}
+            exit={{ scaleY: 0.95 }}
+            transition={{ duration: 0.1, delay: 0.1, ease: "easeOut" }}
             className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10"
           >
             <div className="font-jakarta text-[14px]">
