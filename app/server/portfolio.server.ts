@@ -36,6 +36,10 @@ export interface PortfolioData {
     entreprise?: string;
   };
   bento: BentoItem[];
+  metaTitle?: string;
+  metaDescription?: string;
+  metaImage?: string;
+  schemaOrg?: string;
 }
 
 export interface PortfolioWithMedia {
@@ -58,6 +62,10 @@ export interface PortfolioWithMedia {
   };
   livrable: string[];
   bento: BentoItem[];
+  metaTitle: string;
+  metaDescription: string;
+  metaImage: string;
+  schemaOrg: string;
   createdAt: Date;
   updatedAt: Date;
   medias: Array<{
@@ -105,6 +113,10 @@ export async function createPortfolio(data: PortfolioData): Promise<string> {
       ...(data.temoignage && { temoignage: JSON.stringify(data.temoignage) }),
       livrable: JSON.stringify(data.livrable),
       bento: JSON.stringify(data.bento),
+      metaTitle: data.metaTitle || "",
+      metaDescription: data.metaDescription || "",
+      metaImage: data.metaImage || "",
+      schemaOrg: data.schemaOrg || "{}",
     },
   });
 
@@ -133,6 +145,18 @@ export async function updatePortfolio(
   }
   if (data.temoignage) {
     updateData.temoignage = JSON.stringify(data.temoignage);
+  }
+  if (data.metaTitle !== undefined) {
+    updateData.metaTitle = data.metaTitle;
+  }
+  if (data.metaDescription !== undefined) {
+    updateData.metaDescription = data.metaDescription;
+  }
+  if (data.metaImage !== undefined) {
+    updateData.metaImage = data.metaImage;
+  }
+  if (data.schemaOrg !== undefined) {
+    updateData.schemaOrg = data.schemaOrg;
   }
 
   await prisma.portfolio.update({
@@ -188,6 +212,10 @@ export async function getPortfolio(
     sousTitre: portfolio.sousTitre,
     topTitle: (portfolio as any).topTitle || "",
     couleur: (portfolio as any).couleur || "",
+    metaTitle: (portfolio as any).metaTitle || "",
+    metaDescription: (portfolio as any).metaDescription || "",
+    metaImage: (portfolio as any).metaImage || "",
+    schemaOrg: (portfolio as any).schemaOrg || "{}",
     createdAt: portfolio.createdAt,
     updatedAt: portfolio.updatedAt,
     livrable: safeParse(portfolio.livrable, []),
@@ -249,6 +277,10 @@ export async function getPortfolioBySlug(
       sousTitre: portfolio.sousTitre || "",
       topTitle: (portfolio as any).topTitle || "",
       couleur: (portfolio as any).couleur || "",
+      metaTitle: (portfolio as any).metaTitle || "",
+      metaDescription: (portfolio as any).metaDescription || "",
+      metaImage: (portfolio as any).metaImage || "",
+      schemaOrg: (portfolio as any).schemaOrg || "{}",
       createdAt: portfolio.createdAt,
       updatedAt: portfolio.updatedAt,
       livrable: safeParse(portfolio.livrable, []),
@@ -308,6 +340,10 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
       sousTitre: portfolio.sousTitre || "",
       topTitle: (portfolio as any).topTitle || "",
       couleur: (portfolio as any).couleur || "",
+      metaTitle: (portfolio as any).metaTitle || "",
+      metaDescription: (portfolio as any).metaDescription || "",
+      metaImage: (portfolio as any).metaImage || "",
+      schemaOrg: (portfolio as any).schemaOrg || "{}",
       createdAt: portfolio.createdAt,
       updatedAt: portfolio.updatedAt,
       livrable: safeParse(portfolio.livrable, []),
@@ -346,6 +382,18 @@ export async function updatePortfolioBySlug(
   }
   if (data.temoignage) {
     updateData.temoignage = JSON.stringify(data.temoignage);
+  }
+  if (data.metaTitle !== undefined) {
+    updateData.metaTitle = data.metaTitle;
+  }
+  if (data.metaDescription !== undefined) {
+    updateData.metaDescription = data.metaDescription;
+  }
+  if (data.metaImage !== undefined) {
+    updateData.metaImage = data.metaImage;
+  }
+  if (data.schemaOrg !== undefined) {
+    updateData.schemaOrg = data.schemaOrg;
   }
 
   await prisma.portfolio.update({

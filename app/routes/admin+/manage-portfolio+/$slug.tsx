@@ -12,14 +12,13 @@ import {
   updatePortfolioBySlug,
   deletePortfolioBySlug,
   isSlugUnique,
-  type PortfolioData,
-  type PortfolioWithMedia,
 } from "~/server/portfolio.server";
 import {
   parseFormData,
   extractPortfolioData,
   processPhotoCouverture,
   processPhotoMain,
+  processMetaImage,
   processBentoFiles,
   validatePortfolioDataAsync,
   createJsonResponse,
@@ -109,6 +108,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
       portfolio.id,
       portfolio.photoMain
     );
+    const metaImage = await processMetaImage(
+      formData,
+      portfolio.id,
+      portfolio.metaImage
+    );
     const updatedBento = await processBentoFiles(
       formData,
       portfolio.id,
@@ -120,6 +124,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       ...portfolioData,
       photoCouverture,
       photoMain,
+      metaImage,
       bento: updatedBento,
     });
 

@@ -19,6 +19,10 @@ export interface PortfolioFormData {
     poste?: string;
   };
   bento: BentoItem[];
+  metaTitle?: string;
+  metaDescription?: string;
+  metaImage?: string;
+  schemaOrg?: string;
 }
 
 // Fonction utilitaire pour parser les champs JSON (client-safe)
@@ -54,6 +58,10 @@ export function initializeFormData(portfolio: any): PortfolioFormData {
       poste: "",
     }),
     bento: parseJsonField(portfolio.bento, []),
+    metaTitle: portfolio.metaTitle || "",
+    metaDescription: portfolio.metaDescription || "",
+    metaImage: portfolio.metaImage || "",
+    schemaOrg: portfolio.schemaOrg || "{}",
   };
 }
 

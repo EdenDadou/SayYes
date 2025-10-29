@@ -60,6 +60,10 @@ export default function FormulaireAdmin({
             poste: "",
           },
           bento: [],
+          metaTitle: "",
+          metaDescription: "",
+          metaImage: "",
+          schemaOrg: "{}",
         }
   );
 
@@ -70,6 +74,9 @@ export default function FormulaireAdmin({
     format: "1/3 - 2/3",
     listImage: [],
   });
+
+  // État pour les onglets
+  const [activeTab, setActiveTab] = useState<"general" | "seo">("general");
 
   // États pour les aperçus et uploads - même technique que les bento
   const [photoCouverturePreview, setPhotoCouverturePreview] = useState<
@@ -90,6 +97,16 @@ export default function FormulaireAdmin({
     Map<string, File>
   >(new Map());
   const [photoMainFile, setPhotoMainFile] = useState<Map<string, File>>(
+    new Map()
+  );
+  const [metaImagePreview, setMetaImagePreview] = useState<
+    { url: string; name: string }[]
+  >(
+    initialData?.metaImage && initialData.metaImage !== ""
+      ? [{ url: initialData.metaImage, name: "Meta Image" }]
+      : []
+  );
+  const [metaImageFile, setMetaImageFile] = useState<Map<string, File>>(
     new Map()
   );
   const [bentoPreviewImages, setBentoPreviewImages] = useState<
@@ -151,6 +168,10 @@ export default function FormulaireAdmin({
         poste: "",
       },
       bento: [],
+      metaTitle: "",
+      metaDescription: "",
+      metaImage: "",
+      schemaOrg: "{}",
     };
     setFormData(emptyData);
     setCurrentLivrable("");
@@ -160,6 +181,8 @@ export default function FormulaireAdmin({
     setPhotoMainPreview([]);
     setPhotoCouvertureFile(new Map());
     setPhotoMainFile(new Map());
+    setMetaImagePreview([]);
+    setMetaImageFile(new Map());
     setBentoPreviewImages([]);
     setBentoFiles(new Map());
     setIsUploadingFiles(false);
@@ -278,6 +301,52 @@ export default function FormulaireAdmin({
     return inputs;
   };
 
+  // Handler pour l'upload de la meta image
+  const handleMetaImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const url = URL.createObjectURL(file);
+      setMetaImagePreview([{ url, name: file.name }]);
+      setMetaImageFile(new Map([[file.name, file]]));
+      // Mettre à jour formData avec une valeur temporaire
+      setFormData((prev) => ({
+        ...prev,
+        metaImage: `pending_${file.name}`,
+      }));
+    }
+  };
+
+  const removeMetaImagePreview = () => {
+    metaImagePreview.forEach((preview) => URL.revokeObjectURL(preview.url));
+    setMetaImagePreview([]);
+    setMetaImageFile(new Map());
+    setFormData((prev) => ({ ...prev, metaImage: "" }));
+  };
+
+  // Fonction pour générer l'input file pour la meta image
+  const renderMetaImageFileInput = () => {
+    const inputs: React.ReactElement[] = [];
+    metaImageFile.forEach((file, fileName) => {
+      inputs.push(
+        <input
+          key={`metaImageFile_${fileName}`}
+          type="file"
+          name="metaImageFile"
+          style={{ display: "none" }}
+          ref={(input) => {
+            if (input) {
+              const dt = new DataTransfer();
+              dt.items.add(file);
+              input.files = dt.files;
+            }
+          }}
+        />
+      );
+    });
+    return inputs;
+  };
+
   return (
     <div>
       {/* Messages de feedback */}
@@ -323,10 +392,68 @@ export default function FormulaireAdmin({
         {renderBentoFileInputs()}
         {/* Inputs file dynamiques pour les photos principales */}
         {renderMainPhotoFileInputs()}
+        {/* Input file dynamique pour la meta image */}
+        {renderMetaImageFileInput()}
         {formData.categories.map((category, index) => (
           <input key={index} type="hidden" name="categories" value={category} />
         ))}
+        {/* Inputs cachés pour les champs généraux (seulement si on est dans l'onglet SEO) */}
+        {activeTab === "seo" && (
+          <>
+            <input type="hidden" name="titre" value={formData.titre} />
+            <input type="hidden" name="slug" value={formData.slug} />
+            <input type="hidden" name="description" value={formData.description} />
+            <input type="hidden" name="kicker" value={formData.kicker} />
+            <input type="hidden" name="sousTitre" value={formData.sousTitre} />
+            <input type="hidden" name="topTitle" value={formData.topTitle} />
+            <input type="hidden" name="couleur" value={formData.couleur} />
+            <input type="hidden" name="temoignageAuteur" value={formData.temoignage.auteur} />
+            <input type="hidden" name="temoignageContenu" value={formData.temoignage.contenu} />
+            <input type="hidden" name="temoignagePoste" value={formData.temoignage.poste || ""} />
+            {formData.livrable.map((livrable, index) => (
+              <input key={`livrable-hidden-${index}`} type="hidden" name="livrable" value={livrable} />
+            ))}
+          </>
+        )}
+        {/* Inputs cachés pour les champs SEO */}
+        {isEditing && formData.metaImage && !formData.metaImage.startsWith("pending_") && (
+          <input type="hidden" name="metaImageUrl" value={formData.metaImage} />
+        )}
+        <input type="hidden" name="metaTitle" value={formData.metaTitle || ""} />
+        <input type="hidden" name="metaDescription" value={formData.metaDescription || ""} />
+        <input type="hidden" name="schemaOrg" value={formData.schemaOrg || "{}"} />
 
+        {/* Système d'onglets */}
+        <div className="flex gap-2 border-b border-gray-700 mb-8">
+          <button
+            type="button"
+            onClick={() => setActiveTab("general")}
+            className={`px-6 py-3 font-semibold transition-all duration-200 ${
+              activeTab === "general"
+                ? "text-white border-b-2 border-blue-500"
+                : "text-gray-400 hover:text-gray-300"
+            }`}
+            style={{ fontFamily: "Jakarta Semi Bold" }}
+          >
+            Informations générales
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("seo")}
+            className={`px-6 py-3 font-semibold transition-all duration-200 ${
+              activeTab === "seo"
+                ? "text-white border-b-2 border-blue-500"
+                : "text-gray-400 hover:text-gray-300"
+            }`}
+            style={{ fontFamily: "Jakarta Semi Bold" }}
+          >
+            SEO
+          </button>
+        </div>
+
+        {/* Contenu de l'onglet Général */}
+        {activeTab === "general" && (
+          <>
         <InputGroup title="Informations générales">
           {/* Top Title et Titre côte à côte */}
           <div className="lg:col-span-1">
@@ -1020,6 +1147,119 @@ export default function FormulaireAdmin({
             </div>
           )}
         </div>
+          </>
+        )}
+
+        {/* Contenu de l'onglet SEO */}
+        {activeTab === "seo" && (
+          <InputGroup title="Paramètres SEO">
+            <div className="lg:col-span-2">
+              <InputAdmin
+                type="text"
+                id="metaTitle"
+                name="metaTitle"
+                label="Meta Title"
+                placeholder="Titre pour les moteurs de recherche (recommandé : 50-60 caractères)"
+                value={formData.metaTitle || ""}
+                onChange={(value) =>
+                  handleInputChange({
+                    target: { name: "metaTitle", value },
+                  } as any)
+                }
+              />
+              {formData.metaTitle && (
+                <p className="mt-1 text-xs text-gray-400" style={{ fontFamily: "Jakarta" }}>
+                  {formData.metaTitle.length} caractères
+                </p>
+              )}
+            </div>
+
+            <div className="lg:col-span-2">
+              <InputAdmin
+                type="textarea"
+                id="metaDescription"
+                name="metaDescription"
+                label="Meta Description"
+                placeholder="Description pour les moteurs de recherche (recommandé : 150-160 caractères)"
+                value={formData.metaDescription || ""}
+                onChange={(value) =>
+                  handleInputChange({
+                    target: { name: "metaDescription", value },
+                  } as any)
+                }
+                rows={3}
+              />
+              {formData.metaDescription && (
+                <p className="mt-1 text-xs text-gray-400" style={{ fontFamily: "Jakarta" }}>
+                  {formData.metaDescription.length} caractères
+                </p>
+              )}
+            </div>
+
+            <div className="lg:col-span-2">
+              <InputAdmin
+                type="file"
+                id="metaImageFile"
+                name="metaImageFile"
+                label="Meta Image"
+                accept="image/*"
+                onChange={(value) => {
+                  if (value instanceof File) {
+                    const fakeEvent = {
+                      target: { files: [value] },
+                    } as unknown as React.ChangeEvent<HTMLInputElement>;
+                    handleMetaImageChange(fakeEvent);
+                  }
+                }}
+                previews={metaImagePreview}
+                onRemovePreview={removeMetaImagePreview}
+              />
+              <p className="mt-2 text-xs text-gray-400" style={{ fontFamily: "Jakarta" }}>
+                💡 Image utilisée pour le partage sur les réseaux sociaux (Open Graph, Twitter Card)
+              </p>
+            </div>
+
+            <div className="lg:col-span-2">
+              <InputAdmin
+                type="textarea"
+                id="schemaOrg"
+                name="schemaOrg"
+                label="Schema.org (JSON-LD)"
+                placeholder='{"@context": "https://schema.org", "@type": "CreativeWork", ...}'
+                value={formData.schemaOrg || "{}"}
+                onChange={(value) =>
+                  handleInputChange({
+                    target: { name: "schemaOrg", value },
+                  } as any)
+                }
+                rows={8}
+              />
+              <div className="mt-3 p-3 bg-blue-900/20 border border-blue-700/30 rounded-lg">
+                <p
+                  className="text-sm text-blue-300 mb-2"
+                  style={{ fontFamily: "Jakarta" }}
+                >
+                  💡 <strong>Aide Schema.org :</strong>
+                </p>
+                <p
+                  className="text-xs text-blue-200"
+                  style={{ fontFamily: "Jakarta" }}
+                >
+                  Insérez ici le JSON-LD de votre schema.org. Exemple pour un CreativeWork :
+                </p>
+                <pre className="mt-2 text-xs bg-blue-800/30 p-2 rounded text-blue-100 overflow-x-auto">
+{`{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Nom du projet",
+  "description": "Description",
+  "image": "URL de l'image"
+}`}
+                </pre>
+              </div>
+            </div>
+          </InputGroup>
+        )}
 
         {/* Boutons de soumission */}
         <div className="flex gap-4 justify-end">

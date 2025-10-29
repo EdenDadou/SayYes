@@ -23,6 +23,7 @@ import {
   extractPortfolioData,
   processPhotoCouverture,
   processPhotoMain,
+  processMetaImage,
   processBentoFiles,
   validatePortfolioDataAsync,
   createJsonResponse,
@@ -162,6 +163,10 @@ export async function action({ request }: ActionFunctionArgs) {
     const photoMain = await processPhotoMain(formData, portfolioId);
     console.log("✅ Photo main traitée:", photoMain);
 
+    console.log("📸 Traitement de la meta image...");
+    const metaImage = await processMetaImage(formData, portfolioId);
+    console.log("✅ Meta image traitée:", metaImage);
+
     console.log("🎯 Traitement des fichiers bento...");
     const updatedBento = await processBentoFiles(
       formData,
@@ -175,6 +180,7 @@ export async function action({ request }: ActionFunctionArgs) {
     await updatePortfolio(portfolioId, {
       photoCouverture,
       photoMain,
+      metaImage,
       bento: updatedBento,
     });
 

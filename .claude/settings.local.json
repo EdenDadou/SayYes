@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

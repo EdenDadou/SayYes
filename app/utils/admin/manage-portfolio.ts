@@ -102,6 +102,19 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
     console.log("⚠️ Aucune photo de couverture trouvée");
   }
 
+  // Extraction de la meta image (priorité au fichier uploadé)
+  let metaImage = (formData.get("metaImageUrl") as string) || "";
+  const metaImageFile = formData.get("metaImageFile") as File | null;
+
+  if (metaImageFile && metaImageFile.size > 0) {
+    console.log("📸 Fichier meta image détecté:", metaImageFile.name);
+    metaImage = "temp_" + metaImageFile.name; // URL temporaire
+  } else if (metaImage) {
+    console.log("📸 URL meta image:", metaImage);
+  } else {
+    console.log("ℹ️ Aucune meta image trouvée");
+  }
+
   const extractedData = {
     titre: (formData.get("titre") as string) || "",
     categories: categories,
@@ -130,7 +143,18 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
         return [];
       }
     })(),
+    metaTitle: (formData.get("metaTitle") as string) || "",
+    metaDescription: (formData.get("metaDescription") as string) || "",
+    metaImage: metaImage,
+    schemaOrg: (formData.get("schemaOrg") as string) || "{}",
   };
+
+  console.log("🔍 Champs SEO extraits:", {
+    metaTitle: extractedData.metaTitle,
+    metaDescription: extractedData.metaDescription,
+    metaImage: extractedData.metaImage,
+    schemaOrg: extractedData.schemaOrg,
+  });
 
   return extractedData;
 }
@@ -198,6 +222,27 @@ export async function processPhotoMain(
   }
 
   return photoMain;
+}
+
+/**
+ * Traite l'upload de la meta image
+ */
+export async function processMetaImage(
+  formData: FormData,
+  portfolioId: string,
+  currentUrl?: string
+): Promise<string> {
+  let metaImage = currentUrl || (formData.get("metaImageUrl") as string) || "";
+  const metaImageFile = formData.get("metaImageFile") as File | null;
+
+  if (metaImageFile && metaImageFile.size > 0) {
+    console.log("📸 Traitement du fichier meta image:", metaImageFile.name);
+    const savedMedia = await saveMedia(metaImageFile, "portfolio", portfolioId);
+    metaImage = savedMedia.url;
+    console.log("✅ Meta image sauvegardée:", metaImage);
+  }
+
+  return metaImage;
 }
 
 /**

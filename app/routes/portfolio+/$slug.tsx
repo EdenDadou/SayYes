@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import {
   getPortfolioBySlug,
@@ -44,6 +44,74 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Erreur interne du serveur", { status: 500 });
   }
 }
+
+// Meta fonction pour les métadonnées SEO
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data?.portfolio) {
+    return [
+      { title: "Portfolio non trouvé - SayYes" },
+      { name: "description", content: "Ce portfolio n'existe pas." },
+    ];
+  }
+
+  const { portfolio } = data;
+
+  // Préparer les métadonnées de base
+  const metaTitle = portfolio.metaTitle || `${portfolio.titre} - SayYes`;
+  const metaDescription = portfolio.metaDescription || portfolio.description || `Découvrez le projet ${portfolio.titre}`;
+
+  // Construire l'URL complète de l'image
+  const baseUrl = "https://vps-f16913b8.vps.ovh.net";
+  const imageRelativePath = portfolio.metaImage || portfolio.photoMain || portfolio.photoCouverture;
+  const metaImage = imageRelativePath.startsWith('http')
+    ? imageRelativePath
+    : `${baseUrl}${imageRelativePath}`;
+
+  // URL complète de la page
+  const url = `${baseUrl}/portfolio/${portfolio.slug}`;
+
+  // Parser le Schema.org si présent
+  let schemaOrgScript = null;
+  if (portfolio.schemaOrg && portfolio.schemaOrg !== "{}") {
+    try {
+      const schemaData = JSON.parse(portfolio.schemaOrg);
+      schemaOrgScript = {
+        "script:ld+json": schemaData,
+      };
+    } catch (e) {
+      console.error("Erreur lors du parsing du Schema.org:", e);
+    }
+  }
+
+  const metaTags = [
+    // Métadonnées de base
+    { title: metaTitle },
+    { name: "description", content: metaDescription },
+
+    // Open Graph / Facebook
+    { property: "og:title", content: metaTitle },
+    { property: "og:description", content: metaDescription },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: url },
+    { property: "og:image", content: metaImage },
+
+    // Twitter Card
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: metaTitle },
+    { name: "twitter:description", content: metaDescription },
+    { name: "twitter:image", content: metaImage },
+
+    // Métadonnées supplémentaires
+    { name: "keywords", content: portfolio.categories.join(", ") },
+  ];
+
+  // Ajouter le Schema.org si présent
+  if (schemaOrgScript) {
+    metaTags.push(schemaOrgScript as any);
+  }
+
+  return metaTags;
+};
 
 export default function PortfolioSlug() {
   const { portfolio, allPortfolios } = useLoaderData<typeof loader>();
