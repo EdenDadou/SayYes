@@ -6,6 +6,7 @@ interface CardProps {
   content?: React.ReactNode;
   borderClass?: string;
   children?: React.ReactNode;
+  borderRadius?: string;
 }
 
 export default function Card({
@@ -13,9 +14,10 @@ export default function Card({
   height,
   borderClass,
   children,
+  borderRadius = "24px",
 }: CardProps) {
   const containerClasses = cn(
-    "md:border-custom-thin border-custom-mobile w-full md:rounded-[24px] rounded-[16px]",
+    `md:border-custom-thin border-custom-mobile w-full md:rounded-[${borderRadius}] rounded-[16px]`,
     borderClass
   );
 

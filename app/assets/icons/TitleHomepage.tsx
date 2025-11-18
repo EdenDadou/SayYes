@@ -1,8 +1,7 @@
 import type { SVGProps } from "react";
 const TitleHomepage = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={932}
-    height={203}
+    viewBox="0 0 932 203"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"

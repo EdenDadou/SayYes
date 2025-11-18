@@ -213,3 +213,28 @@
     opacity: 0.4;
   }
 }
+
+.glassy {
+  background: linear-gradient(
+    90deg,
+    rgba(153, 149, 197, 0.77) 0%,
+    rgba(255, 255, 255, 0.94) 25%,
+    #fff 50%,
+    #9995c5 75%,
+    rgba(153, 149, 197, 0.77) 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glassy-shimmer 3s linear infinite;
+}
+
+@keyframes glassy-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
