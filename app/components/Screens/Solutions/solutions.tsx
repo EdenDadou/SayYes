@@ -1,7 +1,7 @@
 import Card from "~/components/Card";
-import { solutionsCards } from "~/components/Solutions/data";
+import { solutionsCards } from "~/components/Screens/Solutions/data";
 import { useViewport } from "~/utils/hooks/useViewport";
-import SolutionTitleMobile from "~/components/Solutions/components/SolutionTitleMobile";
+import SolutionTitleMobile from "~/components/Screens/Solutions/components/SolutionTitleMobile";
 import Star from "~/assets/icons/Star";
 import Desktoplayout from "~/components/Layout/Desktop";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";

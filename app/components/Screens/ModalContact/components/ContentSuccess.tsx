@@ -1,12 +1,12 @@
 import Close from "~/assets/icons/Close";
-import Card from "../../Card";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Coche from "~/assets/icons/Coche";
 import ArrowFull from "~/assets/icons/ArrowFull";
 import Masque from "~/components/Card/components/Solution/Masque";
-import MasqueGif from "~/components/404/MasqueGif";
+import MasqueGif from "~/components/Screens/404/MasqueGif";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "~/components/Button";
+import Card from "~/components/Card";
 
 interface ContentSuccessProps {
   setSuccess: (success: boolean) => void;

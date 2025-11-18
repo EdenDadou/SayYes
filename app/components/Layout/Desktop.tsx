@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import Header from "~/components/Header";
 import { useState } from "react";
-import ModalContact from "~/components/ModalContact";
+import ModalContact from "~/components/Screens/ModalContact";
 import Footer from "~/components/Footer";
 import "~/styles/tailwind.css";
 import { AnimatePresence, motion } from "framer-motion";

@@ -1,17 +1,16 @@
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import Coche from "~/assets/icons/Coche";
-import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
-import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
-import PhotoMain from "~/components/Portfolio/components/PhotoMain";
-import ProjectCarousel from "~/components/Portfolio/components/ProjectCarousel";
-import "~/styles/tailwind.css";
-import BackgroundProject3 from "~/components/PortfolioProject/BackgroundProject3";
+import BackgroundProject1 from "~/components/Screens/PortfolioProject/BackgroundProject1";
+import BackgroundProject2 from "~/components/Screens/PortfolioProject/BackgroundProject2";
+import PhotoMain from "~/components/Screens/Portfolio/components/PhotoMain";
+import BackgroundProject3 from "~/components/Screens/PortfolioProject/BackgroundProject3";
 import MobileLayout from "~/components/Layout/Mobile";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 import NoteStar from "~/assets/icons/NoteStar";
-import BentoMobile from "~/components/Portfolio/components/BentoMobile";
-import ProjectCarouselMobile from "~/components/Portfolio/components/ProjetCarrouselMobile";
+import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
+import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
+import "~/styles/tailwind.css";
 
 export default function PortfolioProjectMobile({
   portfolio,

@@ -1,4 +1,4 @@
-import ContentSolution from "../Card/components/Solution/ContentSolution";
+import ContentSolution from "~/components/Card/components/Solution/ContentSolution";
 
 export const solutionsCards = [
   {

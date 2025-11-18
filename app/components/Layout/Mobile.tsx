@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import HeaderMobile from "../Header/components/HeaderMobile";
 import "~/styles/tailwind.css";
 import FooterMobile from "../Footer/mobile/FooterMobile";
-import ModalContactMobile from "../ModalContact/ModalContactMobile";
+import ModalContactMobile from "../Screens/ModalContact/ModalContactMobile";
 import MenuMobile from "../Header/components/MenuMobile";
 import { AnimatePresence, motion } from "framer-motion";
 

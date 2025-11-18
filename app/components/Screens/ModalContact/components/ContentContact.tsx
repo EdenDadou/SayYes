@@ -11,7 +11,7 @@ import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
 import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Button from "~/components/Button";
 import { useFetcher } from "@remix-run/react";
 import { useEffect } from "react";

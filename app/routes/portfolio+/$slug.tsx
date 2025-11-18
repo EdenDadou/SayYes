@@ -7,18 +7,18 @@ import {
 import { useViewport } from "~/utils/hooks/useViewport";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
-import BackgroundProject1 from "~/components/PortfolioProject/BackgroundProject1";
-import BackgroundProject2 from "~/components/PortfolioProject/BackgroundProject2";
-import PhotoMain from "~/components/Portfolio/components/PhotoMain";
+import BackgroundProject1 from "~/components/Screens/PortfolioProject/BackgroundProject1";
+import BackgroundProject2 from "~/components/Screens/PortfolioProject/BackgroundProject2";
+import PhotoMain from "~/components/Screens/Portfolio/components/PhotoMain";
 import Desktoplayout from "~/components/Layout/Desktop";
-import Bento from "~/components/Portfolio/components/Bento";
-import ProjectCarousel from "~/components/Portfolio/components/ProjectCarousel";
+import Bento from "~/components/Screens/Portfolio/components/Bento";
+import ProjectCarousel from "~/components/Screens/Portfolio/components/ProjectCarousel";
 import "~/styles/tailwind.css";
-import PortfolioProjectMobile from "~/components/PortfolioProject/mobile/PortfolioProjectMobile";
+import PortfolioProjectMobile from "~/components/Screens/PortfolioProject/mobile/PortfolioProjectMobile";
 import Coche from "~/assets/icons/Coche";
 import NoteStar from "~/assets/icons/NoteStar";
 import Star from "~/assets/icons/Star";
-import BackgroundProject3 from "~/components/PortfolioProject/BackgroundProject3";
+import BackgroundProject3 from "~/components/Screens/PortfolioProject/BackgroundProject3";
 
 // Loader pour récupérer le portfolio par slug
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -58,12 +58,16 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
   // Préparer les métadonnées de base
   const metaTitle = portfolio.metaTitle || `${portfolio.titre} - SayYes`;
-  const metaDescription = portfolio.metaDescription || portfolio.description || `Découvrez le projet ${portfolio.titre}`;
+  const metaDescription =
+    portfolio.metaDescription ||
+    portfolio.description ||
+    `Découvrez le projet ${portfolio.titre}`;
 
   // Construire l'URL complète de l'image
   const baseUrl = "https://vps-f16913b8.vps.ovh.net";
-  const imageRelativePath = portfolio.metaImage || portfolio.photoMain || portfolio.photoCouverture;
-  const metaImage = imageRelativePath.startsWith('http')
+  const imageRelativePath =
+    portfolio.metaImage || portfolio.photoMain || portfolio.photoCouverture;
+  const metaImage = imageRelativePath.startsWith("http")
     ? imageRelativePath
     : `${baseUrl}${imageRelativePath}`;
 

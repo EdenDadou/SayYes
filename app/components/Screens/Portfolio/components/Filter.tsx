@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Coche from "../../../assets/icons/Coche";
+import Coche from "~/assets/icons/Coche";
 import { useViewport } from "~/utils/hooks/useViewport";
 const filterList = [
   { value: "all", label: "Tous" },

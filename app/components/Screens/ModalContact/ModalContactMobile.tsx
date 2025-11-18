@@ -1,18 +1,18 @@
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Close from "~/assets/icons/Close";
-import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
 import Tel from "~/assets/icons/Tel";
 import ArrowFull from "~/assets/icons/ArrowFull";
-import Card from "../Card";
 import BackgroundModalMobile from "./assets/BackgroundModalMobile";
 import "~/styles/tailwind.css";
-import SvgBtnLinkedin from "../Footer/components/BtnLinkedin";
-import SvgBtnFacebook from "../Footer/components/BtnFacebook";
-import SvgBtnInstagram from "../Footer/components/BtnInstagram";
-import SvgBtnTiktok from "../Footer/components/BtnTiktok";
-import SvgBtnYoutube from "../Footer/components/BtnYoutube";
-import Button from "../Button";
+import ChatBuble from "~/components/Header/assets/ChatBuble";
+import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
+import SvgBtnFacebook from "~/components/Footer/components/BtnFacebook";
+import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
+import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
+import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
+import Card from "~/components/Card";
+import Button from "~/components/Button";
 
 interface ModalModalContactProps {
   isOpen: boolean;

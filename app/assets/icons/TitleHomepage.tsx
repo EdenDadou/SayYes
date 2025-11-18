@@ -1,6 +1,5 @@
-import * as React from "react";
 import type { SVGProps } from "react";
-const SvgTitleHomepage = (props: SVGProps<SVGSVGElement>) => (
+const TitleHomepage = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width={932}
     height={203}
@@ -11,7 +10,6 @@ const SvgTitleHomepage = (props: SVGProps<SVGSVGElement>) => (
   >
     <foreignObject x={-345.92} y={-310.762} width={1591.83} height={858.728}>
       <div
-        xmlns="http://www.w3.org/1999/xhtml"
         style={{
           backdropFilter: "blur(172.96px)",
           clipPath: "url(#bgblur_0_1880_10318_clip_path)",
@@ -118,4 +116,4 @@ const SvgTitleHomepage = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
-export default SvgTitleHomepage;
+export default TitleHomepage;
