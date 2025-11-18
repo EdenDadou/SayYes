@@ -6,9 +6,9 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import * as styles from "./styles/index.css";
-import Page404 from "./components/404";
+import Page404 from "./components/Screens/404";
 import { useViewport } from "./utils/hooks/useViewport";
-import Page404Mobile from "./components/404/mobile/Page404Mobile";
+import Page404Mobile from "./components/Screens/404/mobile/Page404Mobile";
 
 export function links() {
   return styles;

@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git checkout:*)",
       "Bash(npx prisma migrate dev:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(test:*)",
+      "Bash(npx chrome-devtools-mcp@latest:*)"
     ],
     "deny": [],
     "ask": []
