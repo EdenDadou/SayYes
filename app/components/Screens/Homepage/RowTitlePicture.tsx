@@ -14,7 +14,7 @@ export default function RowTitlePicture() {
   ) : (
     <div className="w-screen">
       <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0" />
-      <section className="relative z-10 md:w-[988px] mx-auto flex flex-row gap-16 py-32">
+      <section className="relative z-10 md:w-[988px] mx-auto flex flex-row gap-16 pt-32 pb-20">
         <div className="w-2/5 flex flex-col gap-8">
           <div className="h-[3px] md:w-20 w-20 holographic-bg rounded-full" />
           <h2 className="glassy font-jakarta-semi-bold text-[56px] text-start leading-[56px] tracking-[-2px] weight-600 whitespace-pre-line">

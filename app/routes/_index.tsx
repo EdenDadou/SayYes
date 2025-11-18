@@ -19,6 +19,9 @@ import BackgroundTitleCards from "~/assets/icons/BackgroundTitleCards";
 import BacgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import RowTitlePicture from "~/components/Screens/Homepage/RowTitlePicture";
+import SvgBackgroundTemoignage from "~/assets/icons/BackgroundTemoignage";
+import BackgroundTemoignage from "~/assets/icons/BackgroundTemoignage";
+import Temoignage from "~/components/Screens/Homepage/Temoignage";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -54,17 +57,8 @@ export default function Index() {
         {/* //Section 3 */}
         <RowTitlePicture />
         {/* //Section 4 */}
-        <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16">
-          <img src="" />
-          <p className="text-center font-jakarta text-[36px] leading-[44px] whitespace-pre-line">
-            {`L'expérience se résume ainsi :\n On a envie de recommencer ! Ils sont très 
-            professionnels, disponibles, fiables et fournissent
-            un travail de grande qualité. Je ne compte plus les
-            personnes qui m'ont félicité de mon choix de les
-            avoir engagés ou qui me demandent leur
-            coordonnées."`}
-          </p>
-        </section>
+        <Temoignage />
+        {/* //Section 5 */}
       </div>
     </Desktoplayout>
   );
