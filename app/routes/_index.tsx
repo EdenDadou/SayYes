@@ -22,6 +22,7 @@ import RowTitlePicture from "~/components/Screens/Homepage/RowTitlePicture";
 import SvgBackgroundTemoignage from "~/assets/icons/BackgroundTemoignage";
 import BackgroundTemoignage from "~/assets/icons/BackgroundTemoignage";
 import Temoignage from "~/components/Screens/Homepage/Temoignage";
+import CarouselCard from "~/components/Screens/Homepage/CarrouselCard";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -59,6 +60,7 @@ export default function Index() {
         {/* //Section 4 */}
         <Temoignage />
         {/* //Section 5 */}
+        <CarouselCard />
       </div>
     </Desktoplayout>
   );

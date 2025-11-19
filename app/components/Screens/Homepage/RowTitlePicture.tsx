@@ -13,7 +13,7 @@ export default function RowTitlePicture() {
     </MobileLayout>
   ) : (
     <div className="w-screen">
-      <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0" />
+      <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-1/2" />
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-row gap-16 pt-32 pb-20">
         <div className="w-2/5 flex flex-col gap-8">
           <div className="h-[3px] md:w-20 w-20 holographic-bg rounded-full" />
