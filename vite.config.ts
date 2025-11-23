@@ -39,13 +39,22 @@ export default defineConfig({
     target: "esnext", // Utilise les dernières fonctionnalités ES
     outDir: "dist", // Répertoire de sortie
     sourcemap: false, // Désactiver les sourcemaps en production pour de meilleures performances
-    chunkSizeWarningLimit: 500, // Alerte si un chunk dépasse 500KB
+    chunkSizeWarningLimit: 2000, // Alerte si un chunk dépasse 2MB (augmenté pour les gros SVG)
     rollupOptions: {
       output: {
         // Cache-busting pour les fichiers JS/CSS
         entryFileNames: "assets/[name].[hash].js",
         chunkFileNames: "assets/[name].[hash].js",
         assetFileNames: "assets/[name].[hash][extname]",
+        // Code splitting manuel pour les gros composants SVG
+        manualChunks(id) {
+          // Sépare les gros composants SVG dans leurs propres chunks
+          if (id.includes("BackgroundHomepage") || 
+              id.includes("BacgroundSideLueur") || 
+              id.includes("BackgroundTemoignage")) {
+            return "background-assets";
+          }
+        },
       },
     },
   },
@@ -68,7 +77,10 @@ export default defineConfig({
     // Plugin pour gérer les chemins de tsconfig
     tsconfigPaths(),
     svgr(), // Ajout du plugin SVG
-    svgo(),
+    svgo({
+      // Configuration SVGO pour optimiser les SVG volumineux
+      multipass: true, // Passe multiple pour une meilleure optimisation
+    }),
 
     // Plugin pour compresser les images en production - disabled due to macOS compilation issues
     // You can enable this later with alternative image optimization solutions

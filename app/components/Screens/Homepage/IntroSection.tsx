@@ -3,9 +3,12 @@ import { useViewport } from "~/utils/hooks/useViewport";
 import MobileLayout from "~/components/Layout/Mobile";
 import Desktoplayout from "~/components/Layout/Desktop";
 import { AnimatePresence, motion } from "framer-motion";
-import BackgroundHomepage from "~/assets/icons/BackgroundHomepage";
+import { lazy, Suspense } from "react";
 import TitleHomepage from "~/assets/icons/TitleHomepage";
 import ArrowLight from "~/assets/icons/ArrowLight";
+
+// Lazy load du composant Background volumineux
+const BackgroundHomepage = lazy(() => import("~/assets/icons/BackgroundHomepage"));
 import "~/styles/tailwind.css";
 import Arrow from "~/assets/icons/Arrow";
 import Button from "~/components/Button";
@@ -53,7 +56,9 @@ export default function IntroSection() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
         >
-          <BackgroundHomepage className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" />
+          <Suspense fallback={<div className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" />}>
+            <BackgroundHomepage className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" />
+          </Suspense>
         </motion.div>
       </AnimatePresence>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16">

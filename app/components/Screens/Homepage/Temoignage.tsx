@@ -1,7 +1,10 @@
 import { useViewport } from "~/utils/hooks/useViewport";
+import { lazy, Suspense } from "react";
 import MobileLayout from "~/components/Layout/Mobile";
-import BackgroundTemoignage from "~/assets/icons/BackgroundTemoignage";
 import "~/styles/tailwind.css";
+
+// Lazy load du composant Background volumineux
+const BackgroundTemoignage = lazy(() => import("~/assets/icons/BackgroundTemoignage"));
 
 export default function Temoignage() {
   const isMobile = useViewport();
@@ -12,7 +15,9 @@ export default function Temoignage() {
     </MobileLayout>
   ) : (
     <div className="w-screen relative">
-      <BackgroundTemoignage className="absolute right-0 h-auto z-0" />
+      <Suspense fallback={<div className="absolute right-0 h-auto z-0" />}>
+        <BackgroundTemoignage className="absolute right-0 h-auto z-0" />
+      </Suspense>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-8 py-52">
         <img src="./images/homepage/logo-generali.png" alt="logo Generali" />
         <p className="text-center font-jakarta-sans text-[36px] leading-[44px] whitespace-pre-line">

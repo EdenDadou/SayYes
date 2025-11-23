@@ -1,9 +1,14 @@
 import { useViewport } from "~/utils/hooks/useViewport";
+import { lazy, Suspense } from "react";
 import MobileLayout from "~/components/Layout/Mobile";
 import Card from "~/components/Card";
 import "~/styles/tailwind.css";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
+
+// Lazy load du composant Background volumineux
+const BackgroundSideLueur = lazy(
+  () => import("~/assets/icons/BacgroundSideLueur")
+);
 
 interface ITitleCardsProps {
   title: string;
@@ -37,8 +42,12 @@ export default function TitleCards({
   ) : (
     <div className="w-screen">
       <div className="mt-20 absolute left-0 right-0 h-auto z-0 opacity-80 flex flex-row justify-between w-screen">
-        <BackgroundSideLueur className="scale-x-[-1]" />
-        <BackgroundSideLueur />
+        <Suspense fallback={<div className="scale-x-[-1]" />}>
+          <BackgroundSideLueur className="scale-x-[-1]" />
+        </Suspense>
+        <Suspense fallback={<div />}>
+          <BackgroundSideLueur />
+        </Suspense>
       </div>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16 pt-48 pb-14">
         <div className="flex flex-col items-center w-[988px] justify-center gap-10">
@@ -129,7 +138,7 @@ export const CardBottomIdentiteVisuelle = {
   content: (
     <div className="h-full w-full relative shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[24px]">
       <div
-        className="absolute inset-3 w-[calc(100%-1rem)] h-[calc(100%-1rem)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[20px]"
+        className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[20px]"
         style={{
           backgroundImage: 'url("images/homepage/bottom-card-bg.png")',
         }}
