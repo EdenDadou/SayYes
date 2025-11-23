@@ -4,9 +4,21 @@ import Card from "~/components/Card";
 import Arrow from "~/assets/icons/Arrow";
 import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import "~/styles/tailwind.css";
+import { AnimatedCard } from "~/components/Card/AnimatedCard";
+import { useInView, useScroll, useTransform, motion } from "framer-motion";
+import { useRef } from "react";
 
 export default function CarouselCard() {
   const isMobile = useViewport();
+
+  const container = useRef(null);
+  const horizontalRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: container,
+  });
+
+  const x = useTransform(scrollYProgress, [0, 0.8], ["5%", "-20%"]);
 
   return isMobile ? (
     <MobileLayout>
@@ -16,35 +28,51 @@ export default function CarouselCard() {
     <div className="w-screen relative">
       <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80" />
       <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%]" />
-      <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-8 py-52">
-        <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
-        <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
-          {`Nous designons tous vos\n supports de communication !`}
-        </h2>
-        <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
-          <p>Branding</p>
-          <Arrow className="w-4" />
-          <p>Print</p>
-          <Arrow className="w-4" />
-          <p>Digital</p>
-          <Arrow className="w-4" />
-          <p>Vidéo</p>
-          <Arrow className="w-4" />
-          <p>Facilitation graphique</p>
-        </div>
-        <div className="flex flex-row gap-8">
-          {supports.map((card) => {
-            const data = CardsSupport(card);
-            return (
-              <Card
-                key={data.name}
-                height={data.height + "px"}
-                borderRadius={data.borderRadius + "px"}
-                content={data.content}
-                borderClass={data.borderClass}
-              />
-            );
-          })}
+      <section
+        ref={container}
+        className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-start items-center gap-8 py-52 h-[300vh]"
+      >
+        <div className="sticky -top-0 h-screen  flex justify-center flex-col w-full items-center">
+          <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
+          <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
+            {`Nous designons tous vos\n supports de communication !`}
+          </h2>
+          <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
+            <p>Branding</p>
+            <Arrow className="w-4" />
+            <p>Print</p>
+            <Arrow className="w-4" />
+            <p>Digital</p>
+            <Arrow className="w-4" />
+            <p>Vidéo</p>
+            <Arrow className="w-4" />
+            <p>Facilitation graphique</p>
+          </div>
+          <motion.div
+            style={{ x }}
+            ref={horizontalRef}
+            className="flex flex-row w-screen h-fit mt-5 z-20"
+          >
+            {supports.map((card, index) => {
+              const data = CardsSupport(card);
+              return (
+                <AnimatedCard
+                  i={index}
+                  key={`p_${index}`}
+                  card={
+                    <Card
+                      key={data.name}
+                      height={data.height + "px"}
+                      borderRadius={data.borderRadius + "px"}
+                      content={data.content}
+                      borderClass={data.borderClass}
+                    />
+                  }
+                  progress={scrollYProgress}
+                />
+              );
+            })}
+          </motion.div>
         </div>
       </section>
     </div>
