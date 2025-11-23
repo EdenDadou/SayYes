@@ -138,7 +138,6 @@
 
 .light-border {
   --border-width: 1px;
-  --radius: 28px;
 
   position: relative;
   border-radius: var(--radius);

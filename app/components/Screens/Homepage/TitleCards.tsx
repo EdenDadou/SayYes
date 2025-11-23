@@ -10,14 +10,14 @@ interface ITitleCardsProps {
   rowCards: {
     height: number;
     image: string;
-    borderRadius?: number;
+    borderRadius?: string;
     borderClass?: string;
     content: React.ReactNode;
   }[];
   bottomCard?: {
     height: number;
     image: string;
-    borderRadius?: number;
+    borderRadius?: string;
     borderClass?: string;
     content: React.ReactNode;
   };
@@ -82,8 +82,8 @@ export const CardsIdentiteVisuelle = ({
   return {
     height: 373,
     image: "./images/homepage/identite-visuelle-1.png",
-    borderRadius: 40,
-    borderClass: "light-border",
+    borderRadius: "40px",
+    borderClass: "light-border rounded-[40px]",
     content: (
       <div className="h-full w-[312px] relative md:p-8 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
         <div
@@ -124,12 +124,12 @@ export const contentIdentiteVisuelle = [
 export const CardBottomIdentiteVisuelle = {
   height: 94,
   image: "",
-  borderRadius: 24,
-  borderClass: "light-border",
+  borderRadius: "40px",
+  borderClass: "light-border rounded-[30px]",
   content: (
     <div className="h-full w-full relative shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[24px]">
       <div
-        className="absolute inset-2 w-[calc(100%-1rem)] h-[calc(100%-1rem)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[20px]"
+        className="absolute inset-3 w-[calc(100%-1rem)] h-[calc(100%-1rem)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[20px]"
         style={{
           backgroundImage: 'url("images/homepage/bottom-card-bg.png")',
         }}
