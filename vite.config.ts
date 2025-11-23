@@ -6,6 +6,7 @@ import { VitePWA } from "vite-plugin-pwa"; // Si tu veux transformer ton app en 
 import svgr from "vite-plugin-svgr";
 import svgo from "vite-plugin-svgo";
 import { flatRoutes } from "remix-flat-routes";
+
 export default defineConfig({
   server: {
     port: 4000,
@@ -14,6 +15,7 @@ export default defineConfig({
       overlay: true, // Afficher les erreurs en overlay
     },
   },
+
 
   // Configuration pour gérer le cache en développement
   cacheDir:
@@ -34,30 +36,6 @@ export default defineConfig({
     "**/*.mkv",
   ],
 
-  // Configuration pour optimiser le bundling et le cache
-  build: {
-    target: "esnext", // Utilise les dernières fonctionnalités ES
-    outDir: "dist", // Répertoire de sortie
-    sourcemap: false, // Désactiver les sourcemaps en production pour de meilleures performances
-    chunkSizeWarningLimit: 2000, // Alerte si un chunk dépasse 2MB (augmenté pour les gros SVG)
-    rollupOptions: {
-      output: {
-        // Cache-busting pour les fichiers JS/CSS
-        entryFileNames: "assets/[name].[hash].js",
-        chunkFileNames: "assets/[name].[hash].js",
-        assetFileNames: "assets/[name].[hash][extname]",
-        // Code splitting manuel pour les gros composants SVG
-        manualChunks(id) {
-          // Sépare les gros composants SVG dans leurs propres chunks
-          if (id.includes("BackgroundHomepage") || 
-              id.includes("BacgroundSideLueur") || 
-              id.includes("BackgroundTemoignage")) {
-            return "background-assets";
-          }
-        },
-      },
-    },
-  },
 
   // Plugins
   plugins: [
@@ -108,7 +86,7 @@ export default defineConfig({
         enabled: true, // Active en mode dev pour tester la PWA
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // Augmente la limite à 5 Mo
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024, // Augmente la limite à 50 Mo pour gérer les gros assets
       },
       manifest: {
         name: "Mon App Remix",
@@ -132,7 +110,71 @@ export default defineConfig({
   ],
 
   // Optimisation des dépendances pour les temps de démarrage
+  // Configuration améliorée pour mieux gérer les imports dynamiques de Remix
   optimizeDeps: {
-    include: ["@remix-run/react", "react", "react-dom"], // Liste des dépendances essentielles
+    include: [
+      "@remix-run/react",
+      "@remix-run/node",
+      "react",
+      "react-dom",
+    ], // Liste des dépendances essentielles
+    esbuildOptions: {
+      // Permet à Vite de mieux gérer les imports dynamiques
+      target: "esnext",
+      // Configuration pour mieux analyser les imports dynamiques
+      supported: {
+        "dynamic-import": true,
+      },
+    },
+    // Exclure les modules qui utilisent des imports dynamiques avec variables
+    // car ils sont gérés par Remix lui-même
+    exclude: [],
+  },
+  // Configuration pour mieux gérer les imports dynamiques et les routes Remix
+  ssr: {
+    // Configuration SSR pour Remix - permet à Vite de mieux gérer les imports dynamiques
+    noExternal: ["@remix-run/react"],
+    resolve: {
+      // Permet de résoudre correctement les imports dynamiques
+      conditions: ["import", "module", "browser", "default"],
+    },
+  },
+  // Configuration pour gérer les avertissements de build
+  build: {
+    target: "esnext", // Utilise les dernières fonctionnalités ES
+    outDir: "dist", // Répertoire de sortie
+    sourcemap: false, // Désactiver les sourcemaps en production pour de meilleures performances
+    chunkSizeWarningLimit: 2000, // Alerte si un chunk dépasse 2MB (augmenté pour les gros SVG)
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Ignorer les avertissements sur les imports dynamiques de Remix (comportement normal)
+        if (
+          warning.code === "DYNAMIC_IMPORT" &&
+          (warning.message?.includes("@remix-run") ||
+            warning.message?.includes("route.module"))
+        ) {
+          return;
+        }
+        // Afficher les autres avertissements
+        warn(warning);
+      },
+      output: {
+        // Cache-busting pour les fichiers JS/CSS
+        entryFileNames: "assets/[name].[hash].js",
+        chunkFileNames: "assets/[name].[hash].js",
+        assetFileNames: "assets/[name].[hash][extname]",
+        // Code splitting manuel pour les gros composants SVG
+        manualChunks(id) {
+          // Sépare les gros composants SVG dans leurs propres chunks
+          if (
+            id.includes("BackgroundHomepage") ||
+            id.includes("BacgroundSideLueur") ||
+            id.includes("BackgroundTemoignage")
+          ) {
+            return "background-assets";
+          }
+        },
+      },
+    },
   },
 });

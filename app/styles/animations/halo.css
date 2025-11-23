@@ -23,3 +23,9 @@
 .animate-moveRight {
   animation: moveRight 3s ease-in-out infinite; /* Durée et type d'animation */
 }
+
+.purple-halo {
+  border-radius: 395.2px;
+  background: linear-gradient(180deg, #000 18.71%, #4F0BAC 49.98%);
+  filter: blur(57.88282775878906px);
+}

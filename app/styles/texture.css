@@ -238,3 +238,11 @@
     background-position: -100% 0;
   }
 }
+
+.metal {
+  border-radius: 15.104px;
+  border: 0.861px solid rgba(156, 156, 156, 0.50);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.30) 0%, rgba(0, 0, 0, 0.30) 64.01%);
+  box-shadow: 0 -4.307px 3.446px 0 rgba(255, 255, 255, 0.25) inset, 0 3.446px 3.446px 0 rgba(255, 255, 255, 0.25) inset, -36.178px 88.722px 26.703px 0 rgba(145, 145, 145, 0.00), -23.257px 56.851px 24.98px 0 rgba(145, 145, 145, 0.01), -12.921px 31.871px 20.673px 0 rgba(145, 145, 145, 0.03), -6.03px 14.643px 15.505px 0 rgba(145, 145, 145, 0.04), -1.723px 3.446px 8.614px 0 rgba(145, 145, 145, 0.05);
+  backdrop-filter: blur(8.613807678222656px);
+}

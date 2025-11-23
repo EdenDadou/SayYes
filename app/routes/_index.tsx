@@ -5,15 +5,18 @@ import MobileLayout from "~/components/Layout/Mobile";
 import Desktoplayout from "~/components/Layout/Desktop";
 import IntroSection from "~/components/Screens/Homepage/IntroSection";
 import "~/styles/tailwind.css";
-import TitleCards, {
+import TitleCards from "~/components/Screens/Homepage/TitleCards";
+import {
   CardBottomIdentiteVisuelle,
   CardsIdentiteVisuelle,
   contentIdentiteVisuelle,
-} from "~/components/Screens/Homepage/TitleCards";
+} from "~/components/Screens/Homepage/TitleCards.helpers";
 import RowTitlePicture from "~/components/Screens/Homepage/RowTitlePicture";
 import Temoignage from "~/components/Screens/Homepage/Temoignage";
 import CarouselCard from "~/components/Screens/Homepage/CarrouselCard";
 import LoadingBar from "~/components/LoadingBar";
+import TitleFullWidthCard from "~/components/Screens/Homepage/TitleFullWidthCard";
+import Card from "~/components/Card";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -58,7 +61,7 @@ export default function Index() {
         </MobileLayout>
       ) : (
         <Desktoplayout>
-          <div className="w-screen h-fit relative pt-20">
+          <div className="w-screen h-fit relative pt-20 flex flex-col gap-20">
             {/* //Section 1 */}
             <IntroSection />
             {/* //Section 2 */}
@@ -75,6 +78,8 @@ export default function Index() {
             <Temoignage />
             {/* //Section 5 */}
             <CarouselCard />
+            {/* //Section 6 */}
+            <TitleFullWidthCard />
           </div>
         </Desktoplayout>
       )}

@@ -1,21 +1,23 @@
-import { motion, MotionValue, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, MotionValue } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 interface AnimatedCardProps {
   card: JSX.Element;
   i: number;
   progress: MotionValue<number>;
+  isSnapped: boolean;
 }
 
-export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
+export const AnimatedCard = ({ card, i, isSnapped }: AnimatedCardProps) => {
   const container = useRef(null);
-  const margin = i !== 4 ? "-100px" : "40px";
-  const delay = i !== 4 ? 0.2 * i : 0.4;
-  const isInView = useInView(container, {
-    once: true,
-    amount: "some",
-    margin: margin,
-  });
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+
+  // Déclencher l'animation quand la card est snappée
+  useEffect(() => {
+    if (isSnapped) {
+      setShouldAnimate(true);
+    }
+  }, [isSnapped]);
 
   const variants = {
     visible: {
@@ -23,12 +25,12 @@ export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
       x: 0,
       transition: {
         duration: 0.8,
-        delay: delay,
         ease: "easeOut",
       },
     },
-    hidden: { opacity: 0, x: (5 - i) * 100 },
+    hidden: { opacity: 0, x: (7 - i) * 100 },
   };
+
   return (
     <motion.div
       ref={container}
@@ -38,10 +40,23 @@ export const AnimatedCard = ({ card, i }: AnimatedCardProps) => {
         x: -100,
       }}
       variants={variants}
-      animate={isInView ? "visible" : "hidden"}
+      animate={shouldAnimate ? "visible" : "hidden"}
       className="flex-shrink-0 h-full flex justify-center items-center"
     >
-      <div className="holographic-card">{card}</div>
+      <motion.div
+        animate={{
+          scale: isSnapped ? 1.15 : 1,
+        }}
+        transition={{
+          duration: 0.5,
+          ease: "easeOut",
+        }}
+        style={{
+          transformOrigin: "center",
+        }}
+      >
+        {card}
+      </motion.div>
     </motion.div>
   );
 };

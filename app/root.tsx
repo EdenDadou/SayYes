@@ -21,7 +21,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
-        <link rel="preload" as="image" href="/images/modal/bg.png" />
         <link rel="preload" as="image" href="/images/404/404.gif" />
         <Links />
       </head>
