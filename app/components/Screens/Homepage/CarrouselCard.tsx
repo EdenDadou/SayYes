@@ -26,34 +26,21 @@ export default function CarouselCard() {
     target: container,
   });
 
+  // Hauteur du container paramétrable
+  const CONTAINER_HEIGHT_VH = 1000;
+
   // État pour suivre l'index de la carte active
   const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const activeCardIndexRef = useRef(0);
-  const [lastSnapProgress, setLastSnapProgress] = useState(0);
-  const lastSnapProgressRef = useRef(0);
-  const containerHeightRef = useRef(0);
   const cardWidthRef = useRef(422);
   const cardGapRef = useRef(64); // gap-16 = 64px
+  const lastScrollPxRef = useRef(0); // Dernière position de scroll en pixels
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Timeout pour détecter la fin du scroll
 
-  // Fonction pour mesurer les dimensions réelles des cartes
+  // Fonction pour définir les dimensions des cartes (valeurs fixes)
   const measureCardDimensions = () => {
-    if (typeof window === "undefined" || !horizontalRef.current) return;
-
-    const container = horizontalRef.current;
-    const firstCard = container.firstElementChild as HTMLElement;
-
-    if (firstCard) {
-      const cardRect = firstCard.getBoundingClientRect();
-      cardWidthRef.current = cardRect.width;
-
-      // Mesurer le gap réel entre les cartes
-      const secondCard = firstCard.nextElementSibling as HTMLElement;
-      if (secondCard) {
-        const secondCardRect = secondCard.getBoundingClientRect();
-        const gap = secondCardRect.left - cardRect.right;
-        cardGapRef.current = gap;
-      }
-    }
+    // Cartes de 422px de large avec gap-16 (64px) entre chaque carte
+    cardWidthRef.current = 422;
+    cardGapRef.current = 64;
   };
 
   // Fonction pour calculer la position x d'une carte à un index donné
@@ -78,41 +65,35 @@ export default function CarouselCard() {
   // Créer une MotionValue pour la position x
   const x = useMotionValue(0);
 
-  // Obtenir la hauteur du container au montage et calculer la position initiale
-  useEffect(() => {
-    if (container.current && typeof window !== "undefined") {
-      // La hauteur du container est 900vh
-      containerHeightRef.current = window.innerHeight * 9; // 900vh = 9 * 100vh
-
-      // Attendre que les cartes soient rendues pour mesurer leurs dimensions
-      const timeoutId = setTimeout(() => {
-        measureCardDimensions();
-        // Calculer la position x initiale pour centrer la première carte
-        x.set(calculateXForIndex(0));
-      }, 100);
-
-      return () => clearTimeout(timeoutId);
-    }
+  // Calculer les positions de snap : au milieu de chaque section
+  // Section par carte = CONTAINER_HEIGHT_VH / nombre de cartes
+  // Snap pour carte i = (i * sectionHeight) + (sectionHeight / 2)
+  const snapPositions = useMemo(() => {
+    const sectionHeight = CONTAINER_HEIGHT_VH / supports.length;
+    return supports.map((_, index) => {
+      const snapVh = index * sectionHeight + sectionHeight / 2;
+      // Convertir en progress (0-1)
+      return snapVh / CONTAINER_HEIGHT_VH;
+    });
   }, []);
 
-  // Recalculer les dimensions lors du redimensionnement de la fenêtre
+  // Obtenir la hauteur du container au montage et calculer la position initiale
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window !== "undefined" && container.current) {
+      const containerHeight = (window.innerHeight * CONTAINER_HEIGHT_VH) / 100;
+      // Initialiser la position de référence au snap de la première carte
+      lastScrollPxRef.current = snapPositions[0] * containerHeight;
 
-    const handleResize = () => {
-      measureCardDimensions();
-      // Recalculer la position pour la carte active
-      x.set(calculateXForIndex(activeCardIndex));
-    };
+      // Attendre que les cartes soient rendues pour mesurer leurs dimensions
+      // const timeoutId = setTimeout(() => {
+      //   measureCardDimensions();
+      //   // Calculer la position x initiale pour centrer la première carte
+      //   x.set(calculateXForIndex(0));
+      // }, 100);
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [activeCardIndex]);
-
-  // Synchroniser le ref avec l'état
-  useEffect(() => {
-    activeCardIndexRef.current = activeCardIndex;
-  }, [activeCardIndex]);
+      // return () => clearTimeout(timeoutId);
+    }
+  }, []);
 
   // Mettre à jour la position x quand l'index change
   useEffect(() => {
@@ -121,34 +102,70 @@ export default function CarouselCard() {
     }
   }, [activeCardIndex]);
 
-  // Écouter le scroll et déterminer quelle carte doit être active
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (!container.current || containerHeightRef.current === 0) return;
-
-    // Convertir le progress en pixels
-    const currentScrollPx = latest * containerHeightRef.current;
-    const lastSnapPx = lastSnapProgressRef.current * containerHeightRef.current;
-    const scrollDelta = Math.abs(currentScrollPx - lastSnapPx);
-
-    // Ne changer de carte que si on a scrollé au moins 100px depuis le dernier snap
-    if (scrollDelta >= 150) {
-      const direction = latest > lastSnapProgressRef.current ? 1 : -1;
-      const currentIndex = activeCardIndexRef.current;
-      const newIndex = Math.max(
-        0,
-        Math.min(supports.length - 1, currentIndex + direction)
-      );
-
-      // Ne mettre à jour que si l'index change réellement
-      if (newIndex !== currentIndex) {
-        activeCardIndexRef.current = newIndex;
-        setActiveCardIndex(newIndex);
-        lastSnapProgressRef.current = latest;
-        setLastSnapProgress(latest);
-        // Mettre à jour la position x pour centrer la nouvelle carte
-        x.set(calculateXForIndex(newIndex));
+  // Nettoyer le timeout au démontage
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
       }
+    };
+  }, []);
+
+  // Écouter le scroll et déterminer quelle carte doit être active
+  // Vérifier à la fin du scroll (après 150ms d'inactivité) si on a scrollé de plus de 80 pixels
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (typeof window === "undefined" || !container.current) return;
+
+    // Annuler le timeout précédent
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
     }
+
+    // Attendre 150ms après la fin du scroll pour vérifier
+    scrollTimeoutRef.current = setTimeout(() => {
+      const containerHeight = (window.innerHeight * CONTAINER_HEIGHT_VH) / 100;
+      const currentScrollPx = latest * containerHeight;
+      const scrollDelta = Math.abs(currentScrollPx - lastScrollPxRef.current);
+
+      // Si on a scrollé de plus de 80 pixels, changer de snap
+      if (scrollDelta >= 80) {
+        const direction = currentScrollPx > lastScrollPxRef.current ? 1 : -1;
+        const newIndex = Math.max(
+          0,
+          Math.min(supports.length - 1, activeCardIndex + direction)
+        );
+
+        // Mettre à jour seulement si l'index change
+        if (newIndex !== activeCardIndex) {
+          setActiveCardIndex(newIndex);
+          // Mettre à jour la position de référence au snap correspondant
+          const snapProgress = snapPositions[newIndex];
+          const snapPositionPx = snapProgress * containerHeight;
+          lastScrollPxRef.current = snapPositionPx;
+
+          // Scroller automatiquement jusqu'à la position du snap
+          if (container.current) {
+            // Calculer la position actuelle du scroll dans le container
+            const currentScrollInContainer = latest * containerHeight;
+
+            // Calculer la différence entre la position cible et la position actuelle
+            const scrollDelta = snapPositionPx - currentScrollInContainer;
+
+            // Ajouter cette différence à la position actuelle du scroll de la fenêtre
+            const currentWindowScrollY = window.scrollY;
+            const targetScrollY = currentWindowScrollY + scrollDelta;
+
+            window.scrollTo({
+              top: targetScrollY,
+              behavior: "smooth",
+            });
+          }
+        } else {
+          // Si on ne peut pas changer d'index, mettre à jour la référence quand même
+          lastScrollPxRef.current = currentScrollPx;
+        }
+      }
+    }, 300);
   });
 
   // Utiliser useSpring pour un mouvement fluide
@@ -158,17 +175,32 @@ export default function CarouselCard() {
     mass: 0.5,
   });
 
+  // Transformer scrollYProgress en largeur de barre (0-100%)
+  const progressBarWidth = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0%", "100%"]
+  );
+
   return isMobile ? (
     <MobileLayout>
       <div>TODO</div>
     </MobileLayout>
   ) : (
     <div className="w-screen relative mb-[60vh]">
+      {/* Barre de progression du scroll pour débogage */}
+      <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
+        <motion.div
+          className="h-full bg-pink-500"
+          style={{ width: progressBarWidth }}
+        />
+      </div>
       <section
         ref={container}
-        className="relative z-10 flex flex-col justify-start items-start gap-8 h-[500vh]"
+        className="relative z-10 flex flex-col justify-start items-start gap-8"
+        style={{ height: `${CONTAINER_HEIGHT_VH}vh` }}
       >
-        <div className="sticky -top-0 h-screen flex justify-center flex-col w-full items-center gap-6">
+        <div className="sticky top-0 h-screen flex justify-center flex-col w-full items-center gap-6">
           <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80" />
           <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%]" />
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />

@@ -24,11 +24,11 @@ export const AnimatedCard = ({ card, i, isSnapped }: AnimatedCardProps) => {
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.8,
+        duration: 0.5,
         ease: "easeOut",
       },
     },
-    hidden: { opacity: 0, x: (7 - i) * 100 },
+    hidden: { opacity: 0, x: 200 },
   };
 
   return (
