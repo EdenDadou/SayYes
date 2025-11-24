@@ -1,29 +1,26 @@
-import { useLoaderData } from "@remix-run/react";
 import Card from "~/components/Card";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import Star from "~/assets/icons/Star";
-import { loader } from "~/routes/portfolio+/$slug";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
+import { usePortfolio } from "~/contexts/PortfolioContext";
 
 interface ProjectCarouselProps {
-  portfolios: PortfolioData[];
   className?: string;
 }
 
 export default function ProjectCarouselMobile({
-  portfolios,
   className = "",
 }: ProjectCarouselProps) {
-  const { portfolio } = useLoaderData<typeof loader>();
+  const { portfolio, allPortfolios: portfolios } = usePortfolio();
 
-  // If no portfolios, don't render anything
+  // If no portfolio or portfolios, don't render anything
   if (!portfolios || portfolios.length === 0) {
     return null;
   }
 
   // Filter out current portfolio
   const filteredPortfolios = portfolios.filter(
-    (project) => project.id !== portfolio.id
+    (project) => project.id !== portfolio?.id
   );
 
   return (
@@ -46,7 +43,7 @@ export default function ProjectCarouselMobile({
                   <ContentPortfolio
                     imageUrl={project.photoCouverture}
                     titre={project.titre}
-                    topTitle={portfolio.topTitle}
+                    topTitle={portfolio?.topTitle}
                     slug={project.slug}
                   />
                 }

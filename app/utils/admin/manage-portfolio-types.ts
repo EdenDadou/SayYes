@@ -34,6 +34,10 @@ export interface PortfolioData {
     entreprise?: string;
   };
   bento: BentoItem[];
+  metaTitle?: string;
+  metaDescription?: string;
+  metaImage?: string;
+  schemaOrg?: string;
 }
 
 // Options pour les formats de bento

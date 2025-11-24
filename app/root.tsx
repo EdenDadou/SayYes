@@ -9,6 +9,7 @@ import * as styles from "./styles/index.css";
 import Page404 from "./components/Screens/404";
 import { useViewport } from "./utils/hooks/useViewport";
 import Page404Mobile from "./components/Screens/404/mobile/Page404Mobile";
+import { PortfolioProvider } from "./contexts/PortfolioContext";
 
 export function links() {
   return styles;
@@ -34,7 +35,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <PortfolioProvider>
+      <Outlet />
+    </PortfolioProvider>
+  );
 }
 
 export function ErrorBoundary() {

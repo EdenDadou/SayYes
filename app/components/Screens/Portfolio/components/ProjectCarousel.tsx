@@ -4,20 +4,16 @@ import Card from "~/components/Card";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
-import { loader } from "~/routes/portfolio+/$slug";
-import { useLoaderData } from "@remix-run/react";
-import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
+import { usePortfolio } from "~/contexts/PortfolioContext";
 
 interface ProjectCarouselProps {
-  portfolios: PortfolioData[];
   className?: string;
 }
 
 export default function ProjectCarousel({
-  portfolios,
   className = "",
 }: ProjectCarouselProps) {
-  const { portfolio } = useLoaderData<typeof loader>();
+  const { portfolio, allPortfolios: portfolios } = usePortfolio();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [dynamicPadding, setDynamicPadding] = useState(128); // 32 * 4 = 128px (fallback initial)
@@ -41,7 +37,7 @@ export default function ProjectCarousel({
     return () => window.removeEventListener("resize", calculatePadding);
   }, []);
 
-  // If no portfolios, don't render anything
+  // If no portfolio or portfolios, don't render anything
   if (!portfolios || portfolios.length === 0) {
     return null;
   }
@@ -158,7 +154,7 @@ export default function ProjectCarousel({
             >
               {portfolios
                 .slice(currentIndex, currentIndex + itemsPerView)
-                .filter((project) => project.id !== portfolio.id)
+                .filter((project) => project.id !== portfolio?.id)
                 .map((project, index) => (
                   <div key={project.id} className="w-[490px] flex-shrink-0">
                     <Card
@@ -167,7 +163,7 @@ export default function ProjectCarousel({
                         <ContentPortfolio
                           imageUrl={project.photoCouverture}
                           titre={project.titre}
-                          topTitle={portfolio.topTitle}
+                          topTitle={portfolio?.topTitle}
                           slug={project.slug}
                         />
                       }

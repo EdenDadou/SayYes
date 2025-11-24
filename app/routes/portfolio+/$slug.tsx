@@ -1,9 +1,4 @@
-import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import {
-  getPortfolioBySlug,
-  getPublicPortfolios,
-} from "~/server/portfolio.server";
+import { useParams } from "@remix-run/react";
 import { useViewport } from "~/utils/hooks/useViewport";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
@@ -19,107 +14,35 @@ import Coche from "~/assets/icons/Coche";
 import NoteStar from "~/assets/icons/NoteStar";
 import Star from "~/assets/icons/Star";
 import BackgroundProject3 from "~/components/Screens/PortfolioProject/BackgroundProject3";
-
-// Loader pour récupérer le portfolio par slug
-export async function loader({ params }: LoaderFunctionArgs) {
-  const { slug } = params;
-
-  if (!slug) {
-    throw new Response("Slug manquant", { status: 400 });
-  }
-
-  try {
-    const portfolio = await getPortfolioBySlug(slug);
-    const allPortfolios = await getPublicPortfolios();
-
-    if (!portfolio) {
-      throw new Response("Portfolio non trouvé", { status: 404 });
-    }
-
-    return json({ portfolio, allPortfolios });
-  } catch (error) {
-    if (error instanceof Response) {
-      throw error;
-    }
-    throw new Response("Erreur interne du serveur", { status: 500 });
-  }
-}
-
-// Meta fonction pour les métadonnées SEO
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data?.portfolio) {
-    return [
-      { title: "Portfolio non trouvé - SayYes" },
-      { name: "description", content: "Ce portfolio n'existe pas." },
-    ];
-  }
-
-  const { portfolio } = data;
-
-  // Préparer les métadonnées de base
-  const metaTitle = portfolio.metaTitle || `${portfolio.titre} - SayYes`;
-  const metaDescription =
-    portfolio.metaDescription ||
-    portfolio.description ||
-    `Découvrez le projet ${portfolio.titre}`;
-
-  // Construire l'URL complète de l'image
-  const baseUrl = "https://vps-f16913b8.vps.ovh.net";
-  const imageRelativePath =
-    portfolio.metaImage || portfolio.photoMain || portfolio.photoCouverture;
-  const metaImage = imageRelativePath.startsWith("http")
-    ? imageRelativePath
-    : `${baseUrl}${imageRelativePath}`;
-
-  // URL complète de la page
-  const url = `${baseUrl}/portfolio/${portfolio.slug}`;
-
-  // Parser le Schema.org si présent
-  let schemaOrgScript = null;
-  if (portfolio.schemaOrg && portfolio.schemaOrg !== "{}") {
-    try {
-      const schemaData = JSON.parse(portfolio.schemaOrg);
-      schemaOrgScript = {
-        "script:ld+json": schemaData,
-      };
-    } catch (e) {
-      console.error("Erreur lors du parsing du Schema.org:", e);
-    }
-  }
-
-  const metaTags = [
-    // Métadonnées de base
-    { title: metaTitle },
-    { name: "description", content: metaDescription },
-
-    // Open Graph / Facebook
-    { property: "og:title", content: metaTitle },
-    { property: "og:description", content: metaDescription },
-    { property: "og:type", content: "website" },
-    { property: "og:url", content: url },
-    { property: "og:image", content: metaImage },
-
-    // Twitter Card
-    { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: metaTitle },
-    { name: "twitter:description", content: metaDescription },
-    { name: "twitter:image", content: metaImage },
-
-    // Métadonnées supplémentaires
-    { name: "keywords", content: portfolio.categories.join(", ") },
-  ];
-
-  // Ajouter le Schema.org si présent
-  if (schemaOrgScript) {
-    metaTags.push(schemaOrgScript as any);
-  }
-
-  return metaTags;
-};
+import { usePortfolio } from "~/contexts/PortfolioContext";
+import { useEffect } from "react";
+import { useMetaData } from "~/utils/hooks/useMetaData";
 
 export default function PortfolioSlug() {
-  const { portfolio, allPortfolios } = useLoaderData<typeof loader>();
+  const { slug } = useParams();
+  const { portfolio, allPortfolios, fetchPortfolioBySlug, fetchAllPortfolios } =
+    usePortfolio();
   const isMobile = useViewport();
+
+  // Fetch data on mount
+  useEffect(() => {
+    if (slug) {
+      fetchPortfolioBySlug(slug);
+    }
+    fetchAllPortfolios();
+  }, [slug, fetchPortfolioBySlug, fetchAllPortfolios]);
+
+  // Update meta tags dynamically when portfolio is loaded
+  useMetaData(portfolio);
+
+  // Show loading or error states
+  if (!portfolio) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        <p className="text-white text-xl">Chargement...</p>
+      </div>
+    );
+  }
 
   return isMobile ? (
     <PortfolioProjectMobile
@@ -265,7 +188,7 @@ export default function PortfolioSlug() {
             </div>
           </section>
         </div>
-        <ProjectCarousel portfolios={allPortfolios as PortfolioData[]} />
+        <ProjectCarousel />
       </main>
       <BackgroundProject3
         fill={portfolio.couleur}

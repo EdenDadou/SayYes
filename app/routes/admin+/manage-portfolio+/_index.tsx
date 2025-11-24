@@ -214,8 +214,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function ManagePortfolio() {
-  const { sessionData, portfolios, flashMessage } =
-    useLoaderData<typeof loader>();
+  const { portfolios, flashMessage } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const deleteFetcher = useFetcher<typeof action>();
 

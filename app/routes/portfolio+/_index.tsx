@@ -1,5 +1,3 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { useViewport } from "~/utils/hooks/useViewport";
 import Card from "~/components/Card";
 import PortfolioTitle from "~/components/Screens/Portfolio/components/PortfolioTitle";
@@ -8,29 +6,24 @@ import Filter from "~/components/Screens/Portfolio/components/Filter";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import Background from "~/assets/icons/Background";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
-import { getPublicPortfolios } from "~/server/portfolio.server";
 import "~/styles/tailwind.css";
 import Desktoplayout from "~/components/Layout/Desktop";
 import MobileLayout from "~/components/Layout/Mobile";
 import { AnimatePresence, motion } from "framer-motion";
-
-// Loader pour récupérer les portfolios depuis la base de données
-export async function loader({ request }: LoaderFunctionArgs) {
-  try {
-    const portfolios = await getPublicPortfolios();
-    return json({ portfolios });
-  } catch (error) {
-    console.error("Erreur lors du chargement des portfolios:", error);
-    return json({ portfolios: [] });
-  }
-}
+import { usePortfolio } from "~/contexts/PortfolioContext";
+import { useEffect } from "react";
 
 export default function Portfolio() {
-  const { portfolios } = useLoaderData<typeof loader>();
+  const { allPortfolios, fetchAllPortfolios } = usePortfolio();
   const isMobile = useViewport();
 
+  // Fetch portfolios on mount
+  useEffect(() => {
+    fetchAllPortfolios();
+  }, [fetchAllPortfolios]);
+
   // Diviser les portfolios en deux groupes pour l'affichage
-  const portfolioTopCards = portfolios.slice(0, 20);
+  const portfolioTopCards = allPortfolios.slice(0, 20);
 
   return isMobile ? (
     <MobileLayout>
