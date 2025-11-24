@@ -83,15 +83,6 @@ export default function CarouselCard() {
       const containerHeight = (window.innerHeight * CONTAINER_HEIGHT_VH) / 100;
       // Initialiser la position de référence au snap de la première carte
       lastScrollPxRef.current = snapPositions[0] * containerHeight;
-
-      // Attendre que les cartes soient rendues pour mesurer leurs dimensions
-      // const timeoutId = setTimeout(() => {
-      //   measureCardDimensions();
-      //   // Calculer la position x initiale pour centrer la première carte
-      //   x.set(calculateXForIndex(0));
-      // }, 100);
-
-      // return () => clearTimeout(timeoutId);
     }
   }, []);
 
@@ -165,7 +156,7 @@ export default function CarouselCard() {
           lastScrollPxRef.current = currentScrollPx;
         }
       }
-    }, 300);
+    }, 100);
   });
 
   // Utiliser useSpring pour un mouvement fluide

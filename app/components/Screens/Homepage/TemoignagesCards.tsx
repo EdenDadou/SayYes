@@ -4,6 +4,7 @@ import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import Card from "~/components/Card";
 import NoteStar from "~/assets/icons/NoteStar";
+import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
 
 export default function TemoignagesCards({}) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -62,14 +63,14 @@ export default function TemoignagesCards({}) {
   };
 
   return (
-    <div className={`relative w-full pt-16 gap-12 z-10 `}>
+    <div className={`relative w-full flex  flex-col pt-16 gap-16 z-10 `}>
       <img
         src="./images/homepage/bg-halo.png"
         alt="background"
         className="absolute inset-0 w-1/2 h-full object-cover z-[-1]"
       />
       {/* Title Section */}
-      <div className="max-w-[990px] m-auto flex flex-col items-center gap-4 mb-10">
+      <div className="max-w-[990px] m-auto flex flex-col items-center gap-4">
         <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full my-8" />
         <div className="flex flex-row font-jakarta-semibold text-[27px] leading-[30px] text-white items-center gap-2">
           <NoteStar className="w-6 h-6 flex-shrink-0" />
@@ -161,6 +162,7 @@ export default function TemoignagesCards({}) {
           </AnimatePresence>
         </div>
       </div>
+      <ScrollingBanner />
     </div>
   );
 }
