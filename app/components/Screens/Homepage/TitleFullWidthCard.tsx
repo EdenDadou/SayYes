@@ -3,7 +3,6 @@ import MobileLayout from "~/components/Layout/Mobile";
 import Card from "~/components/Card";
 import Arrow from "~/assets/icons/Arrow";
 import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
-import { useScroll } from "framer-motion";
 import { useRef } from "react";
 import Coche from "~/assets/icons/Coche";
 import "~/styles/tailwind.css";
@@ -18,40 +17,48 @@ export default function TitleFullWidthCard() {
       <div>TODO</div>
     </MobileLayout>
   ) : (
-    <div className="w-screen pb-[60vh]">
+    <div className="w-screen relative">
+      <img
+        src="./images/homepage/bg-halo.png"
+        alt="background"
+        className="scale-x-[-1] absolute left-0 h-auto z-0 w-[90%] rotate-180 top-0"
+      />
+      {/* <img
+        src="./images/homepage/bg-halo.png"
+        alt="background"
+        className="absolute right-0 h-auto z-0 w-1/2 top-80 object-cover"
+      /> */}
       <section
         ref={container}
-        className="relative z-10 flex flex-col justify-start items-start gap-8"
+        className="z-10 flex flex-col justify-center items-center gap-8 w-full"
       >
-        <div className="h-screen flex justify-center flex-col w-full items-center gap-6">
-          <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80" />
-          <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%]" />
-          <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
-          <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
-            {`Accompagnement sur-mesure`}
-          </h2>
-          <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
-            <p>En co-conception :</p>
-            <p>Simple</p>
-            <Arrow className="w-4" />
-            <p>Efficace</p>
-            <Arrow className="w-4" />
-            <p>Prouvée</p>
-          </div>
-          <div className="flex flex-col gap-8">
-            {cardsAccompagnement.map((card) => {
-              const data = CardsAccompagnement(card);
-              return (
-                <Card
-                  key={data.title}
-                  height={data.height + "px"}
-                  borderRadius={data.borderRadius + "px"}
-                  content={data.content}
-                  borderClass={data.borderClass}
-                />
-              );
-            })}
-          </div>
+        {/* <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80" /> */}
+        {/* <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%]" /> */}
+        <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
+        <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
+          {`Accompagnement sur-mesure`}
+        </h2>
+        <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
+          <p>En co-conception :</p>
+          <p>Simple</p>
+          <Arrow className="w-4" />
+          <p>Efficace</p>
+          <Arrow className="w-4" />
+          <p>Prouvée</p>
+        </div>
+        <div className="flex flex-col gap-8">
+          {cardsAccompagnement.map((card) => {
+            const data = CardsAccompagnement(card);
+            return (
+              <Card
+                key={data.title}
+                height={data.height + "px"}
+                borderRadius={data.borderRadius + "px"}
+                content={data.content}
+                borderClass={data.borderClass}
+              />
+            );
+          })}
         </div>
       </section>
     </div>

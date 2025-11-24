@@ -102,61 +102,91 @@ export default function CarouselCard() {
     };
   }, []);
 
-  // Écouter le scroll et déterminer quelle carte doit être active
-  // Vérifier à la fin du scroll (après 150ms d'inactivité) si on a scrollé de plus de 80 pixels
+  // Écouter le scroll et snapper vers la carte la plus proche quand l'utilisateur arrête de scroller
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (typeof window === "undefined" || !container.current) return;
+
+    // Ne pas snapper si on est en dehors de la zone de scroll du composant (0-1)
+    if (latest < 0 || latest > 1) return;
+
+    const containerHeight = (window.innerHeight * CONTAINER_HEIGHT_VH) / 100;
+    const currentScrollPx = latest * containerHeight;
+
+    // Position de snap de la première et dernière carte
+    const firstCardSnapProgress = snapPositions[0];
+    const lastCardSnapProgress = snapPositions[snapPositions.length - 1];
+
+    // Mettre à jour l'index actif en temps réel pendant le scroll
+    // pour que les cartes apparaissent même lors d'un scroll rapide
+    if (latest >= firstCardSnapProgress && latest <= lastCardSnapProgress) {
+      // Trouver la carte la plus proche de la position actuelle
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      snapPositions.forEach((snapProgress, index) => {
+        const snapPositionPx = snapProgress * containerHeight;
+        const distance = Math.abs(currentScrollPx - snapPositionPx);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      // Mettre à jour l'index actif immédiatement
+      if (closestIndex !== activeCardIndex) {
+        setActiveCardIndex(closestIndex);
+      }
+    }
 
     // Annuler le timeout précédent
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
 
-    // Attendre 150ms après la fin du scroll pour vérifier
+    // Attendre 150ms après la fin du scroll pour snapper
     scrollTimeoutRef.current = setTimeout(() => {
-      const containerHeight = (window.innerHeight * CONTAINER_HEIGHT_VH) / 100;
-      const currentScrollPx = latest * containerHeight;
-      const scrollDelta = Math.abs(currentScrollPx - lastScrollPxRef.current);
+      // Vérifier à nouveau qu'on est dans les limites avant de snapper
+      if (latest < 0 || latest > 1) return;
 
-      // Si on a scrollé de plus de 80 pixels, changer de snap
-      if (scrollDelta >= 80) {
-        const direction = currentScrollPx > lastScrollPxRef.current ? 1 : -1;
-        const newIndex = Math.max(
-          0,
-          Math.min(supports.length - 1, activeCardIndex + direction)
-        );
-
-        // Mettre à jour seulement si l'index change
-        if (newIndex !== activeCardIndex) {
-          setActiveCardIndex(newIndex);
-          // Mettre à jour la position de référence au snap correspondant
-          const snapProgress = snapPositions[newIndex];
-          const snapPositionPx = snapProgress * containerHeight;
-          lastScrollPxRef.current = snapPositionPx;
-
-          // Scroller automatiquement jusqu'à la position du snap
-          if (container.current) {
-            // Calculer la position actuelle du scroll dans le container
-            const currentScrollInContainer = latest * containerHeight;
-
-            // Calculer la différence entre la position cible et la position actuelle
-            const scrollDelta = snapPositionPx - currentScrollInContainer;
-
-            // Ajouter cette différence à la position actuelle du scroll de la fenêtre
-            const currentWindowScrollY = window.scrollY;
-            const targetScrollY = currentWindowScrollY + scrollDelta;
-
-            window.scrollTo({
-              top: targetScrollY,
-              behavior: "smooth",
-            });
-          }
-        } else {
-          // Si on ne peut pas changer d'index, mettre à jour la référence quand même
-          lastScrollPxRef.current = currentScrollPx;
-        }
+      // Ne pas snapper si on est avant le milieu de la première carte
+      // ou après le milieu de la dernière carte
+      if (latest < firstCardSnapProgress || latest > lastCardSnapProgress) {
+        return;
       }
-    }, 100);
+
+      // Trouver la carte la plus proche de la position actuelle
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      snapPositions.forEach((snapProgress, index) => {
+        const snapPositionPx = snapProgress * containerHeight;
+        const distance = Math.abs(currentScrollPx - snapPositionPx);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      // Mettre à jour la position de référence
+      const snapProgress = snapPositions[closestIndex];
+      const snapPositionPx = snapProgress * containerHeight;
+      lastScrollPxRef.current = snapPositionPx;
+
+      // Scroller automatiquement vers le snap le plus proche
+      if (container.current) {
+        const currentScrollInContainer = latest * containerHeight;
+        const scrollDelta = snapPositionPx - currentScrollInContainer;
+        const currentWindowScrollY = window.scrollY;
+        const targetScrollY = currentWindowScrollY + scrollDelta;
+
+        window.scrollTo({
+          top: targetScrollY,
+          behavior: "smooth",
+        });
+      }
+    }, 150);
   });
 
   // Utiliser useSpring pour un mouvement fluide
@@ -178,14 +208,14 @@ export default function CarouselCard() {
       <div>TODO</div>
     </MobileLayout>
   ) : (
-    <div className="w-screen relative mb-[60vh]">
+    <div className="w-screen relative">
       {/* Barre de progression du scroll pour débogage */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
+      {/* <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
         <motion.div
           className="h-full bg-pink-500"
           style={{ width: progressBarWidth }}
         />
-      </div>
+      </div> */}
       <section
         ref={container}
         className="relative z-10 flex flex-col justify-start items-start gap-8"

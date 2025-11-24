@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import Star from "~/assets/icons/Star";
 import Card from "~/components/Card";
 import NoteStar from "~/assets/icons/NoteStar";
 import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
@@ -9,26 +8,6 @@ import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
 export default function TemoignagesCards({}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const [dynamicPadding, setDynamicPadding] = useState(128); // 32 * 4 = 128px (fallback initial)
-  const itemsPerView = 4; // Affiche 4 cartes: 2 complètes au centre + 2 bouts sur les côtés
-
-  //   // Calculate dynamic padding based on viewport width
-  //   useEffect(() => {
-  //     const calculatePadding = () => {
-  //       const viewportWidth = window.innerWidth;
-  //       const calculatedPadding = Math.max(0, (viewportWidth - 990) / 2);
-  //       setDynamicPadding(calculatedPadding);
-  //     };
-
-  //     // Calculate initial padding
-  //     calculatePadding();
-
-  //     // Add resize listener
-  //     window.addEventListener("resize", calculatePadding);
-
-  //     // Cleanup
-  //     return () => window.removeEventListener("resize", calculatePadding);
-  //   }, []);
 
   const nextSlide = () => {
     setDirection(1);
@@ -139,10 +118,8 @@ export default function TemoignagesCards({}) {
                     : "justify-center"
               }`}
               style={{
-                paddingLeft:
-                  currentIndex === 0 ? `${dynamicPadding}px` : undefined,
-                paddingRight:
-                  currentIndex >= 10 ? `${dynamicPadding}px` : undefined,
+                paddingLeft: currentIndex === 0 ? `128px` : undefined,
+                paddingRight: currentIndex >= 10 ? `128px` : undefined,
               }}
             >
               {temoignagesCards.map((temoignage, index) => {
