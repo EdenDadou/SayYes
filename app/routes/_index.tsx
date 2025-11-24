@@ -12,11 +12,11 @@ import {
   contentIdentiteVisuelle,
 } from "~/components/Screens/Homepage/TitleCards.helpers";
 import RowTitlePicture from "~/components/Screens/Homepage/RowTitlePicture";
-import Temoignage from "~/components/Screens/Homepage/Temoignage";
 import CarouselCard from "~/components/Screens/Homepage/CarrouselCard";
 import LoadingBar from "~/components/LoadingBar";
 import TitleFullWidthCard from "~/components/Screens/Homepage/TitleFullWidthCard";
-import Card from "~/components/Card";
+import BigTemoignage from "~/components/Screens/Homepage/BigTemoignage";
+import TemoignagesCards from "~/components/Screens/Homepage/TemoignagesCards";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -75,11 +75,13 @@ export default function Index() {
             {/* //Section 3 */}
             <RowTitlePicture />
             {/* //Section 4 */}
-            <Temoignage />
+            <BigTemoignage />
             {/* //Section 5 */}
             <CarouselCard />
             {/* //Section 6 */}
             <TitleFullWidthCard />
+            {/* //Section 7 */}
+            <TemoignagesCards />
           </div>
         </Desktoplayout>
       )}

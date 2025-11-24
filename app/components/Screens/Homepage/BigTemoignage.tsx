@@ -8,7 +8,7 @@ const BackgroundTemoignage = lazy(
   () => import("~/assets/icons/BackgroundTemoignage")
 );
 
-export default function Temoignage() {
+export default function BigTemoignage() {
   const isMobile = useViewport();
 
   return isMobile ? (

@@ -29,3 +29,9 @@
   background: linear-gradient(180deg, #000 18.71%, #4F0BAC 49.98%);
   filter: blur(57.88282775878906px);
 }
+
+.white-halo {
+  opacity: 0.5;
+  background: linear-gradient(180deg, #000 -56.69%, #989898 43.73%);
+  filter: blur(90.97603607177734px);
+}

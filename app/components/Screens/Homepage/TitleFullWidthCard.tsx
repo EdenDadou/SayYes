@@ -3,29 +3,15 @@ import MobileLayout from "~/components/Layout/Mobile";
 import Card from "~/components/Card";
 import Arrow from "~/assets/icons/Arrow";
 import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
-import "~/styles/tailwind.css";
-import { AnimatedCard } from "~/components/Card/AnimatedCard";
-import {
-  useInView,
-  useScroll,
-  useTransform,
-  motion,
-  useSpring,
-  useMotionValueEvent,
-  useMotionValue,
-} from "framer-motion";
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useScroll } from "framer-motion";
+import { useRef } from "react";
 import Coche from "~/assets/icons/Coche";
+import "~/styles/tailwind.css";
 
 export default function TitleFullWidthCard() {
   const isMobile = useViewport();
 
   const container = useRef<HTMLElement>(null);
-  const horizontalRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress, scrollY } = useScroll({
-    target: container,
-  });
 
   return isMobile ? (
     <MobileLayout>

@@ -4,7 +4,6 @@ import MobileLayout from "~/components/Layout/Mobile";
 import Card from "~/components/Card";
 import "~/styles/tailwind.css";
 
-// Lazy load du composant Background volumineux
 const BackgroundSideLueur = lazy(
   () => import("~/assets/icons/BacgroundSideLueur")
 );
