@@ -41,10 +41,21 @@ export default function TitleCards({
     <div className="w-screen">
       <div className="absolute left-0 right-0 h-auto z-0 opacity-80 flex flex-row justify-between w-screen">
         <Suspense fallback={<div className="scale-x-[-1]" />}>
-          <BackgroundSideLueur className="scale-x-[-1]" />
+          {/* <BackgroundSideLueur className="scale-x-[-1]" /> */}
+          <img
+            src="./images/homepage/bg-halo.png"
+            alt="background"
+            className="scale-x-[-1] absolute left-0 h-auto z-0 w-1/2 rotate-180 top-0"
+          />
         </Suspense>
+
         <Suspense fallback={<div />}>
-          <BackgroundSideLueur />
+          <img
+            src="./images/homepage/bg-halo.png"
+            alt="background"
+            className="absolute right-0 h-auto z-0 w-1/2 rotate-180 top-0"
+          />
+          {/* <BackgroundSideLueur /> */}
         </Suspense>
       </div>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16 pt-48 pb-14">

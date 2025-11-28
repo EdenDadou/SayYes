@@ -8,7 +8,9 @@ import TitleHomepage from "~/assets/icons/TitleHomepage";
 import ArrowLight from "~/assets/icons/ArrowLight";
 
 // Lazy load du composant Background volumineux
-const BackgroundHomepage = lazy(() => import("~/assets/icons/BackgroundHomepage"));
+const BackgroundHomepage = lazy(
+  () => import("~/assets/icons/BackgroundHomepage")
+);
 import "~/styles/tailwind.css";
 import Arrow from "~/assets/icons/Arrow";
 import Button from "~/components/Button";
@@ -56,8 +58,17 @@ export default function IntroSection() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
         >
-          <Suspense fallback={<div className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" />}>
-            <BackgroundHomepage className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" />
+          <Suspense
+            fallback={
+              <div className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" />
+            }
+          >
+            <img
+              src="/images/homepage/bg-section-1.png"
+              alt="background"
+              className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80"
+            />
+            {/* <BackgroundHomepage className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" /> */}
           </Suspense>
         </motion.div>
       </AnimatePresence>

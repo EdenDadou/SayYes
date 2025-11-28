@@ -5,6 +5,7 @@ import "~/styles/tailwind.css";
 import Arrow from "~/assets/icons/Arrow";
 import { useNavigate } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
+import { usePortfolio } from "~/contexts/PortfolioContext";
 
 interface PropsContent {
   imageUrl?: string;
@@ -14,21 +15,22 @@ interface PropsContent {
   slug?: string;
 }
 
-export default function ContentPortfolio({
+export default function CardHomePagePortfolio({
   imageUrl,
   videoUrl,
   titre,
   topTitle,
   slug,
 }: PropsContent) {
+  console.log(topTitle);
   const navigate = useNavigate();
   const imageClasses = cn(
-    "h-full flex items-center justify-center md:rounded-[15px] rounded-[10px] relative card-image"
+    "h-full flex items-center justify-center md:rounded-[24px] rounded-[10px] relative"
   );
 
   return (
     <div
-      className="size-full relative overflow-hidden md:rounded-[15px] rounded-[10px] hover:rounded-[25px] md:p-2 p-1 cursor-pointer
+      className="size-full relative overflow-hidden md:rounded-[24px] rounded-[10px] hover:rounded-[25px] md:p-2 p-1 cursor-pointer
       shadow-lg"
       onClick={() => {
         navigate(`/portfolio/${slug}`);
@@ -40,11 +42,12 @@ export default function ContentPortfolio({
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          borderRadius: "40px",
         }}
         className={`${imageClasses}`}
       >
         {/* Gradient overlay - seulement sur les 20% inférieurs */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] md:rounded-[15px] rounded-[10px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] md:rounded-[40px] rounded-[24px]" />
       </div>
       <div className="size-full absolute top-0 left-0 bottom-0 md:p-4 p-2">
         <div className="flex flex-col items-center justify-end w-full h-full p-4">

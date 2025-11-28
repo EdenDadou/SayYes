@@ -5,12 +5,18 @@ import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import { usePortfolio } from "~/contexts/PortfolioContext";
+import Coeur from "~/components/Header/assets/Coeur";
+import Button from "~/components/Button";
+import ArrowFull from "~/assets/icons/ArrowFull";
+import Arrow from "~/assets/icons/Arrow";
+import CardHomePagePortfolio from "./components/CardHomePagePortfolio";
+import { useNavigate } from "@remix-run/react";
 
 interface ProjectCarouselProps {
   className?: string;
 }
 
-export default function ProjectCarousel({
+export default function HomeProjectCarousel({
   className = "",
 }: ProjectCarouselProps) {
   const {
@@ -19,6 +25,8 @@ export default function ProjectCarousel({
     fetchPortfolioBySlug,
     fetchAllPortfolios,
   } = usePortfolio();
+
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [dynamicPadding, setDynamicPadding] = useState(128); // 32 * 4 = 128px (fallback initial)
@@ -87,41 +95,28 @@ export default function ProjectCarousel({
   };
 
   return (
-    <div className={`relative w-full pt-16 gap-12 z-10 ${className}`}>
+    <div
+      className={`relative w-full flex flex-col items-center pt-16 gap-12 z-10 ${className}`}
+    >
+      <img
+        src="./images/homepage/bg-halo-2.png"
+        alt="background"
+        className="absolute right-0 left-0 h-auto z-0 w-full top-0"
+      />
       {/* Title Section */}
-      <div className="max-w-[990px] m-auto">
-        <h2 className="flex flex-row items-center gap-4 text-3xl font-bold text-white font-jakarta mb-4">
-          <Star className="w-8 h-8 text-white" /> Nos Love Stories
+      <div className="max-w-[990px] m-auto flex flex-col items-center gap-4">
+        <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full my-8" />
+        <div className="flex flex-row font-jakarta-semibold text-[27px] leading-[30px] text-white items-center gap-2">
+          <Coeur className="w-6 h-6 flex-shrink-0" />
+          <span>Love stories</span>
+        </div>
+        <h2 className="font-jakarta-semi-bold text-[48px] leading-[65px] text-center glassy tracking-[-1px] whitespace-pre-line">
+          La preuve en image !
         </h2>
       </div>
 
       {/* Carousel Container */}
       <div className="relative w-full overflow-hidden flex items-center">
-        {/* Navigation Arrows */}
-        <div className="absolute w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20">
-          <button
-            onClick={prevSlide}
-            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
-              currentIndex === 0 ? "opacity-0 invisible" : "opacity-100 visible"
-            }`}
-            aria-label="Projet précédent"
-          >
-            <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
-              currentIndex >= maxIndex
-                ? "opacity-0 invisible"
-                : "opacity-100 visible"
-            }`}
-            aria-label="Projet suivant"
-          >
-            <ArrowLight className="w-[77px] h-[77px] text-white group-hover:scale-110 transition-transform" />
-          </button>
-        </div>
-
         {/* Carousel Content */}
         <div className="relative h-[400px] overflow-visible">
           <AnimatePresence initial={false} custom={direction}>
@@ -170,20 +165,50 @@ export default function ProjectCarousel({
                     <Card
                       height="370px"
                       content={
-                        <ContentPortfolio
+                        <CardHomePagePortfolio
                           imageUrl={project.photoCouverture}
                           titre={project.titre}
-                          topTitle={portfolio?.topTitle}
+                          topTitle={project?.topTitle}
                           slug={project.slug}
                         />
                       }
-                      borderClass="card-hover"
+                      borderClass="light-border rounded-[45px]"
+                      borderRadius="45px"
                     />
                   </div>
                 ))}
             </motion.div>
           </AnimatePresence>
         </div>
+      </div>
+
+      {/* Navigation Arrows */}
+      <div className="w-full flex flex-row justify-center items-center z-20 gap-8">
+        <button
+          onClick={prevSlide}
+          className={`z-20 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group`}
+          aria-label="Projet précédent"
+        >
+          <ArrowLight className="w-[70px] h-[70px] text-white rotate-180 group-hover:scale-110 transition-transform" />
+        </button>
+
+        <Button
+          type="border"
+          label="Voir tous nos projets"
+          leftIcon={<Arrow className="w-6 h-6" />}
+          textSize="M"
+          className="py-2 px-1"
+          onClick={() => {
+            navigate("/portfolio");
+          }}
+        />
+        <button
+          onClick={nextSlide}
+          className={`z-20 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group`}
+          aria-label="Projet suivant"
+        >
+          <ArrowLight className="w-[70px] h-[70px] text-white group-hover:scale-110 transition-transform" />
+        </button>
       </div>
     </div>
   );

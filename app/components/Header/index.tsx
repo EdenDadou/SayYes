@@ -47,11 +47,14 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
     >
       {/* Section gauche */}
       <div className="flex flex-row items-center gap-8 pl-8 justify-between w-[35%] z-20">
-        <div className="font-jakarta text-lg">Communication visuelle*</div>
+        <div className="font-jakarta-semi-bold text-[16px]">
+          Communication visuelle*
+        </div>
         <Button
           label="Solutions"
           leftIcon={<Flamme className="text-shadow-lg shadow-black" />}
           onClick={() => navigate("/solutions")}
+          textSize="S"
         />
       </div>
 
@@ -69,6 +72,7 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
           label="Portfolio"
           leftIcon={<Coeur />}
           onClick={() => navigate("/portfolio")}
+          textSize="S"
         />
         <Button
           label="Parlons Design !"
