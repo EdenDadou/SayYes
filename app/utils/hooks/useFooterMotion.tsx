@@ -10,7 +10,7 @@ export const useFooterMotion = () => {
     offset: any;
   } = {
     target: footerRef,
-    offset: ["350px end", "end end"],
+    offset: ["500px end", "end end"],
   };
 
   const { scrollYProgress } = useScroll(scrollConfig);
@@ -20,7 +20,7 @@ export const useFooterMotion = () => {
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   // Opacité réduite pour la deuxième image (20% de l'opacité principale)
-  const opacitySecondary = useTransform(scrollYProgress, [0, 1], [0, 1.3]);
+  const opacitySecondary = useTransform(scrollYProgress, [0, 1], [0, 1.8]);
 
   return { footerRef, opacity, opacitySecondary };
 };

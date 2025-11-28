@@ -63,7 +63,7 @@ export default function Index() {
           <div>TODO</div>
         </MobileLayout>
       ) : (
-        <Desktoplayout>
+        <Desktoplayout footerType="home">
           <div className="w-screen h-fit relative pt-20 flex flex-col gap-20">
             {/* //Section 1 */}
             <IntroSection />

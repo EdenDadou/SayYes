@@ -13,13 +13,17 @@ import FooterMobile from "./mobile/FooterMobile";
 import LogoSayYesHolo from "./components/LogoSayYesHolo";
 import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
+import Star from "~/assets/icons/Star";
 
 interface IFooterProps {
   setIsOpenModalContact: (value: boolean) => void;
+  footerType?: "default" | "home";
 }
 
-export default function Footer({ setIsOpenModalContact }: IFooterProps) {
-  const isMobile = useViewport();
+export default function Footer({
+  setIsOpenModalContact,
+  footerType,
+}: IFooterProps) {
   const { footerRef, opacity, opacitySecondary } = useFooterMotion();
 
   return (
@@ -27,29 +31,58 @@ export default function Footer({ setIsOpenModalContact }: IFooterProps) {
       ref={footerRef}
       className="relative w-full flex flex-col justify-center items-center filter pt-40"
     >
-      <span className="font-jakarta-semi-bold text-[60px] leading-[60px] text-center">
-        Ça vous inspire ? <br />
-        <span className="holographic-text">Parlons design !</span>
-      </span>
-      <div className="relative z-10 w-full h-[230px] flex justify-center items-center">
+      {footerType === "home" ? (
+        <div className="max-w-[990px] m-auto flex flex-col items-center gap-4">
+          <div className="h-[3px] md:w-28 w-20 holographic-bg rounded-full my-8" />
+          <div className="flex flex-row font-jakarta-semibold text-[24px] leading-[27px] text-white items-center gap-2">
+            <span>L’agence qui met tout le monde d’accord </span>
+          </div>
+          <h2 className="flex flex-col justify-center items-center font-jakarta-semi-bold text-[56px] leading-[56px] text-center glassy tracking-[-2.8px] whitespace-pre-line p-2">
+            <span className="flex flex-row items-center gap-4">
+              <Star className="w-6 h-6" />
+              Dans 2 mois, votre marque
+              <Star className="w-6 h-6" />
+            </span>
+            <span>aura changer de dimension !</span>
+          </h2>
+        </div>
+      ) : (
+        <>
+          <span className="font-jakarta-semi-bold text-[60px] leading-[60px] text-center">
+            Ça vous inspire ? <br />
+            <span className="holographic-text">Parlons design !</span>
+          </span>
+        </>
+      )}
+      <div className="relative z-10 w-full h-[230px] flex justify-center items-center overflow-hidden">
         <SayYesFooter className="w-full h-[300px] absolute pointer-events-none" />
         <Button
-          label="On en discute"
+          label={footerType === "home" ? "Démarrer un projet" : "On en discute"}
           type="border"
           leftIcon={<ChatBuble color="white" />}
           textSize="L"
           onClick={() => setIsOpenModalContact(true)}
         />
-        <motion.img
-          src="/images/footer/Halo.png"
-          alt="footer"
-          className="w-full h-full absolute top-0 left-0 pointer-events-none"
-          style={{ opacity }}
-        />
+        {footerType === "home" ? (
+          <motion.img
+            src="/images/footer/HaloPurple.png"
+            alt="footer"
+            className="w-full h-full absolute bottom-0 left-0 pointer-events-none"
+            style={{ opacity }}
+          />
+        ) : (
+          <motion.img
+            src="/images/footer/Halo.png"
+            alt="footer"
+            className="w-full h-full absolute top-0 left-0 pointer-events-none"
+            style={{ opacity }}
+          />
+        )}
+
         <motion.img
           src="/images/footer/HaloBottom.png"
           alt="footer"
-          className="w-full h-full absolute bottom-0 left-0 pointer-events-none"
+          className="w-full h-full absolute -bottom-20 left-0 pointer-events-none"
           style={{ opacity: opacitySecondary }}
         />
       </div>
