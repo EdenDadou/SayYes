@@ -19,6 +19,7 @@ import BigTemoignage from "~/components/Screens/Homepage/BigTemoignage";
 import TemoignagesCards from "~/components/Screens/Homepage/TemoignagesCards";
 import ProjectCarousel from "~/components/Screens/Portfolio/components/ProjectCarousel";
 import HomeProjectCarousel from "~/components/Screens/Homepage/HomeProjectCarroussel";
+import TitleStepImage from "~/components/Screens/Homepage/TitleStepImage";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -86,6 +87,8 @@ export default function Index() {
             <TemoignagesCards />
             {/* //Section 8 */}
             <HomeProjectCarousel />
+            {/* //Section 9 */}
+            <TitleStepImage />
           </div>
         </Desktoplayout>
       )}
