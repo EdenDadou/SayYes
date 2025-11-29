@@ -49,21 +49,19 @@
   content: "";
   position: absolute;
   inset: 0; /* couvre tout l’élément */
-  padding: 0.5px; /* épaisseur de la bordure */
+  padding: 1px; /* épaisseur de la bordure */
   border-radius: inherit;
   background-image: conic-gradient(
-    from 0deg,
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.3) 25%,
+    from 180deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.3) 10%,
+    rgba(255, 255, 255, 0.4) 20%,
     rgba(255, 255, 255, 0.5) 30%,
-    transparent 55%,
-    rgba(255, 255, 255, 0.3) 70%,
-    rgba(255, 255, 255, 0.5) 80%,
-    rgba(255, 255, 255, 0.1) 90%
+    rgba(255, 255, 255, 0.3) 40%,
+    rgba(255, 255, 255, 0.2) 50%
   );
   -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#675555 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;

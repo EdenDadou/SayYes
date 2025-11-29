@@ -44,7 +44,7 @@ export default function Solutions() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
         >
-          <Background className="absolute -top-40 left-0 w-full h-auto z-0 opacity-80" />
+          <Background className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80" />
         </motion.div>
       </AnimatePresence>
       <section className="relative z-10 w-[988px] mx-auto flex flex-col gap-14 justify-center items-start pt-20 mb-10">

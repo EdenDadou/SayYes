@@ -1,0 +1,87 @@
+import type { SVGProps } from "react";
+const ArrowBig = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    fill="none"
+    viewBox="24.25 18.25 76.6 76.6"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ display: "block" }}
+    {...props}
+  >
+    <g>
+      <foreignObject x={-38.5607} y={-44.5607} width={202.231} height={202.23}>
+        <div
+          style={{
+            backdropFilter: "blur(31.28px)",
+            clipPath: "url(#bgblur_0_1371_3416_clip_path)",
+            height: "100%",
+            width: "100%",
+          }}
+        />
+      </foreignObject>
+      <circle
+        data-figma-bg-blur-radius={62.5607}
+        cx={62.5551}
+        cy={56.5541}
+        r={38.3043}
+        transform="rotate(-180 62.5551 56.5541)"
+        stroke="white"
+        strokeWidth={0.5}
+      />
+      <g filter="url(#filter2_i_1371_3416)">
+        <path
+          d="M65.6384 68.6844C65.6634 68.7088 66.429 68.8951 67.3396 69.0983C68.2503 69.3015 69.0052 69.4367 69.0174 69.399C69.0294 69.3611 69.1236 68.7474 69.2267 68.0352C69.4337 66.6049 69.9348 64.9349 70.4703 63.8904C72.1394 60.6354 75.1341 58.4802 78.7663 57.92L79.6913 57.7773L79.6913 56.3394L79.6913 54.9014L78.8529 54.7648C73.3606 53.8702 69.7799 49.8831 69.11 43.9164C69.0663 43.5268 69.014 43.2081 68.9939 43.2081C68.8087 43.2081 65.7394 43.9263 65.6813 43.9832C65.6394 44.0243 65.6706 44.3896 65.7508 44.7947C66.639 49.281 69.182 52.9316 72.4821 54.4581L73.2738 54.8242C64.8143 54.8354 57.5818 54.8417 49.1224 54.8529L44.7617 54.8711L44.7617 57.7812L49.1489 57.7994L73.2618 57.8282L72.2624 58.3198C69.6698 59.5951 67.6171 62.0967 66.4083 65.4545C66.0638 66.4111 65.5441 68.592 65.6384 68.6844Z"
+          fill="white"
+        />
+      </g>
+    </g>
+    <defs>
+      <clipPath
+        id="bgblur_0_1371_3416_clip_path"
+        transform="translate(38.5607 44.5607)"
+      >
+        <circle
+          cx={62.5551}
+          cy={56.5541}
+          r={38.3043}
+          transform="rotate(-180 62.5551 56.5541)"
+        />
+      </clipPath>
+      <filter
+        id="filter2_i_1371_3416"
+        x={44.7617}
+        y={43.208}
+        width={34.9297}
+        height={27.1063}
+        filterUnits="userSpaceOnUse"
+        colorInterpolationFilters="sRGB"
+      >
+        <feFlood floodOpacity={0} result="BackgroundImageFix" />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="BackgroundImageFix"
+          result="shape"
+        />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy={0.909038} />
+        <feGaussianBlur stdDeviation={0.649312} />
+        <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="shape"
+          result="effect1_innerShadow_1371_3416"
+        />
+      </filter>
+    </defs>
+  </svg>
+);
+export default ArrowBig;

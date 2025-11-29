@@ -5,6 +5,8 @@ import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import { usePortfolio } from "~/contexts/PortfolioContext";
+import Arrow from "~/assets/icons/Arrow";
+import ArrowBig from "~/assets/icons/ArrowBig";
 
 interface ProjectCarouselProps {
   className?: string;
@@ -101,24 +103,24 @@ export default function ProjectCarousel({
         <div className="absolute w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20">
           <button
             onClick={prevSlide}
-            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
+            className={`z-20 backdrop-blur-3xl hover:bg-white/20 rounded-full transition-all duration-300 group ${
               currentIndex === 0 ? "opacity-0 invisible" : "opacity-100 visible"
             }`}
             aria-label="Projet précédent"
           >
-            <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
+            <ArrowBig className="w-[77px] h-[77px] text-white transition-transform rotate-180" />
           </button>
 
           <button
             onClick={nextSlide}
-            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
+            className={`z-20 backdrop-blur-3xl hover:bg-white/20 rounded-full transition-all duration-300 group ${
               currentIndex >= maxIndex
                 ? "opacity-0 invisible"
                 : "opacity-100 visible"
             }`}
             aria-label="Projet suivant"
           >
-            <ArrowLight className="w-[77px] h-[77px] text-white group-hover:scale-110 transition-transform" />
+            <ArrowBig className="w-[77px] h-[77px] text-white transition-transform" />
           </button>
         </div>
 

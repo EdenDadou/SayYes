@@ -28,7 +28,7 @@ export default function ContentSolution({
   const isMobile = useViewport();
 
   const imageClasses = cn(
-    "h-full flex items-center justify-center rounded-[16px] relative "
+    "size-full flex items-center justify-center rounded-[16px] relative "
   );
 
   return isMobile ? (
@@ -57,13 +57,13 @@ export default function ContentSolution({
             autoPlay
             muted
             loop
-            className="absolute inset-0 w-full h-full object-cover rounded-[15px] z-0"
+            className="pl-2 absolute inset-0 w-full h-full object-cover rounded-[15px] z-0"
           />
         ) : null}
 
+        <Masque className="absolute inset-0 w-[100%] h-full object-contain rounded-xl z-0" />
         <div className="size-full relative">
           <div className="relative w-full h-full flex flex-col items-center justify-center">
-            <Masque className="absolute inset-0 w-[80%] h-full object-contain rounded-xl z-0" />
             {/* Contenu au premier plan */}
             <div className="relative z-10 flex flex-col items-start justify-center size-full gap-4 px-20">
               {subtitle !== "last" && (
