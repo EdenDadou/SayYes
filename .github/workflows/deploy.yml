@@ -126,6 +126,10 @@ jobs:
           timeout 300 npm run build || { echo "❌ Échec npm build (timeout ou erreur)"; exit 1; }
           echo "✅ Build terminé avec succès."
 
+          echo "🔄 Synchronisation finale du schéma de base de données..."
+          npx prisma db push || { echo "❌ Échec prisma db push - vérifiez si des changements destructifs sont nécessaires"; exit 1; }
+          echo "✅ Schéma de base de données synchronisé."
+
           echo "🚀 Redémarrage de l'application via PM2..."
           pm2 restart remix-app || { echo "❌ Échec PM2 restart"; exit 1; }
 
