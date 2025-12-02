@@ -55,9 +55,8 @@
 html,
 body {
   height: max-content;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden; /* Empêche le scroll horizontal */
+  width: 100vw; /* Largeur exactement égale à celle de l’écran */
+  max-width: 100%; /* Empêche tout débordement horizontal */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -116,10 +115,6 @@ section {
   backface-visibility: hidden;
 }
 
-/* Optimisation pour les SVG backgrounds */
-svg[aria-hidden="true"] {
-  contain: strict;
-}
 
 /* Réduire les animations sur mobile pour de meilleures performances */
 @media (max-width: 768px) {
