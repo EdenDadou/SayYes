@@ -86,66 +86,68 @@ export default function Footer({
           style={{ opacity: opacitySecondary }}
         />
       </div>
-      <div className="flex flex-col w-screen px-20 footer">
-        <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
-          <div className="flex flex-row items-center gap-8 ">
-            <LogoSayYesHolo width={110} height={108} />
+      <div className="flex flex-col w-screen footer">
+        <div className="flex justify-center item-center flex-col w-[990px] m-auto">
+          <div className="custom w-full md:h-28 top-0 left-0 right-0 flex items-center justify-between overflow-hidden gap-5 py-20">
+            <div className="flex flex-row items-center gap-8 ">
+              <LogoSayYesHolo width={110} height={108} />
 
-            <div className="holographic-text font-jakarta-bold text-xl">
-              Communication visuelle*
+              <div className="holographic-text font-jakarta-bold text-xl">
+                Communication visuelle*
+              </div>
             </div>
-          </div>
-          <p className="text-gray-200 text-md py-2 flex flex-row items-center gap-2">
-            <ChatBuble color="grey" />
-            hello@say_yes.com
-          </p>
-          <p className="text-gray-200 text-md py-2 flex flex-row items-center gap-2">
-            <Localisation color="grey" />
-            40 Rue Servan - 75 011 - Paris
-          </p>
-        </div>
-
-        <div className="h-[1px] w-full mb-12 holographic-bg" />
-        <div className="flex flex-row justfy-between w-full pb-8">
-          <div className="flex flex-col gap-4 w-1/3">
-            <p className="text-md font-jakarta">
-              L’agence de communication
-              <br /> visuelle qui met tout le
-              <br /> monde d’accord !
+            <p className="text-white text-md py-2 flex flex-row items-center gap-2">
+              <ChatBuble color="grey" className="w-4" />
+              hello@say_yes.com
             </p>
-            <div className="flex flex-row h-5 gap-3">
-              <SvgBtnLinkedin className="w-8 h-8" />
-              <SvgBtnFacebook className="w-8 h-8" />
-              <SvgBtnInstagram className="w-8 h-8" />
-              <SvgBtnTiktok className="w-8 h-8" />
-              <SvgBtnYoutube className="w-8 h-8" />
-            </div>
+            <p className="text-white text-md py-2 flex flex-row items-center gap-2">
+              <Localisation color="grey" className="w-3" />
+              40 Rue Servan - 75 011 - Paris
+            </p>
           </div>
-          <div className="flex flex-row justify-between w-full">
-            <div className="flex flex-col gap-6 text-gray-200 ml-10">
-              <p className="text-md font-jakarta">Branding</p>
-              <p className="text-md font-jakarta">Graphisme</p>
-              <p className="text-md font-jakarta">Web Design</p>
+
+          <div className="h-[1px] w-full mb-12 holographic-bg" />
+          <div className="flex flex-row w-full pb-8">
+            <div className="flex flex-col w-1/3 justify-between self-stretch">
+              <p className="text-md font-jakarta">
+                L'agence de communication
+                <br /> visuelle qui met tout le
+                <br /> monde d'accord !
+              </p>
+              <div className="flex flex-row gap-3">
+                <SvgBtnLinkedin className="w-8 h-8" />
+                <SvgBtnFacebook className="w-8 h-8" />
+                <SvgBtnInstagram className="w-8 h-8" />
+                <SvgBtnTiktok className="w-8 h-8" />
+                <SvgBtnYoutube className="w-8 h-8" />
+              </div>
             </div>
-            <div className="flex flex-col gap-6 text-gray-200 ml-10">
-              <p className="text-md font-jakarta">Identité Visuelle</p>
-              <p className="text-md font-jakarta">Communication Print</p>
-              <p className="text-md font-jakarta">Facilitation Graphique</p>
-            </div>
-            <div className="flex flex-col gap-6 text-gray-200 ml-10">
-              <p className="text-md font-jakarta">Motion Design</p>
-              <p className="text-md font-jakarta">Infographie</p>
-              <p className="text-md font-jakarta">Nos Solutions</p>
+            <div className="flex flex-row justify-between w-full">
+              <div className="flex flex-col gap-8 text-white ml-10">
+                <p className="text-md font-jakarta">Branding</p>
+                <p className="text-md font-jakarta">Graphisme</p>
+                <p className="text-md font-jakarta">Web Design</p>
+              </div>
+              <div className="flex flex-col gap-8 text-white ml-10">
+                <p className="text-md font-jakarta">Identité Visuelle</p>
+                <p className="text-md font-jakarta">Communication Print</p>
+                <p className="text-md font-jakarta">Facilitation Graphique</p>
+              </div>
+              <div className="flex flex-col gap-8 text-white ml-10">
+                <p className="text-md font-jakarta">Motion Design</p>
+                <p className="text-md font-jakarta">Infographie</p>
+                <p className="text-md font-jakarta">Nos Solutions</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-row justify-between w-screen px-20 py-3 bg-black">
-        <p className="text-gray-200 text-sm py-2">Mentions Légales</p>
-        <p className="text-gray-200 text-sm py-2">
-          Say Yes ©2024. Tous droits réservés.
-        </p>
-        <p className="text-gray-200 text-sm py-2">From Paris With Love ♥</p>
+        <div className="flex flex-row justify-between w-screen px-20 py-3 bg-black">
+          <p className="text-[#929292] text-sm py-2">Mentions Légales</p>
+          <p className="text-[#929292] text-sm py-2">
+            Say Yes ©2024. Tous droits réservés.
+          </p>
+          <p className="text-[#929292] text-sm py-2">From Paris With Love ♥</p>
+        </div>
       </div>
     </div>
   );

@@ -91,7 +91,9 @@ export default function FooterMobile({
           Say Yes ©2025 - Tous droits réservés.
         </p>
         <p className="text-gray-150 text-sm py-2">Mentions Légales</p>
-        <p className="text-gray-150 text-sm py-2">From Paris With Love ♥</p>
+        <p className="text-gray-150 text-sm py-2 pb-6">
+          From Paris With Love ♥
+        </p>
       </div>
     </div>
   );

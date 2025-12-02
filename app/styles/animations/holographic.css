@@ -62,7 +62,8 @@
 }
 
 /* Background holographique simple au hover */
-.holographic-bg-hover:hover {
+.holographic-bg-hover:hover,
+.group:hover .holographic-bg-hover {
   background: linear-gradient(
     150deg,
     #4ffff5,
@@ -99,7 +100,7 @@
     0 0 10px #dcc4ff,
     0 0 20px #b0f5ff,
     0 0 30px #e1ff8b;
-  filter: blur(0.3px);
+  filter: blur(0.2px);
 }
 
 .holographic-bg-vertical {
@@ -122,5 +123,5 @@
     0 0 10px #dcc4ff,
     0 0 20px #b0f5ff,
     0 0 30px #e1ff8b;
-  filter: blur(0.3px);
+  filter: blur(0.2px);
 }

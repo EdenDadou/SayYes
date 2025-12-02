@@ -52,7 +52,7 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
         </div>
         <Button
           label="Solutions"
-          leftIcon={<Flamme className="text-shadow-lg shadow-black" />}
+          leftIcon={<Flamme />}
           onClick={() => navigate("/solutions")}
           textSize="S"
         />
@@ -60,10 +60,10 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
 
       {/* Logo centré */}
       <LogoSayYes
-        className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[5px]"
+        className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[6.4px]"
         onClick={() => navigate("/")}
-        width={120}
-        height={95}
+        width={121}
+        height={100}
       />
 
       {/* Section droite */}
@@ -75,9 +75,9 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
           textSize="S"
         />
         <Button
+          type="plain"
           label="Parlons Design !"
           leftIcon={<ChatBuble />}
-          type="plain"
           onClick={() => setIsOpenModalContact(true)}
         />
       </div>

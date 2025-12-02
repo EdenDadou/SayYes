@@ -23,9 +23,9 @@ const Button = ({
     <button
       type={htmlType}
       disabled={disabled}
-      className={`w-fit cursor-pointer bg-transparent rounded-full ${className} ${
+      className={`w-fit cursor-pointer rounded-full ${className} ${
         type === "plain"
-          ? "border-custom h-[74px] p-2 "
+          ? "group border-custom h-[74px] p-2 "
           : type === "border"
             ? "border-grey-animed  hover:scale-105 transition-all backdrop-blur-xl bg-white/5"
             : ""
@@ -40,7 +40,7 @@ const Button = ({
               ? "bg-white rounded-full p-3"
               : type === "border"
                 ? `font-jakarta flex items-center gap-2 rounded-full transition-all relative ${textSize === "S" ? "pl-2 pr-4 py-2" : "pl-3 pr-5 py-3"}`
-                : "bg-white rounded-full px-4 holographic-bg-hover"
+                : "bg-white rounded-full px-4 h-full holographic-bg-hover"
         }`}
       >
         {leftIcon ? leftIcon : null}
