@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import Header from "~/components/Header";
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import ModalContact from "~/components/Screens/ModalContact";
 import Footer from "~/components/Footer";
 import "~/styles/tailwind.css";
@@ -19,19 +19,18 @@ interface ILayoutProps {
   footerType?: "default" | "home";
 }
 
-export default function Desktoplayout({
+const Desktoplayout = memo(function Desktoplayout({
   children,
   footer = true,
   footerType = "default",
 }: ILayoutProps) {
   const [isOpenModalContact, setIsOpenModalContact] = useState(false);
 
+  const closeModal = useCallback(() => setIsOpenModalContact(false), []);
+
   return (
     <main className="w-full h-fit relative flex flex-col">
-      <ModalContact
-        isOpen={isOpenModalContact}
-        close={() => setIsOpenModalContact(false)}
-      />
+      <ModalContact isOpen={isOpenModalContact} close={closeModal} />
       <Header setIsOpenModalContact={setIsOpenModalContact} />
       <AnimatePresence>
         <motion.div
@@ -51,4 +50,6 @@ export default function Desktoplayout({
       ) : null}
     </main>
   );
-}
+});
+
+export default Desktoplayout;

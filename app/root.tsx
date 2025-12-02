@@ -17,7 +17,7 @@ export function links() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="w-screen h-auto">
+    <html lang="en" className="w-full h-auto overflow-x-hidden">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

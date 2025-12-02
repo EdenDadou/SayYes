@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Close from "~/assets/icons/Close";
 import Localisation from "~/assets/icons/Localisation";
@@ -23,6 +24,17 @@ export default function ModalContactMobile({
   isOpen,
   close,
 }: ModalModalContactProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
     <div
       className={`fixed inset-0 z-20 flex flex-col items-center w-full h-screen overflow-y-auto pt-20
@@ -32,7 +44,7 @@ export default function ModalContactMobile({
         backdropFilter: "blur(25px)",
       }}
     >
-      <div className="flex flex-col items-center justify-start gap-8 z-20 pb-8 pt-20 relative w-full px-4">
+      <div className="flex flex-col items-center justify-start gap-8 z-20 pb-[200px] pt-20 relative w-full px-4">
         <button
           className="absolute top-10 right-8 text-white cursor-pointer z-30 hover:opacity-70"
           onClick={close}

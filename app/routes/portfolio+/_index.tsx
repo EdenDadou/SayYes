@@ -25,11 +25,6 @@ export default function Portfolio() {
   // Diviser les portfolios en deux groupes pour l'affichage
   const portfolioTopCards = allPortfolios.slice(0, 20);
 
-  // Attendre que le viewport soit détecté pour éviter le flash
-  if (isMobile === null) {
-    return null;
-  }
-
   return isMobile ? (
     <MobileLayout>
       <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />

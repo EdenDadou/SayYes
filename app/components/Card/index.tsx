@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { cn } from "~/utils/ui/ui";
 import "~/styles/tailwind.css";
 
@@ -9,16 +10,20 @@ interface CardProps {
   borderRadius?: string;
 }
 
-export default function Card({
+const Card = memo(function Card({
   content,
   height,
   borderClass,
   children,
-  borderRadius = "24px",
+  borderRadius = "28px",
 }: CardProps) {
-  const containerClasses = cn(
-    `md:border-custom-thin border-custom-mobile w-full md:rounded-[${borderRadius}] rounded-[16px]`,
-    borderClass
+  const containerClasses = useMemo(
+    () =>
+      cn(
+        `md:border-custom-thin border-custom-mobile w-full md:rounded-[${borderRadius}] rounded-[16px]`,
+        borderClass
+      ),
+    [borderRadius, borderClass]
   );
 
   return (
@@ -26,4 +31,6 @@ export default function Card({
       {content || children}
     </div>
   );
-}
+});
+
+export default Card;

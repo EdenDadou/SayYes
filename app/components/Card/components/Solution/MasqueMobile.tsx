@@ -28,27 +28,6 @@ const MasqueMobile = (props: SVGProps<SVGSVGElement>) => (
       </g>
     </g>
     <defs>
-      <filter
-        id="filter0_f_819_1465"
-        x={-399.697}
-        y={132.7}
-        width={1117.04}
-        height={895.6}
-        filterUnits="userSpaceOnUse"
-        colorInterpolationFilters="sRGB"
-      >
-        <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feBlend
-          mode="normal"
-          in="SourceGraphic"
-          in2="BackgroundImageFix"
-          result="shape"
-        />
-        <feGaussianBlur
-          stdDeviation={163.65}
-          result="effect1_foregroundBlur_819_1465"
-        />
-      </filter>
       <linearGradient
         id="paint0_linear_819_1465"
         x1={-65.7553}

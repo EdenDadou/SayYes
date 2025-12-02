@@ -4,6 +4,7 @@ import {
   ReactNode,
   useState,
   useCallback,
+  useMemo,
 } from "react";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
@@ -70,17 +71,20 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
     }
   }, []);
 
+  const value = useMemo(
+    () => ({
+      portfolio,
+      allPortfolios,
+      isLoading,
+      error,
+      fetchAllPortfolios,
+      fetchPortfolioBySlug,
+    }),
+    [portfolio, allPortfolios, isLoading, error, fetchAllPortfolios, fetchPortfolioBySlug]
+  );
+
   return (
-    <PortfolioContext.Provider
-      value={{
-        portfolio,
-        allPortfolios,
-        isLoading,
-        error,
-        fetchAllPortfolios,
-        fetchPortfolioBySlug,
-      }}
-    >
+    <PortfolioContext.Provider value={value}>
       {children}
     </PortfolioContext.Provider>
   );

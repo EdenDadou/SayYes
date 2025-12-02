@@ -27,10 +27,6 @@ export default function ContentSolution({
 }: PropsContent) {
   const isMobile = useViewport();
 
-  const imageClasses = cn(
-    "size-full flex items-center justify-center rounded-[16px] relative "
-  );
-
   return isMobile ? (
     <ContentSolutionMobile
       imageUrl={imageUrl}
@@ -43,7 +39,7 @@ export default function ContentSolution({
   ) : (
     <div className="size-full md:p-3 p-2">
       <div
-        className={imageClasses}
+        className="size-full flex items-center justify-center rounded-[16px] relative"
         style={{
           backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
           backgroundSize: "cover",
@@ -57,11 +53,11 @@ export default function ContentSolution({
             autoPlay
             muted
             loop
-            className="pl-2 absolute inset-0 w-full h-full object-cover rounded-[15px] z-0"
+            className="pl-2 absolute inset-0 w-full h-full object-cover rounded-[16px] z-0"
           />
         ) : null}
 
-        <Masque className="absolute inset-0 w-[100%] h-full object-contain rounded-xl z-0" />
+        <Masque className="absolute inset-0 w-[100%] h-full object-contain rounded-[16px] z-0" />
         <div className="size-full relative">
           <div className="relative w-full h-full flex flex-col items-center justify-center">
             {/* Contenu au premier plan */}

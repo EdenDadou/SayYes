@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Card from "~/components/Card";
 import { solutionsCards } from "~/components/Screens/Solutions/data";
 import { useViewport } from "~/utils/hooks/useViewport";
@@ -9,8 +10,23 @@ import Background from "~/assets/icons/Background";
 import MobileLayout from "~/components/Layout/Mobile";
 import "~/styles/tailwind.css";
 import SolutionTitle from "~/components/Screens/Solutions/components/SolutionTitle";
-import { motion } from "framer-motion";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+
+// Composant Cards mémorisé pour éviter les re-renders
+const SolutionCards = memo(function SolutionCards() {
+  return (
+    <>
+      {solutionsCards.map((card, index) => (
+        <Card
+          key={index}
+          height={card.height}
+          content={card.content}
+          borderClass={card.borderClass}
+        />
+      ))}
+    </>
+  );
+});
 
 export default function Solutions() {
   const isMobile = useViewport();
@@ -30,14 +46,7 @@ export default function Solutions() {
           <Star className="w-4 h-4" />5 étapes pour un branding impeccable
           <Star className="w-4 h-4" />
         </h2>
-        {solutionsCards.map((card, index) => (
-          <Card
-            key={index}
-            height={card.height}
-            content={card.content}
-            borderClass={card.borderClass}
-          />
-        ))}
+        <SolutionCards />
       </section>
     </MobileLayout>
   ) : (
@@ -54,14 +63,7 @@ export default function Solutions() {
       </AnimatePresence>
       <section className="relative z-10 w-[988px] mx-auto flex flex-col gap-14 justify-center items-start pt-20 mb-10">
         <SolutionTitle />
-        {solutionsCards.map((card, index) => (
-          <Card
-            key={index}
-            height={card.height}
-            content={card.content}
-            borderClass={card.borderClass}
-          />
-        ))}
+        <SolutionCards />
       </section>
     </Desktoplayout>
   );

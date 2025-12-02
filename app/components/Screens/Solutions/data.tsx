@@ -18,7 +18,7 @@ export const solutionsCards = [
         ]}
       />
     ),
-    borderClass: "light-border",
+    borderClass: "light-border rounded-[28px]",
   },
   {
     height: "560px",
@@ -36,7 +36,7 @@ export const solutionsCards = [
         ]}
       />
     ),
-    borderClass: "light-border",
+    borderClass: "light-border rounded-[28px]",
   },
   {
     height: "560px",
@@ -56,7 +56,7 @@ export const solutionsCards = [
         ]}
       />
     ),
-    borderClass: "light-border",
+    borderClass: "light-border rounded-[28px]",
   },
   {
     height: "560px",
@@ -74,7 +74,7 @@ export const solutionsCards = [
         ]}
       />
     ),
-    borderClass: "light-border",
+    borderClass: "light-border rounded-[28px]",
   },
   {
     height: "560px",
@@ -92,6 +92,6 @@ export const solutionsCards = [
         ]}
       />
     ),
-    borderClass: "light-border",
+    borderClass: "light-border rounded-[28px]",
   },
 ];

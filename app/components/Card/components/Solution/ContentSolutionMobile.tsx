@@ -30,9 +30,9 @@ export default function ContentSolutionMobile({
 
   return (
     <div className="size-full p-2">
-      <div className="size-full relative">
+      <div className="size-full relative overflow-hidden rounded-[18px]">
         <div className="absolute inset-0 size-full bg-gradient-to-b from-transparent via-black/70 to-black/10 z-20" />
-        <MasqueMobile className="absolute inset-0 size-full object-cover z-10 rounded-[15px]" />
+        <MasqueMobile className="absolute bottom-14 size-full object-cover z-10 rounded-[16px] blur-[80px]" />
         {videoUrl ? (
           <video
             src={videoUrl}
