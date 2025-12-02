@@ -48,7 +48,7 @@ const Button = ({
           <span
             className={`${
               type === "transparent" || type === "border"
-                ? "text-white text-shadow-base shadow-black font-jakarta"
+                ? "text-white shadow-black font-jakarta"
                 : "text-black font-jakarta-bold py-4 text-md"
             } ${textSize === "L" ? "text-[20px]" : textSize === "M" ? "text-[18px]" : "text-[14px]"} `}
           >

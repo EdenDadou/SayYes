@@ -34,8 +34,9 @@ export default function ContentContact({
 
   return (
     <Card
-      borderClass="light-border flex justify-center items-center w-[90%] max-w-6xl p-3"
+      borderClass="light-border flex justify-center items-center w-[90%] max-w-6xl p-3 rounded-[28px]"
       height="85%"
+      borderRadius="28px"
     >
       <div
         className="relative w-full h-full rounded-[16px] flex flex-row overflow-hidden px-20"
@@ -121,7 +122,7 @@ export default function ContentContact({
                 className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  borderBottom: "1px solid #9C9C9C",
+                  borderBottom: "0.5px solid #9C9C9C",
                 }}
                 placeholder="Nom et prénom"
               />
@@ -137,7 +138,7 @@ export default function ContentContact({
                 className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  borderBottom: "1px solid #9C9C9C",
+                  borderBottom: "0.5px solid #9C9C9C",
                 }}
                 placeholder="exemple@gmail.com"
               />
@@ -153,7 +154,7 @@ export default function ContentContact({
                 className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  borderBottom: "1px solid #9C9C9C",
+                  borderBottom: "0.5px solid #9C9C9C",
                 }}
                 placeholder="+33 6 00 00 00"
               />
@@ -169,7 +170,7 @@ export default function ContentContact({
                 className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  borderBottom: "1px solid #9C9C9C",
+                  borderBottom: "0.5px solid #9C9C9C",
                 }}
                 placeholder="Entreprise"
               />
@@ -185,7 +186,7 @@ export default function ContentContact({
                 className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl"
                 style={{
                   background: "rgba(255, 255, 255, 0.10)",
-                  borderBottom: "1px solid #9C9C9C",
+                  borderBottom: "0.5px solid #9C9C9C",
                 }}
                 placeholder="Bonjour, je vous contacte pour..."
               ></textarea>
@@ -204,6 +205,7 @@ export default function ContentContact({
                     : "Envoyer ma demande"
                 }
                 htmlType="submit"
+                textSize="S"
                 disabled={fetcher.state === "submitting"}
                 leftIcon={<ArrowFull className="w-6 h-6" />}
               />
