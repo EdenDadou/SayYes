@@ -73,12 +73,12 @@
     rgba(255, 255, 255, 0.01) 20.12%,
     rgba(78, 78, 78, 0.14) 101.01%
   );
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(30px);
 }
 
 .card-hover {
   --border-width: 2px;
-  --radius: 24px;
+  --radius: 28px;
 
   position: relative;
   border-radius: var(--radius);
