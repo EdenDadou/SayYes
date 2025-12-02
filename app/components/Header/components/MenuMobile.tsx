@@ -56,12 +56,12 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
             transition={{ duration: 0.1, delay: 0.1, ease: "easeOut" }}
             className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10"
           >
-            <div className="font-jakarta text-[14px]">
+            <div className="font-jakarta-bold text-[14px]">
               Communication visuelle*
             </div>
             <button
               onClick={() => handleNaviation("/solutions")}
-              className={`text-[22px] font-jakarta ${
+              className={`text-[28px] font-jakarta ${
                 location.pathname === "/solutions" ? "holographic-text" : ""
               }`}
             >
@@ -69,7 +69,7 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
             </button>
             <button
               onClick={() => handleNaviation("/portfolio")}
-              className={`text-[22px] font-jakarta ${
+              className={`text-[28px] font-jakarta${
                 location.pathname === "/portfolio" ? "holographic-text" : ""
               }`}
             >

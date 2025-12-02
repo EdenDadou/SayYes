@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 
-export function useViewport() {
-  const [isMobile, setIsMobile] = useState(false);
+const VIEWPORT_KEY = "sayyes_is_mobile";
 
-  useEffect(() => {
-    const userAgent =
-      typeof navigator === "undefined" ? "SSR" : navigator.userAgent;
-    setIsMobile(isMobileUserAgent(userAgent));
-  }, []);
-
+function detectAndStore(): boolean {
+  const stored = localStorage.getItem(VIEWPORT_KEY);
+  if (stored !== null) {
+    return stored === "true";
+  }
+  // Première visite : détecter et stocker
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+  localStorage.setItem(VIEWPORT_KEY, String(isMobile));
   return isMobile;
 }
 
-function isMobileUserAgent(userAgent: string) {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    userAgent
-  );
+export function useViewport() {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setIsMobile(detectAndStore());
+  }, []);
+
+  return isMobile;
 }

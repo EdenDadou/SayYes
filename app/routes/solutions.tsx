@@ -15,6 +15,11 @@ import { AnimatePresence } from "framer-motion";
 export default function Solutions() {
   const isMobile = useViewport();
 
+  // Attendre que le viewport soit détecté pour éviter le flash
+  if (isMobile === null) {
+    return null;
+  }
+
   return isMobile ? (
     <MobileLayout>
       <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />

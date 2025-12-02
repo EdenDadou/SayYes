@@ -55,6 +55,11 @@ export default function Index() {
     }
   }, []);
 
+  // Attendre que le viewport soit détecté pour éviter le flash
+  if (isMobile === null) {
+    return <LoadingBar />;
+  }
+
   return (
     <>
       {isLoading && <LoadingBar />}

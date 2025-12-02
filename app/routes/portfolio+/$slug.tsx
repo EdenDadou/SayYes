@@ -35,8 +35,9 @@ export default function PortfolioSlug() {
   // Update meta tags dynamically when portfolio is loaded
   useMetaData(portfolio);
 
+  // Attendre que le viewport soit détecté pour éviter le flash
   // Show loading or error states
-  if (!portfolio) {
+  if (!portfolio || isMobile === null) {
     return (
       <div className="w-screen h-screen flex items-center justify-center">
         <p className="text-white text-xl">Chargement...</p>

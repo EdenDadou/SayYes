@@ -7,16 +7,6 @@ const SvgBtnFacebook = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <foreignObject x={-18.6905} y={-18.6905} width={67.381} height={67.381}>
-      <div
-        style={{
-          backdropFilter: "blur(9.35px)",
-          clipPath: "url(#bgblur_0_4114_3252_clip_path)",
-          height: "100%",
-          width: "100%",
-        }}
-      />
-    </foreignObject>
     <g filter="url(#filter0_i_4114_3252)" data-figma-bg-blur-radius={18.6905}>
       <mask id="path-1-inside-1_4114_3252" fill="white">
         <path

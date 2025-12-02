@@ -44,5 +44,9 @@ export default function App() {
 
 export function ErrorBoundary() {
   const isMobile = useViewport();
+  // Attendre que le viewport soit détecté pour éviter le flash
+  if (isMobile === null) {
+    return null;
+  }
   return !isMobile ? <Page404 /> : <Page404Mobile />;
 }
