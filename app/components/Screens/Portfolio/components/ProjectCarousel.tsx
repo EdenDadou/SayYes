@@ -168,7 +168,8 @@ export default function ProjectCarousel({
                         slug={project.slug}
                       />
                     }
-                    borderClass="card-hover"
+                    borderClass="card-hover rounded-[28px]"
+                    borderRadius="28px"
                   />
                 </div>
               ))}

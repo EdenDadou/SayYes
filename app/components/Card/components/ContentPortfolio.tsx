@@ -1,10 +1,7 @@
-import { useViewport } from "~/utils/hooks/useViewport";
 import { cn } from "~/utils/ui/ui";
-
-import "~/styles/tailwind.css";
-import Arrow from "~/assets/icons/Arrow";
 import { useNavigate } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
+import "~/styles/tailwind.css";
 
 interface PropsContent {
   imageUrl?: string;
@@ -23,12 +20,12 @@ export default function ContentPortfolio({
 }: PropsContent) {
   const navigate = useNavigate();
   const imageClasses = cn(
-    "h-full flex items-center justify-center md:rounded-[15px] rounded-[10px] relative card-image"
+    "h-full flex items-center justify-center md:rounded-[20px] rounded-[10px] relative card-image"
   );
 
   return (
     <div
-      className="size-full relative overflow-hidden md:rounded-[15px] rounded-[10px] hover:rounded-[25px] md:p-2 p-1 cursor-pointer
+      className="size-full relative overflow-hidden md:rounded-[15px] hover:rounded-[26px] rounded-[10px]  md:p-2 p-1 cursor-pointer
       shadow-lg"
       onClick={() => {
         navigate(`/portfolio/${slug}`);
