@@ -65,3 +65,16 @@ enum MediaType {
   VIDEO
   DOCUMENT
 }
+
+model LandingPage {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  color     String   @default("#000000")
+  seo       String   @default("{\"metaTitle\":\"\",\"metaDescription\":\"\",\"schemaOrg\":\"\"}")
+  blocs     String   @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("landing_pages")
+}

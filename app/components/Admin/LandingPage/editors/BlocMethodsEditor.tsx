@@ -1,0 +1,273 @@
+import type { BlocMethods } from "~/types/landing-page";
+import MediaEditor from "./MediaEditor";
+
+interface BlocMethodsEditorProps {
+  bloc: BlocMethods;
+  onUpdate: (bloc: BlocMethods) => void;
+}
+
+export default function BlocMethodsEditor({
+  bloc,
+  onUpdate,
+}: BlocMethodsEditorProps) {
+  const addCard = () => {
+    onUpdate({
+      ...bloc,
+      cards: [
+        ...bloc.cards,
+        { media: { type: "image", url: "" }, title: "", icons: [], lines: [] },
+      ],
+    });
+  };
+
+  const updateCard = (
+    index: number,
+    card: BlocMethods["cards"][0]
+  ) => {
+    const newCards = [...bloc.cards];
+    newCards[index] = card;
+    onUpdate({ ...bloc, cards: newCards });
+  };
+
+  const removeCard = (index: number) => {
+    onUpdate({
+      ...bloc,
+      cards: bloc.cards.filter((_, i) => i !== index),
+    });
+  };
+
+  const addConclusionElement = (type: "icon" | "text") => {
+    const newElement =
+      type === "icon"
+        ? { type: "icon" as const, name: "" }
+        : { type: "text" as const, text: "" };
+    onUpdate({
+      ...bloc,
+      conclusion: {
+        ...bloc.conclusion,
+        elements: [...bloc.conclusion.elements, newElement],
+      },
+    });
+  };
+
+  const updateConclusionElement = (
+    index: number,
+    element: BlocMethods["conclusion"]["elements"][0]
+  ) => {
+    const newElements = [...bloc.conclusion.elements];
+    newElements[index] = element;
+    onUpdate({
+      ...bloc,
+      conclusion: { ...bloc.conclusion, elements: newElements },
+    });
+  };
+
+  const removeConclusionElement = (index: number) => {
+    onUpdate({
+      ...bloc,
+      conclusion: {
+        ...bloc.conclusion,
+        elements: bloc.conclusion.elements.filter((_, i) => i !== index),
+      },
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Titre */}
+      <div>
+        <label className="block text-sm font-medium text-white mb-2">
+          Titre
+        </label>
+        <input
+          type="text"
+          value={bloc.titre}
+          onChange={(e) => onUpdate({ ...bloc, titre: e.target.value })}
+          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      {/* Sous-titre */}
+      <div>
+        <label className="block text-sm font-medium text-white mb-2">
+          Sous-titre
+        </label>
+        <input
+          type="text"
+          value={bloc.subTitle}
+          onChange={(e) => onUpdate({ ...bloc, subTitle: e.target.value })}
+          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      {/* Conclusion */}
+      <div className="border border-gray-700 rounded-lg p-4">
+        <div className="flex justify-between items-center mb-3">
+          <label className="block text-sm font-medium text-white">
+            Conclusion
+          </label>
+          <select
+            value={bloc.conclusion.colorType}
+            onChange={(e) =>
+              onUpdate({
+                ...bloc,
+                conclusion: {
+                  ...bloc.conclusion,
+                  colorType: e.target.value as "white" | "color",
+                },
+              })
+            }
+            className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-white text-sm"
+          >
+            <option value="white">Blanc</option>
+            <option value="color">Couleur</option>
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          {bloc.conclusion.elements.map((el, index) => (
+            <div key={index} className="flex items-center gap-2 bg-gray-800 p-2 rounded">
+              {el.type === "icon" ? (
+                <>
+                  <span className="text-white/70 text-xs w-12">Icon:</span>
+                  <input
+                    type="text"
+                    value={el.name}
+                    onChange={(e) =>
+                      updateConclusionElement(index, { ...el, name: e.target.value })
+                    }
+                    placeholder="Nom de l'icône"
+                    className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+                  />
+                </>
+              ) : (
+                <>
+                  <span className="text-white/70 text-xs w-12">Texte:</span>
+                  <input
+                    type="text"
+                    value={el.text}
+                    onChange={(e) =>
+                      updateConclusionElement(index, { ...el, text: e.target.value })
+                    }
+                    placeholder="Texte"
+                    className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+                  />
+                </>
+              )}
+              <button
+                type="button"
+                onClick={() => removeConclusionElement(index)}
+                className="text-red-400 hover:text-red-300 p-1"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-2 mt-2">
+          <button
+            type="button"
+            onClick={() => addConclusionElement("text")}
+            className="text-xs text-blue-400 hover:text-blue-300 px-2 py-1 border border-blue-400/30 rounded"
+          >
+            + Texte
+          </button>
+          <button
+            type="button"
+            onClick={() => addConclusionElement("icon")}
+            className="text-xs text-green-400 hover:text-green-300 px-2 py-1 border border-green-400/30 rounded"
+          >
+            + Icône
+          </button>
+        </div>
+      </div>
+
+      {/* Cards */}
+      <div>
+        <div className="flex justify-between items-center mb-3">
+          <label className="block text-sm font-medium text-white">
+            Cards ({bloc.cards.length})
+          </label>
+          <button
+            type="button"
+            onClick={addCard}
+            className="text-sm text-blue-400 hover:text-blue-300"
+          >
+            + Ajouter une card
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {bloc.cards.map((card, index) => (
+            <div
+              key={index}
+              className="border border-gray-700 rounded-lg p-4 space-y-3"
+            >
+              <div className="flex justify-between items-center">
+                <span className="text-white/70 text-sm">Card {index + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => removeCard(index)}
+                  className="text-red-400 hover:text-red-300 text-sm"
+                >
+                  Supprimer
+                </button>
+              </div>
+
+              <input
+                type="text"
+                value={card.title}
+                onChange={(e) =>
+                  updateCard(index, { ...card, title: e.target.value })
+                }
+                placeholder="Titre"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              <MediaEditor
+                media={card.media}
+                onChange={(media) => updateCard(index, { ...card, media })}
+                label="Média"
+              />
+
+              <input
+                type="text"
+                value={card.icons.join(", ")}
+                onChange={(e) =>
+                  updateCard(index, {
+                    ...card,
+                    icons: e.target.value
+                      .split(",")
+                      .map((i) => i.trim())
+                      .filter(Boolean),
+                  })
+                }
+                placeholder="Icônes (séparées par virgules)"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              <input
+                type="text"
+                value={card.lines.join(", ")}
+                onChange={(e) =>
+                  updateCard(index, {
+                    ...card,
+                    lines: e.target.value
+                      .split(",")
+                      .map((l) => l.trim())
+                      .filter(Boolean),
+                  })
+                }
+                placeholder="Lignes (séparées par virgules)"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

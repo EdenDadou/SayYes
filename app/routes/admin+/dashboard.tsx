@@ -128,8 +128,9 @@ export default function AdminDashboard() {
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors duration-200"
               style={{ fontFamily: "Jakarta Semi Bold" }}
+              onClick={() => navigate("/admin/manage-landing-page")}
             >
-              Nouveau Temoignage
+              Gérer landing page
             </button>
 
             <button

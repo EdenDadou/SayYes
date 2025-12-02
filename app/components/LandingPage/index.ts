@@ -1,0 +1,13 @@
+export { default as AnimatedTitle } from "./AnimatedTitle";
+export { default as BlocRenderer } from "./BlocRenderer";
+export { default as BlocIntroFront } from "./BlocIntroFront";
+export { default as BlocCardsFront } from "./BlocCardsFront";
+export { default as BlocMethodsFront } from "./BlocMethodsFront";
+export { default as BlocChiffresClesFront } from "./BlocChiffresClesFront";
+export { default as BlocFAQFront } from "./BlocFAQFront";
+export { default as BlocEtapeFront } from "./BlocEtapeFront";
+export { default as BlocTestimonialFront } from "./BlocTestimonialFront";
+export { default as BlocFooterFront } from "./BlocFooterFront";
+export { default as BlocUseCaseFront } from "./BlocUseCaseFront";
+export { default as BlocCommentaireClientFront } from "./BlocCommentaireClientFront";
+export { default as BlocOffresFront } from "./BlocOffresFront";

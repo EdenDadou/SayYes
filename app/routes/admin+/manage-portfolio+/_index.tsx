@@ -444,12 +444,6 @@ export default function ManagePortfolio() {
                         {portfolio.titre}
                       </h3>
 
-                      {portfolio.kicker && (
-                        <p className="text-sm text-blue-600 mb-2 font-medium">
-                          {portfolio.kicker}
-                        </p>
-                      )}
-
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                         {portfolio.description}
                       </p>
@@ -492,16 +486,16 @@ export default function ManagePortfolio() {
                       </div>
 
                       {/* Actions */}
-                      <div className="flex gap-2">
+                      <div className="flex w-full justify-between gap-2">
                         <Link
                           to={`/admin/manage-portfolio/${portfolio.slug}`}
-                          className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors duration-200 justify-center flex"
                         >
                           Modifier
                         </Link>
                         <button
                           type="button"
-                          className={`text-white text-sm px-3 py-1 rounded transition-colors duration-200 ${
+                          className={`w-full text-white text-sm px-3 py-1 rounded transition-colors duration-200 justify-center ${
                             deleteFetcher.state === "submitting"
                               ? "bg-gray-500 cursor-not-allowed"
                               : "bg-red-600 hover:bg-red-700"
