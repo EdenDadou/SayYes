@@ -18,20 +18,22 @@ export default function MasqueGif({
         right: right,
         width: width, // Match the parent container width
         height: height,
+        background: "rgba(0, 0, 0, 0.16)",
       }}
     >
       <div
         className="absolute left-0 top-0 w-60 h-full"
         style={{
           background:
-            "linear-gradient(to right, rgba(0, 0, 0, 1) 15%, transparent)",
+            "linear-gradient(to right, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.9) 30%, transparent)",
         }}
       />
 
       <div
-        className={`absolute right-0 top-0 w-40 h-full ${rounded ? "rounded-r-2xl" : ""}`}
+        className={`absolute right-0 top-0 w-20 h-full ${rounded ? "rounded-r-2xl" : ""}`}
         style={{
-          background: "linear-gradient(to left, rgba(0, 0, 0, 1), transparent)",
+          background:
+            "linear-gradient(to left,  rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.9) 30%, transparent)",
         }}
       />
 
@@ -40,7 +42,7 @@ export default function MasqueGif({
         className={`absolute top-0 left-0 w-full ${rounded ? "rounded-r-2xl" : ""} ${bold ? "h-80" : "h-32"}`}
         style={{
           background:
-            "linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, transparent)",
+            "linear-gradient(to bottom,  rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.8) 40%, transparent)",
         }}
       />
 
@@ -49,7 +51,7 @@ export default function MasqueGif({
         className={`absolute bottom-0 left-0 w-full h-40 ${rounded ? "rounded-r-2xl" : ""}`}
         style={{
           background:
-            "linear-gradient(to top, rgba(0, 0, 0, 1) 15%, transparent)",
+            "linear-gradient(to top, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0.8) 40%, transparent)",
         }}
       />
     </div>

@@ -4,6 +4,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
 } from "@remix-run/react";
 import * as styles from "./styles/index.css";
 import Page404 from "./components/Screens/404";
@@ -43,10 +45,27 @@ export default function App() {
 }
 
 export function ErrorBoundary() {
+  const error = useRouteError();
   const isMobile = useViewport();
+
   // Attendre que le viewport soit détecté pour éviter le flash
   if (isMobile === null) {
     return null;
   }
-  return !isMobile ? <Page404 /> : <Page404Mobile />;
+
+  // Afficher la page 404 uniquement pour les erreurs de route (404)
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return !isMobile ? <Page404 /> : <Page404Mobile />;
+  }
+
+  // Pour les autres erreurs, on peut afficher un message générique
+  // ou relancer l'erreur pour le débogage
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold">Une erreur est survenue</h1>
+        <p className="mt-2 text-gray-600">Veuillez réessayer plus tard.</p>
+      </div>
+    </div>
+  );
 }

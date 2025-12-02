@@ -25,7 +25,7 @@ export default function Page404() {
     <Desktoplayout footer={false}>
       <main className="relative w-screen h-screen flex items-center justify-start px-36 -mt-10">
         <div
-          className="absolute right-10 w-[700px] h-[480px] z-0"
+          className="absolute right-0 w-[780px] h-[480px] z-0"
           style={{
             backgroundImage: 'url("images/404/404.gif")',
             backgroundSize: "100% 100%",
@@ -34,7 +34,7 @@ export default function Page404() {
           }}
         />
 
-        <MasqueGif height="480px" width="700px" right={40} />
+        <MasqueGif height="480px" width="780px" right={0} />
         <Background404 className="absolute inset-0 w-full h-screen z-10 " />
 
         <div className="flex flex-row items-center justify-center gap-8 z-20">

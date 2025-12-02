@@ -1,9 +1,20 @@
-import { json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import {
+  json,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+} from "@remix-run/node";
+import {
+  isRouteErrorResponse,
+  useLoaderData,
+  useRouteError,
+} from "@remix-run/react";
 import { getLandingPageBySlug } from "~/server/landing-page.server";
 import { prisma } from "~/server/db.server";
 import { BlocRenderer } from "~/components/LandingPage";
 import type { Bloc, BlocUseCase } from "~/types/landing-page";
+import { useViewport } from "~/utils/hooks/useViewport";
+import Page404 from "~/components/Screens/404";
+import Page404Mobile from "~/components/Screens/404/mobile/Page404Mobile";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data?.landingPage) {
@@ -23,7 +34,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { property: "og:title", content: seo.metaTitle || landingPage.title },
     { property: "og:description", content: seo.metaDescription || "" },
     { property: "og:type", content: "website" },
-    ...(seo.image?.url ? [{ property: "og:image", content: seo.image.url }] : []),
+    ...(seo.image?.url
+      ? [{ property: "og:image", content: seo.image.url }]
+      : []),
     // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: seo.metaTitle || landingPage.title },
@@ -45,7 +58,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   // Récupérer les portfolios si nécessaire pour les blocs UseCase
-  let portfolios: { id: string; titre: string; imageCover: string; description?: string }[] = [];
+  let portfolios: {
+    id: string;
+    titre: string;
+    imageCover: string;
+    description?: string;
+  }[] = [];
 
   const useCaseBlocs = landingPage.blocs.filter(
     (bloc): bloc is BlocUseCase => bloc.type === "useCase"
@@ -107,26 +125,27 @@ export default function LandingPagePublic() {
 
 // Error boundary
 export function ErrorBoundary() {
+  const error = useRouteError();
+  const isMobile = useViewport();
+
+  // Attendre que le viewport soit détecté pour éviter le flash
+  if (isMobile === null) {
+    return null;
+  }
+
+  // Afficher la page 404 uniquement pour les erreurs de route (404)
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return !isMobile ? <Page404 /> : <Page404Mobile />;
+  }
+
+  // Pour les autres erreurs, on peut afficher un message générique
+  // ou relancer l'erreur pour le débogage
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center">
+    <div className="flex items-center justify-center h-screen">
       <div className="text-center">
-        <h1
-          className="text-4xl md:text-6xl text-white font-bold mb-4"
-          style={{ fontFamily: "Jakarta Bold" }}
-        >
-          404
-        </h1>
-        <p className="text-white/60 text-lg mb-8" style={{ fontFamily: "Jakarta" }}>
-          Cette page n'existe pas
-        </p>
-        <a
-          href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black rounded-full font-semibold hover:bg-white/90 transition-colors"
-          style={{ fontFamily: "Jakarta Semi Bold" }}
-        >
-          ← Retour à l'accueil
-        </a>
+        <h1 className="text-2xl font-bold">Une erreur est survenue</h1>
+        <p className="mt-2 text-gray-600">Veuillez réessayer plus tard.</p>
       </div>
-    </main>
+    </div>
   );
 }
