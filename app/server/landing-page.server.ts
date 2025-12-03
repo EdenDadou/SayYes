@@ -210,3 +210,41 @@ export async function deleteLandingPage(id: string): Promise<void> {
 export async function getLandingPageCount(): Promise<number> {
   return await prisma.landingPage.count();
 }
+
+// Migration: Convertir les blocs "methods" de l'ancien format (titre: string) vers le nouveau (lineTitle: TitleLine[])
+export async function migrateBlocMethodsTitleToLineTitle(): Promise<number> {
+  const landingPages = await prisma.landingPage.findMany();
+  let migratedCount = 0;
+
+  for (const lp of landingPages) {
+    const blocs = JSON.parse(lp.blocs || "[]");
+    let modified = false;
+
+    for (const bloc of blocs) {
+      if (bloc.type === "methods" && "titre" in bloc && !("lineTitle" in bloc)) {
+        // Convertir l'ancien titre string en lineTitle array
+        const oldTitle = bloc.titre || "";
+        bloc.lineTitle = oldTitle
+          ? [
+              {
+                elements: [{ type: "text", text: oldTitle, color: "white" }],
+                titleType: "h2",
+              },
+            ]
+          : [];
+        delete bloc.titre;
+        modified = true;
+      }
+    }
+
+    if (modified) {
+      await prisma.landingPage.update({
+        where: { id: lp.id },
+        data: { blocs: JSON.stringify(blocs) },
+      });
+      migratedCount++;
+    }
+  }
+
+  return migratedCount;
+}

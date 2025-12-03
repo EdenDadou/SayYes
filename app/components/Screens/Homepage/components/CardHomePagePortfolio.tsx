@@ -1,11 +1,7 @@
-import { useViewport } from "~/utils/hooks/useViewport";
 import { cn } from "~/utils/ui/ui";
-
-import "~/styles/tailwind.css";
-import Arrow from "~/assets/icons/Arrow";
 import { useNavigate } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import { usePortfolio } from "~/contexts/PortfolioContext";
+import "~/styles/tailwind.css";
 
 interface PropsContent {
   imageUrl?: string;

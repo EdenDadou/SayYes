@@ -1,5 +1,14 @@
-import { useState } from "react";
 import type { TitleLine, TitleElement } from "~/types/landing-page";
+
+const ICON_OPTIONS = [
+  { value: "heart", label: "Heart" },
+  { value: "star", label: "Star" },
+  { value: "2 stars", label: "2 Stars" },
+  { value: "diamond", label: "Diamond" },
+  { value: "2 diamonds", label: "2 Diamonds" },
+  { value: "arrowLight", label: "Arrow Light" },
+  { value: "arrowWhite", label: "Arrow White" },
+];
 
 interface LineTitleEditorProps {
   lines: TitleLine[];
@@ -8,26 +17,29 @@ interface LineTitleEditorProps {
 }
 
 export default function LineTitleEditor({
-  lines,
+  lines = [],
   onChange,
   label = "Titre animé",
 }: LineTitleEditorProps) {
+  // Garantir que lines est toujours un tableau
+  const safeLines = lines || [];
+
   const addLine = () => {
-    onChange([...lines, { elements: [], titleType: "h2" }]);
+    onChange([...safeLines, { elements: [], titleType: "h2" }]);
   };
 
   const updateLine = (index: number, line: TitleLine) => {
-    const newLines = [...lines];
+    const newLines = [...safeLines];
     newLines[index] = line;
     onChange(newLines);
   };
 
   const removeLine = (index: number) => {
-    onChange(lines.filter((_, i) => i !== index));
+    onChange(safeLines.filter((_, i) => i !== index));
   };
 
   const addElement = (lineIndex: number, type: "icon" | "text") => {
-    const line = lines[lineIndex];
+    const line = safeLines[lineIndex];
     const newElement: TitleElement =
       type === "icon"
         ? { type: "icon", name: "" }
@@ -43,14 +55,14 @@ export default function LineTitleEditor({
     elementIndex: number,
     element: TitleElement
   ) => {
-    const line = lines[lineIndex];
+    const line = safeLines[lineIndex];
     const newElements = [...line.elements];
     newElements[elementIndex] = element;
     updateLine(lineIndex, { ...line, elements: newElements });
   };
 
   const removeElement = (lineIndex: number, elementIndex: number) => {
-    const line = lines[lineIndex];
+    const line = safeLines[lineIndex];
     updateLine(lineIndex, {
       ...line,
       elements: line.elements.filter((_, i) => i !== elementIndex),
@@ -72,7 +84,7 @@ export default function LineTitleEditor({
         </button>
       </div>
 
-      {lines.map((line, lineIndex) => (
+      {safeLines.map((line, lineIndex) => (
         <div
           key={lineIndex}
           className="border border-gray-700 rounded-lg p-4 space-y-3"
@@ -114,8 +126,7 @@ export default function LineTitleEditor({
                 {element.type === "icon" ? (
                   <>
                     <span className="text-white/70 text-xs w-12">Icon:</span>
-                    <input
-                      type="text"
+                    <select
                       value={element.name}
                       onChange={(e) =>
                         updateElement(lineIndex, elementIndex, {
@@ -123,9 +134,15 @@ export default function LineTitleEditor({
                           name: e.target.value,
                         })
                       }
-                      placeholder="Nom de l'icône"
                       className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-                    />
+                    >
+                      <option value="">Sélectionner une icône</option>
+                      {ICON_OPTIONS.map((icon) => (
+                        <option key={icon.value} value={icon.value}>
+                          {icon.label}
+                        </option>
+                      ))}
+                    </select>
                   </>
                 ) : (
                   <>
@@ -200,7 +217,7 @@ export default function LineTitleEditor({
         </div>
       ))}
 
-      {lines.length === 0 && (
+      {safeLines.length === 0 && (
         <p className="text-white/60 text-sm text-center py-4">
           Aucune ligne de titre. Cliquez sur "Ajouter une ligne" pour commencer.
         </p>

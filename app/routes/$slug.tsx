@@ -15,34 +15,10 @@ import type { Bloc, BlocUseCase } from "~/types/landing-page";
 import { useViewport } from "~/utils/hooks/useViewport";
 import Page404 from "~/components/Screens/404";
 import Page404Mobile from "~/components/Screens/404/mobile/Page404Mobile";
-
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data?.landingPage) {
-    return [
-      { title: "Page non trouvée" },
-      { name: "description", content: "Cette page n'existe pas" },
-    ];
-  }
-
-  const { landingPage } = data;
-  const seo = landingPage.seo;
-
-  return [
-    { title: seo.metaTitle || landingPage.title },
-    { name: "description", content: seo.metaDescription || "" },
-    // Open Graph
-    { property: "og:title", content: seo.metaTitle || landingPage.title },
-    { property: "og:description", content: seo.metaDescription || "" },
-    { property: "og:type", content: "website" },
-    ...(seo.image?.url
-      ? [{ property: "og:image", content: seo.image.url }]
-      : []),
-    // Twitter
-    { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: seo.metaTitle || landingPage.title },
-    { name: "twitter:description", content: seo.metaDescription || "" },
-  ];
-};
+import Desktoplayout from "~/components/Layout/Desktop";
+import MobileLayout from "~/components/Layout/Mobile";
+import { usePortfolio } from "~/contexts/PortfolioContext";
+import { AnimatePresence, motion } from "framer-motion";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { slug } = params;
@@ -57,51 +33,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Landing page non trouvée", { status: 404 });
   }
 
-  // Récupérer les portfolios si nécessaire pour les blocs UseCase
-  let portfolios: {
-    id: string;
-    titre: string;
-    imageCover: string;
-    description?: string;
-  }[] = [];
-
-  const useCaseBlocs = landingPage.blocs.filter(
-    (bloc): bloc is BlocUseCase => bloc.type === "useCase"
-  );
-
-  if (useCaseBlocs.length > 0) {
-    const portfolioIds = useCaseBlocs.flatMap((bloc) => bloc.portfolioIds);
-
-    if (portfolioIds.length > 0) {
-      const dbPortfolios = await prisma.portfolio.findMany({
-        where: {
-          id: { in: portfolioIds },
-        },
-        select: {
-          id: true,
-          titre: true,
-          photoCouverture: true,
-          description: true,
-        },
-      });
-
-      portfolios = dbPortfolios.map((p) => ({
-        id: p.id,
-        titre: p.titre,
-        imageCover: p.photoCouverture,
-        description: p.description || undefined,
-      }));
-    }
-  }
-
-  return json({ landingPage, portfolios });
+  return json({ landingPage });
 }
 
 export default function LandingPagePublic() {
-  const { landingPage, portfolios } = useLoaderData<typeof loader>();
+  const { landingPage } = useLoaderData<typeof loader>();
+  const { allPortfolios: portfolios } = usePortfolio();
+  const isMobile = useViewport();
 
-  return (
-    <main className="min-h-screen bg-black">
+  const content = (
+    <>
       {/* Schema.org JSON-LD */}
       {landingPage.seo.schemaOrg && (
         <script
@@ -111,15 +52,44 @@ export default function LandingPagePublic() {
       )}
 
       {/* Render all blocs */}
-      {landingPage.blocs.map((bloc: Bloc, index: number) => (
-        <BlocRenderer
-          key={index}
-          bloc={bloc}
-          color={landingPage.color}
-          portfolios={portfolios}
-        />
-      ))}
-    </main>
+      <div className="w-screen h-fit relative pt-20">
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
+          >
+            {/* <Background className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80" /> */}
+            <img
+              src="/images/portfolio/bg.png"
+              alt="Background"
+              className="absolute top-32 left-0 w-full h-auto z-0 opacity-80"
+            />
+          </motion.div>
+        </AnimatePresence>
+        <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center  items-center gap-10">
+          {landingPage.blocs.map((bloc: Bloc, index: number) => (
+            <BlocRenderer
+              key={index}
+              bloc={bloc}
+              color={landingPage.color}
+              portfolios={portfolios}
+            />
+          ))}
+        </section>
+      </div>
+    </>
+  );
+
+  if (isMobile === null) {
+    return null;
+  }
+
+  return isMobile ? (
+    <MobileLayout>{content}</MobileLayout>
+  ) : (
+    <Desktoplayout>{content}</Desktoplayout>
   );
 }
 
@@ -149,3 +119,31 @@ export function ErrorBoundary() {
     </div>
   );
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data?.landingPage) {
+    return [
+      { title: "Page non trouvée" },
+      { name: "description", content: "Cette page n'existe pas" },
+    ];
+  }
+
+  const { landingPage } = data;
+  const seo = landingPage.seo;
+
+  return [
+    { title: seo.metaTitle || landingPage.title },
+    { name: "description", content: seo.metaDescription || "" },
+    // Open Graph
+    { property: "og:title", content: seo.metaTitle || landingPage.title },
+    { property: "og:description", content: seo.metaDescription || "" },
+    { property: "og:type", content: "website" },
+    ...(seo.image?.url
+      ? [{ property: "og:image", content: seo.image.url }]
+      : []),
+    // Twitter
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: seo.metaTitle || landingPage.title },
+    { name: "twitter:description", content: seo.metaDescription || "" },
+  ];
+};

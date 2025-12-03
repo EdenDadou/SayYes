@@ -1,5 +1,12 @@
 import { motion } from "framer-motion";
 import type { TitleLine, TitleElement } from "~/types/landing-page";
+import Coeur from "../Header/assets/Coeur";
+import Star from "~/assets/icons/Star";
+import NoteStar from "~/assets/icons/NoteStar";
+import TwoDiamonds from "~/assets/icons/TwoDiamonds";
+import ArrowLight from "~/assets/icons/ArrowLight";
+import ArrowFull from "~/assets/icons/ArrowFull";
+import { ReactNode } from "react";
 
 interface AnimatedTitleProps {
   lines: TitleLine[];
@@ -7,47 +14,29 @@ interface AnimatedTitleProps {
 }
 
 // Mapping des icônes par nom
-const IconMap: Record<string, string> = {
-  sparkle: "✦",
-  star: "★",
-  arrow: "→",
-  check: "✓",
-  heart: "♥",
-  fire: "🔥",
-  rocket: "🚀",
-  lightning: "⚡",
-  diamond: "◆",
+const IconMap: Record<string, React.SVGProps<SVGSVGElement>> = {
+  heart: <Coeur />,
+  star: <Star />,
+  "2 stars": <NoteStar />,
+  "2 diamonds": <TwoDiamonds className="w-12" />,
+  arrowLight: <ArrowLight className="w-12" />,
+  arrowWhite: <ArrowFull />,
 };
 
-function renderElement(element: TitleElement, color: string, index: number) {
+function renderElement(element: TitleElement, index: number) {
   if (element.type === "icon") {
     return (
       <span key={index} className="mx-2 opacity-80">
-        {IconMap[element.name] || element.name}
+        {(IconMap[element.name] as ReactNode) || element.name}
       </span>
     );
   }
 
   if (element.color === "animed") {
     return (
-      <motion.span
-        key={index}
-        className="inline-block bg-clip-text text-transparent"
-        style={{
-          backgroundImage: `linear-gradient(90deg, ${color}, #fff, ${color})`,
-          backgroundSize: "200% 100%",
-        }}
-        animate={{
-          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-        }}
-        transition={{
-          duration: 4,
-          ease: "easeInOut",
-          repeat: Infinity,
-        }}
-      >
+      <span key={index} className="holographic-text">
         {element.text}
-      </motion.span>
+      </span>
     );
   }
 
@@ -58,7 +47,7 @@ function renderElement(element: TitleElement, color: string, index: number) {
   );
 }
 
-export default function AnimatedTitle({ lines, color = "#60a5fa" }: AnimatedTitleProps) {
+export default function AnimatedTitle({ lines }: AnimatedTitleProps) {
   return (
     <div className="flex flex-col items-center gap-2">
       {lines.map((line, lineIndex) => {
@@ -72,11 +61,11 @@ export default function AnimatedTitle({ lines, color = "#60a5fa" }: AnimatedTitl
         return (
           <Tag
             key={lineIndex}
-            className={`${sizeClasses[line.titleType]} font-bold text-center`}
+            className={`${sizeClasses[line.titleType]} font-bold text-center flex flex-row gap-2 items-center`}
             style={{ fontFamily: "Jakarta Bold" }}
           >
             {line.elements.map((element, elemIndex) =>
-              renderElement(element, color, elemIndex)
+              renderElement(element, elemIndex)
             )}
           </Tag>
         );

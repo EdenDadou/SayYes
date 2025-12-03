@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import type { BlocIntro } from "~/types/landing-page";
 import AnimatedTitle from "./AnimatedTitle";
+import ChatBuble from "../Header/assets/ChatBuble";
 
 interface BlocIntroFrontProps {
   bloc: BlocIntro;
@@ -9,23 +10,18 @@ interface BlocIntroFrontProps {
 
 export default function BlocIntroFront({ bloc, color }: BlocIntroFrontProps) {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-black">
-      {/* Halo effect top */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-30 blur-[100px] rounded-full"
-        style={{ background: `radial-gradient(ellipse, ${color}, transparent)` }}
-      />
-
+    <section className="relative min-h-screen w-full overflow-hidden">
       {/* Punchline top bar */}
       {bloc.punchline && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="pt-20 text-center"
+          className="pt-20 text-center justify-center flex flex-col items-center"
         >
-          <div className="inline-block px-6 py-2 border-t-2 border-white/30">
-            <span className="text-white/60 text-sm tracking-widest" style={{ fontFamily: "Jakarta" }}>
+          <div className="h-[3px] md:w-24 w-20 holographic-bg rounded-full my-8" />
+          <div className="inline-block px-6 py-2">
+            <span className="text-[#777A88] text-[20px] font-jakarta">
               {bloc.punchline}
             </span>
           </div>
@@ -49,7 +45,7 @@ export default function BlocIntroFront({ bloc, color }: BlocIntroFrontProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-6 text-center text-white/80 text-lg md:text-xl max-w-2xl"
+            className="mt-6 text-center text-white text-[20px] leading-[28px] max-w-xl"
             style={{ fontFamily: "Jakarta" }}
           >
             {bloc.description}
@@ -65,14 +61,11 @@ export default function BlocIntroFront({ bloc, color }: BlocIntroFrontProps) {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="mt-8 inline-flex items-center gap-3 px-6 py-3 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all group"
           >
-            <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="6" cy="12" r="2" />
-                <circle cx="18" cy="12" r="2" />
-              </svg>
-            </span>
-            <span className="text-white font-medium" style={{ fontFamily: "Jakarta Semi Bold" }}>
+            <ChatBuble color="white" />
+            <span
+              className="text-white font-medium"
+              style={{ fontFamily: "Jakarta Semi Bold" }}
+            >
               {bloc.cta}
             </span>
           </motion.a>

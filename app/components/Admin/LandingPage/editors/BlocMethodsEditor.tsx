@@ -1,5 +1,16 @@
 import type { BlocMethods } from "~/types/landing-page";
 import MediaEditor from "./MediaEditor";
+import LineTitleEditor from "./LineTitleEditor";
+
+const ICON_OPTIONS = [
+  { value: "heart", label: "Heart" },
+  { value: "star", label: "Star" },
+  { value: "2 stars", label: "2 Stars" },
+  { value: "diamond", label: "Diamond" },
+  { value: "2 diamonds", label: "2 Diamonds" },
+  { value: "arrowLight", label: "Arrow Light" },
+  { value: "arrowWhite", label: "Arrow White" },
+];
 
 interface BlocMethodsEditorProps {
   bloc: BlocMethods;
@@ -75,17 +86,11 @@ export default function BlocMethodsEditor({
   return (
     <div className="space-y-4">
       {/* Titre */}
-      <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          Titre
-        </label>
-        <input
-          type="text"
-          value={bloc.titre}
-          onChange={(e) => onUpdate({ ...bloc, titre: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
+      <LineTitleEditor
+        lines={bloc.lineTitle}
+        onChange={(lines) => onUpdate({ ...bloc, lineTitle: lines })}
+        label="Titre"
+      />
 
       {/* Sous-titre */}
       <div>
@@ -130,15 +135,20 @@ export default function BlocMethodsEditor({
               {el.type === "icon" ? (
                 <>
                   <span className="text-white/70 text-xs w-12">Icon:</span>
-                  <input
-                    type="text"
+                  <select
                     value={el.name}
                     onChange={(e) =>
                       updateConclusionElement(index, { ...el, name: e.target.value })
                     }
-                    placeholder="Nom de l'icône"
                     className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-                  />
+                  >
+                    <option value="">Sélectionner une icône</option>
+                    {ICON_OPTIONS.map((icon) => (
+                      <option key={icon.value} value={icon.value}>
+                        {icon.label}
+                      </option>
+                    ))}
+                  </select>
                 </>
               ) : (
                 <>
@@ -233,21 +243,36 @@ export default function BlocMethodsEditor({
                 label="Média"
               />
 
-              <input
-                type="text"
-                value={card.icons.join(", ")}
-                onChange={(e) =>
-                  updateCard(index, {
-                    ...card,
-                    icons: e.target.value
-                      .split(",")
-                      .map((i) => i.trim())
-                      .filter(Boolean),
-                  })
-                }
-                placeholder="Icônes (séparées par virgules)"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-2">
+                  Icônes
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {ICON_OPTIONS.map((icon) => (
+                    <label
+                      key={icon.value}
+                      className={`flex items-center gap-1 px-2 py-1 rounded cursor-pointer text-sm ${
+                        card.icons.includes(icon.value)
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-700 text-white/70 hover:bg-gray-600"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={card.icons.includes(icon.value)}
+                        onChange={(e) => {
+                          const newIcons = e.target.checked
+                            ? [...card.icons, icon.value]
+                            : card.icons.filter((i) => i !== icon.value);
+                          updateCard(index, { ...card, icons: newIcons });
+                        }}
+                        className="sr-only"
+                      />
+                      {icon.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
 
               <input
                 type="text"

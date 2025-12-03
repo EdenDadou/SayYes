@@ -158,7 +158,7 @@ export default function BlocIntroEditor({
       {/* Alt Title */}
       <div>
         <label className="block text-sm font-medium text-white mb-2">
-          Titre alternatif
+          Alt media
         </label>
         <input
           type="text"

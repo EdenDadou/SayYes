@@ -1,24 +1,23 @@
 import { motion } from "framer-motion";
 import type { BlocUseCase } from "~/types/landing-page";
-
-interface Portfolio {
-  id: string;
-  titre: string;
-  imageCover: string;
-  description?: string;
-}
+import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
 interface BlocUseCaseFrontProps {
   bloc: BlocUseCase;
   color: string;
-  portfolios?: Portfolio[];
+  portfolios?: PortfolioData[];
 }
 
-export default function BlocUseCaseFront({ bloc, color, portfolios = [] }: BlocUseCaseFrontProps) {
+export default function BlocUseCaseFront({
+  bloc,
+  color,
+  portfolios = [],
+}: BlocUseCaseFrontProps) {
   // Parse le titre pour colorer une partie
   const titleParts = bloc.title.split(",");
   const mainTitle = titleParts[0];
-  const coloredPart = titleParts.length > 1 ? titleParts.slice(1).join(",") : "";
+  const coloredPart =
+    titleParts.length > 1 ? titleParts.slice(1).join(",") : "";
 
   return (
     <section className="relative py-20 px-4 bg-black overflow-hidden">
@@ -31,11 +30,7 @@ export default function BlocUseCaseFront({ bloc, color, portfolios = [] }: BlocU
         style={{ fontFamily: "Jakarta Bold" }}
       >
         <span className="text-white">{mainTitle}</span>
-        {coloredPart && (
-          <span style={{ color }}>
-            {coloredPart}
-          </span>
-        )}
+        {coloredPart && <span style={{ color }}>{coloredPart}</span>}
       </motion.h2>
 
       {/* Portfolio grid */}
@@ -54,7 +49,7 @@ export default function BlocUseCaseFront({ bloc, color, portfolios = [] }: BlocU
               >
                 {/* Image */}
                 <img
-                  src={portfolio.imageCover}
+                  src={portfolio.photoCouverture}
                   alt={portfolio.titre}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -71,7 +66,10 @@ export default function BlocUseCaseFront({ bloc, color, portfolios = [] }: BlocU
                     {portfolio.titre}
                   </h3>
                   {portfolio.description && (
-                    <p className="text-white/60 text-sm line-clamp-2" style={{ fontFamily: "Jakarta" }}>
+                    <p
+                      className="text-white/60 text-sm line-clamp-2"
+                      style={{ fontFamily: "Jakarta" }}
+                    >
                       {portfolio.description}
                     </p>
                   )}
@@ -89,7 +87,10 @@ export default function BlocUseCaseFront({ bloc, color, portfolios = [] }: BlocU
           </div>
         </div>
       ) : (
-        <div className="text-center text-white/50" style={{ fontFamily: "Jakarta" }}>
+        <div
+          className="text-center text-white/50"
+          style={{ fontFamily: "Jakarta" }}
+        >
           Aucun projet à afficher
         </div>
       )}

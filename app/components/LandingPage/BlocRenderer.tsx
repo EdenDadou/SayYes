@@ -10,28 +10,26 @@ import BlocFooterFront from "./BlocFooterFront";
 import BlocUseCaseFront from "./BlocUseCaseFront";
 import BlocCommentaireClientFront from "./BlocCommentaireClientFront";
 import BlocOffresFront from "./BlocOffresFront";
-
-interface Portfolio {
-  id: string;
-  titre: string;
-  imageCover: string;
-  description?: string;
-}
+import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
 interface BlocRendererProps {
   bloc: Bloc;
   color: string;
-  portfolios?: Portfolio[];
+  portfolios?: PortfolioData[];
 }
 
-export default function BlocRenderer({ bloc, color, portfolios }: BlocRendererProps) {
+export default function BlocRenderer({
+  bloc,
+  color,
+  portfolios,
+}: BlocRendererProps) {
   switch (bloc.type) {
     case "blocIntro":
       return <BlocIntroFront bloc={bloc} color={color} />;
 
     case "cards":
       // Check if cards are "offre" type (pricing cards) or "concurrence" type (problem cards)
-      const hasOffreCards = bloc.cards.some(c => c.type === "offre");
+      const hasOffreCards = bloc.cards.some((c) => c.type === "offre");
       if (hasOffreCards) {
         return <BlocOffresFront bloc={bloc} color={color} />;
       }
@@ -56,7 +54,9 @@ export default function BlocRenderer({ bloc, color, portfolios }: BlocRendererPr
       return <BlocFooterFront bloc={bloc} color={color} />;
 
     case "useCase":
-      return <BlocUseCaseFront bloc={bloc} color={color} portfolios={portfolios} />;
+      return (
+        <BlocUseCaseFront bloc={bloc} color={color} portfolios={portfolios} />
+      );
 
     case "commentaireClient":
       return <BlocCommentaireClientFront bloc={bloc} color={color} />;

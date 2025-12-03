@@ -98,7 +98,7 @@ export interface BlocCommentaireClient {
 // Bloc Methods
 export interface BlocMethods {
   type: "methods";
-  titre: string;
+  lineTitle: TitleLine[];
   subTitle: string;
   conclusion: {
     elements: ({ type: "icon"; name: string } | { type: "text"; text: string })[];
@@ -236,7 +236,7 @@ export function createEmptyBloc(type: Bloc["type"]): Bloc {
     case "methods":
       return {
         type: "methods",
-        titre: "",
+        lineTitle: [],
         subTitle: "",
         conclusion: { elements: [], colorType: "white" },
         cards: [],
