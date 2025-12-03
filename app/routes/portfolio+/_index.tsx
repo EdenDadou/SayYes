@@ -35,7 +35,7 @@ export default function Portfolio() {
 
   return isMobile ? (
     <MobileLayout>
-      <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
+      <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80 blur-2xl" />
       {/* Contenu par-dessus */}
       <section className="relative z-10 flex flex-col justify-center  items-center overflow-hidden gap-10">
         <div className="flex flex-col items-center gap-8 w-full justify-center px-4">
