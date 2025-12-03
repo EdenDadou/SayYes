@@ -150,7 +150,8 @@ export default function Portfolio() {
                         slug={portfolio.slug}
                       />
                     }
-                    borderClass="card-hover"
+                    borderClass="card-hover colspan-1 rounded-[28px]"
+                    borderRadius="28px"
                   />
                 ))}
               </div>

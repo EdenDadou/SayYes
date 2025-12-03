@@ -10,6 +10,7 @@ import SvgBtnTiktok from "../components/BtnTiktok";
 import SayYesFooter from "../components/SayYes";
 import LogoSayYesColor from "~/components/Header/assets/LogoSayYesColor";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
+import { Link } from "@remix-run/react";
 
 interface IFooterMobileProps {
   setIsOpenModalContact: (value: boolean) => void;
@@ -90,7 +91,7 @@ export default function FooterMobile({
         <p className="text-gray-150 text-sm py-2">
           Say Yes ©2025 - Tous droits réservés.
         </p>
-        <p className="text-gray-150 text-sm py-2">Mentions Légales</p>
+        <Link to="/mention-legale" className="text-gray-150 text-sm py-2 hover:text-white transition-colors">Mentions Légales</Link>
         <p className="text-gray-150 text-sm py-2 pb-6">
           From Paris With Love ♥
         </p>

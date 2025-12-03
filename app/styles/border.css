@@ -228,6 +228,13 @@
   }
 }
 
+.glass-card {
+  border-radius: 17.674px;
+  border: 1.062px solid #FFF;
+  background: linear-gradient(175deg, #0E0E0E 37.15%, rgba(48, 48, 48, 0.16) 69.36%, rgba(57, 57, 57, 0.56) 91.83%);
+  backdrop-filter: blur(150.52456665039062px);
+}
+
 html {
   box-sizing: border-box;
   scroll-behavior: smooth;

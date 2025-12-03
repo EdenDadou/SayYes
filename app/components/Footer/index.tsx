@@ -14,6 +14,7 @@ import LogoSayYesHolo from "./components/LogoSayYesHolo";
 import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
 import Star from "~/assets/icons/Star";
+import { Link } from "@remix-run/react";
 
 interface IFooterProps {
   setIsOpenModalContact: (value: boolean) => void;
@@ -142,7 +143,7 @@ export default function Footer({
           </div>
         </div>
         <div className="flex flex-row justify-between w-screen px-20 py-3 bg-black">
-          <p className="text-[#929292] text-sm py-2">Mentions Légales</p>
+          <Link to="/mention-legale" className="text-[#929292] text-sm py-2 hover:text-white transition-colors">Mentions Légales</Link>
           <p className="text-[#929292] text-sm py-2">
             Say Yes ©2024. Tous droits réservés.
           </p>
