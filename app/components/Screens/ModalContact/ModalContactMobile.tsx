@@ -95,7 +95,7 @@ export default function ModalContactMobile({
           height="85%"
           borderClass="py-8 px-4 bg-gradient-to-bl from-[#000000] via-[#080809] to-[#4034EB] rounded-[15px] relative"
         >
-          <BackgroundModalMobile className="absolute inset-0  w-full h-full z-0 rounded-[20px] object-contain" />
+          <BackgroundModalMobile className="absolute inset-0  w-full h-full z-0 rounded-[20px] object-contain blur-3xl" />
 
           <form className="relative w-full h-full flex flex-col gap-4 justify-center text-center z-20">
             <label className="block">
