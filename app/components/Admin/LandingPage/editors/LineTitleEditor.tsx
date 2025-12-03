@@ -1,21 +1,42 @@
 import type { TitleLine, TitleElement } from "~/types/landing-page";
 import type { ReactNode } from "react";
 import CollapsibleCard from "./CollapsibleCard";
-import Coeur from "~/components/Header/assets/Coeur";
+// Icons from assets/icons
 import Star from "~/assets/icons/Star";
 import NoteStar from "~/assets/icons/NoteStar";
 import TwoDiamonds from "~/assets/icons/TwoDiamonds";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import ArrowFull from "~/assets/icons/ArrowFull";
+import Arrow from "~/assets/icons/Arrow";
+import ArrowBig from "~/assets/icons/ArrowBig";
+import Close from "~/assets/icons/Close";
+import Coche from "~/assets/icons/Coche";
+import Pause from "~/assets/icons/Pause";
+import Play from "~/assets/icons/Play";
+// Icons from Header/assets
+import Coeur from "~/components/Header/assets/Coeur";
+import Flamme from "~/components/Header/assets/Flamme";
+import Idea from "~/components/Header/assets/Idea";
+import Smile from "~/components/Header/assets/Smile";
+import ChatBuble from "~/components/Header/assets/ChatBuble";
 
 const ICON_OPTIONS = [
-  { value: "heart", label: "Heart" },
-  { value: "star", label: "Star" },
-  { value: "2 stars", label: "2 Stars" },
-  { value: "diamond", label: "Diamond" },
-  { value: "2 diamonds", label: "2 Diamonds" },
-  { value: "arrowLight", label: "Arrow Light" },
-  { value: "arrowWhite", label: "Arrow White" },
+  { value: "heart", label: "❤️ Coeur" },
+  { value: "star", label: "⭐ Étoile" },
+  { value: "2 stars", label: "✨ 2 Étoiles" },
+  { value: "2 diamonds", label: "💎 2 Diamants" },
+  { value: "arrowLight", label: "→ Flèche légère" },
+  { value: "arrowWhite", label: "➜ Flèche pleine" },
+  { value: "arrow", label: "↗ Flèche simple" },
+  { value: "arrowBig", label: "⇒ Grande flèche" },
+  { value: "coche", label: "✓ Coche" },
+  { value: "close", label: "✕ Fermer" },
+  { value: "pause", label: "⏸ Pause" },
+  { value: "play", label: "▶ Play" },
+  { value: "flamme", label: "🔥 Flamme" },
+  { value: "idea", label: "💡 Idée" },
+  { value: "smile", label: "😊 Smile" },
+  { value: "chat", label: "💬 Chat" },
 ];
 
 // Mapping des icônes par nom (identique à AnimatedTitle)
@@ -26,6 +47,16 @@ const IconMap: Record<string, ReactNode> = {
   "2 diamonds": <TwoDiamonds className="w-8" />,
   arrowLight: <ArrowLight className="w-8" />,
   arrowWhite: <ArrowFull />,
+  arrow: <Arrow className="w-8" />,
+  arrowBig: <ArrowBig className="w-8" />,
+  coche: <Coche />,
+  close: <Close className="w-6" />,
+  pause: <Pause className="w-6" />,
+  play: <Play className="w-6" />,
+  flamme: <Flamme />,
+  idea: <Idea />,
+  smile: <Smile />,
+  chat: <ChatBuble />,
 };
 
 interface LineTitleEditorProps {

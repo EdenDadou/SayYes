@@ -2,7 +2,45 @@ import { motion } from "framer-motion";
 import type { BlocMethods } from "~/types/landing-page";
 import AnimatedTitle from "./AnimatedTitle";
 import Card from "../Card";
+import type { ReactNode } from "react";
+// Icons from assets/icons
+import Star from "~/assets/icons/Star";
+import NoteStar from "~/assets/icons/NoteStar";
+import TwoDiamonds from "~/assets/icons/TwoDiamonds";
+import ArrowLight from "~/assets/icons/ArrowLight";
+import ArrowFull from "~/assets/icons/ArrowFull";
+import Arrow from "~/assets/icons/Arrow";
+import ArrowBig from "~/assets/icons/ArrowBig";
+import Close from "~/assets/icons/Close";
 import Coche from "~/assets/icons/Coche";
+import Pause from "~/assets/icons/Pause";
+import Play from "~/assets/icons/Play";
+// Icons from Header/assets
+import Coeur from "../Header/assets/Coeur";
+import Flamme from "../Header/assets/Flamme";
+import Idea from "../Header/assets/Idea";
+import Smile from "../Header/assets/Smile";
+import ChatBuble from "../Header/assets/ChatBuble";
+
+// Mapping des icônes par nom
+const IconMap: Record<string, ReactNode> = {
+  heart: <Coeur />,
+  star: <Star />,
+  "2 stars": <NoteStar />,
+  "2 diamonds": <TwoDiamonds className="w-6 inline-block" />,
+  arrowLight: <ArrowLight className="w-6 inline-block" />,
+  arrowWhite: <ArrowFull />,
+  arrow: <Arrow className="w-6 inline-block" />,
+  arrowBig: <ArrowBig className="w-6 inline-block" />,
+  coche: <Coche />,
+  close: <Close className="w-5 inline-block" />,
+  pause: <Pause className="w-5 inline-block" />,
+  play: <Play className="w-5 inline-block" />,
+  flamme: <Flamme />,
+  idea: <Idea />,
+  smile: <Smile />,
+  chat: <ChatBuble />,
+};
 
 interface BlocMethodsFrontProps {
   bloc: BlocMethods;
@@ -138,25 +176,46 @@ export default function BlocMethodsFront({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="text-center mt-12"
+          className="w-fit mx-auto mt-12"
         >
-          <p
-            className="text-lg md:text-xl"
-            style={{
-              fontFamily: "Jakarta",
-              color: bloc.conclusion.colorType === "color" ? color : "white",
-            }}
-          >
-            {bloc.conclusion.elements.map((elem, i) =>
-              elem.type === "icon" ? (
-                <span key={i} className="mx-1">
-                  {elem.name}
-                </span>
-              ) : (
-                <span key={i}>{elem.text}</span>
-              )
-            )}
-          </p>
+          <Card
+            height="auto"
+            borderClass="light-border p-4 w-fit"
+            content={
+              <div>
+                <p
+                  className="text-lg md:text-xl flex items-center justify-center gap-1 flex-wrap"
+                  style={{ fontFamily: "Jakarta" }}
+                >
+                  {bloc.conclusion.elements.map((elem, i) =>
+                    elem.type === "icon" ? (
+                      <span key={i} className="mx-1 inline-flex items-center">
+                        {IconMap[elem.name] || elem.name}
+                      </span>
+                    ) : (
+                      <span
+                        key={i}
+                        className={`
+                        text-[36px] tracking-[-2px] leading-[78px]
+                          ${elem.color === "animed" ? "holographic-text" : ""}
+                          `}
+                        style={{
+                          color:
+                            elem.color === "animed"
+                              ? undefined
+                              : bloc.conclusion.colorType === "color"
+                                ? color
+                                : "white",
+                        }}
+                      >
+                        {elem.text}
+                      </span>
+                    )
+                  )}
+                </p>
+              </div>
+            }
+          />
         </motion.div>
       )}
     </section>

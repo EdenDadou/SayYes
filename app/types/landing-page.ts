@@ -101,7 +101,7 @@ export interface BlocMethods {
   lineTitle: TitleLine[];
   subTitle: string;
   conclusion: {
-    elements: ({ type: "icon"; name: string } | { type: "text"; text: string })[];
+    elements: ({ type: "icon"; name: string } | { type: "text"; text: string; color: "white" | "animed" })[];
     colorType: "white" | "color";
   };
   cards: {

@@ -4,13 +4,22 @@ import LineTitleEditor from "./LineTitleEditor";
 import CollapsibleCard from "./CollapsibleCard";
 
 const ICON_OPTIONS = [
-  { value: "heart", label: "Heart" },
-  { value: "star", label: "Star" },
-  { value: "2 stars", label: "2 Stars" },
-  { value: "diamond", label: "Diamond" },
-  { value: "2 diamonds", label: "2 Diamonds" },
-  { value: "arrowLight", label: "Arrow Light" },
-  { value: "arrowWhite", label: "Arrow White" },
+  { value: "heart", label: "❤️ Coeur" },
+  { value: "star", label: "⭐ Étoile" },
+  { value: "2 stars", label: "✨ 2 Étoiles" },
+  { value: "2 diamonds", label: "💎 2 Diamants" },
+  { value: "arrowLight", label: "→ Flèche légère" },
+  { value: "arrowWhite", label: "➜ Flèche pleine" },
+  { value: "arrow", label: "↗ Flèche simple" },
+  { value: "arrowBig", label: "⇒ Grande flèche" },
+  { value: "coche", label: "✓ Coche" },
+  { value: "close", label: "✕ Fermer" },
+  { value: "pause", label: "⏸ Pause" },
+  { value: "play", label: "▶ Play" },
+  { value: "flamme", label: "🔥 Flamme" },
+  { value: "idea", label: "💡 Idée" },
+  { value: "smile", label: "😊 Smile" },
+  { value: "chat", label: "💬 Chat" },
 ];
 
 interface BlocMethodsEditorProps {
@@ -60,7 +69,7 @@ export default function BlocMethodsEditor({
     const newElement =
       type === "icon"
         ? { type: "icon" as const, name: "" }
-        : { type: "text" as const, text: "" };
+        : { type: "text" as const, text: "", color: "white" as const };
     onUpdate({
       ...bloc,
       conclusion: {
@@ -304,6 +313,23 @@ export default function BlocMethodsEditor({
                     placeholder="Texte"
                     className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
                   />
+                  <select
+                    value={el.color || "white"}
+                    onChange={(e) =>
+                      updateConclusionElement(index, {
+                        ...el,
+                        color: e.target.value as "white" | "animed",
+                      })
+                    }
+                    className={`px-2 py-1 border rounded text-sm ${
+                      el.color === "animed"
+                        ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-500 text-white"
+                        : "bg-gray-700 border-gray-600 text-white"
+                    }`}
+                  >
+                    <option value="white">Blanc</option>
+                    <option value="animed">Animé</option>
+                  </select>
                 </>
               )}
               <button
