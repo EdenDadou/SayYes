@@ -260,6 +260,35 @@ export default function BentoEditor({
               })}
             </div>
 
+            {/* Champs alt pour les images de cette ligne */}
+            {line.listImage.length > 0 && (
+              <div className="mt-2 space-y-1">
+                <span className="text-xs text-green-400" style={{ fontFamily: "Jakarta" }}>
+                  Textes alt :
+                </span>
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {line.listImage.map((image, imgIndex) => {
+                    const imageName = image.startsWith("pending_")
+                      ? image.replace(/^pending_\d+_[a-z0-9]+_/, "")
+                      : image.split("/").pop() || `Image ${imgIndex + 1}`;
+                    return (
+                      <div key={imgIndex} className="flex items-center gap-1">
+                        <span className="text-xs text-gray-500 w-4">{imgIndex + 1}</span>
+                        <input
+                          type="text"
+                          placeholder={`Alt ${imageName}`}
+                          value={line.listImageAlt?.[imgIndex] || ""}
+                          onChange={(e) => handlers.updateExistingBentoImageAlt(bentoIndex, lineIndex, imgIndex, e.target.value)}
+                          className="flex-1 bg-gray-700/50 border border-gray-600/50 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"
+                          style={{ fontFamily: "Jakarta" }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Bouton pour ajouter des images */}
             <div className="flex gap-2">
               <input

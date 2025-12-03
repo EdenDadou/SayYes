@@ -4,12 +4,14 @@ import { useRef } from "react";
 interface PhotoMainProps {
   photo: string;
   title: string;
+  alt?: string;
   className?: string;
 }
 
 export default function PhotoMain({
   photo,
   title,
+  alt,
   className = "",
 }: PhotoMainProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +43,7 @@ export default function PhotoMain({
       >
         <motion.img
           src={photo}
-          alt={`${title} - Photo principale`}
+          alt={alt || `${title} - Photo principale`}
           className="w-full h-full object-cover object-center"
           style={{ scale }}
         />

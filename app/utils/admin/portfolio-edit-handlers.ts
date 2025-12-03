@@ -27,9 +27,15 @@ export interface EditFormHandlers extends FormHandlers {
   ) => void;
   updateBentoLines: (
     bentoIndex: number,
-    newLines: Array<{ format: string; listImage: string[] }>
+    newLines: Array<{ format: string; listImage: string[]; listImageAlt?: string[] }>
   ) => void;
   addLineToExistingBento: (bentoIndex: number) => void;
+  updateExistingBentoImageAlt: (
+    bentoIndex: number,
+    lineIndex: number,
+    imageIndex: number,
+    alt: string
+  ) => void;
 }
 
 // Interface étendue pour les états d'édition
@@ -107,9 +113,12 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
         });
 
         // Ajouter les placeholders à la ligne bento actuelle immédiatement
+        // Ajouter aussi des alts vides pour chaque nouvelle image
+        const newAlts = newMediaNames.map(() => "");
         setCurrentBentoLine((prev) => ({
           ...prev,
           listImage: [...prev.listImage, ...newMediaNames],
+          listImageAlt: [...(prev.listImageAlt || []), ...newAlts],
         }));
 
         // Créer les aperçus de manière asynchrone avec barre de progression
@@ -207,6 +216,12 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
       newBento[bentoIndex].lines[lineIndex].listImage = newBento[
         bentoIndex
       ].lines[lineIndex].listImage.filter((_, i) => i !== imageIndex);
+      // Supprimer aussi l'alt correspondant
+      if (newBento[bentoIndex].lines[lineIndex].listImageAlt) {
+        newBento[bentoIndex].lines[lineIndex].listImageAlt = newBento[
+          bentoIndex
+        ].lines[lineIndex].listImageAlt.filter((_, i) => i !== imageIndex);
+      }
 
       // Si la ligne n'a plus d'images, la supprimer
       if (newBento[bentoIndex].lines[lineIndex].listImage.length === 0) {
@@ -291,6 +306,12 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
         console.log(`📝 Ajout de ${newImages.length} nouvelles images (${filesData.length} fichiers, ${existingImages.size} existantes)`);
 
         newBento[bentoIndex].lines[lineIndex].listImage.push(...newImages);
+        // Ajouter des alts vides pour les nouvelles images
+        const currentAlts = newBento[bentoIndex].lines[lineIndex].listImageAlt || [];
+        newBento[bentoIndex].lines[lineIndex].listImageAlt = [
+          ...currentAlts,
+          ...newImages.map(() => ""),
+        ];
       }
 
       return {
@@ -334,11 +355,11 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
   // Fonction pour mettre à jour les lignes d'un bento (pour le drag & drop)
   const updateBentoLines = (
     bentoIndex: number,
-    newLines: Array<{ format: string; listImage: string[] }>
+    newLines: Array<{ format: string; listImage: string[]; listImageAlt?: string[] }>
   ) => {
     setFormData((prev) => {
       const newBento = [...prev.bento];
-      newBento[bentoIndex].lines = newLines;
+      newBento[bentoIndex].lines = newLines as any;
       return {
         ...prev,
         bento: newBento,
@@ -356,9 +377,39 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
         newBento[bentoIndex].lines.push({
           format: "1/3 - 2/3",
           listImage: [],
+          listImageAlt: [],
         });
       }
 
+      return {
+        ...prev,
+        bento: newBento,
+      };
+    });
+  };
+
+  // Fonction pour mettre à jour l'alt d'une image dans un bento existant
+  const updateExistingBentoImageAlt = (
+    bentoIndex: number,
+    lineIndex: number,
+    imageIndex: number,
+    alt: string
+  ) => {
+    setFormData((prev) => {
+      const newBento = [...prev.bento];
+      if (newBento[bentoIndex]?.lines[lineIndex]) {
+        const line = newBento[bentoIndex].lines[lineIndex];
+        const newAlts = [...(line.listImageAlt || [])];
+        // S'assurer que le tableau a la bonne taille
+        while (newAlts.length < line.listImage.length) {
+          newAlts.push("");
+        }
+        newAlts[imageIndex] = alt;
+        newBento[bentoIndex].lines[lineIndex] = {
+          ...line,
+          listImageAlt: newAlts,
+        };
+      }
       return {
         ...prev,
         bento: newBento,
@@ -374,6 +425,7 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
     addImagesToExistingBento,
     updateBentoLines,
     addLineToExistingBento,
+    updateExistingBentoImageAlt,
     // S'assurer que les fonctions de base sont bien accessibles
     removeBento: baseHandlers.removeBento,
     addBento: baseHandlers.addBento,

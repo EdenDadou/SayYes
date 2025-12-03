@@ -97,6 +97,7 @@ export default function PortfolioSlug() {
             <PhotoMain
               photo={portfolio.photoMain || portfolio.photoCouverture}
               title={portfolio.titre}
+              alt={portfolio.photoMain ? portfolio.photoMainAlt : portfolio.photoCouvertureAlt}
             />
           </section>
 

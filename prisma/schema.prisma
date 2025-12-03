@@ -8,13 +8,15 @@ datasource db {
 }
 
 model Portfolio {
-  id              String   @id @default(cuid())
-  titre           String
-  categories      String   @default("[]")
-  slug            String   @unique
-  photoCouverture String
-  photoMain       String   @default("")
-  description     String   @default("")
+  id                  String   @id @default(cuid())
+  titre               String
+  categories          String   @default("[]")
+  slug                String   @unique
+  photoCouverture     String
+  photoCouvertureAlt  String   @default("")
+  photoMain           String   @default("")
+  photoMainAlt        String   @default("")
+  description         String   @default("")
   kicker          String   @default("")
   sousTitre       String   @default("")
   topTitle        String   @default("")

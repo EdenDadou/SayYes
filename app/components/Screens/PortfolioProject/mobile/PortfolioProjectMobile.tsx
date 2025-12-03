@@ -63,6 +63,7 @@ export default function PortfolioProjectMobile({
               <PhotoMain
                 photo={portfolio.photoMain || portfolio.photoCouverture}
                 title={portfolio.titre}
+                alt={portfolio.photoMain ? portfolio.photoMainAlt : portfolio.photoCouvertureAlt}
               />
             </div>
           </section>

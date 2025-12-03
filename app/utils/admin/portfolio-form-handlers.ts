@@ -6,7 +6,9 @@ export interface PortfolioFormData {
   categories: string[];
   slug: string;
   photoCouverture: string;
+  photoCouvertureAlt: string;
   photoMain: string;
+  photoMainAlt: string;
   description: string;
   kicker: string;
   livrable: string[];
@@ -45,7 +47,9 @@ export function initializeFormData(portfolio: any): PortfolioFormData {
     categories: parseJsonField(portfolio.categories, []),
     slug: portfolio.slug || "",
     photoCouverture: portfolio.photoCouverture || "",
+    photoCouvertureAlt: portfolio.photoCouvertureAlt || "",
     photoMain: portfolio.photoMain || "",
+    photoMainAlt: portfolio.photoMainAlt || "",
     description: portfolio.description || "",
     kicker: portfolio.kicker || "",
     livrable: parseJsonField(portfolio.livrable, []),
@@ -92,6 +96,7 @@ export interface FormHandlers {
   addBento: () => void;
   removeBento: (index: number) => void;
   removeBentoImage: (index: number) => void;
+  updateCurrentBentoImageAlt: (imageIndex: number, alt: string) => void;
 }
 
 // Interface pour les états nécessaires aux handlers
@@ -350,9 +355,12 @@ export function createFormHandlers(state: FormState): FormHandlers {
         });
 
         // Ajouter les placeholders à la ligne bento actuelle immédiatement
+        // Ajouter aussi des alts vides pour chaque nouvelle image
+        const newAlts = newMediaNames.map(() => "");
         setCurrentBentoLine((prev) => ({
           ...prev,
           listImage: [...prev.listImage, ...newMediaNames],
+          listImageAlt: [...(prev.listImageAlt || []), ...newAlts],
         }));
 
         // Créer les aperçus de manière asynchrone avec barre de progression
@@ -430,6 +438,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
     setCurrentBentoLine((prev) => ({
       ...prev,
       listImage: prev.listImage.filter((_, i) => i !== index),
+      listImageAlt: (prev.listImageAlt || []).filter((_, i) => i !== index),
     }));
 
     // Supprimer aussi l'aperçu et le fichier correspondants
@@ -466,6 +475,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
       setCurrentBentoLine({
         format: "1/3 - 2/3",
         listImage: [],
+        listImageAlt: [],
       });
       setBentoPreviewImages([]);
     }
@@ -490,6 +500,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
       setCurrentBentoLine({
         format: "1/3 - 2/3",
         listImage: [],
+        listImageAlt: [],
       });
       setBentoPreviewImages([]);
     }
@@ -504,6 +515,22 @@ export function createFormHandlers(state: FormState): FormHandlers {
       return {
         ...prev,
         bento: newBento,
+      };
+    });
+  };
+
+  // Mettre à jour l'alt d'une image dans la ligne bento en cours
+  const updateCurrentBentoImageAlt = (imageIndex: number, alt: string) => {
+    setCurrentBentoLine((prev) => {
+      const newAlts = [...(prev.listImageAlt || [])];
+      // S'assurer que le tableau a la bonne taille
+      while (newAlts.length < prev.listImage.length) {
+        newAlts.push("");
+      }
+      newAlts[imageIndex] = alt;
+      return {
+        ...prev,
+        listImageAlt: newAlts,
       };
     });
   };
@@ -523,6 +550,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
     addBento,
     removeBento,
     removeBentoImage,
+    updateCurrentBentoImageAlt,
   };
 }
 

@@ -59,6 +59,7 @@ export default function BentoMobile({ bento }: { bento: BentoItem }) {
                 <img
                   src={image}
                   alt={
+                    line.listImageAlt?.[imageIndex] ||
                     image.split("/").pop()?.split(".")[0] ||
                     `Image ${imageIndex + 1}`
                   }

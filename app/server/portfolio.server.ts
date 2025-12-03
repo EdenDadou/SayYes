@@ -11,6 +11,7 @@ export interface BentoLine {
     | "2 square"
     | "full";
   listImage: string[]; // URLs des médias (images et vidéos)
+  listImageAlt?: string[]; // Textes alt pour chaque média
 }
 
 export interface BentoItem {
@@ -22,7 +23,9 @@ export interface PortfolioData {
   categories: string[];
   slug: string;
   photoCouverture: string;
+  photoCouvertureAlt?: string;
   photoMain: string;
+  photoMainAlt?: string;
   description: string;
   kicker: string;
   livrable: string[];
@@ -48,7 +51,9 @@ export interface PortfolioWithMedia {
   categories: string[];
   slug: string;
   photoCouverture: string;
+  photoCouvertureAlt?: string;
   photoMain: string;
+  photoMainAlt?: string;
   description: string;
   kicker: string;
   sousTitre: string;
@@ -104,7 +109,9 @@ export async function createPortfolio(data: PortfolioData): Promise<string> {
       categories: JSON.stringify(data.categories),
       slug: data.slug,
       photoCouverture: data.photoCouverture,
+      photoCouvertureAlt: data.photoCouvertureAlt || "",
       photoMain: data.photoMain || "",
+      photoMainAlt: data.photoMainAlt || "",
       description: data.description,
       kicker: data.kicker,
       sousTitre: data.sousTitre,
@@ -139,6 +146,12 @@ export async function updatePortfolio(
   }
   if (data.photoMain !== undefined) {
     updateData.photoMain = data.photoMain;
+  }
+  if (data.photoMainAlt !== undefined) {
+    updateData.photoMainAlt = data.photoMainAlt;
+  }
+  if (data.photoCouvertureAlt !== undefined) {
+    updateData.photoCouvertureAlt = data.photoCouvertureAlt;
   }
   if (data.categories !== undefined) {
     updateData.categories = JSON.stringify(data.categories);
@@ -206,7 +219,9 @@ export async function getPortfolio(
     categories: safeParse(portfolio.categories, []),
     slug: portfolio.slug,
     photoCouverture: portfolio.photoCouverture,
+    photoCouvertureAlt: (portfolio as any).photoCouvertureAlt || "",
     photoMain: (portfolio as any).photoMain || "",
+    photoMainAlt: (portfolio as any).photoMainAlt || "",
     description: portfolio.description,
     kicker: portfolio.kicker,
     sousTitre: portfolio.sousTitre,
@@ -271,7 +286,9 @@ export async function getPortfolioBySlug(
       categories: safeParse(portfolio.categories, []),
       slug: portfolio.slug,
       photoCouverture: portfolio.photoCouverture,
+      photoCouvertureAlt: (portfolio as any).photoCouvertureAlt || "",
       photoMain: (portfolio as any).photoMain || "",
+      photoMainAlt: (portfolio as any).photoMainAlt || "",
       description: portfolio.description || "",
       kicker: portfolio.kicker || "",
       sousTitre: portfolio.sousTitre || "",
@@ -334,7 +351,9 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
       categories: safeParse(portfolio.categories, []),
       slug: portfolio.slug,
       photoCouverture: portfolio.photoCouverture,
+      photoCouvertureAlt: (portfolio as any).photoCouvertureAlt || "",
       photoMain: (portfolio as any).photoMain || "",
+      photoMainAlt: (portfolio as any).photoMainAlt || "",
       description: portfolio.description || "",
       kicker: portfolio.kicker || "",
       sousTitre: portfolio.sousTitre || "",
@@ -376,6 +395,12 @@ export async function updatePortfolioBySlug(
   }
   if (data.photoMain !== undefined) {
     updateData.photoMain = data.photoMain;
+  }
+  if (data.photoMainAlt !== undefined) {
+    updateData.photoMainAlt = data.photoMainAlt;
+  }
+  if (data.photoCouvertureAlt !== undefined) {
+    updateData.photoCouvertureAlt = data.photoCouvertureAlt;
   }
   if (data.categories !== undefined) {
     updateData.categories = JSON.stringify(data.categories);
@@ -506,7 +531,9 @@ export async function getPublicPortfolios() {
           categories: safeParse(portfolio.categories, []),
           slug: portfolio.slug,
           photoCouverture: portfolio.photoCouverture,
+          photoCouvertureAlt: (portfolio as any).photoCouvertureAlt || "",
           photoMain: (portfolio as any).photoMain || "",
+          photoMainAlt: (portfolio as any).photoMainAlt || "",
           description: portfolio.description || "",
           kicker: portfolio.kicker || "",
           sousTitre: portfolio.sousTitre || "",
@@ -528,7 +555,9 @@ export async function getPublicPortfolios() {
           categories: [],
           slug: portfolio.slug,
           photoCouverture: portfolio.photoCouverture,
+          photoCouvertureAlt: "",
           photoMain: "",
+          photoMainAlt: "",
           description: "",
           kicker: "",
           sousTitre: "",

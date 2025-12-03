@@ -152,8 +152,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function EditPortfolio() {
-  const { sessionData, portfolio } = useLoaderData<typeof loader>();
-  const navigate = useNavigate();
+  const { portfolio } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
 
   const [toast, setToast] = useState<{

@@ -8,6 +8,7 @@ export interface BentoLine {
     | "2 square"
     | "full";
   listImage: string[]; // URLs des médias (images et vidéos)
+  listImageAlt?: string[]; // Textes alt pour chaque média
 }
 
 export interface BentoItem {
@@ -20,7 +21,9 @@ export interface PortfolioData {
   categories: string[];
   slug: string;
   photoCouverture: string;
+  photoCouvertureAlt?: string;
   photoMain: string;
+  photoMainAlt?: string;
   description: string;
   kicker: string;
   livrable: string[];
