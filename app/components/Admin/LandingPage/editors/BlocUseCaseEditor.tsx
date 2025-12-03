@@ -1,42 +1,24 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import type { BlocUseCase } from "~/types/landing-page";
+import { usePortfolio } from "~/contexts/PortfolioContext";
 
 interface BlocUseCaseEditorProps {
   bloc: BlocUseCase;
   onUpdate: (bloc: BlocUseCase) => void;
 }
 
-interface PortfolioOption {
-  id: string;
-  titre: string;
-  slug: string;
-}
-
 export default function BlocUseCaseEditor({
   bloc,
   onUpdate,
 }: BlocUseCaseEditorProps) {
-  const [portfolios, setPortfolios] = useState<PortfolioOption[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { allPortfolios, isLoading, fetchAllPortfolios } = usePortfolio();
 
   // Charger les portfolios disponibles
   useEffect(() => {
-    const fetchPortfolios = async () => {
-      try {
-        const response = await fetch("/api/portfolios");
-        if (response.ok) {
-          const data = await response.json();
-          setPortfolios(data);
-        }
-      } catch (error) {
-        console.error("Erreur lors du chargement des portfolios:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPortfolios();
-  }, []);
+    if (allPortfolios.length === 0) {
+      fetchAllPortfolios();
+    }
+  }, [allPortfolios.length, fetchAllPortfolios]);
 
   const togglePortfolio = (portfolioId: string) => {
     const isSelected = bloc.portfolioIds.includes(portfolioId);
@@ -74,15 +56,15 @@ export default function BlocUseCaseEditor({
           Portfolios sélectionnés ({bloc.portfolioIds.length})
         </label>
 
-        {loading ? (
+        {isLoading ? (
           <p className="text-white/70 text-sm">Chargement des portfolios...</p>
-        ) : portfolios.length === 0 ? (
+        ) : allPortfolios.length === 0 ? (
           <p className="text-white/70 text-sm">
             Aucun portfolio disponible. Créez d'abord des portfolios.
           </p>
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto">
-            {portfolios.map((portfolio) => (
+            {allPortfolios.map((portfolio) => (
               <label
                 key={portfolio.id}
                 className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
@@ -112,7 +94,7 @@ export default function BlocUseCaseEditor({
         {bloc.portfolioIds.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
             {bloc.portfolioIds.map((id) => {
-              const portfolio = portfolios.find((p) => p.id === id);
+              const portfolio = allPortfolios.find((p) => p.id === id);
               return (
                 <span
                   key={id}

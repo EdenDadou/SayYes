@@ -1,6 +1,7 @@
 import type { BlocEtape } from "~/types/landing-page";
 import LineTitleEditor from "./LineTitleEditor";
 import MediaEditor from "./MediaEditor";
+import CollapsibleCard from "./CollapsibleCard";
 
 interface BlocEtapeEditorProps {
   bloc: BlocEtape;
@@ -32,6 +33,14 @@ export default function BlocEtapeEditor({
       ...bloc,
       stepLines: bloc.stepLines.filter((_, i) => i !== index),
     });
+  };
+
+  const moveStep = (index: number, direction: "up" | "down") => {
+    const newSteps = [...bloc.stepLines];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= newSteps.length) return;
+    [newSteps[index], newSteps[targetIndex]] = [newSteps[targetIndex], newSteps[index]];
+    onUpdate({ ...bloc, stepLines: newSteps });
   };
 
   return (
@@ -90,7 +99,7 @@ export default function BlocEtapeEditor({
       </div>
 
       {/* Étapes */}
-      <div>
+      <div className="border border-gray-700 rounded-lg p-4">
         <div className="flex justify-between items-center mb-3">
           <label className="block text-sm font-medium text-white">
             Étapes ({bloc.stepLines.length})
@@ -98,20 +107,32 @@ export default function BlocEtapeEditor({
           <button
             type="button"
             onClick={addStep}
-            className="text-sm text-blue-400 hover:text-blue-300"
+            className="text-sm text-blue-400 hover:text-blue-300 px-3 py-1.5 border border-blue-400/30 rounded-lg hover:bg-blue-400/10 transition-colors"
           >
             + Ajouter une étape
           </button>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {bloc.stepLines.map((step, index) => (
-            <div
+            <CollapsibleCard
               key={index}
-              className="flex gap-2 items-start bg-gray-800 p-3 rounded-lg"
+              index={index}
+              title={step.title}
+              subtitle={step.subtitle}
+              icon={
+                <span className="text-blue-400 font-bold text-lg">{index + 1}</span>
+              }
+              onRemove={() => removeStep(index)}
+              onMoveUp={() => moveStep(index, "up")}
+              onMoveDown={() => moveStep(index, "down")}
+              disableMoveUp={index === 0}
+              disableMoveDown={index === bloc.stepLines.length - 1}
             >
-              <span className="text-blue-400 font-bold mt-2">{index + 1}.</span>
-              <div className="flex-1 space-y-2">
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1">
+                  Titre de l'étape
+                </label>
                 <input
                   type="text"
                   value={step.title}
@@ -119,8 +140,13 @@ export default function BlocEtapeEditor({
                     updateStep(index, { ...step, title: e.target.value })
                   }
                   placeholder="Titre de l'étape"
-                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-1">
+                  Sous-titre
+                </label>
                 <input
                   type="text"
                   value={step.subtitle}
@@ -128,35 +154,16 @@ export default function BlocEtapeEditor({
                     updateStep(index, { ...step, subtitle: e.target.value })
                   }
                   placeholder="Sous-titre de l'étape"
-                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              <button
-                type="button"
-                onClick={() => removeStep(index)}
-                className="p-2 text-red-400 hover:text-red-300"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
+            </CollapsibleCard>
           ))}
         </div>
 
         {bloc.stepLines.length === 0 && (
-          <p className="text-white/60 text-sm text-center py-4">
-            Aucune étape ajoutée.
+          <p className="text-white/40 text-sm text-center py-6">
+            Aucune étape ajoutée. Cliquez sur "+ Ajouter une étape" pour commencer.
           </p>
         )}
       </div>

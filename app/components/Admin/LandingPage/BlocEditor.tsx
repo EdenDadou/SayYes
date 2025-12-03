@@ -33,7 +33,7 @@ export default function BlocEditor({
   onMoveUp,
   onMoveDown,
 }: BlocEditorProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Trouver le label du type de bloc
   const blocLabel =
@@ -95,7 +95,7 @@ export default function BlocEditor({
             className={`p-1 rounded ${
               index === 0
                 ? "text-gray-500 cursor-not-allowed"
-                : "text-gray-400 hover:text-white hover:bg-gray-700"
+                : "text-white hover:text-white/80 hover:bg-gray-700"
             }`}
             title="Monter"
           >
@@ -124,7 +124,7 @@ export default function BlocEditor({
             className={`p-1 rounded ${
               index === totalBlocs - 1
                 ? "text-gray-500 cursor-not-allowed"
-                : "text-gray-400 hover:text-white hover:bg-gray-700"
+                : "text-white hover:text-white/80 hover:bg-gray-700"
             }`}
             title="Descendre"
           >
@@ -152,7 +152,7 @@ export default function BlocEditor({
                 onRemove();
               }
             }}
-            className="p-1 rounded text-red-400 hover:text-red-300 hover:bg-red-900/30"
+            className="p-1 rounded text-red-500 hover:text-red-400 hover:bg-red-900/30"
             title="Supprimer"
           >
             <svg
@@ -177,7 +177,7 @@ export default function BlocEditor({
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
-            className="p-1 rounded text-gray-400 hover:text-white hover:bg-gray-700"
+            className="p-1 rounded text-white hover:text-white/80 hover:bg-gray-700"
           >
             <svg
               className={`w-5 h-5 transform transition-transform ${

@@ -1,6 +1,7 @@
 import type { BlocMethods } from "~/types/landing-page";
 import MediaEditor from "./MediaEditor";
 import LineTitleEditor from "./LineTitleEditor";
+import CollapsibleCard from "./CollapsibleCard";
 
 const ICON_OPTIONS = [
   { value: "heart", label: "Heart" },
@@ -47,6 +48,14 @@ export default function BlocMethodsEditor({
     });
   };
 
+  const moveCard = (index: number, direction: "up" | "down") => {
+    const newCards = [...bloc.cards];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= newCards.length) return;
+    [newCards[index], newCards[targetIndex]] = [newCards[targetIndex], newCards[index]];
+    onUpdate({ ...bloc, cards: newCards });
+  };
+
   const addConclusionElement = (type: "icon" | "text") => {
     const newElement =
       type === "icon"
@@ -85,13 +94,6 @@ export default function BlocMethodsEditor({
 
   return (
     <div className="space-y-4">
-      {/* Titre */}
-      <LineTitleEditor
-        lines={bloc.lineTitle}
-        onChange={(lines) => onUpdate({ ...bloc, lineTitle: lines })}
-        label="Titre"
-      />
-
       {/* Sous-titre */}
       <div>
         <label className="block text-sm font-medium text-white mb-2">
@@ -103,6 +105,146 @@ export default function BlocMethodsEditor({
           onChange={(e) => onUpdate({ ...bloc, subTitle: e.target.value })}
           className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
+      </div>
+
+      {/* Titre */}
+      <LineTitleEditor
+        lines={bloc.lineTitle}
+        onChange={(lines) => onUpdate({ ...bloc, lineTitle: lines })}
+        label="Titre"
+      />
+
+      {/* Cards */}
+      <div className="border border-gray-700 rounded-lg p-4">
+        <div className="flex justify-between items-center mb-3">
+          <label className="block text-sm font-medium text-white">
+            Cards ({bloc.cards.length})
+          </label>
+          <button
+            type="button"
+            onClick={addCard}
+            className="text-sm text-blue-400 hover:text-blue-300 px-3 py-1.5 border border-blue-400/30 rounded-lg hover:bg-blue-400/10 transition-colors"
+          >
+            + Ajouter une card
+          </button>
+        </div>
+
+        <div className="space-y-2">
+          {bloc.cards.map((card, index) => (
+            <CollapsibleCard
+              key={index}
+              index={index}
+              title={card.title}
+              previewImage={card.media?.type === "image" ? card.media.url : undefined}
+              itemCount={{ count: card.lines.length, label: card.lines.length > 1 ? "lignes" : "ligne" }}
+              onRemove={() => removeCard(index)}
+              onMoveUp={() => moveCard(index, "up")}
+              onMoveDown={() => moveCard(index, "down")}
+              disableMoveUp={index === 0}
+              disableMoveDown={index === bloc.cards.length - 1}
+            >
+              <input
+                type="text"
+                value={card.title}
+                onChange={(e) =>
+                  updateCard(index, { ...card, title: e.target.value })
+                }
+                placeholder="Titre"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              <MediaEditor
+                media={card.media}
+                onChange={(media) => updateCard(index, { ...card, media })}
+                label={`Média Card ${index + 1}`}
+              />
+
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-2">
+                  Icônes
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {ICON_OPTIONS.map((icon) => (
+                    <label
+                      key={icon.value}
+                      className={`flex items-center gap-1 px-2 py-1 rounded cursor-pointer text-sm transition-colors ${
+                        card.icons.includes(icon.value)
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-700 text-white/70 hover:bg-gray-600"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={card.icons.includes(icon.value)}
+                        onChange={(e) => {
+                          const newIcons = e.target.checked
+                            ? [...card.icons, icon.value]
+                            : card.icons.filter((i) => i !== icon.value);
+                          updateCard(index, { ...card, icons: newIcons });
+                        }}
+                        className="sr-only"
+                      />
+                      {icon.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Lignes */}
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-2">
+                  Lignes ({card.lines.length})
+                </label>
+                <div className="space-y-2">
+                  {card.lines.map((line, lineIndex) => (
+                    <div key={lineIndex} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={line}
+                        onChange={(e) => {
+                          const newLines = [...card.lines];
+                          newLines[lineIndex] = e.target.value;
+                          updateCard(index, { ...card, lines: newLines });
+                        }}
+                        placeholder={`Ligne ${lineIndex + 1}`}
+                        className="flex-1 px-3 py-1.5 bg-gray-700 border border-gray-600 rounded text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          updateCard(index, {
+                            ...card,
+                            lines: card.lines.filter((_, i) => i !== lineIndex),
+                          });
+                        }}
+                        className="text-red-400 hover:text-red-300 p-1"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    updateCard(index, { ...card, lines: [...card.lines, ""] });
+                  }}
+                  className="mt-2 text-xs text-blue-400 hover:text-blue-300 px-2 py-1 border border-blue-400/30 rounded"
+                >
+                  + Ajouter une ligne
+                </button>
+              </div>
+            </CollapsibleCard>
+          ))}
+        </div>
+
+        {bloc.cards.length === 0 && (
+          <p className="text-white/40 text-sm text-center py-6">
+            Aucune card ajoutée. Cliquez sur "+ Ajouter une card" pour commencer.
+          </p>
+        )}
       </div>
 
       {/* Conclusion */}
@@ -192,105 +334,6 @@ export default function BlocMethodsEditor({
           >
             + Icône
           </button>
-        </div>
-      </div>
-
-      {/* Cards */}
-      <div>
-        <div className="flex justify-between items-center mb-3">
-          <label className="block text-sm font-medium text-white">
-            Cards ({bloc.cards.length})
-          </label>
-          <button
-            type="button"
-            onClick={addCard}
-            className="text-sm text-blue-400 hover:text-blue-300"
-          >
-            + Ajouter une card
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {bloc.cards.map((card, index) => (
-            <div
-              key={index}
-              className="border border-gray-700 rounded-lg p-4 space-y-3"
-            >
-              <div className="flex justify-between items-center">
-                <span className="text-white/70 text-sm">Card {index + 1}</span>
-                <button
-                  type="button"
-                  onClick={() => removeCard(index)}
-                  className="text-red-400 hover:text-red-300 text-sm"
-                >
-                  Supprimer
-                </button>
-              </div>
-
-              <input
-                type="text"
-                value={card.title}
-                onChange={(e) =>
-                  updateCard(index, { ...card, title: e.target.value })
-                }
-                placeholder="Titre"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-
-              <MediaEditor
-                media={card.media}
-                onChange={(media) => updateCard(index, { ...card, media })}
-                label="Média"
-              />
-
-              <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">
-                  Icônes
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {ICON_OPTIONS.map((icon) => (
-                    <label
-                      key={icon.value}
-                      className={`flex items-center gap-1 px-2 py-1 rounded cursor-pointer text-sm ${
-                        card.icons.includes(icon.value)
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-700 text-white/70 hover:bg-gray-600"
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={card.icons.includes(icon.value)}
-                        onChange={(e) => {
-                          const newIcons = e.target.checked
-                            ? [...card.icons, icon.value]
-                            : card.icons.filter((i) => i !== icon.value);
-                          updateCard(index, { ...card, icons: newIcons });
-                        }}
-                        className="sr-only"
-                      />
-                      {icon.label}
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <input
-                type="text"
-                value={card.lines.join(", ")}
-                onChange={(e) =>
-                  updateCard(index, {
-                    ...card,
-                    lines: e.target.value
-                      .split(",")
-                      .map((l) => l.trim())
-                      .filter(Boolean),
-                  })
-                }
-                placeholder="Lignes (séparées par virgules)"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-          ))}
         </div>
       </div>
     </div>

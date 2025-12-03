@@ -1,5 +1,6 @@
-import type { BlocCards, Card, CardConcurrence, CardOffre } from "~/types/landing-page";
+import type { BlocCards, Card, CardConcurrence } from "~/types/landing-page";
 import MediaEditor from "./MediaEditor";
+import CollapsibleCard from "./CollapsibleCard";
 
 interface BlocCardsEditorProps {
   bloc: BlocCards;
@@ -64,6 +65,14 @@ export default function BlocCardsEditor({
     });
   };
 
+  const moveCard = (index: number, direction: "up" | "down") => {
+    const newCards = [...bloc.cards];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= newCards.length) return;
+    [newCards[index], newCards[targetIndex]] = [newCards[targetIndex], newCards[index]];
+    onUpdate({ ...bloc, cards: newCards });
+  };
+
   return (
     <div className="space-y-4">
       {/* Titre */}
@@ -119,7 +128,7 @@ export default function BlocCardsEditor({
       </div>
 
       {/* Cards */}
-      <div>
+      <div className="border border-gray-700 rounded-lg p-4">
         <div className="flex justify-between items-center mb-3">
           <label className="block text-sm font-medium text-white">
             Cards ({bloc.cards.length})
@@ -128,45 +137,43 @@ export default function BlocCardsEditor({
             <button
               type="button"
               onClick={() => addCard("offre")}
-              className="text-sm text-green-400 hover:text-green-300 px-2 py-1 border border-green-400/30 rounded"
+              className="text-sm text-green-400 hover:text-green-300 px-3 py-1.5 border border-green-400/30 rounded-lg hover:bg-green-400/10 transition-colors"
             >
               + Card Offre
             </button>
             <button
               type="button"
               onClick={() => addCard("concurrence")}
-              className="text-sm text-orange-400 hover:text-orange-300 px-2 py-1 border border-orange-400/30 rounded"
+              className="text-sm text-orange-400 hover:text-orange-300 px-3 py-1.5 border border-orange-400/30 rounded-lg hover:bg-orange-400/10 transition-colors"
             >
               + Card Concurrence
             </button>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-2">
           {bloc.cards.map((card, cardIndex) => (
-            <div
+            <CollapsibleCard
               key={cardIndex}
-              className="border border-gray-700 rounded-lg p-4 space-y-3"
+              index={cardIndex}
+              title={card.titre}
+              subtitle={card.cta}
+              badge={{
+                label: card.type === "offre" ? "Offre" : "Concurrence",
+                color: card.type === "offre" ? "green" : "orange",
+              }}
+              previewImage={card.image?.url}
+              itemCount={
+                card.type === "concurrence"
+                  ? { count: (card as CardConcurrence).blocs.length, label: "blocs" }
+                  : undefined
+              }
+              onRemove={() => removeCard(cardIndex)}
+              onMoveUp={() => moveCard(cardIndex, "up")}
+              onMoveDown={() => moveCard(cardIndex, "down")}
+              disableMoveUp={cardIndex === 0}
+              disableMoveDown={cardIndex === bloc.cards.length - 1}
             >
-              <div className="flex justify-between items-center">
-                <span
-                  className={`text-xs px-2 py-1 rounded ${
-                    card.type === "offre"
-                      ? "bg-green-600/30 text-green-300"
-                      : "bg-orange-600/30 text-orange-300"
-                  }`}
-                >
-                  {card.type === "offre" ? "Offre" : "Concurrence"}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => removeCard(cardIndex)}
-                  className="text-red-400 hover:text-red-300 text-sm"
-                >
-                  Supprimer
-                </button>
-              </div>
-
               {/* Champs communs */}
               <input
                 type="text"
@@ -227,7 +234,7 @@ export default function BlocCardsEditor({
                       image: { type: "image", url: "" },
                     })
                   }
-                  className="text-sm text-blue-400 hover:text-blue-300"
+                  className="text-sm text-blue-400 hover:text-blue-300 px-2 py-1 border border-blue-400/30 rounded"
                 >
                   + Ajouter une image
                 </button>
@@ -238,94 +245,102 @@ export default function BlocCardsEditor({
                 <div className="border-t border-gray-700 pt-3 mt-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-white/70">
-                      Blocs concurrence
+                      Blocs concurrence ({(card as CardConcurrence).blocs.length})
                     </span>
                     <button
                       type="button"
                       onClick={() => addBlocConcurrence(cardIndex)}
-                      className="text-xs text-blue-400 hover:text-blue-300"
+                      className="text-xs text-blue-400 hover:text-blue-300 px-2 py-1 border border-blue-400/30 rounded"
                     >
                       + Ajouter un bloc
                     </button>
                   </div>
 
-                  {(card as CardConcurrence).blocs.map((b, blocIndex) => (
-                    <div
-                      key={blocIndex}
-                      className="bg-gray-800 p-3 rounded mt-2 space-y-2"
-                    >
-                      <div className="flex justify-between">
-                        <input
-                          type="text"
-                          value={b.sousTitre}
+                  <div className="space-y-2">
+                    {(card as CardConcurrence).blocs.map((b, blocIndex) => (
+                      <div
+                        key={blocIndex}
+                        className="bg-gray-800 p-3 rounded-lg space-y-2"
+                      >
+                        <div className="flex justify-between items-center">
+                          <input
+                            type="text"
+                            value={b.sousTitre}
+                            onChange={(e) =>
+                              updateBlocConcurrence(cardIndex, blocIndex, {
+                                ...b,
+                                sousTitre: e.target.value,
+                              })
+                            }
+                            placeholder="Sous-titre"
+                            className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              removeBlocConcurrence(cardIndex, blocIndex)
+                            }
+                            className="ml-2 text-red-400 hover:text-red-300 p-1"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+
+                        <select
+                          value={b.linesType}
                           onChange={(e) =>
                             updateBlocConcurrence(cardIndex, blocIndex, {
                               ...b,
-                              sousTitre: e.target.value,
+                              linesType: e.target.value as "coche" | "croix",
                             })
                           }
-                          placeholder="Sous-titre"
-                          className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-                        />
-                        <button
-                          type="button"
-                          onClick={() =>
-                            removeBlocConcurrence(cardIndex, blocIndex)
-                          }
-                          className="ml-2 text-red-400 hover:text-red-300"
+                          className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
                         >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
+                          <option value="coche">Coche</option>
+                          <option value="croix">Croix</option>
+                        </select>
+
+                        <input
+                          type="text"
+                          value={b.lines.join(", ")}
+                          onChange={(e) =>
+                            updateBlocConcurrence(cardIndex, blocIndex, {
+                              ...b,
+                              lines: e.target.value
+                                .split(",")
+                                .map((l) => l.trim())
+                                .filter(Boolean),
+                            })
+                          }
+                          placeholder="Lignes (séparées par virgules)"
+                          className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+                        />
                       </div>
-
-                      <select
-                        value={b.linesType}
-                        onChange={(e) =>
-                          updateBlocConcurrence(cardIndex, blocIndex, {
-                            ...b,
-                            linesType: e.target.value as "coche" | "croix",
-                          })
-                        }
-                        className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-                      >
-                        <option value="coche">Coche</option>
-                        <option value="croix">Croix</option>
-                      </select>
-
-                      <input
-                        type="text"
-                        value={b.lines.join(", ")}
-                        onChange={(e) =>
-                          updateBlocConcurrence(cardIndex, blocIndex, {
-                            ...b,
-                            lines: e.target.value
-                              .split(",")
-                              .map((l) => l.trim())
-                              .filter(Boolean),
-                          })
-                        }
-                        placeholder="Lignes (séparées par virgules)"
-                        className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-                      />
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               )}
-            </div>
+            </CollapsibleCard>
           ))}
         </div>
+
+        {bloc.cards.length === 0 && (
+          <p className="text-white/40 text-sm text-center py-6">
+            Aucune card ajoutée. Cliquez sur un bouton ci-dessus pour commencer.
+          </p>
+        )}
       </div>
     </div>
   );

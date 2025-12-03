@@ -37,13 +37,6 @@ export default function BlocIntroEditor({
 
   return (
     <div className="space-y-4">
-      {/* Titre animé */}
-      <LineTitleEditor
-        lines={bloc.lineTitle}
-        onChange={(lines) => updateField("lineTitle", lines)}
-        label="Titre principal"
-      />
-
       {/* Punchline */}
       <div>
         <label className="block text-sm font-medium text-white mb-2">
@@ -53,9 +46,17 @@ export default function BlocIntroEditor({
           type="text"
           value={bloc.punchline}
           onChange={(e) => updateField("punchline", e.target.value)}
+          placeholder="Texte affiché au-dessus du titre..."
           className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
+
+      {/* Titre animé */}
+      <LineTitleEditor
+        lines={bloc.lineTitle}
+        onChange={(lines) => updateField("lineTitle", lines)}
+        label="Titre principal"
+      />
 
       {/* Description */}
       <div>
