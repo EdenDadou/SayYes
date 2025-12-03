@@ -3,12 +3,14 @@ import Background404 from "../Background404";
 export default function Background404Mobile() {
   return (
     <div
-      className="absolute top-24 left-0 w-screen h-screen z-0"
+      className="absolute top-24 left-0 w-full z-0"
       style={{
         backgroundImage: 'url("images/404/404.gif")',
         backgroundSize: "180vw",
         backgroundPositionX: "-40vw",
         backgroundRepeat: "no-repeat",
+        height: "calc(100vh - 6rem)", // 6rem = top-24
+        minHeight: "-webkit-fill-available",
       }}
     >
       <div
