@@ -103,6 +103,71 @@
   filter: blur(0.2px);
 }
 
+/* Holographic pour SVG avec masque */
+.holographic-svg {
+  background: linear-gradient(
+    150deg,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef
+  );
+  background-size: 500% 500%;
+  animation: moveGradient 4s linear infinite;
+  -webkit-mask: var(--svg-mask);
+  mask: var(--svg-mask);
+}
+
+/* Wrapper pour SVG holographique - utilise le SVG comme masque */
+.holographic-icon {
+  position: relative;
+  display: inline-flex;
+}
+
+.holographic-icon svg {
+  position: relative;
+  z-index: 1;
+}
+
+.holographic-icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    150deg,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef,
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef
+  );
+  background-size: 500% 500%;
+  animation: moveGradient 4s linear infinite;
+  -webkit-mask: var(--mask-image);
+  mask: var(--mask-image);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.holographic-icon svg {
+  opacity: 0;
+}
+
 .holographic-bg-vertical {
   background: linear-gradient(
     0deg,

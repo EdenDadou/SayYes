@@ -80,12 +80,13 @@ export interface BlocCards {
 // Bloc Chiffres Clés
 export interface BlocChiffresCles {
   type: "chiffresCles";
-  title: string;
+  punchline: string;
+  lineTitle: TitleLine[];
   numbers: {
     title: string;
     subtitle: string;
   }[];
-  media: Media;
+  lines: string[];
 }
 
 // Bloc Commentaire Client
@@ -223,9 +224,10 @@ export function createEmptyBloc(type: Bloc["type"]): Bloc {
     case "chiffresCles":
       return {
         type: "chiffresCles",
-        title: "",
+        punchline: "",
+        lineTitle: [],
         numbers: [],
-        media: { type: "image", url: "" },
+        lines: [],
       };
     case "commentaireClient":
       return {
