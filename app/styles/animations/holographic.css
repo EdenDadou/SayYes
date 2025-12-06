@@ -29,14 +29,17 @@
     #feab71,
     #e6ff9c,
     #b7eeef,
-    #4ffff5
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef
   );
-  background-size: 200% 100%;
+  background-size: 500% 500%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: holographicFlow 6s linear infinite;
-  will-change: background-position;
+  animation: moveGradient 10s linear infinite;
 }
 
 .holographic-border {

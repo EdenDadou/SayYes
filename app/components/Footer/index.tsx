@@ -49,7 +49,7 @@ export default function Footer({
         </div>
       ) : (
         <>
-          <span className="font-jakarta-semi-bold text-[60px] leading-[60px] text-center">
+          <span className="font-jakarta-semi-bold text-[60px] leading-[60px] text-center z-20">
             Ça vous inspire ? <br />
             <span className="holographic-text">Parlons design !</span>
           </span>
