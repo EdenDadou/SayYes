@@ -1,21 +1,21 @@
-import { memo } from "react";
+import { memo, useRef } from "react";
 import Card from "~/components/Card";
+import ParallaxCard from "~/components/Card/ParallaxCard";
 import { solutionsCards } from "~/components/Screens/Solutions/data";
 import { useViewport } from "~/utils/hooks/useViewport";
 import SolutionTitleMobile from "~/components/Screens/Solutions/components/SolutionTitleMobile";
 import Star from "~/assets/icons/Star";
 import Desktoplayout from "~/components/Layout/Desktop";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
-import Background from "~/assets/icons/Background";
 import MobileLayout from "~/components/Layout/Mobile";
 import "~/styles/tailwind.css";
 import SolutionTitle from "~/components/Screens/Solutions/components/SolutionTitle";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
 
-// Composant Cards mémorisé pour éviter les re-renders
-const SolutionCards = memo(function SolutionCards() {
+// Composant Cards mémorisé pour éviter les re-renders (mobile)
+const SolutionCardsMobile = memo(function SolutionCardsMobile() {
   return (
-    <>
+    <div className="flex flex-col w-full gap-[24px]">
       {solutionsCards.map((card, index) => (
         <Card
           key={index}
@@ -24,9 +24,38 @@ const SolutionCards = memo(function SolutionCards() {
           borderClass={card.borderClass}
         />
       ))}
-    </>
+    </div>
   );
 });
+
+// Composant Cards parallax pour desktop
+function SolutionCardsParallax() {
+  const container = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  return (
+    <div ref={container} className="relative">
+      {solutionsCards.map((card, index) => {
+        const targetScale = 1 - (solutionsCards.length - index) * 0.05;
+        return (
+          <ParallaxCard
+            key={index}
+            index={index}
+            totalCards={solutionsCards.length}
+            content={card.content}
+            borderClass={card.borderClass}
+            progress={scrollYProgress}
+            range={[index * 0.2, 1]}
+            targetScale={targetScale}
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 export default function Solutions() {
   const isMobile = useViewport();
@@ -48,31 +77,35 @@ export default function Solutions() {
           <Star className="w-4 h-4" />5 étapes pour un branding impeccable
           <Star className="w-4 h-4" />
         </h2>
-        <SolutionCards />
+        <SolutionCardsMobile />
       </section>
     </MobileLayout>
   ) : (
     <Desktoplayout>
-      <AnimatePresence>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
-        >
-          {/* <Background className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80" /> */}
-          <img
-            src="/images/portfolio/bg.png"
-            alt="Background"
-            className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80"
-          />
-        </motion.div>
-      </AnimatePresence>
-      <section className="relative z-10 w-[988px] mx-auto flex flex-col justify-center items-start pt-20 mb-10">
-        <div className="h-[3px] md:w-24 w-20 holographic-bg mt-8 rounded-full" />
-        <SolutionTitle className="mb-10" />
-        <SolutionCards />
-      </section>
+      <div className="relative">
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
+            className="sticky top-0 -mt-20 w-full h-screen z-0 pointer-events-none"
+          >
+            <img
+              src="/images/portfolio/bg.png"
+              alt="Background"
+              className="w-full h-full object-cover opacity-80"
+            />
+          </motion.div>
+        </AnimatePresence>
+        <div className="relative z-10 -mt-[100vh]">
+          <section className="w-[988px] mx-auto flex flex-col justify-center items-start pt-20">
+            <div className="h-[3px] md:w-24 w-20 holographic-bg mt-8 rounded-full" />
+            <SolutionTitle />
+          </section>
+          <SolutionCardsParallax />
+        </div>
+      </div>
     </Desktoplayout>
   );
 }

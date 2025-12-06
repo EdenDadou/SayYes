@@ -154,3 +154,8 @@ img {
   content-visibility: auto;
   contain-intrinsic-size: 500px;
 }
+
+/* Parallax Cards Effect */
+.transform-origin-top {
+  transform-origin: top center;
+}

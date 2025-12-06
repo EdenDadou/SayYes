@@ -17,7 +17,7 @@ export default function Portfolio() {
   const { filteredPortfolios, fetchAllPortfolios } = usePortfolio();
   const isMobile = useViewport();
 
-  const { isImageFixed, imageOpacity, imageScale } = useScrollProgress();
+  const { imageOpacity, imageScale, bottomCardsOffset } = useScrollProgress();
 
   // Fetch portfolios on mount
   useEffect(() => {
@@ -133,69 +133,66 @@ export default function Portfolio() {
                 </motion.div>
               ))}
             </AnimatePresence>
+
+            {/* Section avec image sticky et cartes qui passent par-dessus */}
+            {/* <div className="relative z-10"> */}
+            {/* Image ClientsWall - sticky au scroll */}
+            <div className={`w-screen h-screen sticky top-0 z-0 mb-20`}>
+              <img
+                src={imageMobile}
+                alt="Clients Wall"
+                className="w-full h-full object-cover transition-all duration-500"
+                style={{
+                  opacity: imageOpacity,
+                  transform: `scale(${imageScale})`,
+                }}
+                loading="lazy"
+                width={"100%"}
+                height={"100%"}
+              />
+            </div>
+
+            {/* Cartes du bas */}
+            <div
+              className="grid md:grid-cols-2 grid-cols-1 gap-4 transition-transform duration-300"
+              style={{
+                transform: `translateY(${bottomCardsOffset}vh)`,
+              }}
+            >
+              <AnimatePresence mode="popLayout">
+                {portfolioTopCards.map((portfolio, index) => (
+                  <motion.div
+                    key={portfolio.id}
+                    className="w-[482px] flex-shrink-0 border-custom-thin rounded-[28px]"
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.05,
+                      ease: "easeOut",
+                    }}
+                    layout
+                  >
+                    <Card
+                      height="364px"
+                      content={
+                        <ContentPortfolio
+                          imageUrl={portfolio.photoCouverture}
+                          titre={portfolio.titre}
+                          topTitle={portfolio.topTitle}
+                          slug={portfolio.slug}
+                        />
+                      }
+                      borderClass="card-hover colspan-1 rounded-[28px]"
+                      borderRadius="28px"
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
         </section>
-
-        {/* Section avec image sticky et cartes qui passent par-dessus */}
-        {/* <div className="relative z-10"> */}
-        {/* Image ClientsWall - sticky au scroll */}
-        <div
-          className={`w-screen h-screen ${
-            isImageFixed ? "sticky top-0 z-0" : "relative"
-          }`}
-        >
-          <img
-            src={imageMobile}
-            alt="Clients Wall"
-            className="w-full h-full object-cover transition-all duration-500"
-            style={{
-              opacity: imageOpacity,
-              transform: `scale(${imageScale})`,
-            }}
-            loading="lazy"
-            width={"100%"}
-            height={"100%"}
-          />
-        </div>
-
-        {/* Cartes du bas */}
-        <div className="relative z-10 bg-transparent min-h-screen">
-          <div className="pt-32 pb-32">
-            <section className="md:px-36 px-4 flex flex-col gap-8">
-              <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-                <AnimatePresence mode="popLayout">
-                  {portfolioBottomCards.map((portfolio, index) => (
-                    <motion.div
-                      key={portfolio.id}
-                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                      transition={{
-                        duration: 0.3,
-                        delay: index * 0.05,
-                        ease: "easeOut",
-                      }}
-                      layout
-                    >
-                      <Card
-                        height="370px"
-                        content={
-                          <ContentPortfolio
-                            imageUrl={portfolio.photoCouverture}
-                            titre={portfolio.titre}
-                            slug={portfolio.slug}
-                          />
-                        }
-                        borderClass="card-hover colspan-1 rounded-[28px]"
-                        borderRadius="28px"
-                      />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            </section>
-          </div>
-        </div>
         {/* </div> */}
       </div>
     </Desktoplayout>
