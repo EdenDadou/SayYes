@@ -12,6 +12,21 @@ import "~/styles/tailwind.css";
 import SolutionTitle from "~/components/Screens/Solutions/components/SolutionTitle";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
 
+// Variants pour les animations d'entrée
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
 // Composant Cards mémorisé pour éviter les re-renders (mobile)
 const SolutionCardsMobile = memo(function SolutionCardsMobile() {
   return (
@@ -98,13 +113,32 @@ export default function Solutions() {
             />
           </motion.div>
         </AnimatePresence>
-        <div className="relative z-10 -mt-[100vh]">
+        <motion.div
+          className="relative z-10 -mt-[90vh]"
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
           <section className="w-[988px] mx-auto flex flex-col justify-center items-start pt-20">
-            <div className="h-[3px] md:w-24 w-20 holographic-bg mt-8 rounded-full" />
-            <SolutionTitle />
+            <motion.div
+              variants={fadeInUp}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="h-[3px] md:w-24 w-20 holographic-bg mt-8 rounded-full"
+            />
+            <motion.div
+              variants={fadeInUp}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <SolutionTitle />
+            </motion.div>
           </section>
-          <SolutionCardsParallax />
-        </div>
+          <motion.div
+            variants={fadeInUp}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <SolutionCardsParallax />
+          </motion.div>
+        </motion.div>
       </div>
     </Desktoplayout>
   );

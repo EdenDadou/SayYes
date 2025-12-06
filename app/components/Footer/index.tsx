@@ -49,7 +49,7 @@ export default function Footer({
         </div>
       ) : (
         <>
-          <span className="font-jakarta-semi-bold text-[60px] leading-[60px] text-center z-20">
+          <span className="font-jakarta-semi-bold text-[70px] leading-[70px] text-center z-20">
             Ça vous inspire ? <br />
             <span className="holographic-text">Parlons design !</span>
           </span>
@@ -108,7 +108,7 @@ export default function Footer({
           </div>
 
           <div className="h-[1px] w-full mb-12 holographic-bg-no-shadow" />
-          <div className="flex flex-row w-full pb-8">
+          <div className="flex flex-row w-full pb-12">
             <div className="flex flex-col w-1/3 justify-between self-stretch">
               <p className="text-md font-jakarta">
                 L'agence de communication
@@ -125,34 +125,38 @@ export default function Footer({
             </div>
             <div className="flex flex-row justify-between w-full">
               <div className="flex flex-col gap-8 text-white ml-10">
-                <p className="text-md font-jakarta">Branding</p>
-                <p className="text-md font-jakarta">Graphisme</p>
-                <p className="text-md font-jakarta">Web Design</p>
+                <p className="text-[14px] font-jakarta">Branding</p>
+                <p className="text-[14px] font-jakarta">Graphisme</p>
+                <p className="text-[14px] font-jakarta">Web Design</p>
               </div>
               <div className="flex flex-col gap-8 text-white ml-10">
-                <p className="text-md font-jakarta">Identité Visuelle</p>
-                <p className="text-md font-jakarta">Communication Print</p>
-                <p className="text-md font-jakarta">Facilitation Graphique</p>
+                <p className="text-[14px] font-jakarta">Identité Visuelle</p>
+                <p className="text-[14px] font-jakarta">Communication Print</p>
+                <p className="text-[14px] font-jakarta">
+                  Facilitation Graphique
+                </p>
               </div>
               <div className="flex flex-col gap-8 text-white ml-10">
-                <p className="text-md font-jakarta">Motion Design</p>
-                <p className="text-md font-jakarta">Infographie</p>
-                <p className="text-md font-jakarta">Nos Solutions</p>
+                <p className="text-[14px] font-jakarta">Motion Design</p>
+                <p className="text-[14px] font-jakarta">Infographie</p>
+                <p className="text-[14px] font-jakarta">Nos Solutions</p>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex flex-row justify-between w-screen px-20 py-3 bg-black">
-          <Link
-            to="/mention-legale"
-            className="text-[#929292] text-sm py-2 hover:text-white transition-colors"
-          >
-            Mentions Légales
-          </Link>
-          <p className="text-[#929292] text-sm py-2">
-            Say Yes ©2024. Tous droits réservés.
-          </p>
-          <p className="text-[#929292] text-sm py-2">From Paris With Love ♥</p>
+          <div className="flex flex-row justify-between w-full py-3 bg-black">
+            <Link
+              to="/mention-legale"
+              className="text-[#929292] text-sm py-2 hover:text-white transition-colors"
+            >
+              Mentions Légales
+            </Link>
+            <p className="text-[#929292] text-sm py-2">
+              Say Yes ©2024. Tous droits réservés.
+            </p>
+            <p className="text-[#929292] text-sm py-2">
+              From Paris With Love ♥
+            </p>
+          </div>
         </div>
       </div>
     </div>
