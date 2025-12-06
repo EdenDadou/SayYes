@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import useScrollProgress from "~/utils/hooks/useScrollProgress";
 
 export default function Portfolio() {
-  const { allPortfolios, fetchAllPortfolios } = usePortfolio();
+  const { filteredPortfolios, fetchAllPortfolios } = usePortfolio();
   const isMobile = useViewport();
 
   const { isImageFixed, imageOpacity, imageScale } = useScrollProgress();
@@ -25,8 +25,8 @@ export default function Portfolio() {
   }, [fetchAllPortfolios]);
 
   // Diviser les portfolios en deux groupes pour l'affichage
-  const portfolioTopCards = allPortfolios.slice(0, 4);
-  const portfolioBottomCards = allPortfolios.slice(4, 20);
+  const portfolioTopCards = filteredPortfolios.slice(0, 4);
+  const portfolioBottomCards = filteredPortfolios.slice(4, 20);
 
   const imageMobile = isMobile
     ? "/images/portfolio/ClientsWallMobile.png"
@@ -81,13 +81,13 @@ export default function Portfolio() {
           </motion.div>
         </AnimatePresence>
         {/* Contenu par-dessus */}
-        <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center  items-center gap-10">
+        <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center gap-10">
           <div className="flex flex-col items-start gap-6 w-[988px] justify-center">
             <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
             <PortfolioTitle />
           </div>
-          <Filter />
-          <div className="flex flex-wrap justify-start gap-[24px] w-[996px] m-auto">
+          <div className="flex flex-wrap justify-start gap-[24px] w-[990px] m-auto">
+            <Filter />
             {portfolioTopCards.map((portfolio, index) => (
               <div
                 key={portfolio.id}

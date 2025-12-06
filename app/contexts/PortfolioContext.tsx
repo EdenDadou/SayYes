@@ -11,6 +11,9 @@ import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 interface PortfolioContextType {
   portfolio: PortfolioData | null;
   allPortfolios: PortfolioData[];
+  filteredPortfolios: PortfolioData[];
+  activeFilters: string[];
+  setActiveFilters: (filters: string[]) => void;
   isLoading: boolean;
   error: string | null;
   fetchAllPortfolios: () => Promise<void>;
@@ -28,8 +31,29 @@ interface PortfolioProviderProps {
 export function PortfolioProvider({ children }: PortfolioProviderProps) {
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [allPortfolios, setAllPortfolios] = useState<PortfolioData[]>([]);
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const filteredPortfolios = useMemo(() => {
+    if (activeFilters.length === 0) {
+      return allPortfolios;
+    }
+    // Filtrer les portfolios qui ont au moins une catégorie correspondante
+    // Utiliser un Set pour éviter les doublons
+    const seen = new Set<string>();
+    return allPortfolios.filter((portfolio) => {
+      if (seen.has(portfolio.id)) return false;
+      const hasMatchingCategory = portfolio.categories?.some((cat) =>
+        activeFilters.includes(cat)
+      );
+      if (hasMatchingCategory) {
+        seen.add(portfolio.id);
+        return true;
+      }
+      return false;
+    });
+  }, [allPortfolios, activeFilters]);
 
   const fetchAllPortfolios = useCallback(async () => {
     setIsLoading(true);
@@ -75,12 +99,15 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
     () => ({
       portfolio,
       allPortfolios,
+      filteredPortfolios,
+      activeFilters,
+      setActiveFilters,
       isLoading,
       error,
       fetchAllPortfolios,
       fetchPortfolioBySlug,
     }),
-    [portfolio, allPortfolios, isLoading, error, fetchAllPortfolios, fetchPortfolioBySlug]
+    [portfolio, allPortfolios, filteredPortfolios, activeFilters, isLoading, error, fetchAllPortfolios, fetchPortfolioBySlug]
   );
 
   return (
