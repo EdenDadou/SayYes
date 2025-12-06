@@ -1,5 +1,5 @@
 import { cn } from "~/utils/ui/ui";
-import { useNavigate } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import "~/styles/tailwind.css";
 
@@ -18,18 +18,16 @@ export default function ContentPortfolio({
   topTitle,
   slug,
 }: PropsContent) {
-  const navigate = useNavigate();
   const imageClasses = cn(
     "h-full flex items-center justify-center md:rounded-[20px] rounded-[10px] relative card-image"
   );
 
   return (
-    <div
+    <Link
+      to={`/portfolio/${slug}`}
+      reloadDocument
       className="size-full relative overflow-hidden md:rounded-[16px] hover:rounded-[26px] rounded-[10px]  md:p-2 p-1 cursor-pointer
-      shadow-lg"
-      onClick={() => {
-        navigate(`/portfolio/${slug}`);
-      }}
+      shadow-lg block"
     >
       <div
         style={{
@@ -61,6 +59,6 @@ export default function ContentPortfolio({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

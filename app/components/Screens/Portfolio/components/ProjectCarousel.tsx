@@ -101,10 +101,10 @@ export default function ProjectCarousel({
         {/* Carousel Content */}
         <div className="relative h-[370px] w-full">
           {/* Navigation Arrows - centered vertically with cards */}
-          <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20">
+          <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20 pointer-events-none">
             <button
               onClick={prevSlide}
-              className="z-20 backdrop-blur-3xl hover:bg-white/20 rounded-full transition-all my-4 duration-300 group"
+              className="z-20 backdrop-blur-3xl hover:bg-white/20 rounded-full transition-all my-4 duration-300 group pointer-events-auto"
               aria-label="Projet précédent"
             >
               <ArrowBig className="w-[77px] h-[77px] text-white transition-transform rotate-180" />
@@ -112,7 +112,7 @@ export default function ProjectCarousel({
 
             <button
               onClick={nextSlide}
-              className="z-20 backdrop-blur-3xl hover:bg-white/20 transition-all duration-300 group my-4 rounded-full"
+              className="z-20 backdrop-blur-3xl hover:bg-white/20 transition-all duration-300 group my-4 rounded-full pointer-events-auto"
               aria-label="Projet suivant"
             >
               <ArrowBig className="w-[77px] h-[77px] text-white transition-transform" />
@@ -154,7 +154,8 @@ export default function ProjectCarousel({
                 <div
                   key={`${project.id}-${project.position}`}
                   className="flex-shrink-0"
-                  style={{ width: `${cardWidth}px` }}
+                  style={{ width: `${cardWidth}px`, pointerEvents: "auto" }}
+                  onPointerDown={(e) => e.stopPropagation()}
                 >
                   <Card
                     height="370px"
