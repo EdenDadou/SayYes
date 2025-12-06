@@ -43,22 +43,36 @@ export default function Portfolio() {
         </div>
         <Filter />
         <div className="flex flex-wrap justify-start gap-[14px] w-full m-auto">
-          {portfolioTopCards.map((portfolio, index) => (
-            <div key={portfolio.id} className="w-screen flex-shrink-0 px-4">
-              <Card
-                height="260px"
-                content={
-                  <ContentPortfolio
-                    imageUrl={portfolio.photoCouverture}
-                    titre={portfolio.titre}
-                    topTitle={portfolio.topTitle}
-                    slug={portfolio.slug}
-                  />
-                }
-                borderClass="card-hover"
-              />
-            </div>
-          ))}
+          <AnimatePresence mode="popLayout">
+            {portfolioTopCards.map((portfolio, index) => (
+              <motion.div
+                key={portfolio.id}
+                className="w-screen flex-shrink-0 px-4"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.05,
+                  ease: "easeOut",
+                }}
+                layout
+              >
+                <Card
+                  height="260px"
+                  content={
+                    <ContentPortfolio
+                      imageUrl={portfolio.photoCouverture}
+                      titre={portfolio.titre}
+                      topTitle={portfolio.topTitle}
+                      slug={portfolio.slug}
+                    />
+                  }
+                  borderClass="card-hover"
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </section>
     </MobileLayout>
@@ -88,26 +102,37 @@ export default function Portfolio() {
           </div>
           <div className="flex flex-wrap justify-start gap-[24px] w-[990px] m-auto">
             <Filter />
-            {portfolioTopCards.map((portfolio, index) => (
-              <div
-                key={portfolio.id}
-                className="w-[482px] flex-shrink-0 border-custom-thin rounded-[28px]"
-              >
-                <Card
-                  height="364px"
-                  content={
-                    <ContentPortfolio
-                      imageUrl={portfolio.photoCouverture}
-                      titre={portfolio.titre}
-                      topTitle={portfolio.topTitle}
-                      slug={portfolio.slug}
-                    />
-                  }
-                  borderClass="card-hover colspan-1 rounded-[28px]"
-                  borderRadius="28px"
-                />
-              </div>
-            ))}
+            <AnimatePresence mode="popLayout">
+              {portfolioTopCards.map((portfolio, index) => (
+                <motion.div
+                  key={portfolio.id}
+                  className="w-[482px] flex-shrink-0 border-custom-thin rounded-[28px]"
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: index * 0.05,
+                    ease: "easeOut",
+                  }}
+                  layout
+                >
+                  <Card
+                    height="364px"
+                    content={
+                      <ContentPortfolio
+                        imageUrl={portfolio.photoCouverture}
+                        titre={portfolio.titre}
+                        topTitle={portfolio.topTitle}
+                        slug={portfolio.slug}
+                      />
+                    }
+                    borderClass="card-hover colspan-1 rounded-[28px]"
+                    borderRadius="28px"
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </section>
 
@@ -138,21 +163,35 @@ export default function Portfolio() {
           <div className="pt-32 pb-32">
             <section className="md:px-36 px-4 flex flex-col gap-8">
               <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-                {portfolioBottomCards.map((portfolio, index) => (
-                  <Card
-                    key={portfolio.id}
-                    height="370px"
-                    content={
-                      <ContentPortfolio
-                        imageUrl={portfolio.photoCouverture}
-                        titre={portfolio.titre}
-                        slug={portfolio.slug}
+                <AnimatePresence mode="popLayout">
+                  {portfolioBottomCards.map((portfolio, index) => (
+                    <motion.div
+                      key={portfolio.id}
+                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: index * 0.05,
+                        ease: "easeOut",
+                      }}
+                      layout
+                    >
+                      <Card
+                        height="370px"
+                        content={
+                          <ContentPortfolio
+                            imageUrl={portfolio.photoCouverture}
+                            titre={portfolio.titre}
+                            slug={portfolio.slug}
+                          />
+                        }
+                        borderClass="card-hover colspan-1 rounded-[28px]"
+                        borderRadius="28px"
                       />
-                    }
-                    borderClass="card-hover colspan-1 rounded-[28px]"
-                    borderRadius="28px"
-                  />
-                ))}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
               </div>
             </section>
           </div>
