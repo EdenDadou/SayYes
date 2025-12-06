@@ -29,17 +29,14 @@
     #feab71,
     #e6ff9c,
     #b7eeef,
-    #4ffff5,
-    #fe77b7,
-    #feab71,
-    #e6ff9c,
-    #b7eeef
+    #4ffff5
   );
-  background-size: 500% 500%;
+  background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: moveGradient 4s linear infinite;
+  animation: holographicFlow 6s linear infinite;
+  will-change: background-position;
 }
 
 .holographic-border {
@@ -71,14 +68,11 @@
     #feab71,
     #e6ff9c,
     #b7eeef,
-    #4ffff5,
-    #fe77b7,
-    #feab71,
-    #e6ff9c,
-    #b7eeef
+    #4ffff5
   );
-  background-size: 500% 500%;
-  animation: moveGradient 4s linear infinite;
+  background-size: 200% 100%;
+  animation: holographicFlow 6s linear infinite;
+  will-change: background-position;
 }
 .holographic-bg {
   background: linear-gradient(
@@ -88,19 +82,45 @@
     #feab71,
     #e6ff9c,
     #b7eeef,
+    #4ffff5
+  );
+  background-size: 200% 100%;
+  animation: holographicFlow 6s linear infinite;
+  filter: blur(0.2px);
+  will-change: background-position;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+      box-shadow:
+    0 0 10px #dcc4ff,
+    0 0 20px #b0f5ff,
+    0 0 30px #e1ff8b;
+}
+
+.holographic-bg-no-shadow {
+  background: linear-gradient(
+    150deg,
     #4ffff5,
     #fe77b7,
     #feab71,
     #e6ff9c,
-    #b7eeef
+    #b7eeef,
+    #4ffff5
   );
-  background-size: 500% 500%;
-  animation: moveGradient 4s linear infinite;
-  box-shadow:
-    0 0 10px #dcc4ff,
-    0 0 20px #b0f5ff,
-    0 0 30px #e1ff8b;
+  background-size: 200% 100%;
+  animation: holographicFlow 6s linear infinite;
   filter: blur(0.2px);
+  will-change: background-position;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+@keyframes holographicFlow {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: -200% 0%;
+  }
 }
 
 /* Holographic pour SVG avec masque */
@@ -112,16 +132,13 @@
     #feab71,
     #e6ff9c,
     #b7eeef,
-    #4ffff5,
-    #fe77b7,
-    #feab71,
-    #e6ff9c,
-    #b7eeef
+    #4ffff5
   );
-  background-size: 500% 500%;
-  animation: moveGradient 4s linear infinite;
+  background-size: 200% 100%;
+  animation: holographicFlow 6s linear infinite;
   -webkit-mask: var(--svg-mask);
   mask: var(--svg-mask);
+  will-change: background-position;
 }
 
 /* Wrapper pour SVG holographique - utilise le SVG comme masque */
@@ -146,14 +163,10 @@
     #feab71,
     #e6ff9c,
     #b7eeef,
-    #4ffff5,
-    #fe77b7,
-    #feab71,
-    #e6ff9c,
-    #b7eeef
+    #4ffff5
   );
-  background-size: 500% 500%;
-  animation: moveGradient 4s linear infinite;
+  background-size: 200% 100%;
+  animation: holographicFlow 6s linear infinite;
   -webkit-mask: var(--mask-image);
   mask: var(--mask-image);
   -webkit-mask-size: contain;
@@ -162,6 +175,7 @@
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-position: center;
+  will-change: background-position;
 }
 
 .holographic-icon svg {
@@ -176,17 +190,23 @@
     #feab71,
     #e6ff9c,
     #b7eeef,
-    #4ffff5,
-    #fe77b7,
-    #feab71,
-    #e6ff9c,
-    #b7eeef
+    #4ffff5
   );
-  background-size: 500% 500%;
-  animation: moveGradientVertical 4s linear infinite;
+  background-size: 100% 200%;
+  animation: holographicFlowVertical 6s linear infinite;
   box-shadow:
     0 0 10px #dcc4ff,
     0 0 20px #b0f5ff,
     0 0 30px #e1ff8b;
   filter: blur(0.2px);
+  will-change: background-position;
+}
+
+@keyframes holographicFlowVertical {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% -200%;
+  }
 }

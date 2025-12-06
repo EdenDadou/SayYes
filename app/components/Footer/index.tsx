@@ -107,7 +107,7 @@ export default function Footer({
             </p>
           </div>
 
-          <div className="h-[1px] w-full mb-12 holographic-bg" />
+          <div className="h-[1px] w-full mb-12 holographic-bg-no-shadow" />
           <div className="flex flex-row w-full pb-8">
             <div className="flex flex-col w-1/3 justify-between self-stretch">
               <p className="text-md font-jakarta">
@@ -143,7 +143,12 @@ export default function Footer({
           </div>
         </div>
         <div className="flex flex-row justify-between w-screen px-20 py-3 bg-black">
-          <Link to="/mention-legale" className="text-[#929292] text-sm py-2 hover:text-white transition-colors">Mentions Légales</Link>
+          <Link
+            to="/mention-legale"
+            className="text-[#929292] text-sm py-2 hover:text-white transition-colors"
+          >
+            Mentions Légales
+          </Link>
           <p className="text-[#929292] text-sm py-2">
             Say Yes ©2024. Tous droits réservés.
           </p>

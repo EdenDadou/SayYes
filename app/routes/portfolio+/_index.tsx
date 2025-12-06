@@ -4,7 +4,6 @@ import PortfolioTitle from "~/components/Screens/Portfolio/components/PortfolioT
 import PortfolioTitleMobile from "~/components/Screens/Portfolio/components/PortfolioTitleMobile";
 import Filter from "~/components/Screens/Portfolio/components/Filter";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
-import Background from "~/assets/icons/Background";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
 import "~/styles/tailwind.css";
 import Desktoplayout from "~/components/Layout/Desktop";
@@ -83,8 +82,8 @@ export default function Portfolio() {
         </AnimatePresence>
         {/* Contenu par-dessus */}
         <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center  items-center gap-10">
-          <div className="flex flex-col items-start gap-8 w-[988px] justify-center">
-            <div className="h-[3px] md:w-28 w-20 holographic-bg mt-6 mb-2 rounded-full" />
+          <div className="flex flex-col items-start gap-6 w-[988px] justify-center">
+            <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
             <PortfolioTitle />
           </div>
           <Filter />

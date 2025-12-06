@@ -16,8 +16,7 @@ export default function Bento({ bento }: { bento: BentoItem }) {
   return bento.lines.map((line, lineIndex) => (
     <div
       key={lineIndex}
-      className={`gap-4 max-w-[990px] m-auto ${
-        line.format === "2 square" ? "grid grid-cols-2" : "flex"
+      className={`gap-4 max-w-[990px] m-auto flex flex-row"
       }`}
     >
       {line.listImage &&

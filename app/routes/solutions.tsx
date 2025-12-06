@@ -40,8 +40,10 @@ export default function Solutions() {
     <MobileLayout>
       <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80 blur-2xl" />
       <section className="relative z-10 px-6 flex flex-col gap-6 justify-center items-center">
-        <div className="h-[3px] w-20 holographic-bg my-6 rounded-full" />
-        <SolutionTitleMobile />
+        <div className="flex flex-col items-start gap-6 w-[988px] justify-center">
+          <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
+          <SolutionTitleMobile />
+        </div>
         <h2 className="flex flex-row items-center justify-start gap-2 text-sm font-jakarta pb-6">
           <Star className="w-4 h-4" />5 étapes pour un branding impeccable
           <Star className="w-4 h-4" />
@@ -58,11 +60,17 @@ export default function Solutions() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
         >
-          <Background className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80" />
+          {/* <Background className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80" /> */}
+          <img
+            src="/images/portfolio/bg.png"
+            alt="Background"
+            className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80"
+          />
         </motion.div>
       </AnimatePresence>
-      <section className="relative z-10 w-[988px] mx-auto flex flex-col gap-14 justify-center items-start pt-20 mb-10">
-        <SolutionTitle />
+      <section className="relative z-10 w-[988px] mx-auto flex flex-col justify-center items-start pt-20 mb-10">
+        <div className="h-[3px] md:w-24 w-20 holographic-bg mt-8 rounded-full" />
+        <SolutionTitle className="mb-10" />
         <SolutionCards />
       </section>
     </Desktoplayout>

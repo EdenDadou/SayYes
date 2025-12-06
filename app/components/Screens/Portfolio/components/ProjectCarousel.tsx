@@ -70,7 +70,6 @@ export default function ProjectCarousel({
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? cardWidth + gap : -(cardWidth + gap),
-      opacity: 0.5,
     }),
     center: {
       zIndex: 1,
@@ -79,12 +78,11 @@ export default function ProjectCarousel({
     },
     exit: (direction: number) => ({
       zIndex: 0,
-      x: direction < 0 ? cardWidth + gap : -(cardWidth + gap),
-      opacity: 0.5,
+      opacity: 1,
     }),
   };
 
-  const swipeConfidenceThreshold = 10000;
+  const swipeConfidenceThreshold = 5000;
   const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
   };
@@ -106,7 +104,7 @@ export default function ProjectCarousel({
           <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20">
             <button
               onClick={prevSlide}
-              className="z-20 backdrop-blur-3xl hover:bg-white/20 rounded-full transition-all duration-300 group"
+              className="z-20 backdrop-blur-3xl hover:bg-white/20 rounded-full transition-all my-4 duration-300 group"
               aria-label="Projet précédent"
             >
               <ArrowBig className="w-[77px] h-[77px] text-white transition-transform rotate-180" />
@@ -114,7 +112,7 @@ export default function ProjectCarousel({
 
             <button
               onClick={nextSlide}
-              className="z-20 backdrop-blur-3xl hover:bg-white/20 rounded-full transition-all duration-300 group"
+              className="z-20 backdrop-blur-3xl hover:bg-white/20 transition-all duration-300 group my-4 rounded-full"
               aria-label="Projet suivant"
             >
               <ArrowBig className="w-[77px] h-[77px] text-white transition-transform" />
@@ -130,17 +128,17 @@ export default function ProjectCarousel({
               exit="exit"
               transition={{
                 x: { type: "spring", stiffness: 200, damping: 25, mass: 0.8 },
-                opacity: { duration: 0.4, ease: "easeOut" },
               }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={1}
+              dragElastic={0.5}
               onDragEnd={(e, { offset, velocity }) => {
                 const swipe = swipePower(offset.x, velocity.x);
 
-                if (swipe < -swipeConfidenceThreshold) {
+                // Déclenche soit par vélocité, soit par distance parcourue
+                if (swipe < -swipeConfidenceThreshold || offset.x < -100) {
                   nextSlide();
-                } else if (swipe > swipeConfidenceThreshold) {
+                } else if (swipe > swipeConfidenceThreshold || offset.x > 100) {
                   prevSlide();
                 }
               }}

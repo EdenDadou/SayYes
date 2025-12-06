@@ -60,7 +60,7 @@ export default function FooterMobile({
           </div>
         </div>
 
-        <div className="h-[1px] w-2/3 holographic-bg my-4" />
+        <div className="h-[1px] w-2/3 holographic-bg-no-shadow my-4" />
         <p className="text-[14px] font-jakarta-bold">
           L’agence de communication visuelle <br /> qui qui met tout le monde
           d’accord !
@@ -91,7 +91,12 @@ export default function FooterMobile({
         <p className="text-gray-150 text-sm py-2">
           Say Yes ©2025 - Tous droits réservés.
         </p>
-        <Link to="/mention-legale" className="text-gray-150 text-sm py-2 hover:text-white transition-colors">Mentions Légales</Link>
+        <Link
+          to="/mention-legale"
+          className="text-gray-150 text-sm py-2 hover:text-white transition-colors"
+        >
+          Mentions Légales
+        </Link>
         <p className="text-gray-150 text-sm py-2 pb-6">
           From Paris With Love ♥
         </p>
