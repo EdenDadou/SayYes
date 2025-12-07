@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useEffect } from "react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import Coche from "~/assets/icons/Coche";
@@ -13,17 +13,6 @@ import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
 import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
-
-// Utilitaire pour précharger une image (version optimisée)
-const preloadImage = (src: string): Promise<void> => {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = () => resolve();
-    // Précharger la version optimisée pour mobile
-    img.src = getOptimizedImageUrl(src, "tablet");
-  });
-};
 
 // Utilitaire pour extraire les images du bento (first batch seulement)
 const getFirstBentoImages = (bento: PortfolioData["bento"]): string[] => {
@@ -45,77 +34,17 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
   allPortfolios: PortfolioData[];
   portfolio: PortfolioData;
 }) {
-  const [isReady, setIsReady] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState(0);
-
-  // Précharger les images critiques avant l'affichage
+  // Précharger les images en arrière-plan (sans bloquer le rendu)
   useEffect(() => {
-    const criticalImages = [
-      portfolio.photoMain || portfolio.photoCouverture,
-    ].filter(Boolean) as string[];
-
-    // Images secondaires à précharger en arrière-plan
     const secondaryImages = getFirstBentoImages(portfolio.bento);
 
-    const totalCritical = criticalImages.length;
-    let loadedCritical = 0;
+    // Précharger les images du bento en arrière-plan
+    secondaryImages.forEach((src) => {
+      const img = new Image();
+      img.src = getOptimizedImageUrl(src, "mobile");
+    });
+  }, [portfolio.bento]);
 
-    if (totalCritical === 0) {
-      setIsReady(true);
-      return;
-    }
-
-    // Charger les images critiques en priorité
-    const loadCriticalImages = async () => {
-      const promises = criticalImages.map(async (src, index) => {
-        await preloadImage(src);
-        loadedCritical++;
-        setLoadingProgress(Math.round((loadedCritical / totalCritical) * 100));
-      });
-
-      await Promise.all(promises);
-
-      // Une fois les images critiques chargées, afficher la page
-      requestAnimationFrame(() => {
-        setIsReady(true);
-      });
-
-      // Précharger les images secondaires en arrière-plan (version optimisée mobile)
-      secondaryImages.forEach((src) => {
-        const img = new Image();
-        img.src = getOptimizedImageUrl(src, "mobile");
-      });
-    };
-
-    loadCriticalImages();
-
-    // Timeout de secours
-    const timeout = setTimeout(() => {
-      setIsReady(true);
-    }, 2500);
-
-    return () => clearTimeout(timeout);
-  }, [portfolio.photoMain, portfolio.photoCouverture, portfolio.bento]);
-
-  // Afficher un placeholder pendant le chargement
-  if (!isReady) {
-    return (
-      <MobileLayout>
-        <div
-          className="w-screen h-screen flex flex-col items-center justify-center gap-4"
-          style={{ backgroundColor: portfolio.couleur || "#080809" }}
-        >
-          <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
-          <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-white rounded-full transition-all duration-300"
-              style={{ width: `${loadingProgress}%` }}
-            />
-          </div>
-        </div>
-      </MobileLayout>
-    );
-  }
   return (
     <MobileLayout>
       <BackgroundProject1
