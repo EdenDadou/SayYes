@@ -50,6 +50,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
       <BackgroundProject1
         fill={portfolio.couleur}
         className="absolute top-0 left-0 right-0 w-screen h-[1200px] object-cover"
+        isMobile={true}
       />
       <main className="w-screen h-fit relative overflow-hidden py-8 mobile-optimized-scroll">
         {/* Main Content */}
@@ -142,6 +143,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
             <BackgroundProject2
               fill={portfolio.couleur}
               className="absolute left-0 right-0 w-screen"
+              isMobile={true}
             />
             <div className="relative z-50 bg-white -mt-40">
               <h2 className="flex flex-col justify-center items-center text-[26px] font-bold text-black font-jakarta-bold z-50">
@@ -190,6 +192,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
           <BackgroundProject3
             fill={portfolio.couleur}
             className="w-screen h-full"
+            isMobile={true}
           />
         </div>
         <ProjectCarouselMobile portfolios={allPortfolios} />

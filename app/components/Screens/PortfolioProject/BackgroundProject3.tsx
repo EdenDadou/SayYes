@@ -8,30 +8,15 @@ const gpuOptimizedStyle: CSSProperties = {
   contain: "layout paint",
 };
 
-const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGSVGElement>) {
-  // Fonction pour calculer une couleur plus sombre basée sur la couleur principale
-  const getDarkerColor = (baseColor: string) => {
-    // Couleur par défaut si pas de couleur fournie
-    if (!baseColor) return "#0A2A62";
+interface BackgroundProject3Props extends SVGProps<SVGSVGElement> {
+  isMobile?: boolean;
+}
 
-    // Extraire les valeurs RGB de la couleur hex
-    const hex = baseColor.replace("#", "");
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
+const BackgroundProject3 = memo(function BackgroundProject3(props: BackgroundProject3Props) {
+  const { isMobile, ...svgProps } = props;
 
-    // Réduction d'environ 44% pour R, 51% pour G, 52% pour B
-    const newR = Math.round(r * 0.56);
-    const newG = Math.round(g * 0.49);
-    const newB = Math.round(b * 0.48);
-
-    // Convertir en hex
-    const toHex = (n: number) => n.toString(16).padStart(2, "0");
-    return `#${toHex(newR)}${toHex(newG)}${toHex(newB)}`;
-  };
-
-  const baseColor = props.fill || "#1255CB";
-  const darkerColor = getDarkerColor(baseColor);
+  // Réduire les valeurs de blur sur mobile pour de meilleures performances
+  const blurScale = isMobile ? 0.4 : 1;
 
   return (
     <svg
@@ -40,20 +25,21 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGS
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       preserveAspectRatio="none"
-      style={{ ...gpuOptimizedStyle, ...props.style }}
-      {...props}
+      style={{ ...gpuOptimizedStyle, ...svgProps.style }}
+      {...svgProps}
     >
-      <g clipPath="url(#clip0_1172_4458)">
-        <g filter="url(#filter0_f_1172_4458)">
+      <g clipPath="url(#bg3-clip)">
+        <rect width="1280" height="1604" fill="#080809" />
+        <g filter="url(#bg3-filter)">
           <path
             d="M-968.671 -1.85459C-926.162 -164.435 -633.393 238.77 643.972 560.54C1693.12 840.55 2450.71 697.49 2408.2 860.07C2365.69 1022.65 1692.19 1367.59 527.679 1072.87C-636.83 778.159 -1011.18 160.726 -968.671 -1.85459Z"
-            fill={props.fill || "#1255CB"}
+            fill={svgProps.fill || "#1255CB"}
           />
         </g>
       </g>
       <defs>
         <filter
-          id="filter0_f_1172_4458"
+          id="bg3-filter"
           x={-1345.95}
           y={-413.178}
           width={4129.94}
@@ -62,27 +48,15 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGS
           colorInterpolationFilters="sRGB"
         >
           <feFlood floodOpacity={0} result="BackgroundImageFix" />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          />
-          <feGaussianBlur
-            stdDeviation={187.04}
-            result="effect1_foregroundBlur_1172_4458"
-          />
+          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur stdDeviation={187.04 * blurScale} result="effect1" />
         </filter>
-        <clipPath id="clip0_1172_4458">
-          <rect
-            width={1281}
-            height={1710}
-            fill="white"
-            transform="translate(0 -162)"
-          />
+        <clipPath id="bg3-clip">
+          <rect width={1281} height={1710} fill="white" transform="translate(0 -162)" />
         </clipPath>
       </defs>
     </svg>
   );
 });
+
 export default BackgroundProject3;
