@@ -18,20 +18,23 @@ const Filter = () => {
   const isMobile = useViewport();
   const { setActiveFilters } = usePortfolio();
 
-  const handleFilterClick = useCallback((filterValue: string) => {
-    if (filterValue === "all") {
-      setSelectedFilters([]);
-      setActiveFilters([]);
-    } else {
-      setSelectedFilters((prev) => {
-        const newFilters = prev.includes(filterValue)
-          ? prev.filter((f) => f !== filterValue)
-          : [...prev, filterValue];
-        setActiveFilters(newFilters);
-        return newFilters;
-      });
-    }
-  }, [setActiveFilters]);
+  const handleFilterClick = useCallback(
+    (filterValue: string) => {
+      if (filterValue === "all") {
+        setSelectedFilters([]);
+        setActiveFilters([]);
+      } else {
+        setSelectedFilters((prev) => {
+          const newFilters = prev.includes(filterValue)
+            ? prev.filter((f) => f !== filterValue)
+            : [...prev, filterValue];
+          setActiveFilters(newFilters);
+          return newFilters;
+        });
+      }
+    },
+    [setActiveFilters]
+  );
 
   const isSelected = (filterValue: string) => {
     if (filterValue === "all") {
@@ -74,7 +77,7 @@ const Filter = () => {
           style={{ transition: "none", transitionDuration: "0s" }}
         >
           <Coche
-            className={`${isSelected(filter.value) ? "text-dark-blue" : ""}`}
+            className={`w-4 ${isSelected(filter.value) ? "text-dark-blue" : ""}`}
             style={{ transition: "none" }}
           />
           <span

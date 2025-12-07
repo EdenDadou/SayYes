@@ -81,7 +81,7 @@ export default function ContentSolution({
                     className="flex flex-row items-center justify-center gap-[10px]"
                     key={bullet}
                   >
-                    <Coche />
+                    <Coche className="w-4" />
                     {bullet}
                   </span>
                 ))}
