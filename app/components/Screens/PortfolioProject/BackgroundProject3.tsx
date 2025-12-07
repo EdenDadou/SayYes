@@ -1,21 +1,11 @@
 import { memo, type SVGProps, type CSSProperties } from "react";
 
+// Styles pour l'optimisation GPU (desktop et mobile)
 const gpuOptimizedStyle: CSSProperties = {
-  willChange: "transform",
   transform: "translateZ(0)",
   backfaceVisibility: "hidden",
   WebkitBackfaceVisibility: "hidden",
   contain: "layout paint",
-};
-
-// Styles optimisés pour mobile - force le caching du rendu
-const mobileGpuOptimizedStyle: CSSProperties = {
-  transform: "translateZ(0)",
-  backfaceVisibility: "hidden",
-  WebkitBackfaceVisibility: "hidden",
-  contain: "strict",
-  contentVisibility: "auto" as CSSProperties["contentVisibility"],
-  containIntrinsicSize: "auto 1604px",
   pointerEvents: "none",
 };
 
@@ -26,9 +16,8 @@ interface BackgroundProject3Props extends SVGProps<SVGSVGElement> {
 const BackgroundProject3 = memo(function BackgroundProject3(props: BackgroundProject3Props) {
   const { isMobile, ...svgProps } = props;
 
-  // Réduire les valeurs de blur sur mobile pour de meilleures performances
-  const blurScale = isMobile ? 0.4 : 1;
-  const baseStyle = isMobile ? mobileGpuOptimizedStyle : gpuOptimizedStyle;
+  // Sur mobile, garder le blur à 0.7 pour un rendu correct
+  const blurScale = isMobile ? 0.7 : 1;
 
   return (
     <svg
@@ -37,7 +26,7 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: BackgroundPro
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       preserveAspectRatio="none"
-      style={{ ...baseStyle, ...svgProps.style }}
+      style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
       <g clipPath="url(#bg3-clip)">

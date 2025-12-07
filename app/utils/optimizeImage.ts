@@ -3,7 +3,7 @@
  * Utilise l'endpoint /api/image pour redimensionner à la volée avec sharp
  */
 
-export type ImageSize = "thumbnail" | "mobile" | "tablet" | "desktop" | "full";
+export type ImageSize = "placeholder" | "thumbnail" | "mobile" | "tablet" | "desktop" | "full";
 
 interface ImageDimensions {
   width: number;
@@ -11,6 +11,7 @@ interface ImageDimensions {
 }
 
 const SIZE_CONFIG: Record<ImageSize, ImageDimensions> = {
+  placeholder: { width: 20, quality: 30 }, // Ultra léger pour blur placeholder
   thumbnail: { width: 150, quality: 60 },
   mobile: { width: 640, quality: 75 },
   tablet: { width: 1024, quality: 80 },

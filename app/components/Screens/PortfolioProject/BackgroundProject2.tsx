@@ -1,21 +1,11 @@
 import { memo, type SVGProps, type CSSProperties } from "react";
 
+// Styles pour l'optimisation GPU (desktop et mobile)
 const gpuOptimizedStyle: CSSProperties = {
-  willChange: "transform",
   transform: "translateZ(0)",
   backfaceVisibility: "hidden",
   WebkitBackfaceVisibility: "hidden",
   contain: "layout paint",
-};
-
-// Styles optimisés pour mobile - force le caching du rendu
-const mobileGpuOptimizedStyle: CSSProperties = {
-  transform: "translateZ(0)",
-  backfaceVisibility: "hidden",
-  WebkitBackfaceVisibility: "hidden",
-  contain: "strict",
-  contentVisibility: "auto" as CSSProperties["contentVisibility"],
-  containIntrinsicSize: "auto 1044px",
   pointerEvents: "none",
 };
 
@@ -26,16 +16,15 @@ interface BackgroundProject2Props extends SVGProps<SVGSVGElement> {
 const BackgroundProject2 = memo(function BackgroundProject2(props: BackgroundProject2Props) {
   const { isMobile, ...svgProps } = props;
 
-  // Réduire les valeurs de blur sur mobile pour de meilleures performances
-  const blurScale = isMobile ? 0.4 : 1;
-  const baseStyle = isMobile ? mobileGpuOptimizedStyle : gpuOptimizedStyle;
+  // Sur mobile, garder le blur à 0.7 pour un rendu correct
+  const blurScale = isMobile ? 0.7 : 1;
 
   return (
     <svg
       viewBox="0 0 1280 1044"
       fill="white"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ ...baseStyle, ...svgProps.style }}
+      style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
       {/* Rectangle de fond blanc */}

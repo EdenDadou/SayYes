@@ -115,10 +115,16 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
   const heroInView = useInView(heroRef, { once: true });
 
   const deliverablesRef = useRef<HTMLDivElement>(null);
-  const deliverablesInView = useInView(deliverablesRef, { once: true, margin: "-50px" });
+  const deliverablesInView = useInView(deliverablesRef, {
+    once: true,
+    margin: "-50px",
+  });
 
   const testimonialRef = useRef<HTMLDivElement>(null);
-  const testimonialInView = useInView(testimonialRef, { once: true, margin: "-50px" });
+  const testimonialInView = useInView(testimonialRef, {
+    once: true,
+    margin: "-50px",
+  });
 
   return (
     <MobileLayout>
@@ -140,7 +146,9 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
               ref={heroRef}
               className="flex flex-row justify-center items-end"
               initial={{ opacity: 0, y: 20 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              animate={
+                heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+              }
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <div className="flex flex-col gap-8 items-center justify-center">
@@ -156,7 +164,11 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                     <motion.p
                       className="text-white flex flex-row items-center font-jakarta-semi-bold gap-4 tracking-[-2px] text-[40px] leading-[40px]"
                       initial={{ opacity: 0, y: 10 }}
-                      animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                      animate={
+                        heroInView
+                          ? { opacity: 1, y: 0 }
+                          : { opacity: 0, y: 10 }
+                      }
                       transition={{ duration: 0.5, delay: 0.3 }}
                     >
                       {portfolio.topTitle}
@@ -167,7 +179,9 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                     className="text-[40px] leading-[40px] text-white font-jakarta-semi-bold tracking-[-2px]"
                     style={{ color: portfolio.couleur }}
                     initial={{ opacity: 0, y: 10 }}
-                    animate={heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                    animate={
+                      heroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
+                    }
                     transition={{ duration: 0.5, delay: 0.4 }}
                   >
                     {portfolio.titre}
@@ -189,7 +203,11 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
               <PhotoMain
                 photo={portfolio.photoMain || portfolio.photoCouverture}
                 title={portfolio.titre}
-                alt={portfolio.photoMain ? portfolio.photoMainAlt : portfolio.photoCouvertureAlt}
+                alt={
+                  portfolio.photoMain
+                    ? portfolio.photoMainAlt
+                    : portfolio.photoCouvertureAlt
+                }
                 isMobile={true}
               />
             </AnimatedSection>
@@ -259,8 +277,8 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
           <section className="relative px-4 flex flex-col gap-6">
             <BackgroundProject2
               fill={portfolio.couleur}
-              className="absolute left-0 right-0 w-screen"
-              isMobile={true}
+              className="absolute left-0 right-0 top-0 w-screen h-fit bg-red-200"
+              // isMobile={true}
             />
             <AnimatedSection className="relative z-50 bg-white -mt-40">
               <h2 className="flex flex-col justify-center items-center text-[26px] font-bold text-black font-jakarta-bold z-50">
@@ -293,8 +311,16 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                 ref={testimonialRef}
                 className="p-8 flex flex-col items-center justify-center gap-6"
                 initial={{ opacity: 0, y: 20 }}
-                animate={testimonialInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                animate={
+                  testimonialInView
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 20 }
+                }
+                transition={{
+                  duration: 0.6,
+                  delay: 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
               >
                 <blockquote className="text-white text-[16px] leading-relaxed text-center font-jakarta">
                   {portfolio.temoignage.contenu}

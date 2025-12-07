@@ -7,8 +7,8 @@ import { join } from "path";
 const imageCache = new Map<string, { buffer: Buffer; timestamp: number }>();
 const CACHE_DURATION = 1000 * 60 * 60; // 1 heure
 
-// Tailles prédéfinies
-const ALLOWED_WIDTHS = [150, 320, 480, 640, 768, 1024, 1280, 1920];
+// Tailles prédéfinies (20px pour placeholder blur)
+const ALLOWED_WIDTHS = [20, 150, 320, 480, 640, 768, 1024, 1280, 1920];
 const DEFAULT_QUALITY = 80;
 const MAX_QUALITY = 95;
 const MIN_QUALITY = 50;

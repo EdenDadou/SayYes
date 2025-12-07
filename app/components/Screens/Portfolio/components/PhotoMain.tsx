@@ -4,7 +4,7 @@ import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/opt
 
 // Styles pour forcer le caching GPU sur mobile
 const mobileOptimizedStyle: CSSProperties = {
-  willChange: "auto", // Désactiver willChange après le chargement pour libérer la mémoire
+  willChange: "auto",
   transform: "translateZ(0)",
   backfaceVisibility: "hidden",
   WebkitBackfaceVisibility: "hidden",
@@ -51,30 +51,44 @@ const PhotoMain = memo(function PhotoMain({
     return null;
   }
 
-  // Sur mobile, charger "mobile" (640px), sinon "desktop" (1920px)
+  // Sur mobile: image optimisée 640px sans srcSet (on sait déjà la taille)
+  // Sur desktop: srcSet complet pour responsive
   const optimizedSrc = getOptimizedImageUrl(photo, isMobile ? "mobile" : "desktop");
-  const srcSet = generateSrcSet(photo);
-  const sizes = generateSizes();
+
+  // Placeholder ultra léger (20px, très compressé) pour effet blur pendant le chargement
+  const placeholderSrc = getOptimizedImageUrl(photo, "placeholder");
+
+  // Sur mobile, pas besoin de srcSet - on charge directement la bonne taille
+  const srcSet = isMobile ? undefined : generateSrcSet(photo) || undefined;
+  const sizes = isMobile ? undefined : (srcSet ? generateSizes() : undefined);
 
   return (
     <div
       ref={containerRef}
-      className={`relative w-full rounded-2xl overflow-hidden h-[650px] ${className}`}
+      className={`relative w-full rounded-2xl overflow-hidden ${isMobile ? "h-[500px]" : "h-[650px]"} ${className}`}
       style={isMobile ? mobileOptimizedStyle : undefined}
     >
+      {/* Placeholder flou en arrière-plan */}
+      {!isLoaded && (
+        <img
+          src={placeholderSrc}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center blur-xl scale-110"
+          style={{ filter: "blur(20px)" }}
+        />
+      )}
+
       <motion.div
-        initial={{ opacity: 0, filter: "blur(10px)" }}
-        animate={{
-          opacity: 1,
-          filter: isLoaded ? "blur(0px)" : "blur(10px)"
-        }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoaded ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         className="w-full h-full"
       >
         <motion.img
           src={optimizedSrc}
-          srcSet={srcSet || undefined}
-          sizes={srcSet ? sizes : undefined}
+          srcSet={srcSet}
+          sizes={sizes}
           alt={alt || `${title} - Photo principale`}
           className="w-full h-full object-cover object-center"
           style={{ scale }}
