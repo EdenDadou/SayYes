@@ -1,11 +1,9 @@
 import LogoSayYes from "~/components/Header/assets/LogoSayYes";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useNavigate } from "@remix-run/react";
 import Button from "~/components/Button";
 import ChatBuble from "../assets/ChatBuble";
-import BurgerMenu from "~/components/Header/assets/BurgerMenu";
-import Close from "~/assets/icons/Close";
 import AnimatedBurgerMenu from "../assets/AnimatedBurgerMenu";
 
 interface HeaderProps {
@@ -23,30 +21,32 @@ const HeaderMobile = ({
 }: HeaderProps) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
   const { scrollY } = useScroll();
 
   // Listen to scroll changes
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const direction = latest > lastScrollY ? "down" : "up";
-    if (latest > 50 && direction === "down") {
+    const direction = latest > lastScrollY.current ? "down" : "up";
+    if (latest > 100 && direction === "down") {
       setIsVisible(false);
     } else if (direction === "up" || latest < 100) {
       setIsVisible(true);
     }
-    setLastScrollY(latest);
+    lastScrollY.current = latest;
   });
 
   return (
     <motion.div
       className="header-custom border-custom flex flex-row justify-between items-center mx-4 h-[60px] px-2 mb-20"
-      initial={{ y: 0 }}
-      animate={{ y: isVisible ? 0 : -130 }}
+      initial={{ y: 0, opacity: 1 }}
+      animate={{
+        y: isVisible ? 0 : -130,
+        opacity: isVisible ? 1 : 0
+      }}
       transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
-        mass: 0.5,
+        type: "tween",
+        duration: 0.3,
+        ease: [0.25, 0.1, 0.25, 1],
       }}
     >
       {/* Section gauche */}

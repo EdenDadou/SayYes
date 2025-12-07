@@ -1,7 +1,5 @@
-import useFooterMotion from "~/utils/hooks/useFooterMotion";
 import Button from "../../Button";
-import { motion } from "framer-motion";
-import LogoSayYes from "~/components/Header/assets/LogoSayYes";
+import { motion, useInView } from "framer-motion";
 import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
@@ -11,6 +9,7 @@ import SayYesFooter from "../components/SayYes";
 import LogoSayYesColor from "~/components/Header/assets/LogoSayYesColor";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
 import { Link } from "@remix-run/react";
+import { useRef } from "react";
 
 interface IFooterMobileProps {
   setIsOpenModalContact: (value: boolean) => void;
@@ -19,11 +18,11 @@ interface IFooterMobileProps {
 export default function FooterMobile({
   setIsOpenModalContact,
 }: IFooterMobileProps) {
-  const { footerRef, opacity, opacitySecondary } = useFooterMotion();
+  const haloRef = useRef(null);
+  const isInView = useInView(haloRef, { once: true });
 
   return (
     <div
-      ref={footerRef}
       className="relative w-full flex flex-col justify-center items-center filter mt-20 gap-6"
     >
       <span className="font-jakarta text-[36px] leading-[40px] text-center">
@@ -37,19 +36,26 @@ export default function FooterMobile({
         textSize="S"
         onClick={() => setIsOpenModalContact(true)}
       />
-      <div className="relative z-10 w-full h-[100px] flex justify-center items-end overflow-hidden">
+      <div
+        ref={haloRef}
+        className="relative z-10 w-full h-[100px] flex justify-center items-end overflow-hidden"
+      >
         <SayYesFooter className="w-full h-fit absolute" />
         <motion.img
           src="/images/footer/Halo.png"
           alt="footer"
           className="w-screen h-full absolute inset-0 object-cover z-20"
-          style={{ opacity }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isInView ? 1 : 0 }}
+          transition={{ duration: 2.5 }}
         />
         <motion.img
           src="/images/footer/HaloBottom.png"
           alt="footer"
           className="w-full h-[80px] absolute -bottom-5 left-0 object-cover"
-          style={{ opacity: opacitySecondary }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isInView ? 1 : 0 }}
+          transition={{ duration: 2.5 }}
         />
       </div>
       <div className="flex flex-col w-screen justify-center items-center gap-4 footer-mobile">

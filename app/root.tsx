@@ -25,6 +25,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {/* Fallback pour l'animation des bordures sur Safari iOS qui ne supporte pas @property */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof CSS === 'undefined' || !CSS.registerProperty) {
+                  var angle = 0;
+                  function animateBorders() {
+                    angle = (angle + 0.36) % 360;
+                    document.documentElement.style.setProperty('--angle', angle + 'deg');
+                    requestAnimationFrame(animateBorders);
+                  }
+                  document.documentElement.style.setProperty('--angle', '0deg');
+                  requestAnimationFrame(animateBorders);
+                }
+              })();
+            `,
+          }}
+        />
       </head>
       <body>
         {children}

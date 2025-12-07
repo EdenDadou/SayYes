@@ -39,6 +39,7 @@ export default function ContentSolutionMobile({
             autoPlay
             muted
             loop
+            playsInline
             className="absolute inset-0 w-full h-full object-cover rounded-t-[15px] z-0"
             style={{
               backgroundPosition: "top",
