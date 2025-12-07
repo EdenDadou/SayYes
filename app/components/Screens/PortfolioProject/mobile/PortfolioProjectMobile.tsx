@@ -13,6 +13,30 @@ import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
 import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
 import "~/styles/tailwind.css";
 
+// Utilitaire pour précharger une image
+const preloadImage = (src: string): Promise<void> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve(); // Continuer même en cas d'erreur
+    img.src = src;
+  });
+};
+
+// Utilitaire pour extraire les images du bento (first batch seulement)
+const getFirstBentoImages = (bento: PortfolioData["bento"]): string[] => {
+  if (!bento || !bento[0] || !bento[0].lines) return [];
+
+  const images: string[] = [];
+  // Ne prendre que les 2 premières images du premier bento
+  for (const line of bento[0].lines.slice(0, 2)) {
+    if (line.listImage) {
+      images.push(...line.listImage.slice(0, 1));
+    }
+  }
+  return images.slice(0, 2);
+};
+
 const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
   portfolio,
   allPortfolios,
@@ -21,55 +45,72 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
   portfolio: PortfolioData;
 }) {
   const [isReady, setIsReady] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   // Précharger les images critiques avant l'affichage
   useEffect(() => {
-    const imagesToPreload = [
+    const criticalImages = [
       portfolio.photoMain || portfolio.photoCouverture,
-    ].filter(Boolean);
+    ].filter(Boolean) as string[];
 
-    let loadedCount = 0;
-    const totalImages = imagesToPreload.length;
+    // Images secondaires à précharger en arrière-plan
+    const secondaryImages = getFirstBentoImages(portfolio.bento);
 
-    if (totalImages === 0) {
+    const totalCritical = criticalImages.length;
+    let loadedCritical = 0;
+
+    if (totalCritical === 0) {
       setIsReady(true);
       return;
     }
 
-    const handleImageLoad = () => {
-      loadedCount++;
-      if (loadedCount >= totalImages) {
-        // Petit délai pour laisser le navigateur respirer
-        requestAnimationFrame(() => {
-          setIsReady(true);
-        });
-      }
+    // Charger les images critiques en priorité
+    const loadCriticalImages = async () => {
+      const promises = criticalImages.map(async (src, index) => {
+        await preloadImage(src);
+        loadedCritical++;
+        setLoadingProgress(Math.round((loadedCritical / totalCritical) * 100));
+      });
+
+      await Promise.all(promises);
+
+      // Une fois les images critiques chargées, afficher la page
+      requestAnimationFrame(() => {
+        setIsReady(true);
+      });
+
+      // Précharger les images secondaires en arrière-plan (sans bloquer)
+      secondaryImages.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+      });
     };
 
-    imagesToPreload.forEach((src) => {
-      const img = new Image();
-      img.onload = handleImageLoad;
-      img.onerror = handleImageLoad; // Continuer même en cas d'erreur
-      img.src = src as string;
-    });
+    loadCriticalImages();
 
-    // Timeout de secours pour ne pas bloquer indéfiniment
+    // Timeout de secours
     const timeout = setTimeout(() => {
       setIsReady(true);
-    }, 3000);
+    }, 2500);
 
     return () => clearTimeout(timeout);
-  }, [portfolio.photoMain, portfolio.photoCouverture]);
+  }, [portfolio.photoMain, portfolio.photoCouverture, portfolio.bento]);
 
   // Afficher un placeholder pendant le chargement
   if (!isReady) {
     return (
       <MobileLayout>
         <div
-          className="w-screen h-screen flex items-center justify-center"
+          className="w-screen h-screen flex flex-col items-center justify-center gap-4"
           style={{ backgroundColor: portfolio.couleur || "#080809" }}
         >
           <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
+          <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-white rounded-full transition-all duration-300"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
         </div>
       </MobileLayout>
     );
