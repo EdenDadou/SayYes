@@ -1,10 +1,8 @@
-import { memo, useRef } from "react";
-import Card from "~/components/Card";
+import { useRef } from "react";
 import ParallaxCard from "~/components/Card/ParallaxCard";
 import { solutionsCards } from "~/components/Screens/Solutions/data";
 import { useViewport } from "~/utils/hooks/useViewport";
 import SolutionTitleMobile from "~/components/Screens/Solutions/components/SolutionTitleMobile";
-import Star from "~/assets/icons/Star";
 import Desktoplayout from "~/components/Layout/Desktop";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
 import MobileLayout from "~/components/Layout/Mobile";
@@ -27,21 +25,36 @@ const staggerContainer = {
   },
 };
 
-// Composant Cards mémorisé pour éviter les re-renders (mobile)
-const SolutionCardsMobile = memo(function SolutionCardsMobile() {
+// Composant Cards parallax pour mobile
+function SolutionCardsParallaxMobile() {
+  const container = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
   return (
-    <div className="flex flex-col w-full gap-[24px]">
-      {solutionsCards.map((card, index) => (
-        <Card
-          key={index}
-          height={card.height}
-          content={card.content}
-          borderClass={card.borderClass}
-        />
-      ))}
+    <div ref={container} className="relative w-full">
+      {solutionsCards.map((card, index) => {
+        const targetScale = 1 - (solutionsCards.length - index) * 0.03;
+        return (
+          <ParallaxCard
+            key={index}
+            index={index}
+            totalCards={solutionsCards.length}
+            content={card.content}
+            borderClass={card.borderClass}
+            progress={scrollYProgress}
+            range={[index * 0.2, 1]}
+            targetScale={targetScale}
+            isMobile
+            height={card.height}
+          />
+        );
+      })}
     </div>
   );
-});
+}
 
 // Composant Cards parallax pour desktop
 function SolutionCardsParallax() {
@@ -82,18 +95,18 @@ export default function Solutions() {
 
   return isMobile ? (
     <MobileLayout>
-      <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80 blur-2xl" />
-      <section className="relative z-10 px-6 flex flex-col gap-6 justify-center items-center">
-        <div className="flex flex-col items-start gap-6 w-[988px] justify-center">
-          <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
-          <SolutionTitleMobile />
+      <div className="relative">
+        <div className="sticky top-0 -mt-20 w-full h-screen z-0 pointer-events-none">
+          <BackgroundMobile className="w-full h-full opacity-80 blur-2xl" />
         </div>
-        <h2 className="flex flex-row items-center justify-start gap-2 text-sm font-jakarta pb-6">
-          <Star className="w-4 h-4" />5 étapes pour un branding impeccable
-          <Star className="w-4 h-4" />
-        </h2>
-        <SolutionCardsMobile />
-      </section>
+        <section className="relative z-10 px-6 flex flex-col gap-8 justify-center items-center -mt-[90vh]">
+          <div className="flex flex-col items-center gap-10 w-full justify-center -mb-10">
+            <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
+            <SolutionTitleMobile />
+          </div>
+          <SolutionCardsParallaxMobile />
+        </section>
+      </div>
     </MobileLayout>
   ) : (
     <Desktoplayout>
@@ -119,7 +132,7 @@ export default function Solutions() {
           initial="initial"
           animate="animate"
         >
-          <section className="w-[988px] mx-auto flex flex-col justify-center items-start pt-20">
+          <section className="w-[988px] mx-auto flex flex-col justify-center items-start pt-20 -mb-10">
             <motion.div
               variants={fadeInUp}
               transition={{ duration: 0.6, ease: "easeOut" }}

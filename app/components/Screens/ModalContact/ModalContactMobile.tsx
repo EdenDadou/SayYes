@@ -27,11 +27,22 @@ export default function ModalContactMobile({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+      document.body.style.top = `-${window.scrollY}px`;
     } else {
+      const scrollY = document.body.style.top;
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.top = "";
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
     return () => {
       document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.top = "";
     };
   }, [isOpen]);
 
@@ -44,7 +55,7 @@ export default function ModalContactMobile({
         backdropFilter: "blur(25px)",
       }}
     >
-      <div className="flex flex-col items-center justify-start gap-8 z-20 pb-[200px] pt-20 relative w-full px-4">
+      <div className="flex flex-col items-center justify-start gap-8 z-20 pb-[30px] pt-20 relative w-full px-4">
         <button
           className="absolute top-10 right-8 text-white cursor-pointer z-30 hover:opacity-70"
           onClick={close}
