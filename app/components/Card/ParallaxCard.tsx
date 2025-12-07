@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useTransform } from "framer-motion";
 import { cn } from "~/utils/ui/ui";
 import "~/styles/tailwind.css";
 
@@ -30,11 +30,6 @@ export default function ParallaxCard({
 }: ParallaxCardProps) {
   const container = useRef<HTMLDivElement>(null);
 
-  useScroll({
-    target: container,
-    offset: ["start end", "start start"],
-  });
-
   // Scale de la carte basé sur la progression globale du scroll
   const scale = useTransform(progress, range, [1, targetScale]);
 
@@ -45,10 +40,6 @@ export default function ParallaxCard({
     1,
     index === totalCards - 1 ? 1 : 0,
   ]);
-
-  const topOffset = isMobile
-    ? `calc(5vh + ${index * 15}px)`
-    : `calc(-5vh + ${index * 25}px)`;
 
   return (
     <div
@@ -64,6 +55,8 @@ export default function ParallaxCard({
           opacity,
           top: 0,
           height: isMobile ? height : undefined,
+          willChange: "transform, opacity",
+          transform: "translateZ(0)",
         }}
         className={cn(
           "relative transform-origin-top",
