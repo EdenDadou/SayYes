@@ -346,7 +346,9 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
           >
             <BackgroundProject2
               fill={portfolio.couleur}
-              className="absolute left-0 right-0 top-0 w-screen h-fit"
+              className="absolute left-0 right-0 top-0 w-screen"
+              style={{ height: "auto", minHeight: "100%" }}
+              preserveAspectRatio="xMidYMin slice"
             />
             <AnimatedSection className="relative z-50 bg-white -mt-40">
               <h2 className="flex flex-col justify-center items-center text-[26px] font-bold text-black font-jakarta-bold z-50">
@@ -432,14 +434,16 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
 
         {/* Background 3 - Stage 4 */}
         <motion.div
-          className="absolute left-0 right-0 -bottom-28 h-[120vh] w-screen z-0 object-cover"
+          className="absolute left-0 right-0 -bottom-28 w-screen z-0"
+          style={{ height: "120vh" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
         >
           <BackgroundProject3
             fill={portfolio.couleur}
-            className="w-screen h-full"
+            className="w-full h-full"
+            preserveAspectRatio="xMidYMid slice"
           />
         </motion.div>
 

@@ -21,7 +21,7 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGS
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      preserveAspectRatio="none"
+      preserveAspectRatio={svgProps.preserveAspectRatio || "xMidYMid slice"}
       style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >

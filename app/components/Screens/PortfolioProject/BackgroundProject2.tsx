@@ -20,6 +20,7 @@ const BackgroundProject2 = memo(function BackgroundProject2(props: SVGProps<SVGS
       viewBox="0 0 1280 1044"
       fill="white"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio={svgProps.preserveAspectRatio || "xMidYMid meet"}
       style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
