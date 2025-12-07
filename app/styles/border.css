@@ -169,6 +169,13 @@
   animation: spinBorder 10s linear infinite;
 }
 
+/* Désactive l'animation CSS quand JS prend le relais */
+.no-css-property .light-border::before,
+.no-css-property .border-grey-animed::before,
+.no-css-property .card-hover:hover::before {
+  animation: none;
+}
+
 .border-grey-animed {
   --border-width: 1px;
   --radius: 28px;

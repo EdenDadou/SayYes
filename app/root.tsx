@@ -19,7 +19,7 @@ export function links() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="w-full h-auto overflow-x-hidden">
+    <html lang="fr" className="w-full h-auto overflow-x-hidden">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,20 +32,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                var needsFallback = false;
                 try {
                   CSS.registerProperty({
-                    name: '--test-prop',
+                    name: '--test-angle-support',
                     syntax: '<angle>',
                     inherits: false,
                     initialValue: '0deg'
                   });
                 } catch (e) {
+                  needsFallback = true;
+                }
+                if (needsFallback) {
+                  document.documentElement.classList.add('no-css-property');
                   var angle = 0;
-                  var lastTime = performance.now();
-                  function animate(currentTime) {
-                    var delta = currentTime - lastTime;
-                    lastTime = currentTime;
-                    angle = (angle + delta * 0.036) % 360;
+                  function animate() {
+                    angle = (angle + 0.6) % 360;
                     document.documentElement.style.setProperty('--angle', angle + 'deg');
                     requestAnimationFrame(animate);
                   }
