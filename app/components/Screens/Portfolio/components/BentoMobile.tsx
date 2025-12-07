@@ -1,4 +1,5 @@
-import { memo, useState } from "react";
+import { memo, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { BentoItem } from "~/server/portfolio.server";
 import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
@@ -9,17 +10,21 @@ function isVideoFile(url: string): boolean {
   return isVideo;
 }
 
-// Composant image optimisé avec effet de flou au chargement
+// Composant image optimisé avec effet de flou au chargement et animation d'apparition
 const OptimizedImage = memo(function OptimizedImage({
   src,
   alt,
   className,
+  index,
 }: {
   src: string;
   alt: string;
   className: string;
+  index: number;
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   // Utiliser l'URL optimisée pour mobile
   const optimizedSrc = getOptimizedImageUrl(src, "mobile");
@@ -27,7 +32,17 @@ const OptimizedImage = memo(function OptimizedImage({
   const sizes = generateSizes();
 
   return (
-    <div className={`relative ${className}`}>
+    <motion.div
+      ref={ref}
+      className={`relative ${className}`}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
+    >
       <img
         src={optimizedSrc}
         srcSet={srcSet || undefined}
@@ -42,22 +57,36 @@ const OptimizedImage = memo(function OptimizedImage({
         decoding="async"
         onLoad={() => setIsLoaded(true)}
       />
-    </div>
+    </motion.div>
   );
 });
 
-// Composant vidéo optimisé avec effet de flou
+// Composant vidéo optimisé avec effet de flou et animation d'apparition
 const OptimizedVideo = memo(function OptimizedVideo({
   src,
   className,
+  index,
 }: {
   src: string;
   className: string;
+  index: number;
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <div className={`relative ${className}`}>
+    <motion.div
+      ref={ref}
+      className={`relative ${className}`}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
+    >
       <video
         src={src}
         className="w-full h-full object-cover object-center transition-all duration-500"
@@ -74,7 +103,7 @@ const OptimizedVideo = memo(function OptimizedVideo({
       >
         Votre navigateur ne prend pas en charge la lecture de vidéos.
       </video>
-    </div>
+    </motion.div>
   );
 });
 
@@ -102,6 +131,8 @@ const BentoMobile = memo(function BentoMobile({ bento }: { bento: BentoItem }) {
     }
   };
 
+  let globalIndex = 0;
+
   return bento.lines
     .filter((line) => line.format !== "3 square")
     .map((line, lineIndex) => (
@@ -110,12 +141,14 @@ const BentoMobile = memo(function BentoMobile({ bento }: { bento: BentoItem }) {
           line.listImage.map((image, imageIndex) => {
             const heightClass = getHeightClass(line.format, imageIndex);
             const containerClass = `rounded-[16px] overflow-hidden ${heightClass} w-full`;
+            const currentIndex = globalIndex++;
 
             return isVideoFile(image) ? (
               <OptimizedVideo
                 key={imageIndex}
                 src={image}
                 className={containerClass}
+                index={currentIndex}
               />
             ) : (
               <OptimizedImage
@@ -127,6 +160,7 @@ const BentoMobile = memo(function BentoMobile({ bento }: { bento: BentoItem }) {
                   `Image ${imageIndex + 1}`
                 }
                 className={containerClass}
+                index={currentIndex}
               />
             );
           })}
