@@ -1,5 +1,6 @@
 import { memo, useState } from "react";
 import { BentoItem } from "~/server/portfolio.server";
+import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
 
 // Fonction pour déterminer si un média est une vidéo
@@ -8,7 +9,7 @@ function isVideoFile(url: string): boolean {
   return isVideo;
 }
 
-// Composant image optimisé avec lazy loading et placeholder
+// Composant image optimisé avec effet de flou au chargement
 const OptimizedImage = memo(function OptimizedImage({
   src,
   alt,
@@ -20,18 +21,23 @@ const OptimizedImage = memo(function OptimizedImage({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
+  // Utiliser l'URL optimisée pour mobile
+  const optimizedSrc = getOptimizedImageUrl(src, "mobile");
+  const srcSet = generateSrcSet(src);
+  const sizes = generateSizes();
+
   return (
     <div className={`relative ${className}`}>
-      {/* Placeholder skeleton */}
-      {!isLoaded && (
-        <div className="absolute inset-0 bg-gray-800 animate-pulse rounded-[16px]" />
-      )}
       <img
-        src={src}
+        src={optimizedSrc}
+        srcSet={srcSet || undefined}
+        sizes={srcSet ? sizes : undefined}
         alt={alt}
-        className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        }`}
+        className="w-full h-full object-cover object-center transition-all duration-500"
+        style={{
+          filter: isLoaded ? "blur(0px)" : "blur(8px)",
+          transform: isLoaded ? "scale(1)" : "scale(1.02)",
+        }}
         loading="lazy"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
@@ -40,7 +46,7 @@ const OptimizedImage = memo(function OptimizedImage({
   );
 });
 
-// Composant vidéo optimisé
+// Composant vidéo optimisé avec effet de flou
 const OptimizedVideo = memo(function OptimizedVideo({
   src,
   className,
@@ -52,14 +58,13 @@ const OptimizedVideo = memo(function OptimizedVideo({
 
   return (
     <div className={`relative ${className}`}>
-      {!isLoaded && (
-        <div className="absolute inset-0 bg-gray-800 animate-pulse rounded-[16px]" />
-      )}
       <video
         src={src}
-        className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        }`}
+        className="w-full h-full object-cover object-center transition-all duration-500"
+        style={{
+          filter: isLoaded ? "blur(0px)" : "blur(8px)",
+          transform: isLoaded ? "scale(1)" : "scale(1.02)",
+        }}
         muted
         autoPlay
         loop

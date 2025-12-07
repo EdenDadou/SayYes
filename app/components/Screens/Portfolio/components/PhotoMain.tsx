@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, memo } from "react";
+import { getOptimizedImageUrl, generateSrcSet, generateSizes, isMobileDevice } from "~/utils/optimizeImage";
 
 interface PhotoMainProps {
   photo: string;
@@ -16,7 +17,6 @@ const PhotoMain = memo(function PhotoMain({
 }: PhotoMainProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -29,24 +29,30 @@ const PhotoMain = memo(function PhotoMain({
     return null;
   }
 
+  // Optimiser l'image selon le device (tablet pour la photo principale car elle est grande)
+  const isMobile = typeof window !== "undefined" && isMobileDevice();
+  const optimizedSrc = getOptimizedImageUrl(photo, isMobile ? "tablet" : "desktop");
+  const srcSet = generateSrcSet(photo);
+  const sizes = generateSizes();
+
   return (
     <div
       ref={containerRef}
       className={`relative w-full rounded-2xl overflow-hidden h-[650px] ${className}`}
     >
-      {/* Placeholder skeleton pendant le chargement */}
-      {!isLoaded && !hasError && (
-        <div className="absolute inset-0 bg-gray-800 animate-pulse" />
-      )}
-
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        initial={{ opacity: 0, filter: "blur(10px)" }}
+        animate={{
+          opacity: 1,
+          filter: isLoaded ? "blur(0px)" : "blur(10px)"
+        }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full h-full"
       >
         <motion.img
-          src={photo}
+          src={optimizedSrc}
+          srcSet={srcSet || undefined}
+          sizes={srcSet ? sizes : undefined}
           alt={alt || `${title} - Photo principale`}
           className="w-full h-full object-cover object-center"
           style={{ scale }}
@@ -54,10 +60,6 @@ const PhotoMain = memo(function PhotoMain({
           decoding="async"
           fetchPriority="high"
           onLoad={() => setIsLoaded(true)}
-          onError={() => {
-            setHasError(true);
-            setIsLoaded(true);
-          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10" />
       </motion.div>

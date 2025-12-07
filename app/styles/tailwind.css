@@ -164,15 +164,9 @@ img {
     -webkit-backface-visibility: hidden;
   }
 
-  /* Optimiser le scroll sur mobile */
+  /* Optimiser le scroll sur mobile (iOS) */
   .mobile-optimized-scroll {
     -webkit-overflow-scrolling: touch;
-    overflow-scrolling: touch;
-  }
-
-  /* Réduire la complexité des filtres sur mobile */
-  .mobile-reduce-filters svg filter feGaussianBlur {
-    stdDeviation: 20 !important;
   }
 }
 

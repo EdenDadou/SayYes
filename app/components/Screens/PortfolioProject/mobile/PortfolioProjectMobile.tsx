@@ -11,15 +11,17 @@ import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 import NoteStar from "~/assets/icons/NoteStar";
 import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
 import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
 
-// Utilitaire pour précharger une image
+// Utilitaire pour précharger une image (version optimisée)
 const preloadImage = (src: string): Promise<void> => {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => resolve();
-    img.onerror = () => resolve(); // Continuer même en cas d'erreur
-    img.src = src;
+    img.onerror = () => resolve();
+    // Précharger la version optimisée pour mobile
+    img.src = getOptimizedImageUrl(src, "tablet");
   });
 };
 
@@ -28,7 +30,6 @@ const getFirstBentoImages = (bento: PortfolioData["bento"]): string[] => {
   if (!bento || !bento[0] || !bento[0].lines) return [];
 
   const images: string[] = [];
-  // Ne prendre que les 2 premières images du premier bento
   for (const line of bento[0].lines.slice(0, 2)) {
     if (line.listImage) {
       images.push(...line.listImage.slice(0, 1));
@@ -79,10 +80,10 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
         setIsReady(true);
       });
 
-      // Précharger les images secondaires en arrière-plan (sans bloquer)
+      // Précharger les images secondaires en arrière-plan (version optimisée mobile)
       secondaryImages.forEach((src) => {
         const img = new Image();
-        img.src = src;
+        img.src = getOptimizedImageUrl(src, "mobile");
       });
     };
 
