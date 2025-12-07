@@ -31,8 +31,7 @@ export default function ContentSolutionMobile({
   return (
     <div className="size-full p-2">
       <div className="size-full relative overflow-hidden rounded-[18px]">
-        <div className="absolute inset-0 size-full bg-gradient-to-b from-transparent via-black/70 to-black/10 z-20" />
-        <MasqueMobile className="absolute bottom-14 size-full object-cover z-10 rounded-[16px] blur-[80px]" />
+        <div className="absolute inset-0 size-fullz-20" />
         {videoUrl ? (
           <video
             src={videoUrl}
@@ -62,27 +61,37 @@ export default function ContentSolutionMobile({
             }}
           />
         )}
+        {/* Masque avec transparence en haut pour laisser voir l'image/vidéo */}
+        <div
+          className="absolute inset-0 size-full z-10 rounded-[16px]"
+          style={{
+            backgroundImage: "url(/images/solutions/MasqueMobile.png)",
+            backgroundSize: "cover",
+            maskImage: "linear-gradient(to top, gray 50%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to top, black 60%, transparent 100%)",
+          }}
+        />
         <div className="relative w-full h-full flex flex-col items-center justify-center z-20 pb-16 px-2">
           <div className="relative z-10 flex flex-col items-start md:justify-center justify-end size-full px-4 md:px-20 gap-4">
-            <div className="flex flex-row items-center justify-center gap-2 ">
-              <Star className="w-4 h-4" />
-              <h2 className="text-lg">{subtitle}</h2>
-            </div>
-            <span className="flex flex-col items-start justify-center gap-2 font-jakarta-bold md:text-[50px] md:leading-[50px] text-[30px] leading-[30px]">
+            {subtitle !== "last" && (
+              <div className="flex flex-row items-center justify-center gap-2 text-[#9DA4AA]">
+                <Star className="w-4 h-4" fill="rgb(255 255 255 / 0.5)" />
+                <h2 className="text-[13px]">Say Yes</h2>
+              </div>
+            )}
+            <span className="flex flex-col items-start justify-center gap-2 font-jakarta-semi-bold text-[30px] leading-[30px] tracking-[-2px]">
               <span>{title1}</span>
-              <span className="flex flex-row items-center justify-center gap-2 holographic-text">
-                <ArrowLight className="w-10 h-10" />
+              <span className="flex flex-row items-center justify-center gap-1 holographic-text whitespace-nowrap pb-2">
+                <ArrowLight className="w-8 h-8" />
                 {title2}
               </span>
             </span>
-            <div className="flex flex-col items-start justify-center gap-2 font-jakarta text-[12px] md:text-[16px] md:mt-6">
+            <div className="flex flex-col items-start justify-center gap-3 font-jakarta text-[12px] md:text-[16px] md:mt-6">
               {bulletPoints.map((bullet) => (
-                <span
-                  className="flex flex-row items-center justify-center gap-2"
-                  key={bullet}
-                >
-                  <Coche />
-                  {bullet}
+                <span className="flex flex-row items-start gap-2" key={bullet}>
+                  <Coche className="flex-shrink-0 w-4" />
+                  <span className="leading-tight text-[16px]">{bullet}</span>
                 </span>
               ))}
             </div>

@@ -48,7 +48,7 @@ function SolutionCardsParallaxMobile() {
             range={[index * 0.2, 1]}
             targetScale={targetScale}
             isMobile
-            height={card.height}
+            height="540px"
           />
         );
       })}
@@ -99,7 +99,7 @@ export default function Solutions() {
         <div className="sticky top-0 -mt-20 w-full h-screen z-0 pointer-events-none">
           <BackgroundMobile className="w-full h-full opacity-80 blur-2xl" />
         </div>
-        <section className="relative z-10 px-6 flex flex-col gap-8 justify-center items-center -mt-[90vh]">
+        <section className="relative z-10 px-[14px] flex flex-col gap-8 justify-center items-center -mt-[90vh]">
           <div className="flex flex-col items-center gap-10 w-full justify-center -mb-10">
             <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
             <SolutionTitleMobile />

@@ -13,21 +13,6 @@ import { usePortfolio } from "~/contexts/PortfolioContext";
 import { useEffect } from "react";
 import useScrollProgress from "~/utils/hooks/useScrollProgress";
 
-// Variants pour les animations d'entrée
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
-  },
-};
-
 export default function Portfolio() {
   const { filteredPortfolios, fetchAllPortfolios } = usePortfolio();
   const isMobile = useViewport();
