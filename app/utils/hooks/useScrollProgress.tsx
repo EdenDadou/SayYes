@@ -1,82 +1,139 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 export const useScrollProgress = () => {
-  const [scrollY, setScrollY] = useState(0);
-  const [isImageFixed, setIsImageFixed] = useState(false);
-  const [imageOpacity, setImageOpacity] = useState(0);
-  const [imageScale, setImageScale] = useState(0.86);
-  const [cardsSpread, setCardsSpread] = useState(0); // Translation X des cartes pour s'écarter
-  const [bottomCardsOffset, setBottomCardsOffset] = useState(-115); // Translation Y des cartes du bas (vh) - doit couvrir l'image + margin
+  const [animationProgress, setAnimationProgress] = useState(0); // 0 à 2 (0-1: ouverture, 1-2: fermeture)
+  const [isLocked, setIsLocked] = useState(false);
+  const [hasCompleted, setHasCompleted] = useState(false);
+
+  const lockPointRef = useRef<number | null>(null);
+  const accumulatedDelta = useRef(0);
+
+  // Point de déclenchement
+  const getTriggerPoint = useCallback(() => window.innerHeight * 1.2, []);
+
+  // Vitesse de l'animation (plus petit = plus rapide)
+  const ANIMATION_SENSITIVITY = 2000;
+
+  // Dériver les valeurs à partir de animationProgress
+  const imageOpacity =
+    animationProgress <= 1 ? animationProgress : 2 - animationProgress;
+
+  const imageScale =
+    animationProgress <= 1
+      ? 0.86 + animationProgress * 0.14
+      : 1 - (animationProgress - 1) * 0.14;
+
+  const bottomCardsOffset =
+    animationProgress <= 1
+      ? animationProgress * 100
+      : (2 - animationProgress) * 100;
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleWheel = (e: WheelEvent) => {
+      const triggerPoint = getTriggerPoint();
       const currentScrollY = window.scrollY;
-      setScrollY(currentScrollY);
 
-      // Point où l'animation d'entrée commence (quand on approche de l'image)
-      const entryStartPoint = window.innerHeight * 1.5;
-
-      // Point où l'image est complètement visible et les cartes écartées
-      const imageTriggerPoint = window.innerHeight * 1.8;
-
-      // Commencer le fade de sortie
-      const fadeStartPoint = window.innerHeight * 2.5;
-
-      // Finir le fade de sortie
-      const fadeEndPoint = window.innerHeight * 3.2;
-
-      if (currentScrollY > imageTriggerPoint) {
-        setIsImageFixed(true);
-        // Les cartes sont complètement écartées, cartes du bas à leur position normale
-        setCardsSpread(100);
-        setBottomCardsOffset(0);
-
-        // Commencer le fade progressif et le dézoom (sortie)
-        if (currentScrollY > fadeStartPoint) {
-          const fadeProgress = Math.min(
-            (currentScrollY - fadeStartPoint) / (fadeEndPoint - fadeStartPoint),
-            1
-          );
-          setImageOpacity(1 - fadeProgress);
-          // Dézoom de 1 (100%) à 0.86 (86%) pendant que l'opacité diminue
-          setImageScale(1 - fadeProgress * 0.14);
-          // Les cartes du bas se referment progressivement (translateX)
-          setCardsSpread(100 - fadeProgress * 100);
-          // Les cartes du bas remontent progressivement
-          setBottomCardsOffset(-fadeProgress * 115);
-        } else {
-          setImageOpacity(1);
-          setImageScale(1);
+      // Si l'animation est déjà terminée, laisser le scroll normal
+      if (hasCompleted) {
+        if (currentScrollY < triggerPoint - 100) {
+          setHasCompleted(false);
+          setAnimationProgress(0);
         }
-      } else if (currentScrollY > entryStartPoint) {
-        // Animation d'entrée : zoom-in et fade-in progressif
-        setIsImageFixed(false);
-        const entryProgress = Math.min(
-          (currentScrollY - entryStartPoint) / (imageTriggerPoint - entryStartPoint),
-          1
-        );
-        // Fade-in de 0 à 1
-        setImageOpacity(entryProgress);
-        // Zoom de 0.86 à 1
-        setImageScale(0.86 + entryProgress * 0.14);
-        // Les cartes s'écartent progressivement (translateX)
-        setCardsSpread(entryProgress * 100);
-        // Les cartes du bas descendent progressivement (de -115 vers 0)
-        setBottomCardsOffset(-115 + entryProgress * 115);
-      } else {
-        setIsImageFixed(false);
-        setImageOpacity(0);
-        setImageScale(0.86);
-        setCardsSpread(0);
-        setBottomCardsOffset(-115); // Cartes du bas collées aux cartes du haut
+        return;
+      }
+
+      // Si on n'est pas encore au point de déclenchement
+      if (!isLocked && currentScrollY < triggerPoint) {
+        return;
+      }
+
+      // Si on arrive au point de déclenchement
+      if (!isLocked && currentScrollY >= triggerPoint && e.deltaY > 0) {
+        setIsLocked(true);
+        lockPointRef.current = currentScrollY;
+        accumulatedDelta.current = 0;
+        e.preventDefault();
+        return;
+      }
+
+      // Si on est verrouillé
+      if (isLocked) {
+        e.preventDefault();
+        accumulatedDelta.current += e.deltaY;
+
+        const rawProgress = accumulatedDelta.current / ANIMATION_SENSITIVITY;
+        const newProgress = Math.min(Math.max(rawProgress, 0), 2);
+        setAnimationProgress(newProgress);
+
+        // Débloquer si on revient à 0
+        if (newProgress <= 0 && e.deltaY < 0) {
+          setIsLocked(false);
+          lockPointRef.current = null;
+          accumulatedDelta.current = 0;
+          return;
+        }
+
+        // Débloquer si animation terminée
+        if (newProgress >= 2) {
+          setIsLocked(false);
+          setHasCompleted(true);
+          lockPointRef.current = null;
+          accumulatedDelta.current = 0;
+          setAnimationProgress(0);
+        }
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleScroll = () => {
+      const triggerPoint = getTriggerPoint();
+      const currentScrollY = window.scrollY;
 
-  return { scrollY, isImageFixed, imageOpacity, imageScale, cardsSpread, bottomCardsOffset };
+      // if (isLocked && lockPointRef.current !== null) {
+      //   window.scrollTo(0, lockPointRef.current);
+      //   return;
+      // }
+
+      if (!isLocked && !hasCompleted && currentScrollY > triggerPoint + 50) {
+        setIsLocked(true);
+        lockPointRef.current = triggerPoint;
+        accumulatedDelta.current = 0;
+        window.scrollTo(0, triggerPoint);
+      }
+    };
+
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isLocked) return;
+      e.preventDefault();
+      const deltaY = touchStartY - e.touches[0].clientY;
+      touchStartY = e.touches[0].clientY;
+      handleWheel(new WheelEvent("wheel", { deltaY: deltaY * 2 }));
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [isLocked, hasCompleted, getTriggerPoint]);
+
+  return {
+    imageOpacity,
+    imageScale,
+    bottomCardsOffset,
+    isLocked,
+    animationProgress,
+  };
 };
 
 export default useScrollProgress;

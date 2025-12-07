@@ -110,77 +110,19 @@ export default function Portfolio() {
           </motion.div>
         </AnimatePresence>
         {/* Contenu par-dessus */}
-        <motion.section
-          className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center gap-10"
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
-        >
-          <motion.div
-            className="flex flex-col items-start gap-6 w-[988px] justify-center"
-            variants={fadeInUp}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
+        <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center gap-10">
+          <div className="flex flex-col items-start gap-6 w-[988px] justify-center">
             <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
             <PortfolioTitle />
-          </motion.div>
+          </div>
           <div className="flex flex-wrap justify-start gap-[24px] w-[990px] m-auto">
             <Filter />
-            <AnimatePresence mode="popLayout">
-              {portfolioTopCards.map((portfolio, index) => (
-                <motion.div
-                  key={portfolio.id}
-                  className="w-[482px] flex-shrink-0 border-custom-thin rounded-[28px]"
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: index * 0.05,
-                    ease: "easeOut",
-                  }}
-                  layout
-                >
-                  <Card
-                    height="364px"
-                    content={
-                      <ContentPortfolio
-                        imageUrl={portfolio.photoCouverture}
-                        titre={portfolio.titre}
-                        topTitle={portfolio.topTitle}
-                        slug={portfolio.slug}
-                      />
-                    }
-                    borderClass="card-hover colspan-1 rounded-[28px]"
-                    borderRadius="28px"
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
 
-            {/* Section avec image sticky et cartes qui passent par-dessus */}
-            {/* <div className="relative z-10"> */}
-            {/* Image ClientsWall - sticky au scroll */}
-            <div className={`w-screen h-screen sticky top-0 z-0 mb-20`}>
-              <img
-                src={imageMobile}
-                alt="Clients Wall"
-                className="w-full h-full object-cover transition-all duration-500"
-                style={{
-                  opacity: imageOpacity,
-                  transform: `scale(${imageScale})`,
-                }}
-                loading="lazy"
-                width={"100%"}
-                height={"100%"}
-              />
-            </div>
-
-            {/* Cartes du bas */}
+            {/* Cartes du haut - se déplacent vers le haut quand l'animation est active */}
             <div
-              className="grid md:grid-cols-2 grid-cols-1 gap-4 transition-transform duration-300"
+              className="grid md:grid-cols-2 grid-cols-1 gap-6 w-full z-20 transition-transform duration-100 ease-out"
               style={{
-                transform: `translateY(${bottomCardsOffset}vh)`,
+                transform: `translateY(-${bottomCardsOffset}vh)`,
               }}
             >
               <AnimatePresence mode="popLayout">
@@ -215,8 +157,70 @@ export default function Portfolio() {
                 ))}
               </AnimatePresence>
             </div>
+
+            {/* Image ClientsWall - sticky au centre */}
+            <div
+              className="w-screen h-screen sticky top-0 z-0 flex items-center justify-center pointer-events-none"
+              style={{
+                marginTop: "-50vh",
+                marginBottom: "-50vh",
+              }}
+            >
+              <img
+                src={imageMobile}
+                alt="Clients Wall"
+                className="w-full h-full object-cover transition-all duration-100 ease-out"
+                style={{
+                  opacity: imageOpacity,
+                  transform: `scale(${imageScale})`,
+                }}
+                loading="lazy"
+                width={"100%"}
+                height={"100%"}
+              />
+            </div>
+
+            {/* Cartes du bas - se déplacent vers le bas quand l'animation est active */}
+            <div
+              className="grid md:grid-cols-2 grid-cols-1 gap-6 w-full z-20 transition-transform duration-100 ease-out"
+              style={{
+                transform: `translateY(${bottomCardsOffset}vh)`,
+              }}
+            >
+              <AnimatePresence mode="popLayout">
+                {portfolioBottomCards.map((portfolio, index) => (
+                  <motion.div
+                    key={portfolio.id}
+                    className="w-[482px] flex-shrink-0 border-custom-thin rounded-[28px]"
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.05,
+                      ease: "easeOut",
+                    }}
+                    layout
+                  >
+                    <Card
+                      height="364px"
+                      content={
+                        <ContentPortfolio
+                          imageUrl={portfolio.photoCouverture}
+                          titre={portfolio.titre}
+                          topTitle={portfolio.topTitle}
+                          slug={portfolio.slug}
+                        />
+                      }
+                      borderClass="card-hover colspan-1 rounded-[28px]"
+                      borderRadius="28px"
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
-        </motion.section>
+        </section>
         {/* </div> */}
       </div>
     </Desktoplayout>
