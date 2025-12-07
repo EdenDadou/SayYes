@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, type CSSProperties } from "react";
 import { motion, useInView } from "framer-motion";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
@@ -14,6 +14,14 @@ import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
 import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
+
+// Style pour optimiser le scroll sur mobile
+const mobileScrollContainerStyle: CSSProperties = {
+  transform: "translateZ(0)",
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+  WebkitOverflowScrolling: "touch",
+};
 
 // Variants d'animation réutilisables
 const fadeInUp = {
@@ -119,7 +127,10 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
         className="absolute top-0 left-0 right-0 w-screen h-[1200px] object-cover"
         isMobile={true}
       />
-      <main className="w-screen h-fit relative overflow-hidden py-8 mobile-optimized-scroll">
+      <main
+        className="w-screen h-fit relative overflow-hidden py-8 mobile-optimized-scroll"
+        style={mobileScrollContainerStyle}
+      >
         {/* Main Content */}
         <div className="relative z-10 flex flex-col gap-0">
           {/* Hero Section */}

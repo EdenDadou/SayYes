@@ -1,6 +1,16 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState, useEffect, memo } from "react";
+import { useRef, useState, useEffect, memo, type CSSProperties } from "react";
 import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/optimizeImage";
+
+// Styles pour forcer le caching GPU sur mobile
+const mobileOptimizedStyle: CSSProperties = {
+  willChange: "auto", // Désactiver willChange après le chargement pour libérer la mémoire
+  transform: "translateZ(0)",
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+  contain: "layout style paint",
+  contentVisibility: "auto" as CSSProperties["contentVisibility"],
+};
 
 interface PhotoMainProps {
   photo: string;
@@ -28,12 +38,14 @@ const PhotoMain = memo(function PhotoMain({
     }
   }, [isMobileProp]);
 
+  // Désactiver l'effet parallax sur mobile pour éviter les recalculs coûteux
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   });
 
-  const scale = useTransform(scrollYProgress, [0.2, 1], [1, 1.5]);
+  // Sur mobile, pas d'effet scale (cause des saccades au scroll up)
+  const scale = useTransform(scrollYProgress, [0.2, 1], isMobile ? [1, 1] : [1, 1.5]);
 
   if (!photo) {
     return null;
@@ -48,6 +60,7 @@ const PhotoMain = memo(function PhotoMain({
     <div
       ref={containerRef}
       className={`relative w-full rounded-2xl overflow-hidden h-[650px] ${className}`}
+      style={isMobile ? mobileOptimizedStyle : undefined}
     >
       <motion.div
         initial={{ opacity: 0, filter: "blur(10px)" }}

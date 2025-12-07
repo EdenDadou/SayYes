@@ -8,6 +8,17 @@ const gpuOptimizedStyle: CSSProperties = {
   contain: "layout paint",
 };
 
+// Styles optimisés pour mobile - force le caching du rendu
+const mobileGpuOptimizedStyle: CSSProperties = {
+  transform: "translateZ(0)",
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+  contain: "strict",
+  contentVisibility: "auto" as CSSProperties["contentVisibility"],
+  containIntrinsicSize: "auto 1044px",
+  pointerEvents: "none",
+};
+
 interface BackgroundProject2Props extends SVGProps<SVGSVGElement> {
   isMobile?: boolean;
 }
@@ -17,13 +28,14 @@ const BackgroundProject2 = memo(function BackgroundProject2(props: BackgroundPro
 
   // Réduire les valeurs de blur sur mobile pour de meilleures performances
   const blurScale = isMobile ? 0.4 : 1;
+  const baseStyle = isMobile ? mobileGpuOptimizedStyle : gpuOptimizedStyle;
 
   return (
     <svg
       viewBox="0 0 1280 1044"
       fill="white"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ ...gpuOptimizedStyle, ...svgProps.style }}
+      style={{ ...baseStyle, ...svgProps.style }}
       {...svgProps}
     >
       {/* Rectangle de fond blanc */}

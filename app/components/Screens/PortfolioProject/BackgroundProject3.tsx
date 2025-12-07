@@ -8,6 +8,17 @@ const gpuOptimizedStyle: CSSProperties = {
   contain: "layout paint",
 };
 
+// Styles optimisés pour mobile - force le caching du rendu
+const mobileGpuOptimizedStyle: CSSProperties = {
+  transform: "translateZ(0)",
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+  contain: "strict",
+  contentVisibility: "auto" as CSSProperties["contentVisibility"],
+  containIntrinsicSize: "auto 1604px",
+  pointerEvents: "none",
+};
+
 interface BackgroundProject3Props extends SVGProps<SVGSVGElement> {
   isMobile?: boolean;
 }
@@ -17,6 +28,7 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: BackgroundPro
 
   // Réduire les valeurs de blur sur mobile pour de meilleures performances
   const blurScale = isMobile ? 0.4 : 1;
+  const baseStyle = isMobile ? mobileGpuOptimizedStyle : gpuOptimizedStyle;
 
   return (
     <svg
@@ -25,7 +37,7 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: BackgroundPro
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       preserveAspectRatio="none"
-      style={{ ...gpuOptimizedStyle, ...svgProps.style }}
+      style={{ ...baseStyle, ...svgProps.style }}
       {...svgProps}
     >
       <g clipPath="url(#bg3-clip)">
