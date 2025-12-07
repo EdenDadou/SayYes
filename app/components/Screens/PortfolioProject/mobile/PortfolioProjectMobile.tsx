@@ -242,9 +242,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
               className="px-4"
               initial={{ opacity: 0, y: 30 }}
               animate={
-                loadStage >= 3
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 30 }
+                loadStage >= 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
               }
               transition={{
                 duration: 0.6,
@@ -312,7 +310,9 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
               ref={deliverablesRef}
               className="flex flex-row flex-nowrap gap-2 w-screen overflow-x-scroll scrollbar-hide"
               initial="hidden"
-              animate={loadStage >= 4 && deliverablesInView ? "visible" : "hidden"}
+              animate={
+                loadStage >= 4 && deliverablesInView ? "visible" : "hidden"
+              }
               variants={staggerContainer}
             >
               {portfolio.livrable.map((item: string, index: number) => (
@@ -345,8 +345,8 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
           >
             <BackgroundProject2
               fill={portfolio.couleur}
-              className="absolute left-0 right-0 top-0 w-screen h-fit bg-red-200"
-              // isMobile={true}
+              className="absolute left-0 right-0 top-0 w-screen h-fit"
+              isMobile={true}
             />
             <AnimatedSection className="relative z-50 bg-white -mt-40">
               <h2 className="flex flex-col justify-center items-center text-[26px] font-bold text-black font-jakarta-bold z-50">

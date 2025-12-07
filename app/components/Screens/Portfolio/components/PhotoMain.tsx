@@ -18,6 +18,7 @@ interface PhotoMainProps {
   alt?: string;
   className?: string;
   isMobile?: boolean;
+  onImageLoad?: () => void;
 }
 
 const PhotoMain = memo(function PhotoMain({
@@ -26,6 +27,7 @@ const PhotoMain = memo(function PhotoMain({
   alt,
   className = "",
   isMobile: isMobileProp,
+  onImageLoad,
 }: PhotoMainProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -95,7 +97,10 @@ const PhotoMain = memo(function PhotoMain({
           loading="eager"
           decoding="async"
           fetchPriority="high"
-          onLoad={() => setIsLoaded(true)}
+          onLoad={() => {
+            setIsLoaded(true);
+            onImageLoad?.();
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10" />
       </motion.div>
