@@ -25,27 +25,36 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        {/* Fallback pour l'animation des bordures sur Safari iOS qui ne supporte pas @property */}
+      </head>
+      <body>
+        {/* Fallback JS pour animer --angle sur Safari iOS qui ne supporte pas @property */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                if (typeof CSS === 'undefined' || !CSS.registerProperty) {
+                try {
+                  CSS.registerProperty({
+                    name: '--test-prop',
+                    syntax: '<angle>',
+                    inherits: false,
+                    initialValue: '0deg'
+                  });
+                } catch (e) {
                   var angle = 0;
-                  function animateBorders() {
-                    angle = (angle + 0.36) % 360;
+                  var lastTime = performance.now();
+                  function animate(currentTime) {
+                    var delta = currentTime - lastTime;
+                    lastTime = currentTime;
+                    angle = (angle + delta * 0.036) % 360;
                     document.documentElement.style.setProperty('--angle', angle + 'deg');
-                    requestAnimationFrame(animateBorders);
+                    requestAnimationFrame(animate);
                   }
-                  document.documentElement.style.setProperty('--angle', '0deg');
-                  requestAnimationFrame(animateBorders);
+                  requestAnimationFrame(animate);
                 }
               })();
             `,
           }}
         />
-      </head>
-      <body>
         {children}
         <ScrollRestoration />
         <Scripts />
