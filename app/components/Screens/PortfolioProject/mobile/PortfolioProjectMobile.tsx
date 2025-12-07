@@ -90,6 +90,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                 photo={portfolio.photoMain || portfolio.photoCouverture}
                 title={portfolio.titre}
                 alt={portfolio.photoMain ? portfolio.photoMainAlt : portfolio.photoCouvertureAlt}
+                isMobile={true}
               />
             </div>
           </section>

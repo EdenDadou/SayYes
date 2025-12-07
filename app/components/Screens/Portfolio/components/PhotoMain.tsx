@@ -1,12 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState, memo } from "react";
-import { getOptimizedImageUrl, generateSrcSet, generateSizes, isMobileDevice } from "~/utils/optimizeImage";
+import { useRef, useState, useEffect, memo } from "react";
+import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/optimizeImage";
 
 interface PhotoMainProps {
   photo: string;
   title: string;
   alt?: string;
   className?: string;
+  isMobile?: boolean;
 }
 
 const PhotoMain = memo(function PhotoMain({
@@ -14,9 +15,18 @@ const PhotoMain = memo(function PhotoMain({
   title,
   alt,
   className = "",
+  isMobile: isMobileProp,
 }: PhotoMainProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(isMobileProp ?? false);
+
+  // Détecter le device côté client
+  useEffect(() => {
+    if (isMobileProp === undefined) {
+      setIsMobile(window.innerWidth < 768);
+    }
+  }, [isMobileProp]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -29,9 +39,8 @@ const PhotoMain = memo(function PhotoMain({
     return null;
   }
 
-  // Optimiser l'image selon le device (tablet pour la photo principale car elle est grande)
-  const isMobile = typeof window !== "undefined" && isMobileDevice();
-  const optimizedSrc = getOptimizedImageUrl(photo, isMobile ? "tablet" : "desktop");
+  // Sur mobile, charger "mobile" (640px), sinon "desktop" (1920px)
+  const optimizedSrc = getOptimizedImageUrl(photo, isMobile ? "mobile" : "desktop");
   const srcSet = generateSrcSet(photo);
   const sizes = generateSizes();
 

@@ -42,7 +42,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
     const contentType = mimeTypes[extension || ""] || "application/octet-stream";
 
-    return new Response(file, {
+    return new Response(new Uint8Array(file), {
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=31536000, immutable",

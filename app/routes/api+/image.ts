@@ -48,7 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
     const contentType = format === "avif" ? "image/avif" :
                         format === "webp" ? "image/webp" : "image/jpeg";
-    return new Response(cached.buffer, {
+    return new Response(new Uint8Array(cached.buffer), {
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=31536000, immutable",
@@ -121,7 +121,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       if (oldestKey) imageCache.delete(oldestKey);
     }
 
-    return new Response(outputBuffer, {
+    return new Response(new Uint8Array(outputBuffer), {
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=31536000, immutable",
