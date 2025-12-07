@@ -1,3 +1,4 @@
+import { memo, useState, useEffect } from "react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import Coche from "~/assets/icons/Coche";
@@ -12,20 +13,74 @@ import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
 import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
 import "~/styles/tailwind.css";
 
-export default function PortfolioProjectMobile({
+const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
   portfolio,
   allPortfolios,
 }: {
   allPortfolios: PortfolioData[];
   portfolio: PortfolioData;
 }) {
+  const [isReady, setIsReady] = useState(false);
+
+  // Précharger les images critiques avant l'affichage
+  useEffect(() => {
+    const imagesToPreload = [
+      portfolio.photoMain || portfolio.photoCouverture,
+    ].filter(Boolean);
+
+    let loadedCount = 0;
+    const totalImages = imagesToPreload.length;
+
+    if (totalImages === 0) {
+      setIsReady(true);
+      return;
+    }
+
+    const handleImageLoad = () => {
+      loadedCount++;
+      if (loadedCount >= totalImages) {
+        // Petit délai pour laisser le navigateur respirer
+        requestAnimationFrame(() => {
+          setIsReady(true);
+        });
+      }
+    };
+
+    imagesToPreload.forEach((src) => {
+      const img = new Image();
+      img.onload = handleImageLoad;
+      img.onerror = handleImageLoad; // Continuer même en cas d'erreur
+      img.src = src as string;
+    });
+
+    // Timeout de secours pour ne pas bloquer indéfiniment
+    const timeout = setTimeout(() => {
+      setIsReady(true);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [portfolio.photoMain, portfolio.photoCouverture]);
+
+  // Afficher un placeholder pendant le chargement
+  if (!isReady) {
+    return (
+      <MobileLayout>
+        <div
+          className="w-screen h-screen flex items-center justify-center"
+          style={{ backgroundColor: portfolio.couleur || "#080809" }}
+        >
+          <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin" />
+        </div>
+      </MobileLayout>
+    );
+  }
   return (
     <MobileLayout>
       <BackgroundProject1
         fill={portfolio.couleur}
         className="absolute top-0 left-0 right-0 w-screen h-[1200px] object-cover"
       />
-      <main className="w-screen h-fit relative overflow-hidden py-8">
+      <main className="w-screen h-fit relative overflow-hidden py-8 mobile-optimized-scroll">
         {/* Main Content */}
         <div className="relative z-10 flex flex-col gap-0">
           {/* Hero Section */}
@@ -169,4 +224,6 @@ export default function PortfolioProjectMobile({
       </main>
     </MobileLayout>
   );
-}
+});
+
+export default PortfolioProjectMobile;

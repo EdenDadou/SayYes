@@ -155,6 +155,36 @@ img {
   contain-intrinsic-size: 500px;
 }
 
+/* Optimisations mobile pour les SVG et backgrounds */
+@media (max-width: 768px) {
+  /* Forcer l'accélération GPU pour les SVG */
+  svg {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Optimiser le scroll sur mobile */
+  .mobile-optimized-scroll {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+
+  /* Réduire la complexité des filtres sur mobile */
+  .mobile-reduce-filters svg filter feGaussianBlur {
+    stdDeviation: 20 !important;
+  }
+}
+
+/* Classe utilitaire pour les éléments avec GPU acceleration */
+.gpu-accelerated {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  contain: layout paint;
+}
+
 /* Parallax Cards Effect */
 .transform-origin-top {
   transform-origin: top center;

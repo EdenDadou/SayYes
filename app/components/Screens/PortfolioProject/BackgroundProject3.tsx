@@ -1,5 +1,14 @@
-import type { SVGProps } from "react";
-const BackgroundProject3 = (props: SVGProps<SVGSVGElement>) => {
+import { memo, type SVGProps, type CSSProperties } from "react";
+
+const gpuOptimizedStyle: CSSProperties = {
+  willChange: "transform",
+  transform: "translateZ(0)",
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+  contain: "layout paint",
+};
+
+const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGSVGElement>) {
   // Fonction pour calculer une couleur plus sombre basée sur la couleur principale
   const getDarkerColor = (baseColor: string) => {
     // Couleur par défaut si pas de couleur fournie
@@ -31,6 +40,7 @@ const BackgroundProject3 = (props: SVGProps<SVGSVGElement>) => {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       preserveAspectRatio="none"
+      style={{ ...gpuOptimizedStyle, ...props.style }}
       {...props}
     >
       <g clipPath="url(#clip0_1172_4458)">
@@ -74,5 +84,5 @@ const BackgroundProject3 = (props: SVGProps<SVGSVGElement>) => {
       </defs>
     </svg>
   );
-};
+});
 export default BackgroundProject3;
