@@ -1,12 +1,8 @@
 import { useViewport } from "~/utils/hooks/useViewport";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import MobileLayout from "~/components/Layout/Mobile";
 import Card from "~/components/Card";
 import "~/styles/tailwind.css";
-
-const BackgroundSideLueur = lazy(
-  () => import("~/assets/icons/BacgroundSideLueur")
-);
 
 interface ITitleCardsProps {
   title: string;

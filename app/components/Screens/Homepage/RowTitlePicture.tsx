@@ -26,28 +26,28 @@ export default function RowTitlePicture() {
             {`15 ans\n d'expertise\n créative !`}
             <Arrow className="w-10 inline-block ml-4" color="grey" />
           </h2>
-          <div className="grid grid-cols-2 gap-6 w-full">
+          <div className="grid grid-cols-2 gap-4 w-full">
             <div className="text-center">
               <p className="text-[52px] leading-[62px] holographic-text font-jakarta-semi-bold tracking-[-3px]">
-                + 140
+                +140
               </p>
-              <p className="font-jakarta text-[16px] text-white/70">
+              <p className="font-jakarta text-[16px] text-white/70 whitespace-nowrap">
                 Clients accompagnées
               </p>
             </div>
             <div className="text-center">
               <p className="text-[52px] leading-[62px] holographic-text font-jakarta-semi-bold tracking-[-3px]">
-                + 250
+                +250
               </p>
-              <p className="font-jakarta text-[16px] text-white/70">
+              <p className="font-jakarta text-[16px] text-white/70 whitespace-nowrap">
                 Projets livrés
               </p>
             </div>
             <div className="text-center">
               <p className="text-[52px] leading-[62px] holographic-text font-jakarta-semi-bold tracking-[-3px]">
-                + 1000
+                +1000
               </p>
-              <p className="font-jakarta text-[16px] text-white/70">
+              <p className="font-jakarta text-[16px] text-white/70 whitespace-nowrap">
                 Supports au compteur
               </p>
             </div>
@@ -55,7 +55,7 @@ export default function RowTitlePicture() {
               <p className="text-[52px] leading-[62px] holographic-text font-jakarta-semi-bold tracking-[-3px]">
                 92%
               </p>
-              <p className="font-jakarta text-[16px] text-white/70">
+              <p className="font-jakarta text-[16px] text-white/70 whitespace-nowrap">
                 de clients fidèles
               </p>
             </div>

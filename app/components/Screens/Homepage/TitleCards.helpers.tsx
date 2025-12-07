@@ -3,13 +3,15 @@ import ArrowLight from "~/assets/icons/ArrowLight";
 export const CardsIdentiteVisuelle = ({
   title,
   desc,
+  img,
 }: {
   title: string;
   desc: string;
+  img: string;
 }) => {
   return {
     height: 373,
-    image: "./images/homepage/identite-visuelle-1.png",
+    image: img,
     borderRadius: "40px",
     borderClass: "light-border rounded-[40px]",
     content: (
@@ -17,15 +19,15 @@ export const CardsIdentiteVisuelle = ({
         <div
           className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[34px]"
           style={{
-            backgroundImage: 'url("images/homepage/identite-visuelle-1.png")',
+            backgroundImage: `url(${img})`,
           }}
         />
-        <div className="z-10 relative flex flex-col gap-4 h-full justify-start py-10 text-white">
+        <div className="z-10 relative flex flex-col gap-4 h-full justify-start pt-20 text-white">
           <div className="h-[3px] md:w-16 w-20 holographic-bg rounded-full" />
           <p className="glassy font-jakarta-semi-bold text-[33px] leading-[36px] tracking-[-1px] whitespace-pre-line">
             {title}
           </p>
-          <p className="font-jakarta text-[18px] leading-[24px] tracking-[-1px]">
+          <p className="font-jakarta text-[18px] leading-[24px] tracking-[-1px] whitespace-pre-line">
             {desc}
           </p>
         </div>
@@ -36,16 +38,19 @@ export const CardsIdentiteVisuelle = ({
 
 export const contentIdentiteVisuelle = [
   {
-    title: "Prenez\n soin de\n votre image",
-    desc: "De l'identité aux supports, du print  au digital, tout s'aligne",
+    title: "Prenez\nsoin de\nvotre image",
+    desc: "De l'identité aux supports,\ndu print au digital, tout\ns'aligne",
+    img: "./images/homepage/identite-visuelle-1.png",
   },
   {
-    title: "Centralisez\n et gagnez\n du temps",
-    desc: "Le même interlocuteur, une équipe complète, des délais tenus.",
+    title: "Centralisez\net gagnez\ndu temps",
+    desc: "Le même interlocuteur,\nune équipe complète,\ndes délais tenus.",
+    img: "./images/homepage/identite-visuelle-2.png",
   },
   {
     title: "Gardez\n le contrôle\n de votre projet",
-    desc: "Co-création, validation à chaque étape, montée en compétence des équipes.",
+    desc: "Co-création, validation à\nchaque étape, montée en\ncompétence des équipes.",
+    img: "./images/homepage/identite-visuelle-3.png",
   },
 ];
 

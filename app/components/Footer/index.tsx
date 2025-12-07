@@ -8,8 +8,6 @@ import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import SvgBtnFacebook from "./components/BtnFacebook";
 import SvgBtnTiktok from "./components/BtnTiktok";
 import SayYesFooter from "./components/SayYes";
-import LogoSayYes from "~/components/Header/assets/LogoSayYes";
-import FooterMobile from "./mobile/FooterMobile";
 import LogoSayYesHolo from "./components/LogoSayYesHolo";
 import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
@@ -143,7 +141,9 @@ export default function Footer({
               </div>
             </div>
           </div>
-          <div className="flex flex-row justify-between w-full py-3 bg-black">
+        </div>
+        <div className="flex flex-row justify-center py-3 bg-black w-screen ">
+          <div className="w-[990px] flex flex-row justify-between items-center">
             <Link
               to="/mention-legale"
               className="text-[#929292] text-sm py-2 hover:text-white transition-colors"

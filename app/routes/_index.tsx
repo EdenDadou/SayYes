@@ -19,6 +19,7 @@ import BigTemoignage from "~/components/Screens/Homepage/BigTemoignage";
 import TemoignagesCards from "~/components/Screens/Homepage/TemoignagesCards";
 import HomeProjectCarousel from "~/components/Screens/Homepage/HomeProjectCarroussel";
 import TitleStepImage from "~/components/Screens/Homepage/TitleStepImage";
+import FadeInView from "~/components/FadeInView";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -70,29 +71,47 @@ export default function Index() {
         <Desktoplayout footerType="home">
           <div className="w-screen h-fit relative pt-20 flex flex-col gap-20">
             {/* //Section 1 */}
-            <IntroSection />
+            <FadeInView>
+              <IntroSection />
+            </FadeInView>
             {/* //Section 2 */}
-            <TitleCards
-              title="Reprenez la main sur votre identité visuelle !"
-              rowCards={contentIdentiteVisuelle.map((card) =>
-                CardsIdentiteVisuelle(card)
-              )}
-              bottomCard={CardBottomIdentiteVisuelle}
-            />
+            <FadeInView>
+              <TitleCards
+                title="Reprenez la main sur votre identité visuelle !"
+                rowCards={contentIdentiteVisuelle.map((card) =>
+                  CardsIdentiteVisuelle(card)
+                )}
+                bottomCard={CardBottomIdentiteVisuelle}
+              />
+            </FadeInView>
             {/* //Section 3 */}
-            <RowTitlePicture />
+            <FadeInView>
+              <RowTitlePicture />
+            </FadeInView>
             {/* //Section 4 */}
-            <BigTemoignage />
+            <FadeInView>
+              <BigTemoignage />
+            </FadeInView>
             {/* //Section 5 */}
-            <CarouselCard />
+            <FadeInView>
+              <CarouselCard />
+            </FadeInView>
             {/* //Section 6 */}
-            <TitleFullWidthCard />
+            <FadeInView>
+              <TitleFullWidthCard />
+            </FadeInView>
             {/* //Section 7 */}
-            <TemoignagesCards />
+            <FadeInView>
+              <TemoignagesCards />
+            </FadeInView>
             {/* //Section 8 */}
-            <HomeProjectCarousel />
+            <FadeInView>
+              <HomeProjectCarousel />
+            </FadeInView>
             {/* //Section 9 */}
-            <TitleStepImage />
+            <FadeInView>
+              <TitleStepImage />
+            </FadeInView>
           </div>
         </Desktoplayout>
       )}

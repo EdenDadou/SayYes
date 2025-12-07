@@ -217,11 +217,11 @@
 .glassy {
   background: linear-gradient(
     90deg,
-    rgba(153, 149, 197, 0.77) 0%,
-    rgba(255, 255, 255, 0.94) 25%,
+    rgb(160, 156, 206) 0%,
+    rgba(255, 255, 255, 0.94) 30%,
     #fff 50%,
-    #9995c5 75%,
-    rgba(153, 149, 197, 0.77) 100%
+    #9995c5 70%,
+     rgb(160, 156, 206) 100%
   );
   background-size: 200% 100%;
   background-clip: text;

@@ -53,35 +53,35 @@ export default function IntroSection() {
         >
           <Suspense
             fallback={
-              <div className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" />
+              <div className="absolute left-0 w-full h-auto z-0 opacity-80" />
             }
           >
             <img
               src="/images/homepage/bg-section-1.png"
               alt="background"
-              className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80"
+              className="absolute -top-[88px] left-0 w-full h-auto z-0 opacity-80"
             />
             {/* <BackgroundHomepage className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" /> */}
           </Suspense>
         </motion.div>
       </AnimatePresence>
-      <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16">
-        <div className="flex flex-col items-center w-[988px] justify-center gap-10 py-20">
+      <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden">
+        <div className="flex flex-col items-center w-[988px] justify-center gap-9 py-20">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
           <TitleHomepage width={940} />
 
           <div className="flex flex-col items-center justify-center">
             <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
               <p>Branding</p>
-              <Arrow className="w-4" />
+              <Arrow className="w-[22px]" />
               <p>Print</p>
-              <Arrow className="w-4" />
+              <Arrow className="w-[22px]" />
               <p>Digital</p>
-              <Arrow className="w-4" />
+              <Arrow className="w-[22px]" />
               <p>Vidéo</p>
-              <Arrow className="w-4" />
+              <Arrow className="w-[22px]" />
               <p>Facilitation graphique</p>
-              <Arrow className="w-4" />
+              <Arrow className="w-[22px]" />
               <p>Illustration</p>
             </div>
             <p className="text-white font-jakarta-semibold text-[28px]">
