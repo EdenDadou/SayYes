@@ -9,12 +9,8 @@ const gpuOptimizedStyle: CSSProperties = {
   pointerEvents: "none",
 };
 
-interface BackgroundProject3Props extends SVGProps<SVGSVGElement> {
-  isMobile?: boolean;
-}
-
-const BackgroundProject3 = memo(function BackgroundProject3(props: BackgroundProject3Props) {
-  const { isMobile, ...svgProps } = props;
+const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGSVGElement>) {
+  const svgProps = props;
 
   // blurScale = 1 pour un rendu identique sur desktop et mobile
   const blurScale = 1;

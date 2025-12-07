@@ -9,12 +9,8 @@ const gpuOptimizedStyle: CSSProperties = {
   pointerEvents: "none",
 };
 
-interface BackgroundProject1Props extends SVGProps<SVGSVGElement> {
-  isMobile?: boolean;
-}
-
-const BackgroundProject1 = memo(function BackgroundProject1(props: BackgroundProject1Props) {
-  const { isMobile, ...svgProps } = props;
+const BackgroundProject1 = memo(function BackgroundProject1(props: SVGProps<SVGSVGElement>) {
+  const svgProps = props;
 
   // Fonction pour calculer une couleur plus sombre basée sur la couleur principale
   const getDarkerColor = (baseColor: string) => {
