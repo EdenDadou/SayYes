@@ -13,6 +13,21 @@ import { usePortfolio } from "~/contexts/PortfolioContext";
 import { useEffect } from "react";
 import useScrollProgress from "~/utils/hooks/useScrollProgress";
 
+// Variants pour les animations d'entrée
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
 export default function Portfolio() {
   const { filteredPortfolios, fetchAllPortfolios } = usePortfolio();
   const isMobile = useViewport();
@@ -95,11 +110,20 @@ export default function Portfolio() {
           </motion.div>
         </AnimatePresence>
         {/* Contenu par-dessus */}
-        <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center gap-10">
-          <div className="flex flex-col items-start gap-6 w-[988px] justify-center">
+        <motion.section
+          className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center gap-10"
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.div
+            className="flex flex-col items-start gap-6 w-[988px] justify-center"
+            variants={fadeInUp}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <div className="h-[3px] md:w-24 w-20 holographic-bg mt-6 rounded-full" />
             <PortfolioTitle />
-          </div>
+          </motion.div>
           <div className="flex flex-wrap justify-start gap-[24px] w-[990px] m-auto">
             <Filter />
             <AnimatePresence mode="popLayout">
@@ -192,7 +216,7 @@ export default function Portfolio() {
               </AnimatePresence>
             </div>
           </div>
-        </section>
+        </motion.section>
         {/* </div> */}
       </div>
     </Desktoplayout>

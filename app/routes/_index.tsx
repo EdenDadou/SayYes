@@ -17,7 +17,6 @@ import LoadingBar from "~/components/LoadingBar";
 import TitleFullWidthCard from "~/components/Screens/Homepage/TitleFullWidthCard";
 import BigTemoignage from "~/components/Screens/Homepage/BigTemoignage";
 import TemoignagesCards from "~/components/Screens/Homepage/TemoignagesCards";
-import ProjectCarousel from "~/components/Screens/Portfolio/components/ProjectCarousel";
 import HomeProjectCarousel from "~/components/Screens/Homepage/HomeProjectCarroussel";
 import TitleStepImage from "~/components/Screens/Homepage/TitleStepImage";
 

@@ -1,16 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useViewport } from "~/utils/hooks/useViewport";
 import MobileLayout from "~/components/Layout/Mobile";
-import Desktoplayout from "~/components/Layout/Desktop";
 import { AnimatePresence, motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 import TitleHomepage from "~/assets/icons/TitleHomepage";
-import ArrowLight from "~/assets/icons/ArrowLight";
-
-// Lazy load du composant Background volumineux
-const BackgroundHomepage = lazy(
-  () => import("~/assets/icons/BackgroundHomepage")
-);
 import "~/styles/tailwind.css";
 import Arrow from "~/assets/icons/Arrow";
 import Button from "~/components/Button";

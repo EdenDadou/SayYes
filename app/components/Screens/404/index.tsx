@@ -23,7 +23,7 @@ export default function Page404() {
 
   return (
     <Desktoplayout footer={false}>
-      <main className="relative w-screen h-screen flex items-center justify-start px-36 -mt-10">
+      <main className="relative w-screen h-screen flex items-center justify-center -mt-10">
         <div
           className="absolute right-0 w-[780px] h-[480px] z-0"
           style={{
@@ -37,9 +37,9 @@ export default function Page404() {
         <MasqueGif height="480px" width="780px" right={0} />
         <Background404 className="absolute inset-0 w-full h-screen z-10 " />
 
-        <div className="flex flex-row items-center justify-center gap-8 z-20">
+        <div className="flex flex-row items-center justify-start gap-8 z-20 w-[990px]">
           <div className="self-stretch w-[3px] holographic-bg-vertical rounded-full" />
-          <div className="flex flex-col items-start justify-center gap-4 relative">
+          <div className="flex flex-col items-start justify-center gap-10 relative">
             <div
               className="w-[608px] h-[359px]"
               style={{

@@ -3,14 +3,32 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface LoadingBarProps {
   onComplete?: () => void;
+  /** Si true, la barre reste en chargement indéfini jusqu'au démontage du composant */
+  indefinite?: boolean;
 }
 
-export default function LoadingBar({ onComplete }: LoadingBarProps) {
+export default function LoadingBar({ onComplete, indefinite = false }: LoadingBarProps) {
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    // Détection du chargement réel de la page
+    // Mode indéfini : la barre progresse jusqu'à 90% et reste là
+    if (indefinite) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(interval);
+            return 90;
+          }
+          const increment = prev < 60 ? 3 + Math.random() * 4 : 1 + Math.random() * 2;
+          return Math.min(prev + increment, 90);
+        });
+      }, 50);
+
+      return () => clearInterval(interval);
+    }
+
+    // Mode normal : détection du chargement réel de la page
     const checkPageLoad = () => {
       if (document.readyState === "complete") {
         // Si la page est déjà chargée, on accélère la progression
@@ -63,7 +81,7 @@ export default function LoadingBar({ onComplete }: LoadingBarProps) {
       clearInterval(interval);
       window.removeEventListener("load", () => {});
     };
-  }, [onComplete]);
+  }, [onComplete, indefinite]);
 
   return (
     <AnimatePresence>

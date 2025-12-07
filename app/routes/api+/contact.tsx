@@ -66,8 +66,8 @@ ${message || "Aucun message"}
     }
 
     // Envoi de l'email
-    await transporter.sendMail({
-      from: `"La Sainte Paire" <javier@lasaintepaire.com>`, // Utilise l'adresse du compte Brevo
+    const mailOptions = {
+      from: `"Say Yes" <${process.env.BREVOS_FROM_EMAIL || process.env.BREVOS_LOGIN}>`, // Utilise l'adresse vérifiée Brevo
       to: "javier@lasaintepaire.com", // adresse de destination
       replyTo: email, // L'email du client pour pouvoir répondre directement
       subject: `Nouvelle demande de contact - ${name}`,
@@ -99,7 +99,16 @@ ${message || "Aucun message"}
           </div>
         </div>
       `,
+    };
+
+    console.log("Tentative d'envoi avec:", {
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject,
     });
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log("✓ Email envoyé avec succès:", result);
 
     return json({ success: true, message: "Email envoyé avec succès" });
   } catch (error) {
