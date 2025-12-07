@@ -195,7 +195,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                 <div className="flex flex-col items-center justify-center">
                   {portfolio.topTitle ? (
                     <motion.div
-                      className="flex flex-col items-center"
+                      className="flex flex-row items-center gap-2"
                       initial={{ opacity: 0, y: 10 }}
                       animate={
                         loadStage >= 2 && heroInView
@@ -207,7 +207,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                       <p className="text-white text-center font-jakarta-semi-bold tracking-[-2px] text-[40px] leading-[40px]">
                         {portfolio.topTitle}
                       </p>
-                      <ArrowLight className="w-10 h-10 rotate-90 mt-4" />
+                      <ArrowLight className="w-10 h-10 rotate-90" />
                     </motion.div>
                   ) : null}
                   <motion.h1

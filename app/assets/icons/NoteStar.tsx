@@ -8,12 +8,12 @@ const NoteStar = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      fill="url(#holographicGradient)"
+      fill="url(#holographicGradientStar)"
       d="M31.574 26.693 29.01 19l-2.584 7.687-7.426.315 5.83 5.09-2.025 7.892 6.185-4.543L35.17 40l-2.01-7.897L39 27.03z"
     />
     <defs>
       <linearGradient
-        id="holographicGradient"
+        id="holographicGradientStar"
         x1="0%"
         y1="0%"
         x2="100%"
