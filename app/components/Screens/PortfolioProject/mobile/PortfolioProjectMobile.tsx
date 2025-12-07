@@ -158,7 +158,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
       >
         <BackgroundProject1
           fill={portfolio.couleur}
-          className="absolute top-0 left-0 right-0 w-screen h-[1200px] object-cover"
+          className="absolute inset-0 w-screen h-[1280px] object-cover"
           isMobile={true}
         />
       </motion.div>
@@ -182,7 +182,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
               }
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <div className="flex flex-col gap-8 items-center justify-center">
+              <div className="flex flex-col gap-16 items-center justify-center">
                 <motion.div
                   className="h-[3px] w-28 holographic-bg"
                   initial={{ scaleX: 0 }}
@@ -192,10 +192,10 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                   transition={{ duration: 0.8, delay: 0.2 }}
                 />
 
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center justify-center">
                   {portfolio.topTitle ? (
-                    <motion.p
-                      className="text-white flex flex-row items-center font-jakarta-semi-bold gap-4 tracking-[-2px] text-[40px] leading-[40px]"
+                    <motion.div
+                      className="flex flex-col items-center"
                       initial={{ opacity: 0, y: 10 }}
                       animate={
                         loadStage >= 2 && heroInView
@@ -204,9 +204,11 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
                       }
                       transition={{ duration: 0.5, delay: 0.3 }}
                     >
-                      {portfolio.topTitle}
-                      <ArrowLight className="w-10 h-10 rotate-90" />
-                    </motion.p>
+                      <p className="text-white text-center font-jakarta-semi-bold tracking-[-2px] text-[40px] leading-[40px]">
+                        {portfolio.topTitle}
+                      </p>
+                      <ArrowLight className="w-10 h-10 rotate-90 mt-4" />
+                    </motion.div>
                   ) : null}
                   <motion.h1
                     className="text-[40px] leading-[40px] text-white font-jakarta-semi-bold tracking-[-2px]"
@@ -265,7 +267,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
 
           {/* Content Grid - Stage 4 */}
           <motion.section
-            className="flex flex-col gap-8 py-16 bg-white px-8"
+            className="flex flex-col gap-8 py-16 bg-white px-8 mt-40 -mb-1"
             initial={{ opacity: 0 }}
             animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
@@ -295,7 +297,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
 
           {/* Deliverables - Stage 4 */}
           <motion.section
-            className="flex flex-col items-start justify-between w-full px-8 bg-white -my-1 gap-5 pb-64"
+            className="flex flex-col items-start justify-between w-full px-8 bg-white gap-5 pb-64"
             initial={{ opacity: 0 }}
             animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}

@@ -35,10 +35,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(props: BackgroundPro
 
   const baseColor = svgProps.fill || "#1255CB";
   const darkerColor = getDarkerColor(baseColor);
-
-  // Sur mobile, garder le blur complet pour un rendu identique au desktop
-  // Le blurScale à 0.4 causait un rendu trop "sharp"
-  const blurScale = isMobile ? 0.7 : 1;
+  const blurScale = 1;
 
   return (
     <svg

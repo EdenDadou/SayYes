@@ -16,8 +16,8 @@ interface BackgroundProject2Props extends SVGProps<SVGSVGElement> {
 const BackgroundProject2 = memo(function BackgroundProject2(props: BackgroundProject2Props) {
   const { isMobile, ...svgProps } = props;
 
-  // Sur mobile, garder le blur à 0.7 pour un rendu correct
-  const blurScale = isMobile ? 0.7 : 1;
+  // blurScale = 1 pour un rendu identique sur desktop et mobile
+  const blurScale = 1;
 
   return (
     <svg
