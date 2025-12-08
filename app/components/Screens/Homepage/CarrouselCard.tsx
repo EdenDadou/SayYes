@@ -4,253 +4,79 @@ import Card from "~/components/Card";
 import Arrow from "~/assets/icons/Arrow";
 import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import "~/styles/tailwind.css";
-import { AnimatedCard } from "~/components/Card/AnimatedCard";
-import {
-  useInView,
-  useScroll,
-  useTransform,
-  motion,
-  useSpring,
-  useMotionValueEvent,
-  useMotionValue,
-} from "framer-motion";
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useScroll, useTransform, motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 export default function CarouselCard() {
   const isMobile = useViewport();
 
-  const container = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
+  const [scrollRange, setScrollRange] = useState(0);
 
-  const { scrollYProgress, scrollY } = useScroll({
-    target: container,
-  });
-
-  // Hauteur du container paramétrable
-  const CONTAINER_HEIGHT_VH = 1000;
-
-  // État pour suivre l'index de la carte active
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const cardWidthRef = useRef(422);
-  const cardGapRef = useRef(64); // gap-16 = 64px
-  const lastScrollPxRef = useRef(0); // Dernière position de scroll en pixels
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Timeout pour détecter la fin du scroll
-
-  // Fonction pour définir les dimensions des cartes (valeurs fixes)
-  const measureCardDimensions = () => {
-    // Cartes de 422px de large avec gap-16 (64px) entre chaque carte
-    cardWidthRef.current = 422;
-    cardGapRef.current = 64;
-  };
-
-  // Fonction pour calculer la position x d'une carte à un index donné
-  const calculateXForIndex = (index: number) => {
-    if (typeof window === "undefined") return 0;
-
-    // Mesurer les dimensions si nécessaire
-    measureCardDimensions();
-
-    const centerX = window.innerWidth / 2;
-    const cardWidth = cardWidthRef.current;
-    const cardGap = cardGapRef.current;
-    const totalCardWidth = cardWidth + cardGap;
-
-    // Calculer la position pour centrer la carte au centre de l'écran
-    // Le centre de l'écran moins la moitié de la largeur de la carte
-    // moins le décalage basé sur l'index
-    const cardCenterOffset = cardWidth / 2;
-    return centerX - cardCenterOffset - index * totalCardWidth;
-  };
-
-  // Créer une MotionValue pour la position x
-  const x = useMotionValue(0);
-
-  // Calculer les positions de snap : au milieu de chaque section
-  // Section par carte = CONTAINER_HEIGHT_VH / nombre de cartes
-  // Snap pour carte i = (i * sectionHeight) + (sectionHeight / 2)
-  const snapPositions = useMemo(() => {
-    const sectionHeight = CONTAINER_HEIGHT_VH / supports.length;
-    return supports.map((_, index) => {
-      const snapVh = index * sectionHeight + sectionHeight / 2;
-      // Convertir en progress (0-1)
-      return snapVh / CONTAINER_HEIGHT_VH;
-    });
-  }, []);
-
-  // Obtenir la hauteur du container au montage et calculer la position initiale
+  // Calculer la largeur totale du contenu horizontal
   useEffect(() => {
-    if (typeof window !== "undefined" && container.current) {
-      const containerHeight = (window.innerHeight * CONTAINER_HEIGHT_VH) / 100;
-      // Initialiser la position de référence au snap de la première carte
-      lastScrollPxRef.current = snapPositions[0] * containerHeight;
+    if (horizontalRef.current) {
+      const totalWidth = horizontalRef.current.scrollWidth;
+      const viewportWidth = window.innerWidth;
+      // Padding supplémentaire après la dernière carte (24vw)
+      const endPadding = viewportWidth * 0.24;
+      setScrollRange(totalWidth - viewportWidth + endPadding);
     }
   }, []);
 
-  // Mettre à jour la position x quand l'index change
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      x.set(calculateXForIndex(activeCardIndex));
-    }
-  }, [activeCardIndex]);
-
-  // Nettoyer le timeout au démontage
-  useEffect(() => {
-    return () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  // Écouter le scroll et snapper vers la carte la plus proche quand l'utilisateur arrête de scroller
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (typeof window === "undefined" || !container.current) return;
-
-    // Ne pas snapper si on est en dehors de la zone de scroll du composant (0-1)
-    if (latest < 0 || latest > 1) return;
-
-    const containerHeight = (window.innerHeight * CONTAINER_HEIGHT_VH) / 100;
-    const currentScrollPx = latest * containerHeight;
-
-    // Position de snap de la première et dernière carte
-    const firstCardSnapProgress = snapPositions[0];
-    const lastCardSnapProgress = snapPositions[snapPositions.length - 1];
-
-    // Mettre à jour l'index actif en temps réel pendant le scroll
-    // pour que les cartes apparaissent même lors d'un scroll rapide
-    if (latest >= firstCardSnapProgress && latest <= lastCardSnapProgress) {
-      // Trouver la carte la plus proche de la position actuelle
-      let closestIndex = 0;
-      let minDistance = Infinity;
-
-      snapPositions.forEach((snapProgress, index) => {
-        const snapPositionPx = snapProgress * containerHeight;
-        const distance = Math.abs(currentScrollPx - snapPositionPx);
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      // Mettre à jour l'index actif immédiatement
-      if (closestIndex !== activeCardIndex) {
-        setActiveCardIndex(closestIndex);
-      }
-    }
-
-    // Annuler le timeout précédent
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-
-    // Attendre 150ms après la fin du scroll pour snapper
-    scrollTimeoutRef.current = setTimeout(() => {
-      // Vérifier à nouveau qu'on est dans les limites avant de snapper
-      if (latest < 0 || latest > 1) return;
-
-      // Ne pas snapper si on est avant le milieu de la première carte
-      // ou après le milieu de la dernière carte
-      if (latest < firstCardSnapProgress || latest > lastCardSnapProgress) {
-        return;
-      }
-
-      // Trouver la carte la plus proche de la position actuelle
-      let closestIndex = 0;
-      let minDistance = Infinity;
-
-      snapPositions.forEach((snapProgress, index) => {
-        const snapPositionPx = snapProgress * containerHeight;
-        const distance = Math.abs(currentScrollPx - snapPositionPx);
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      // Mettre à jour la position de référence
-      const snapProgress = snapPositions[closestIndex];
-      const snapPositionPx = snapProgress * containerHeight;
-      lastScrollPxRef.current = snapPositionPx;
-
-      // Scroller automatiquement vers le snap le plus proche
-      if (container.current) {
-        const currentScrollInContainer = latest * containerHeight;
-        const scrollDelta = snapPositionPx - currentScrollInContainer;
-        const currentWindowScrollY = window.scrollY;
-        const targetScrollY = currentWindowScrollY + scrollDelta;
-
-        window.scrollTo({
-          top: targetScrollY,
-          behavior: "smooth",
-        });
-      }
-    }, 150);
+  // useScroll avec offset pour contrôler quand l'animation commence/finit
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
   });
 
-  // Utiliser useSpring pour un mouvement fluide
-  const springX = useSpring(x, {
-    stiffness: 100,
-    damping: 30,
-    mass: 0.5,
-  });
-
-  // Transformer scrollYProgress en largeur de barre (0-100%)
-  const progressBarWidth = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["0%", "100%"]
-  );
+  // Transformer le scroll vertical en déplacement horizontal
+  // scrollYProgress va de 0 à 1, on le transforme en translation X
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   return isMobile ? (
     <MobileLayout>
       <div>TODO</div>
     </MobileLayout>
   ) : (
-    <div className="w-screen relative">
-      {/* Barre de progression du scroll pour débogage */}
-      {/* <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
-        <motion.div
-          className="h-full bg-pink-500"
-          style={{ width: progressBarWidth }}
-        />
-      </div> */}
-      <section
-        ref={container}
-        className="relative z-10 flex flex-col justify-start items-start gap-8"
-        style={{ height: `${CONTAINER_HEIGHT_VH}vh` }}
-      >
-        <div className="sticky top-0 h-screen flex justify-center flex-col w-full items-center gap-6">
-          <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80" />
-          <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%]" />
+    <section ref={containerRef} className="relative w-screen">
+      {/* Conteneur avec hauteur pour créer la zone de scroll */}
+      {/* La hauteur détermine combien il faut scroller pour parcourir toutes les cartes */}
+      <div style={{ height: `${supports.length * 50}vh` }}>
+        {/* Sticky container qui reste fixe pendant le scroll */}
+        <div className="sticky top-0 h-screen flex flex-col justify-center items-center">
+          {/* Backgrounds positionnés en dehors du flux */}
+          <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80 pointer-events-none" />
+          <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%] pointer-events-none" />
+
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
-          <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
+          <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line mt-6">
             {`Nous designons tous vos\n supports de communication !`}
           </h2>
-          <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
+          <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px] mt-6">
             <p>Branding</p>
-            <Arrow className="w-4" />
+            <Arrow className="w-[22px]" />
             <p>Print</p>
-            <Arrow className="w-4" />
+            <Arrow className="w-[22px]" />
             <p>Digital</p>
-            <Arrow className="w-4" />
+            <Arrow className="w-[22px]" />
             <p>Vidéo</p>
-            <Arrow className="w-4" />
+            <Arrow className="w-[22px]" />
             <p>Facilitation graphique</p>
           </div>
-          <motion.div
-            style={{ x: springX }}
-            ref={horizontalRef}
-            className="flex flex-row w-screen h-fit mt-5 z-20 gap-16"
-          >
-            {supports.map((card, index) => {
-              const data = CardsSupport(card);
-              return (
-                <AnimatedCard
-                  i={index}
-                  key={`p_${index}`}
-                  card={
+
+          {/* Conteneur horizontal qui se déplace */}
+          <div className="w-full overflow-hidden">
+            <motion.div
+              ref={horizontalRef}
+              style={{ x }}
+              className="flex gap-10 mt-12 pl-[calc(24vw)] pr-[calc(24vw)]"
+            >
+              {supports.map((card, index) => {
+                const data = CardsSupport(card);
+                return (
+                  <div key={`card_${index}`} className="flex-shrink-0">
                     <Card
                       key={data.name}
                       height={data.height + "px"}
@@ -258,16 +84,14 @@ export default function CarouselCard() {
                       content={data.content}
                       borderClass={data.borderClass}
                     />
-                  }
-                  progress={scrollYProgress}
-                  isSnapped={activeCardIndex === index}
-                />
-              );
-            })}
-          </motion.div>
+                  </div>
+                );
+              })}
+            </motion.div>
+          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }
 
@@ -292,8 +116,8 @@ export const CardsSupport = ({
             backgroundImage: `url("${image}")`,
           }}
         />
-        <div className="z-10 relative flex flex-col gap-4 h-full justify-end py-2 text-white">
-          <p className="glassy font-jakarta-semi-bold text-[33px] leading-[36px] tracking-[-1px] whitespace-pre-line">
+        <div className="z-10 relative flex flex-col gap-4 h-full justify-end pt-4 pb-2 text-white">
+          <p className="glassy font-jakarta-semi-bold text-[36px] leading-[36px] tracking-[-1px] whitespace-pre-line text-center pb-1">
             {name}
           </p>
         </div>
@@ -304,35 +128,35 @@ export const CardsSupport = ({
 
 const supports = [
   {
-    name: "Identité visuelle",
+    name: "Identité visuelle.",
     image: "./images/homepage/carousel-cards/card1.png",
   },
   {
-    name: "Supports de com’",
+    name: "Supports de com’.",
     image: "./images/homepage/carousel-cards/card2.png",
   },
   {
-    name: "Présentation",
+    name: "Présentation.",
     image: "./images/homepage/carousel-cards/card3.png",
   },
   {
-    name: "Site web & App",
+    name: "Site web & App.",
     image: "./images/homepage/carousel-cards/card4.png",
   },
   {
-    name: "Vidéo & Motion",
+    name: "Vidéo & Motion.",
     image: "./images/homepage/carousel-cards/card5.png",
   },
   {
-    name: "Illustration",
+    name: "Illustration.",
     image: "./images/homepage/carousel-cards/card6.png",
   },
   {
-    name: "Fresque murale",
+    name: "Fresque murale.",
     image: "./images/homepage/carousel-cards/card7.png",
   },
   {
-    name: "Live sketching",
+    name: "Live sketching.",
     image: "./images/homepage/carousel-cards/card8.png",
   },
 ];

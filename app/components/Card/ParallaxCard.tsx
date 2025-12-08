@@ -12,8 +12,10 @@ interface ParallaxCardProps {
   progress: any;
   range: [number, number];
   targetScale: number;
+  step: number;
   isMobile?: boolean;
   height?: string;
+  containerHeight?: string;
 }
 
 export default function ParallaxCard({
@@ -25,8 +27,10 @@ export default function ParallaxCard({
   progress,
   range,
   targetScale,
+  step,
   isMobile = false,
   height,
+  containerHeight,
 }: ParallaxCardProps) {
   const container = useRef<HTMLDivElement>(null);
 
@@ -34,8 +38,8 @@ export default function ParallaxCard({
   const scale = useTransform(progress, range, [1, targetScale]);
 
   // Opacité qui diminue quand la carte suivante arrive (sauf pour la dernière carte)
-  const nextCardStart = (index + 1) * 0.2;
-  const opacityRange = [nextCardStart, nextCardStart + 0.15];
+  const nextCardStart = (index + 1) * step;
+  const opacityRange = [nextCardStart, nextCardStart + step * 0.6];
   const opacity = useTransform(progress, opacityRange, [
     1,
     index === totalCards - 1 ? 1 : 0,
@@ -44,9 +48,10 @@ export default function ParallaxCard({
   return (
     <div
       ref={container}
+      style={containerHeight ? { height: containerHeight } : undefined}
       className={cn(
         "flex items-center justify-center sticky top-0",
-        isMobile ? "h-[85vh]" : "h-screen"
+        !containerHeight && (isMobile ? "h-[85vh]" : "h-screen")
       )}
     >
       <motion.div

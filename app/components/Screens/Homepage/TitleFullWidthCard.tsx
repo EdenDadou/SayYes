@@ -1,16 +1,52 @@
 import { useViewport } from "~/utils/hooks/useViewport";
 import MobileLayout from "~/components/Layout/Mobile";
-import Card from "~/components/Card";
+import ParallaxCard from "~/components/Card/ParallaxCard";
 import Arrow from "~/assets/icons/Arrow";
-import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import { useRef } from "react";
 import Coche from "~/assets/icons/Coche";
+import { useScroll } from "framer-motion";
 import "~/styles/tailwind.css";
+
+function AccompagnementCardsParallax() {
+  const container = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  const totalCards = cardsAccompagnement.length;
+  // Espacement entre chaque carte dans la progression du scroll
+  const step = 1 / (totalCards + 1);
+
+  return (
+    <div
+      ref={container}
+      className="relative"
+      style={{ height: `${totalCards * 100}vh` }}
+    >
+      {cardsAccompagnement.map((card, index) => {
+        const data = CardsAccompagnement(card);
+        const targetScale = 1 - (totalCards - index) * 0.05;
+        return (
+          <ParallaxCard
+            key={data.title}
+            index={index}
+            totalCards={totalCards}
+            content={data.content}
+            borderClass={data.borderClass}
+            progress={scrollYProgress}
+            range={[index * step, 1]}
+            targetScale={targetScale}
+            step={step}
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 export default function TitleFullWidthCard() {
   const isMobile = useViewport();
-
-  const container = useRef<HTMLElement>(null);
 
   return isMobile ? (
     <MobileLayout>
@@ -23,17 +59,7 @@ export default function TitleFullWidthCard() {
         alt="background"
         className="scale-x-[-1] absolute left-0 h-auto z-0 w-[90%] rotate-180 top-0"
       />
-      {/* <img
-        src="./images/homepage/bg-halo.png"
-        alt="background"
-        className="absolute right-0 h-auto z-0 w-1/2 top-80 object-cover"
-      /> */}
-      <section
-        ref={container}
-        className="z-10 flex flex-col justify-center items-center gap-8 w-full"
-      >
-        {/* <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80" /> */}
-        {/* <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%]" /> */}
+      <section className="z-10 flex flex-col justify-center items-center gap-8 w-full">
         <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
         <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
           {`Accompagnement sur-mesure`}
@@ -41,26 +67,13 @@ export default function TitleFullWidthCard() {
         <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
           <p>En co-conception :</p>
           <p>Simple</p>
-          <Arrow className="w-4" />
+          <Arrow className="w-[20px]" />
           <p>Efficace</p>
-          <Arrow className="w-4" />
+          <Arrow className="w-[20px]" />
           <p>Prouvée</p>
         </div>
-        <div className="flex flex-col gap-8">
-          {cardsAccompagnement.map((card) => {
-            const data = CardsAccompagnement(card);
-            return (
-              <Card
-                key={data.title}
-                height={data.height + "px"}
-                borderRadius={data.borderRadius + "px"}
-                content={data.content}
-                borderClass={data.borderClass}
-              />
-            );
-          })}
-        </div>
       </section>
+      <AccompagnementCardsParallax />
     </div>
   );
 }
@@ -82,7 +95,7 @@ export const CardsAccompagnement = ({
     title,
     borderClass: "light-border rounded-[40px]",
     content: (
-      <div className="h-full w-[988px] relative md:p-12 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
+      <div className="h-full w-[986px] relative md:p-12 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
         <div
           className="absolute top-0 left-0 w-full h-full object-cover bg-center bg-no-repeat bg-cover z-0"
           style={{
