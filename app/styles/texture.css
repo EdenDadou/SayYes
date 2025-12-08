@@ -218,16 +218,17 @@
   background: linear-gradient(
     90deg,
     rgb(160, 156, 206) 0%,
-    rgba(255, 255, 255, 0.94) 30%,
+    rgba(255, 255, 255, 0.94) 45%,
     #fff 50%,
-    #9995c5 70%,
+    rgba(255, 255, 255, 0.94) 55%,
+    #a3a1c1 70%,
      rgb(160, 156, 206) 100%
   );
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: glassy-shimmer 3s linear infinite;
+  animation: glassy-shimmer 4s linear infinite;
 }
 
 @keyframes glassy-shimmer {
@@ -236,6 +237,32 @@
   }
   100% {
     background-position: -100% 0;
+  }
+}
+
+.glassy-overlay {
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 35%,
+    rgba(255, 255, 255, 0.15) 40%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.15) 55%,
+    rgba(255, 255, 255, 0) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: glassy-shimmer-diagonal 4s linear infinite;
+}
+
+@keyframes glassy-shimmer-diagonal {
+  0% {
+    transform: translateX(100%);
+  }
+  20% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(-100%);
   }
 }
 

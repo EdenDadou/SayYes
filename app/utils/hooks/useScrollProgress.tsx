@@ -1,9 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useScrollLock } from "~/contexts/ScrollLockContext";
 
 export const useScrollProgress = () => {
   const [animationProgress, setAnimationProgress] = useState(0); // 0 à 2 (0-1: ouverture, 1-2: fermeture)
-  const [isLocked, setIsLocked] = useState(false);
+  const [isLocked, setIsLockedLocal] = useState(false);
   const [hasCompleted, setHasCompleted] = useState(false);
+  const { setIsScrollLocked } = useScrollLock();
+
+  // Sync local state with context
+  const setIsLocked = useCallback(
+    (value: boolean) => {
+      setIsLockedLocal(value);
+      setIsScrollLocked(value);
+    },
+    [setIsScrollLocked]
+  );
 
   const lockPointRef = useRef<number | null>(null);
   const accumulatedDelta = useRef(0);
@@ -125,7 +136,7 @@ export const useScrollProgress = () => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [isLocked, hasCompleted, getTriggerPoint]);
+  }, [isLocked, hasCompleted, getTriggerPoint, setIsLocked]);
 
   return {
     imageOpacity,

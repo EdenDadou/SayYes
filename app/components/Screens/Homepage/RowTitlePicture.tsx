@@ -61,8 +61,22 @@ export default function RowTitlePicture() {
             </div>
           </div>
         </div>
-        <div className="-mt-10">
+        <div className="-mt-10 relative overflow-hidden">
           <img src="./images/homepage/grid-partenaire.png" />
+          <div className="absolute inset-0 grid grid-cols-3 grid-rows-5 pointer-events-none py-5 gap-2">
+            {[...Array(15)].map((_, i) => {
+              const row = Math.floor(i / 3);
+              const col = i % 3;
+              const isBlack = (row + col) % 2 === 0;
+              return (
+                <div key={i} className="relative overflow-hidden">
+                  {isBlack && (
+                    <div className="absolute inset-0 glassy-overlay rounded-3xl" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
     </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Button from "../Button";
 import LogoSayYes from "~/components/Header/assets/LogoSayYes";
 import { useViewport } from "~/utils/hooks/useViewport";
+import { useScrollLock } from "~/contexts/ScrollLockContext";
 import HeaderMobile from "./components/HeaderMobile";
 import ChatBuble from "./assets/ChatBuble";
 import Flamme from "./assets/Flamme";
@@ -21,9 +22,13 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { scrollY } = useScroll();
+  const { isScrollLocked } = useScrollLock();
 
   // Listen to scroll changes
   useMotionValueEvent(scrollY, "change", (latest) => {
+    // Ignorer les changements de scroll pendant l'animation des cartes
+    if (isScrollLocked) return;
+
     const direction = latest > lastScrollY ? "down" : "up";
     if (latest > 50 && direction === "down") {
       setIsVisible(false);
