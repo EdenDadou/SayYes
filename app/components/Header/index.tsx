@@ -75,7 +75,7 @@ const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
       <div className="flex flex-row items-center gap-8 justify-between w-[35%] z-20">
         <Button
           label="Portfolio"
-          leftIcon={<Coeur />}
+          leftIcon={<Coeur className="w-4 h-4" />}
           onClick={() => navigate("/portfolio")}
           textSize="S"
         />

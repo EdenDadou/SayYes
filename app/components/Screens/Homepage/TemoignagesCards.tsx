@@ -8,21 +8,40 @@ import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
 export default function TemoignagesCards({}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const itemsPerView = 4; // Affiche 4 cartes: 2 complètes au centre + 2 bouts sur les côtés
 
   const nextSlide = () => {
     setDirection(1);
-    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, 10));
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % temoignagesCards.length);
   };
 
   const prevSlide = () => {
     setDirection(-1);
-    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? temoignagesCards.length - 1 : prevIndex - 1
+    );
   };
+
+  // Get items for display with infinite loop support
+  // We need 4 items: 1 partial left + 2 center + 1 partial right
+  const getVisibleItems = () => {
+    const items = [];
+    // Start from -1 to get the left partial card
+    for (let i = -1; i < itemsPerView - 1; i++) {
+      const index =
+        (currentIndex + i + temoignagesCards.length) % temoignagesCards.length;
+      items.push({ ...temoignagesCards[index], position: i });
+    }
+    return items;
+  };
+
+  // Card width + gap
+  const cardWidth = 314;
+  const gap = 16;
 
   const slideVariants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
+      x: direction > 0 ? cardWidth + gap : -(cardWidth + gap),
     }),
     center: {
       zIndex: 1,
@@ -31,12 +50,11 @@ export default function TemoignagesCards({}) {
     },
     exit: (direction: number) => ({
       zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
+      opacity: 1,
     }),
   };
 
-  const swipeConfidenceThreshold = 10000;
+  const swipeConfidenceThreshold = 5000;
   const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
   };
@@ -60,32 +78,27 @@ export default function TemoignagesCards({}) {
         </h2>
       </div>
       {/* Carousel Container */}
-      <div className="relative w-full overflow-hidden flex items-center gap-10">
-        {/* Navigation Arrows */}
-        <div className="absolute w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20">
-          <button
-            onClick={prevSlide}
-            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
-              currentIndex === 0 ? "opacity-0 invisible" : "opacity-100 visible"
-            }`}
-            aria-label="Projet précédent"
-          >
-            <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className={`z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group ${
-              currentIndex >= 10 ? "opacity-0 invisible" : "opacity-100 visible"
-            }`}
-            aria-label="Projet suivant"
-          >
-            <ArrowLight className="w-[77px] h-[77px] text-white group-hover:scale-110 transition-transform" />
-          </button>
-        </div>
-
+      <div className="relative w-full overflow-hidden">
         {/* Carousel Content */}
-        <div className="relative h-[420px] overflow-visible">
+        <div className="relative h-[420px] w-full">
+          {/* Navigation Arrows - centered vertically with cards */}
+          <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20 pointer-events-none">
+            <button
+              onClick={prevSlide}
+              className="z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group pointer-events-auto"
+              aria-label="Projet précédent"
+            >
+              <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
+            </button>
+
+            <button
+              onClick={nextSlide}
+              className="z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group pointer-events-auto"
+              aria-label="Projet suivant"
+            >
+              <ArrowLight className="w-[77px] h-[77px] text-white group-hover:scale-110 transition-transform" />
+            </button>
+          </div>
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={currentIndex}
@@ -95,37 +108,38 @@ export default function TemoignagesCards({}) {
               animate="center"
               exit="exit"
               transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
+                x: { type: "spring", stiffness: 200, damping: 25, mass: 0.8 },
               }}
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={1}
+              dragElastic={0.5}
               onDragEnd={(e, { offset, velocity }) => {
                 const swipe = swipePower(offset.x, velocity.x);
 
-                if (swipe < -swipeConfidenceThreshold) {
+                // Déclenche soit par vélocité, soit par distance parcourue
+                if (swipe < -swipeConfidenceThreshold || offset.x < -100) {
                   nextSlide();
-                } else if (swipe > swipeConfidenceThreshold) {
+                } else if (swipe > swipeConfidenceThreshold || offset.x > 100) {
                   prevSlide();
                 }
               }}
-              className={`absolute inset-0 flex items-center gap-4 ${
-                currentIndex === 0
-                  ? ""
-                  : currentIndex >= 10
-                    ? "justify-end"
-                    : "justify-center"
-              }`}
+              className="absolute flex items-center -translate-y-1/2"
               style={{
-                paddingLeft: currentIndex === 0 ? `128px` : undefined,
-                paddingRight: currentIndex >= 10 ? `128px` : undefined,
+                gap: `${gap}px`,
+                // 4 cards: [partial left, center1, center2, partial right]
+                // To center cards 1&2: offset by (1 full card + 1.5 gaps + half of center width)
+                left: `calc(50% - ${cardWidth * 2 + gap * 1.5}px)`,
               }}
             >
-              {temoignagesCards.map((temoignage, index) => {
+              {getVisibleItems().map((temoignage) => {
                 const data = CardsTemoignage(temoignage);
                 return (
-                  <div key={index} className="w-[314px] flex-shrink-0">
+                  <div
+                    key={`${temoignage.auteur}-${temoignage.position}`}
+                    className="flex-shrink-0"
+                    style={{ width: `${cardWidth}px`, pointerEvents: "auto" }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                  >
                     <Card
                       height={data.height + "px"}
                       borderRadius={data.borderRadius + "px"}

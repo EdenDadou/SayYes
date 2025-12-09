@@ -21,12 +21,12 @@ export default function CardHomePagePortfolio({
   console.log(topTitle);
   const navigate = useNavigate();
   const imageClasses = cn(
-    "h-full flex items-center justify-center md:rounded-[24px] rounded-[10px] relative"
+    "h-full flex items-center justify-center md:rounded-[45px] rounded-[10px] relative"
   );
 
   return (
     <div
-      className="size-full relative overflow-hidden md:rounded-[24px] rounded-[10px] hover:rounded-[25px] md:p-2 p-1 cursor-pointer
+      className="size-full relative overflow-hidden md:rounded-[45px] rounded-[10px] md:p-2 p-1 cursor-pointer
       shadow-lg"
       onClick={() => {
         navigate(`/portfolio/${slug}`);

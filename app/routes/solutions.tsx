@@ -36,7 +36,10 @@ function SolutionCardsParallaxMobile() {
   return (
     <div ref={container} className="relative w-full">
       {solutionsCards.map((card, index) => {
-        const targetScale = 1 - (solutionsCards.length - index) * 0.03;
+        const targetScale =
+          index === solutionsCards.length - 1
+            ? 1
+            : 1 - (solutionsCards.length - index) * 0.03;
         return (
           <ParallaxCard
             key={index}
@@ -45,7 +48,6 @@ function SolutionCardsParallaxMobile() {
             content={card.content}
             borderClass={card.borderClass}
             progress={scrollYProgress}
-            range={[index * 0.2, 1]}
             targetScale={targetScale}
             isMobile
             height="540px"
@@ -67,7 +69,10 @@ function SolutionCardsParallax() {
   return (
     <div ref={container} className="relative">
       {solutionsCards.map((card, index) => {
-        const targetScale = 1 - (solutionsCards.length - index) * 0.05;
+        const targetScale =
+          index === solutionsCards.length - 1
+            ? 1
+            : 1 - (solutionsCards.length - index) * 0.05;
         return (
           <ParallaxCard
             key={index}
@@ -76,7 +81,6 @@ function SolutionCardsParallax() {
             content={card.content}
             borderClass={card.borderClass}
             progress={scrollYProgress}
-            range={[index * 0.2, 1]}
             targetScale={targetScale}
           />
         );

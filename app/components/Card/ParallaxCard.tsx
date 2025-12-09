@@ -10,12 +10,9 @@ interface ParallaxCardProps {
   children?: React.ReactNode;
   borderClass?: string;
   progress: any;
-  range: [number, number];
   targetScale: number;
-  step: number;
   isMobile?: boolean;
   height?: string;
-  containerHeight?: string;
 }
 
 export default function ParallaxCard({
@@ -25,33 +22,42 @@ export default function ParallaxCard({
   children,
   borderClass,
   progress,
-  range,
   targetScale,
-  step,
   isMobile = false,
   height,
-  containerHeight,
 }: ParallaxCardProps) {
   const container = useRef<HTMLDivElement>(null);
+  const scrollSegments = Math.max(totalCards - 1, 1);
+  const step = 1 / scrollSegments;
+  const hasNextCard = index < totalCards - 1;
 
-  // Scale de la carte basé sur la progression globale du scroll
-  const scale = useTransform(progress, range, [1, targetScale]);
+  const nextCardStart = hasNextCard ? Math.min(1, (index + 1) * step) : 1;
+  const fadeStart = hasNextCard ? Math.max(0, nextCardStart - step * 0.3) : 1;
+  const effectiveTargetScale = hasNextCard ? targetScale : 1;
 
-  // Opacité qui diminue quand la carte suivante arrive (sauf pour la dernière carte)
-  const nextCardStart = (index + 1) * step;
-  const opacityRange = [nextCardStart, nextCardStart + step * 0.6];
+  // Scale reste à 1 tant qu'aucune carte ne passe au-dessus, puis réduit au moment du chevauchement
+  const scale = hasNextCard
+    ? useTransform(
+        progress,
+        [0, fadeStart, nextCardStart],
+        [1, 1, effectiveTargetScale],
+        { clamp: true }
+      )
+    : useTransform(progress, [0, 1], [1, 1], { clamp: true });
+
+  // Opacité qui diminue au moment où la carte suivante entre en vue (sauf pour la dernière)
+  const opacityRange = hasNextCard ? [fadeStart, nextCardStart] : [0, 1];
   const opacity = useTransform(progress, opacityRange, [
     1,
-    index === totalCards - 1 ? 1 : 0,
+    hasNextCard ? 0 : 1,
   ]);
 
   return (
     <div
       ref={container}
-      style={containerHeight ? { height: containerHeight } : undefined}
       className={cn(
         "flex items-center justify-center sticky top-0",
-        !containerHeight && (isMobile ? "h-[85vh]" : "h-screen")
+        isMobile ? "h-[85vh]" : "h-screen"
       )}
     >
       <motion.div
@@ -59,7 +65,8 @@ export default function ParallaxCard({
           scale,
           opacity,
           top: 0,
-          height: isMobile ? height : undefined,
+          height: height || (isMobile ? undefined : "560px"),
+          maxHeight: height || (isMobile ? undefined : "560px"),
           willChange: "transform, opacity",
           transform: "translateZ(0)",
         }}
@@ -67,7 +74,8 @@ export default function ParallaxCard({
           "relative transform-origin-top",
           isMobile
             ? "w-full border-custom-mobile rounded-[20px]"
-            : "w-[988px] h-[560px] md:border-custom-thin border-custom-mobile rounded-[28px]",
+            : "w-[990px] md:border-custom-thin border-custom-mobile rounded-[28px]",
+          !height && !isMobile && "h-[560px]",
           borderClass
         )}
       >

@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import { useViewport } from "~/utils/hooks/useViewport";
 import MobileLayout from "~/components/Layout/Mobile";
 import Arrow from "~/assets/icons/Arrow";
@@ -8,6 +9,223 @@ import Coche from "~/assets/icons/Coche";
 
 export default function TitleStepImage() {
   const isMobile = useViewport();
+  const [activeSteps, setActiveSteps] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [justCompletedStep, setJustCompletedStep] = useState<number | null>(
+    null
+  );
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            // Activer immédiatement la première étape
+            setActiveSteps(1);
+            // Déclencher l'animation pour la première étape
+            setJustCompletedStep(1);
+            setTimeout(() => {
+              setJustCompletedStep(null);
+            }, 600);
+            // Une fois visible, on peut arrêter d'observer
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Déclencher quand 20% de la section est visible
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    // Incrémenter le nombre d'étapes actives toutes les 3 secondes
+    const interval = setInterval(() => {
+      setActiveSteps((prev) => {
+        if (prev < 4) {
+          const newStep = prev + 1;
+          // Déclencher l'animation pour l'étape qui vient d'être complétée
+          setJustCompletedStep(newStep);
+          // Réinitialiser après l'animation (0.6s)
+          setTimeout(() => {
+            setJustCompletedStep(null);
+          }, 600);
+          return newStep;
+        }
+        return prev; // Arrêter à 4 étapes
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isVisible]);
+
+  // Fonction pour rendre une étape selon son état
+  const renderStep = (
+    stepNumber: number,
+    title: string,
+    description: string
+  ) => {
+    const isCompleted = stepNumber <= activeSteps;
+    const isPending = stepNumber === activeSteps + 1;
+    const isInactive = stepNumber > activeSteps + 1;
+    const showBar = stepNumber < 4; // Toujours afficher la barre pour les 3 premières étapes
+
+    // Déterminer l'opacité selon l'état pour le fade
+    let opacity = 0; // Inactive par défaut
+    if (isCompleted) {
+      opacity = 1; // Complétée = opacité maximale
+    } else if (isPending) {
+      opacity = 1; // En attente = opacité maximale (mais avec gradient pour la barre)
+    }
+
+    if (isCompleted) {
+      // Étape complétée (avec coche)
+      return (
+        <div className="relative flex items-start gap-6">
+          <div className="relative flex flex-col items-center">
+            <div className="relative z-10 flex items-center justify-center w-[32px] h-[32px] rounded-full bg-black flex-shrink-0">
+              {/* Bordure inactive en dessous */}
+              <div className="absolute inset-0 rounded-full border-2 border-[#DCC4FF]/40" />
+              {/* Bordure active au-dessus avec fade */}
+              <div
+                className="absolute inset-0 rounded-full border-2 border-[#DCC4FF] transition-opacity duration-500 ease-in-out"
+                style={{ opacity }}
+              />
+              <Coche
+                color="#DCC4FF"
+                className="w-6 h-6 relative z-10"
+                style={{
+                  animation: "fadeIn 0.5s ease-in-out forwards",
+                }}
+              />
+            </div>
+            {showBar && (
+              <div className="relative w-[2px] h-10 mt-0">
+                {/* Barre inactive en dessous */}
+                <div className="absolute inset-0 bg-[#DCC4FF]/40" />
+                {/* Barre active au-dessus avec fade */}
+                <div
+                  className="absolute inset-0 bg-[#DCC4FF] transition-opacity duration-500 ease-in-out"
+                  style={{ opacity }}
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col gap-1 pt-1">
+            <h3
+              className="font-jakarta-semi-bold text-[24px] text-white leading-[28px] tracking-[-1px]"
+              style={{
+                animation:
+                  justCompletedStep === stepNumber
+                    ? "textScale 0.6s ease-in-out"
+                    : "none",
+              }}
+            >
+              {title}
+            </h3>
+            <p
+              className="font-jakarta text-[14px] text-white/60 leading-[18px]"
+              style={{
+                animation:
+                  justCompletedStep === stepNumber
+                    ? "textScale 0.6s ease-in-out"
+                    : "none",
+              }}
+            >
+              {description}
+            </p>
+          </div>
+        </div>
+      );
+    } else if (isPending) {
+      // Étape en attente
+      return (
+        <div className="relative flex items-start gap-6">
+          <div className="relative flex flex-col items-center">
+            <div className="relative z-10 flex items-center justify-center w-[32px] h-[32px] rounded-full bg-transparent flex-shrink-0">
+              {/* Bordure inactive en dessous */}
+              <div className="absolute inset-0 rounded-full border-2 border-[#DCC4FF]/40" />
+              {/* Bordure active au-dessus avec fade */}
+              <div
+                className="absolute inset-0 rounded-full border-2 border-[#DCC4FF] transition-opacity duration-500 ease-in-out"
+                style={{ opacity }}
+              />
+              <div className="relative w-6 h-6 bg-transpatent rounded-full z-10" />
+            </div>
+            {showBar && (
+              <div className="relative w-[2px] h-10 mt-0">
+                {/* Barre inactive en dessous */}
+                <div className="absolute inset-0 bg-[#DCC4FF]/40" />
+                {/* Barre en attente au-dessus avec fade (gradient) */}
+                <div
+                  className="absolute inset-0 bg-gradient-to-b from-[#8d7da4] to-[#8d7da4]/50 transition-opacity duration-500 ease-in-out"
+                  style={{ opacity }}
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col gap-1 pt-1">
+            <h3 className="font-jakarta-semi-bold text-[24px] text-white/90 leading-[28px] tracking-[-1px]">
+              {title}
+            </h3>
+            <p className="font-jakarta text-[14px] text-white/50 leading-[18px]">
+              {description}
+            </p>
+          </div>
+        </div>
+      );
+    } else {
+      // Étape inactive
+      return (
+        <div className="relative flex items-start gap-6">
+          <div className="relative flex flex-col items-center">
+            <div className="relative z-10 flex items-center justify-center w-[32px] h-[32px] rounded-full bg-transparent flex-shrink-0">
+              {/* Bordure inactive en dessous */}
+              <div className="absolute inset-0 rounded-full border-2 border-[#DCC4FF]/40" />
+              {/* Bordure active au-dessus avec fade */}
+              <div
+                className="absolute inset-0 rounded-full border-2 border-[#DCC4FF] transition-opacity duration-500 ease-in-out"
+                style={{ opacity }}
+              />
+            </div>
+            {showBar && (
+              <div className="relative w-[2px] h-10 mt-0">
+                {/* Barre inactive en dessous */}
+                <div className="absolute inset-0 bg-[#DCC4FF]/40" />
+                {/* Barre active au-dessus avec fade */}
+                <div
+                  className="absolute inset-0 bg-[#DCC4FF] transition-opacity duration-500 ease-in-out"
+                  style={{ opacity }}
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col gap-1 pt-1">
+            <h3 className="font-jakarta-semi-bold text-[24px] text-white/50 leading-[28px] tracking-[-1px]">
+              {title}
+            </h3>
+            <p className="font-jakarta text-[14px] text-white/30 leading-[18px]">
+              {description}
+            </p>
+          </div>
+        </div>
+      );
+    }
+  };
 
   return isMobile ? (
     <MobileLayout>
@@ -25,7 +243,10 @@ export default function TitleStepImage() {
         alt="background"
         className="absolute right-0 h-auto z-0 w-1/2 top-40 rotate-180"
       />
-      <section className="relative z-10 md:w-[988px] mx-auto flex flex-row gap-4 pt-32 pb-20">
+      <section
+        ref={sectionRef}
+        className="relative z-10 md:w-[988px] mx-auto flex flex-row gap-4 pt-32 pb-20"
+      >
         <div className="w-1/2 flex flex-col gap-8">
           <div className="h-[3px] md:w-20 w-20 holographic-bg rounded-full" />
           <h2 className="glassy font-jakarta-semi-bold text-[56px] text-start leading-[56px] pb-2 tracking-[-3px] weight-600 whitespace-pre-line">
@@ -37,77 +258,26 @@ export default function TitleStepImage() {
 
           {/* Timeline des étapes */}
           <div className="relative flex flex-col mt-4">
-            {/* Étape 1 - Complétée */}
-            <div className="relative flex items-start gap-6">
-              <div className="relative flex flex-col items-center">
-                <div className="relative z-10 flex items-center justify-center w-[32px] h-[32px] rounded-full bg-black border-2 border-[#DCC4FF] flex-shrink-0">
-                  <Coche color="#DCC4FF" className="w-6 h-6" />
-                </div>
-                {/* Ligne sous la coche 1 */}
-                <div className="w-[2px] h-10 bg-[#DCC4FF] mt-0" />
-              </div>
-              <div className="flex flex-col gap-1 pt-1">
-                <h3 className="font-jakarta-semi-bold text-[24px] text-white leading-[28px] tracking-[-1px]">
-                  01. Indiquez vos coordonnées
-                </h3>
-                <p className="font-jakarta text-[14px] text-white/60 leading-[18px]">
-                  1 minute maximum, promis!
-                </p>
-              </div>
-            </div>
-
-            {/* Étape 2 - Complétée */}
-            <div className="relative flex items-start gap-6">
-              <div className="relative flex flex-col items-center">
-                <div className="relative z-10 flex items-center justify-center w-[32px] h-[32px] rounded-full bg-black border-2 border-[#DCC4FF] flex-shrink-0">
-                  <Coche color="#DCC4FF" className="w-6 h-6" />
-                </div>
-                {/* Ligne sous la coche 2 */}
-                <div className="w-[2px] h-10 bg-[#DCC4FF]  mt-0" />
-              </div>
-              <div className="flex flex-col gap-1 pt-1">
-                <h3 className="font-jakarta-semi-bold text-[24px] text-white leading-[28px] tracking-[-1px]">
-                  02. Nous vous rappelons sous 48h
-                </h3>
-                <p className="font-jakarta text-[14px] text-white/60 leading-[18px]">
-                  Ou l'on vous offre un support de com'!
-                </p>
-              </div>
-            </div>
-
-            {/* Étape 3 - En attente */}
-            <div className="relative flex items-start gap-6">
-              <div className="relative flex flex-col items-center">
-                <div className="z-10 flex items-center justify-center w-[32px] h-[32px] rounded-full border-2 border-[#DCC4FF] bg-transparent flex-shrink-0">
-                  <div className="absolute w-6 h-6 bg-transpatent rounded-full" />
-                </div>
-                {/* Ligne sous la coche 3 */}
-                <div className="w-[2px] h-10 bg-gradient-to-b from-[#8d7da4] to-[#8d7da4]/50 mt-0" />
-              </div>
-              <div className="flex flex-col gap-1 pt-1">
-                <h3 className="font-jakarta-semi-bold text-[24px] text-white/90 leading-[28px] tracking-[-1px]">
-                  03. Devis express ou visio de cadrage
-                </h3>
-                <p className="font-jakarta text-[14px] text-white/50 leading-[18px]">
-                  C'est gratuit, profitez-en!
-                </p>
-              </div>
-            </div>
-
-            {/* Étape 4 - En attente */}
-            <div className="relative flex items-start gap-6">
-              <div className="relative flex flex-col items-center">
-                <div className="relative z-10 flex items-center justify-center w-[32px] h-[32px] rounded-full border-2 border-[#DCC4FF]/40 bg-transparent flex-shrink-0" />
-              </div>
-              <div className="flex flex-col gap-1 pt-1">
-                <h3 className="font-jakarta-semi-bold text-[24px] text-white/50 leading-[28px] tracking-[-1px]">
-                  04. Démarrage de votre projet
-                </h3>
-                <p className="font-jakarta text-[14px] text-white/30 leading-[18px]">
-                  Kick-Off &gt; Idéation &gt; Création &gt; Livraison
-                </p>
-              </div>
-            </div>
+            {renderStep(
+              1,
+              "01. Indiquez vos coordonnées",
+              "1 minute maximum, promis!"
+            )}
+            {renderStep(
+              2,
+              "02. Nous vous rappelons sous 48h",
+              "Ou l'on vous offre un support de com'!"
+            )}
+            {renderStep(
+              3,
+              "03. Devis express ou visio de cadrage",
+              "C'est gratuit, profitez-en!"
+            )}
+            {renderStep(
+              4,
+              "04. Démarrage de votre projet",
+              "Kick-Off > Idéation > Création > Livraison"
+            )}
           </div>
         </div>
         <div className="w-1/2">
