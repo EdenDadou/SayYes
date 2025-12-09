@@ -1,6 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useViewport } from "~/utils/hooks/useViewport";
-import MobileLayout from "~/components/Layout/Mobile";
 import { AnimatePresence, motion } from "framer-motion";
 import { lazy, Suspense } from "react";
 import TitleHomepage from "~/assets/icons/TitleHomepage";
@@ -39,9 +38,79 @@ export default function IntroSection() {
   };
 
   return isMobile ? (
-    <MobileLayout>
-      <div>TODO</div>
-    </MobileLayout>
+    <section className="relative w-full flex flex-col gap-10 px-5 pb-4 text-white">
+      <img
+        src="/images/homepage/bg-section-1.png"
+        alt="background"
+        className="absolute -top-[88px] left-0 w-full h-auto z-0 opacity-80"
+      />
+      <div className="relative z-10 flex flex-col items-center gap-6">
+        <div className="h-[3px] w-16 holographic-bg rounded-full" />
+        <TitleHomepage width={320} />
+        <div className="flex flex-col gap-2 text-[18px] leading-[22px] font-jakarta-semibold items-center">
+          <div className="flex flex-row items-center gap-2">
+            <Arrow className="w-4" />
+            <p>Branding</p>
+            <Arrow className="w-4" />
+            <p>Print</p>
+            <Arrow className="w-4" />
+            <p>Digital</p>
+            <Arrow className="w-4" />
+            <p>Vidéo</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Arrow className="w-4" />
+            <p>Facilitation graphique</p>
+            <Arrow className="w-4" />
+            <p>Illustration</p>
+          </div>
+        </div>
+        <p className="text-white text-[20px] leading-[25px] font-jakarta-semibold text-center">
+          Say Yes réunit toutes les <br /> expertises créatives
+        </p>
+        <Button
+          className="mt-2"
+          type="border"
+          label="Démarrer un projet"
+          leftIcon={<ChatBuble color="white" className="w-6 h-6" />}
+          textSize="S"
+        />
+      </div>
+
+      <Card
+        height="200px"
+        borderRadius="14px"
+        borderClass="light-border rounded-[14px]"
+        content={
+          <div
+            className="size-full relative p-2 cursor-pointer shadow-lg"
+            onClick={togglePlay}
+          >
+            <video
+              ref={videoRef}
+              src="/video/bureau.mp4"
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover rounded-[10px]"
+            />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div
+                className={`w-16 h-16 rounded-full backdrop-blur-2xl flex items-center justify-center transition-opacity duration-300 border border-white ${
+                  isPlaying ? "opacity-0 hover:opacity-100" : "opacity-100"
+                }`}
+              >
+                {!isPlaying ? (
+                  <Play className="w-10 h-10 text-white" fill="currentColor" />
+                ) : (
+                  <Pause className="w-9 h-9 text-white" fill="currentColor" />
+                )}
+              </div>
+            </div>
+          </div>
+        }
+      />
+    </section>
   ) : (
     <div className="w-screen">
       <AnimatePresence>

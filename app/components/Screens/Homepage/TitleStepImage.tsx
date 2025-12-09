@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useViewport } from "~/utils/hooks/useViewport";
-import MobileLayout from "~/components/Layout/Mobile";
 import Arrow from "~/assets/icons/Arrow";
 import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import "~/styles/tailwind.css";
@@ -228,9 +227,57 @@ export default function TitleStepImage() {
   };
 
   return isMobile ? (
-    <MobileLayout>
-      <div>TODO</div>
-    </MobileLayout>
+    <section
+      ref={sectionRef}
+      className="w-full relative px-5 pt-20 pb-12 flex flex-col gap-10"
+    >
+      <img
+        src="./images/homepage/bg-halo.png"
+        alt="background"
+        className="absolute left-0 top-0 w-3/4 h-auto z-0 opacity-60 rotate-180"
+      />
+      <div className="relative z-10 flex flex-col gap-6">
+        <div className="h-[3px] w-16 holographic-bg rounded-full" />
+        <h2 className="glassy font-jakarta-semi-bold text-[32px] leading-[34px] tracking-[-2px] whitespace-pre-line">
+          {`Prêt à transformer\n votre image`}
+        </h2>
+        <p className="font-jakarta text-[16px] text-white">
+          Les 4 étapes pour lancer votre projet :
+        </p>
+        <div className="relative flex flex-col gap-4">
+          {renderStep(
+            1,
+            "01. Indiquez vos coordonnées",
+            "1 minute maximum, promis!"
+          )}
+          {renderStep(
+            2,
+            "02. Nous vous rappelons sous 48h",
+            "Ou l'on vous offre un support de com'!"
+          )}
+          {renderStep(
+            3,
+            "03. Devis express ou visio de cadrage",
+            "C'est gratuit, profitez-en!"
+          )}
+          {renderStep(
+            4,
+            "04. Démarrage de votre projet",
+            "Kick-Off > Idéation > Création > Livraison"
+          )}
+        </div>
+      </div>
+      <Card
+        height="auto"
+        borderRadius="30px"
+        borderClass="light-border rounded-[30px] p-3"
+        content={
+          <div>
+            <img src="./images/homepage/step-img.png" alt="step-image" />
+          </div>
+        }
+      />
+    </section>
   ) : (
     <div className="w-screen relative">
       <img

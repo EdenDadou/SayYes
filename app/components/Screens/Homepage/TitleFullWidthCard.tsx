@@ -1,11 +1,11 @@
 import { useViewport } from "~/utils/hooks/useViewport";
-import MobileLayout from "~/components/Layout/Mobile";
 import ParallaxCard from "~/components/Card/ParallaxCard";
 import Arrow from "~/assets/icons/Arrow";
 import { useRef } from "react";
 import Coche from "~/assets/icons/Coche";
 import { useScroll } from "framer-motion";
 import "~/styles/tailwind.css";
+import Card from "~/components/Card";
 
 function AccompagnementCardsParallax() {
   const container = useRef<HTMLDivElement>(null);
@@ -44,9 +44,44 @@ export default function TitleFullWidthCard() {
   const isMobile = useViewport();
 
   return isMobile ? (
-    <MobileLayout>
-      <div>TODO</div>
-    </MobileLayout>
+    <section className="w-full px-5 flex flex-col gap-8">
+      <div className="h-[3px] w-16 holographic-bg rounded-full" />
+      <h2 className="font-jakarta-semi-bold text-[30px] leading-[36px] text-left glassy tracking-[-1px]">
+        Accompagnement sur-mesure
+      </h2>
+      <div className="flex flex-row items-center gap-2 w-full text-white font-jakarta-semibold text-[16px] flex-wrap">
+        <p>En co-conception :</p>
+        <p>Simple</p>
+        <Arrow className="w-[18px]" />
+        <p>Efficace</p>
+        <Arrow className="w-[18px]" />
+        <p>Prouvée</p>
+      </div>
+      <div className="flex flex-col gap-5">
+        {cardsAccompagnement.map((card) => {
+          const data = CardsAccompagnement(card);
+          return (
+            <Card
+              key={data.title}
+              height="auto"
+              borderRadius="28px"
+              borderClass="light-border rounded-[28px]"
+              content={data.content}
+            />
+          );
+        })}
+      </div>
+      <div className="flex flex-col gap-4">
+        {cardsAccompagnementSmall.map((card) => {
+          const data = CardsAccompagnementSmall(card);
+          return (
+            <div key={card.title} className="w-full">
+              {data.content}
+            </div>
+          );
+        })}
+      </div>
+    </section>
   ) : (
     <section className="w-screen">
       <div className="relative">
@@ -100,7 +135,7 @@ export const CardsAccompagnement = ({
     title,
     borderClass: "light-border rounded-[40px]",
     content: (
-      <div className="h-full w-[988px] relative md:p-14 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px] max-h-full">
+      <div className="h-full w-full md:w-[988px] relative md:p-14 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px] max-h-full">
         <div
           className="absolute top-0 left-0 w-full h-full object-cover bg-center bg-no-repeat bg-cover z-0"
           style={{
@@ -180,7 +215,7 @@ export const CardsAccompagnementSmall = ({
 }) => {
   return {
     content: (
-      <div className="border-grey-animed z-10 relative h-[230px] w-[476px] justify-center rounded-[40px] bg-black/90">
+      <div className="border-grey-animed z-10 relative h-[230px] w-full md:w-[476px] justify-center rounded-[40px] bg-black/90">
         <div className="relative flex flex-col gap-4 justify-center py-2 overflow-hidden size-full rounded-[40px] p-12">
           <div className="purple-halo absolute -bottom-100 translate-y-2/3 left-0 w-full h-full z-0" />
           <div className="flex flex-row items-start justify-between">

@@ -1,38 +1,55 @@
 import { useViewport } from "~/utils/hooks/useViewport";
 import { Suspense } from "react";
-import MobileLayout from "~/components/Layout/Mobile";
 import Card from "~/components/Card";
 import "~/styles/tailwind.css";
+import {
+  CardBottomIdentiteVisuelle,
+  CardsIdentiteVisuelle,
+  contentIdentiteVisuelle,
+} from "./TitleCards.helpers";
 
-interface ITitleCardsProps {
-  title: string;
-  rowCards: {
-    height: number;
-    image: string;
-    borderRadius?: string;
-    borderClass?: string;
-    content: React.ReactNode;
-  }[];
-  bottomCard?: {
-    height: number;
-    image: string;
-    borderRadius?: string;
-    borderClass?: string;
-    content: React.ReactNode;
-  };
-}
-
-export default function TitleCards({
-  title,
-  rowCards,
-  bottomCard,
-}: ITitleCardsProps) {
+export default function TitleCards() {
   const isMobile = useViewport();
 
+  const getBorderRadius = (value?: string | number) => {
+    if (typeof value === "number") return `${value}px`;
+    return value;
+  };
+
+  const rowCards = contentIdentiteVisuelle.map((card) =>
+    CardsIdentiteVisuelle(card)
+  );
+
+  const bottomCard = CardBottomIdentiteVisuelle;
+
   return isMobile ? (
-    <MobileLayout>
-      <div>TODO</div>
-    </MobileLayout>
+    <section className="w-full flex flex-col gap-6 items-center">
+      <div className="h-[3px] w-16 holographic-bg rounded-full" />
+      <h2 className="text-center glassy font-jakarta-semi-bold text-[34px] leading-[40px] tracking-[-1px] whitespace-pre-line">
+        {`Reprenez la main\nsur votre\nidentité visuelle !`}
+      </h2>
+      <div className="flex flex-col gap-4 overflow-x-auto pb-2 snap-x">
+        {rowCards.map((card, index) => (
+          <div key={index} className="flex-shrink-0  snap-start">
+            <Card
+              key={index}
+              height={card.height + "px"}
+              borderRadius={getBorderRadius(card.borderRadius)}
+              content={card.content}
+              borderClass={card.borderClass}
+            />
+          </div>
+        ))}
+      </div>
+      {bottomCard ? (
+        <Card
+          height="146px"
+          borderRadius={getBorderRadius(bottomCard.borderRadius)}
+          content={bottomCard.content}
+          borderClass={bottomCard.borderClass}
+        />
+      ) : null}
+    </section>
   ) : (
     <div className="w-screen">
       <div className="absolute left-0 right-0 h-auto z-0 opacity-80 flex flex-row justify-between w-screen">
@@ -58,7 +75,7 @@ export default function TitleCards({
         <div className="flex flex-col items-center w-[988px] justify-center gap-10">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
           <h2 className="glassy font-jakarta-semi-bold text-[56px] text-center leading-[52px] w-[55%] tracking-[-3px] weight-600">
-            {title}
+            Reprenez la main sur votre identité visuelle !
           </h2>
         </div>
         <div className="flex flex-col gap-4">
@@ -67,7 +84,7 @@ export default function TitleCards({
               <Card
                 key={index}
                 height={card.height + "px"}
-                borderRadius={card.borderRadius + "px"}
+                borderRadius={getBorderRadius(card.borderRadius)}
                 content={card.content}
                 borderClass={card.borderClass}
               />
@@ -76,7 +93,7 @@ export default function TitleCards({
           {bottomCard ? (
             <Card
               height={bottomCard.height + "px"}
-              borderRadius={bottomCard.borderRadius + "px"}
+              borderRadius={getBorderRadius(bottomCard.borderRadius)}
               content={bottomCard.content}
               borderClass={bottomCard.borderClass}
             />

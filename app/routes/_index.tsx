@@ -65,7 +65,35 @@ export default function Index() {
       {isLoading && <LoadingBar />}
       {isMobile ? (
         <MobileLayout>
-          <div>TODO</div>
+          <div className="w-full h-fit relative pt-12 flex flex-col gap-16">
+            <FadeInView>
+              <IntroSection />
+            </FadeInView>
+            <FadeInView>
+              <TitleCards />
+            </FadeInView>
+            <FadeInView>
+              <RowTitlePicture />
+            </FadeInView>
+            <FadeInView>
+              <BigTemoignage />
+            </FadeInView>
+            <FadeInView>
+              <CarouselCard />
+            </FadeInView>
+            <FadeInView>
+              <TitleFullWidthCard />
+            </FadeInView>
+            <FadeInView>
+              <TemoignagesCards />
+            </FadeInView>
+            <FadeInView>
+              <HomeProjectCarousel />
+            </FadeInView>
+            <FadeInView>
+              <TitleStepImage />
+            </FadeInView>
+          </div>
         </MobileLayout>
       ) : (
         <Desktoplayout footerType="home">
@@ -76,13 +104,7 @@ export default function Index() {
             </FadeInView>
             {/* //Section 2 */}
             <FadeInView>
-              <TitleCards
-                title="Reprenez la main sur votre identité visuelle !"
-                rowCards={contentIdentiteVisuelle.map((card) =>
-                  CardsIdentiteVisuelle(card)
-                )}
-                bottomCard={CardBottomIdentiteVisuelle}
-              />
+              <TitleCards />
             </FadeInView>
             {/* //Section 3 */}
             <FadeInView>

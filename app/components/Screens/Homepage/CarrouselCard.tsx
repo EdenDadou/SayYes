@@ -1,5 +1,4 @@
 import { useViewport } from "~/utils/hooks/useViewport";
-import MobileLayout from "~/components/Layout/Mobile";
 import Card from "~/components/Card";
 import Arrow from "~/assets/icons/Arrow";
 import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
@@ -36,9 +35,45 @@ export default function CarouselCard() {
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   return isMobile ? (
-    <MobileLayout>
-      <div>TODO</div>
-    </MobileLayout>
+    <section className="w-full px-5 flex flex-col  gap-6">
+      <div className="flex flex-col items-center gap-6">
+        <div className="h-[3px] w-16 holographic-bg rounded-full" />
+        <h2 className="font-jakarta-semi-bold text-[30px] leading-[36px] text-center glassy tracking-[-1px] whitespace-pre-line">
+          {`Nous designons tous vos\nsupports de communication !`}
+        </h2>
+      </div>
+      <div className="flex flex-row items-center justify-center gap-2 w-full text-white font-jakarta-semibold text-[16px] flex-wrap">
+        <p>Branding</p>
+        <Arrow className="w-[18px]" />
+        <p>Print</p>
+        <Arrow className="w-[18px]" />
+        <p>Digital</p>
+        <Arrow className="w-[18px]" />
+        <p>Vidéo</p>
+        <Arrow className="w-[18px]" />
+        <p>Facilitation graphique</p>
+      </div>
+      <div className="flex gap-4 overflow-x-auto pb-2">
+        {supports.map((card, index) => {
+          const data = CardsSupport(card);
+          return (
+            <div
+              key={`card_${index}`}
+              className="flex-shrink-0 w-[260px]"
+              style={{ scrollSnapAlign: "start" }}
+            >
+              <Card
+                key={data.name}
+                height="260px"
+                borderRadius="28px"
+                content={data.content}
+                borderClass={data.borderClass}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </section>
   ) : (
     <section ref={containerRef} className="relative w-screen">
       {/* Conteneur avec hauteur pour créer la zone de scroll */}
@@ -109,7 +144,7 @@ export const CardsSupport = ({
     name,
     borderClass: "light-border rounded-[40px]",
     content: (
-      <div className="h-full w-[422px] relative md:p-8 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
+      <div className="h-full w-full md:w-[422px] relative md:p-8 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
         <div
           className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[34px]"
           style={{
