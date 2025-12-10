@@ -99,7 +99,7 @@ section {
   -webkit-backdrop-filter: blur(10px);
   z-index: 50;
   position: sticky;
-  top: 35px;
+  top: 20px;
   left: 0;
   right: 0;
 }
@@ -114,7 +114,6 @@ section {
   will-change: transform;
   backface-visibility: hidden;
 }
-
 
 /* Réduire les animations sur mobile pour de meilleures performances */
 @media (max-width: 768px) {

@@ -6,6 +6,7 @@ import Footer from "~/components/Footer";
 import "~/styles/tailwind.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation } from "@remix-run/react";
+import { ModalContactProvider } from "~/contexts/ModalContactContext";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,29 +30,32 @@ const Desktoplayout = memo(function Desktoplayout({
   const location = useLocation();
 
   const closeModal = useCallback(() => setIsOpenModalContact(false), []);
+  const openModal = useCallback(() => setIsOpenModalContact(true), []);
 
   return (
-    <main className="w-full h-fit relative flex flex-col">
-      <ModalContact isOpen={isOpenModalContact} close={closeModal} />
-      <Header setIsOpenModalContact={setIsOpenModalContact} />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={location.pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
-      {footer ? (
-        <Footer
-          setIsOpenModalContact={setIsOpenModalContact}
-          footerType={footerType}
-        />
-      ) : null}
-    </main>
+    <ModalContactProvider openModalContact={openModal}>
+      <main className="w-full h-fit relative flex flex-col">
+        <ModalContact isOpen={isOpenModalContact} close={closeModal} />
+        <Header setIsOpenModalContact={setIsOpenModalContact} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+        {footer ? (
+          <Footer
+            setIsOpenModalContact={setIsOpenModalContact}
+            footerType={footerType}
+          />
+        ) : null}
+      </main>
+    </ModalContactProvider>
   );
 });
 

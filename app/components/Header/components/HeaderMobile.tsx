@@ -41,7 +41,7 @@ const HeaderMobile = ({
       initial={{ y: 0, opacity: 1 }}
       animate={{
         y: isVisible ? 0 : -130,
-        opacity: isVisible ? 1 : 0
+        opacity: isVisible ? 1 : 0,
       }}
       transition={{
         type: "tween",

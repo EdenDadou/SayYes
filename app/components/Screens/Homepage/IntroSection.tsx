@@ -11,6 +11,9 @@ import Card from "~/components/Card";
 import { useRef, useState } from "react";
 import Play from "~/assets/icons/Play";
 import Pause from "~/assets/icons/Pause";
+import { useModalContact } from "~/contexts/ModalContactContext";
+import GridBg from "~/assets/icons/GridBg";
+import SvgLogoAllClients from "~/components/Sections/Section-2/components/assets/LogoAllClients";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -25,6 +28,7 @@ export default function IntroSection() {
   const isMobile = useViewport();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { openModalContact } = useModalContact();
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -40,14 +44,15 @@ export default function IntroSection() {
   return isMobile ? (
     <section className="relative w-full flex flex-col gap-10 px-5 pb-4 text-white">
       <img
-        src="/images/homepage/bg-section-1.png"
+        src="/images/homepage/bg-halo-mobile.png"
         alt="background"
-        className="absolute -top-[88px] left-0 w-full h-auto z-0 opacity-80"
+        className="absolute -top-36 left-0 w-full h-auto z-0 opacity-80"
       />
-      <div className="relative z-10 flex flex-col items-center gap-6">
+      <GridBg className="absolute -top-36 w-full left-0 right-0 h-auto z-0 opacity-80" />
+      <div className="relative z-10 flex flex-col items-center gap-7">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
-        <TitleHomepage width={320} />
-        <div className="flex flex-col gap-2 text-[18px] leading-[22px] font-jakarta-semibold items-center">
+        <TitleHomepage width="100%" />
+        <div className="flex flex-col gap-1 text-[18px] leading-[22px] font-jakarta-semibold items-center">
           <div className="flex flex-row items-center gap-2">
             <Arrow className="w-4" />
             <p>Branding</p>
@@ -74,7 +79,21 @@ export default function IntroSection() {
           label="Démarrer un projet"
           leftIcon={<ChatBuble color="white" className="w-6 h-6" />}
           textSize="S"
+          onClick={openModalContact}
         />
+      </div>
+
+      <div className="relative filter w-full md:h-[100px] bottom-0 left-0 right-0 flex items-center overflow-hidden">
+        {/* Overlay sombre à gauche */}
+        <div className="absolute left-0 top-0 h-full w-[20px] bg-gradient-to-r from-[rgba(10,10,10,1)] to-transparent pointer-events-none z-10"></div>
+
+        {/* Dégradé sombre à droite */}
+        <div className="absolute right-0 top-0 h-full w-[20px] bg-gradient-to-l from-[rgba(10,10,10,1)] to-transparent pointer-events-none z-10"></div>
+
+        <div className="inline-flex animate-scroll whitespace-nowrap scroll-right gap-10 z-24">
+          <SvgLogoAllClients className="inline-block" />
+          <SvgLogoAllClients className="inline-block" />
+        </div>
       </div>
 
       <Card
@@ -162,6 +181,7 @@ export default function IntroSection() {
             type="border"
             label="Démarrer un projet"
             leftIcon={<ChatBuble color="white" className="w-6 h-6" />}
+            onClick={openModalContact}
           />
         </div>
         <Card

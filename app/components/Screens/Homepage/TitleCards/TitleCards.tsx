@@ -1,12 +1,55 @@
 import { useViewport } from "~/utils/hooks/useViewport";
-import { Suspense } from "react";
+import { Suspense, useRef } from "react";
 import Card from "~/components/Card";
+import ParallaxCard from "~/components/Card/ParallaxCard";
+import { useScroll } from "framer-motion";
 import "~/styles/tailwind.css";
 import {
   CardBottomIdentiteVisuelle,
   CardsIdentiteVisuelle,
   contentIdentiteVisuelle,
 } from "./TitleCards.helpers";
+
+// Composant Cards parallax pour mobile
+function TitleCardsParallaxMobile() {
+  const container = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  const rowCards = contentIdentiteVisuelle.map((card) =>
+    CardsIdentiteVisuelle({ ...card, isMobile: true })
+  );
+  const bottomCard = CardBottomIdentiteVisuelle;
+  const allCards = [...rowCards, bottomCard];
+
+  return (
+    <div ref={container} className="relative w-full px-6">
+      {allCards.map((card, index) => {
+        const targetScale =
+          index === allCards.length - 1
+            ? 1
+            : 1 - (allCards.length - index) * 0.03;
+        return (
+          <ParallaxCard
+            key={index}
+            index={index}
+            totalCards={allCards.length}
+            content={card.content}
+            borderClass={card.borderClass}
+            progress={scrollYProgress}
+            targetScale={targetScale}
+            isMobile
+            height={
+              index === allCards.length - 1 ? "146px" : `${card.height}px`
+            }
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 export default function TitleCards() {
   const isMobile = useViewport();
@@ -17,38 +60,33 @@ export default function TitleCards() {
   };
 
   const rowCards = contentIdentiteVisuelle.map((card) =>
-    CardsIdentiteVisuelle(card)
+    CardsIdentiteVisuelle({ ...card, isMobile: false })
   );
 
   const bottomCard = CardBottomIdentiteVisuelle;
 
   return isMobile ? (
-    <section className="w-full flex flex-col gap-6 items-center">
-      <div className="h-[3px] w-16 holographic-bg rounded-full" />
-      <h2 className="text-center glassy font-jakarta-semi-bold text-[34px] leading-[40px] tracking-[-1px] whitespace-pre-line">
+    <section className="w-full flex flex-col gap-6 items-center relative">
+      <div className="absolute inset-0 z-0 opacity-80 pointer-events-none overflow-hidden">
+        <div className="sticky top-0 h-screen w-full">
+          <div className="absolute left-1/2 -translate-x-1/2 w-[200%] h-full">
+            <Suspense fallback={<div />}>
+              <img
+                src="./images/homepage/bg-halo.png"
+                alt="background"
+                className="absolute right-0 h-auto w-full rotate-180 top-0"
+              />
+            </Suspense>
+          </div>
+        </div>
+      </div>
+      <div className="relative z-10 h-[3px] w-16 holographic-bg rounded-full" />
+      <h2 className="relative z-10 text-center glassy font-jakarta-semi-bold text-[34px] leading-[40px] tracking-[-1px] whitespace-pre-line">
         {`Reprenez la main\nsur votre\nidentité visuelle !`}
       </h2>
-      <div className="flex flex-col gap-4 overflow-x-auto pb-2 snap-x">
-        {rowCards.map((card, index) => (
-          <div key={index} className="flex-shrink-0  snap-start">
-            <Card
-              key={index}
-              height={card.height + "px"}
-              borderRadius={getBorderRadius(card.borderRadius)}
-              content={card.content}
-              borderClass={card.borderClass}
-            />
-          </div>
-        ))}
+      <div className="relative z-10 w-full">
+        <TitleCardsParallaxMobile />
       </div>
-      {bottomCard ? (
-        <Card
-          height="146px"
-          borderRadius={getBorderRadius(bottomCard.borderRadius)}
-          content={bottomCard.content}
-          borderClass={bottomCard.borderClass}
-        />
-      ) : null}
     </section>
   ) : (
     <div className="w-screen">

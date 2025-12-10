@@ -5,12 +5,12 @@ import MobileLayout from "~/components/Layout/Mobile";
 import Desktoplayout from "~/components/Layout/Desktop";
 import IntroSection from "~/components/Screens/Homepage/IntroSection";
 import "~/styles/tailwind.css";
-import TitleCards from "~/components/Screens/Homepage/TitleCards";
+import TitleCards from "~/components/Screens/Homepage/TitleCards/TitleCards";
 import {
   CardBottomIdentiteVisuelle,
   CardsIdentiteVisuelle,
   contentIdentiteVisuelle,
-} from "~/components/Screens/Homepage/TitleCards.helpers";
+} from "~/components/Screens/Homepage/TitleCards/TitleCards.helpers";
 import RowTitlePicture from "~/components/Screens/Homepage/RowTitlePicture";
 import CarouselCard from "~/components/Screens/Homepage/CarrouselCard";
 import LoadingBar from "~/components/LoadingBar";
@@ -65,7 +65,7 @@ export default function Index() {
       {isLoading && <LoadingBar />}
       {isMobile ? (
         <MobileLayout>
-          <div className="w-full h-fit relative pt-12 flex flex-col gap-16">
+          <div className="w-full h-fit relative flex flex-col gap-16">
             <FadeInView>
               <IntroSection />
             </FadeInView>
