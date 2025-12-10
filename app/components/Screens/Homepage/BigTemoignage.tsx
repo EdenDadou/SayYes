@@ -15,50 +15,66 @@ const temoignageTextMobile = `"L'expérience se résume ainsi :\nOn a envie de r
 export default function BigTemoignage() {
   const isMobile = useViewport();
   const imagesContainerRef = useRef<HTMLDivElement>(null);
+  const imagesContainerRefMobile = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: imagesContainerRef,
     offset: ["start end", "end start"], // Commence quand le bas de l'élément atteint le viewport, finit quand le haut sort
   });
+  const { scrollYProgress: scrollYProgressMobile } = useScroll({
+    target: imagesContainerRefMobile,
+    offset: ["start end", "end start"], // Commence quand le bas de l'élément atteint le viewport, finit quand le haut sort
+  });
 
-  // Différentes vitesses de parallax pour chaque image
-  const y1 = useTransform(scrollYProgress, [0.3, 1], [0, -120]);
-  const y2 = useTransform(scrollYProgress, [0.3, 1], [0, -200]);
+  // Différentes vitesses de parallax pour chaque image - effet accentué
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -250]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -400]);
+  const y1Mobile = useTransform(scrollYProgressMobile, [0, 1], [50, -350]);
+  const y2Mobile = useTransform(scrollYProgressMobile, [0, 1], [0, -450]);
 
   return isMobile ? (
-    <section className="w-full relative px-5 py-16 flex flex-col items-center gap-10">
-      <Suspense fallback={<div className="absolute right-0 h-auto z-0" />}>
-        <BackgroundTemoignage className="absolute right-0 h-auto z-0 opacity-50" />
+    <section className="w-full relative px-5 pt-48 flex flex-col items-center gap-10">
+      <Suspense
+        fallback={<div className="absolute right-0 h-auto z-0 top-0" />}
+      >
+        <img
+          src="./images/homepage/bg-temoignage-mobile.png"
+          alt="background"
+          className="absolute right-0 h-auto z-0 opacity-90 top-0 "
+        />
       </Suspense>
-      <div className="relative z-10 flex flex-col items-center gap-6 text-center">
+      <div className="relative z-10 flex flex-col items-center h-fit gap-2 text-center">
         <img
           src="./images/homepage/logo-generali.png"
           alt="logo Generali"
-          className="w-14"
+          className="w-12"
         />
         <AnimatedText
           text={temoignageTextMobile}
           className="text-center font-jakarta-sans text-[18px] leading-[36px]"
         />
-        <p className="text-[16px] leading-[24px] font-jakarta">
-          <span className="font-jakarta-semi-bold mb-2">Franck Dauger</span>
+        <p className="text-[16px] leading-[24px] font-jakarta mt-8">
+          <span className="font-jakarta-semi-bold mb-2 text-[16px]">
+            Franck Dauger
+          </span>
           <br />
-          Manager design d'expérience
+          <span className="text-[14px] font-jakarta">
+            Manager design d'expérience
+          </span>
         </p>
-
-        <div className="relative mt-6 w-full flex justify-center">
-          <div className="relative w-56 h-56">
-            <motion.img
-              src="./images/homepage/icone-logiciel-1.png"
-              style={{ y: y1 }}
-              className="relative z-0 top-6 w-full mx-auto"
-            />
-            <motion.img
-              src="./images/homepage/icone-logiciel-2.png"
-              style={{ y: y2 }}
-              className="absolute top-0 z-10 w-full"
-            />
-          </div>
+      </div>
+      <div className="relative w-full flex justify-center mt-20">
+        <div className="relative w-screen h-56" ref={imagesContainerRefMobile}>
+          <motion.img
+            src="images/homepage/icone-logiciel-mobile-1.png"
+            style={{ y: y1Mobile }}
+            className="relative z-0 top-6 w-[60%] mx-auto"
+          />
+          <motion.img
+            src="images/homepage/icone-logiciel-mobile-2.png"
+            style={{ y: y2Mobile }}
+            className="absolute top-0 z-10 w-full"
+          />
         </div>
       </div>
     </section>

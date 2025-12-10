@@ -1,6 +1,5 @@
 import { useViewport } from "~/utils/hooks/useViewport";
 import Arrow from "~/assets/icons/Arrow";
-import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import "~/styles/tailwind.css";
 
 export default function RowTitlePicture() {
@@ -13,7 +12,7 @@ export default function RowTitlePicture() {
         alt="background"
         className="absolute -top-10 left-0 w-full h-auto z-0 opacity-70 rotate-180"
       />
-      <div className="relative z-10 flex flex-col items-center gap-6">
+      <div className="relative z-10 flex flex-col items-center gap-12">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
         <h2 className="glassy font-jakarta-semi-bold text-[34px] leading-[38px] tracking-[-1px] whitespace-pre-line text-center">
           {`15 ans\n d'expertise\n créative !`}

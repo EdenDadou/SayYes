@@ -25,7 +25,7 @@ function TitleCardsParallaxMobile() {
   const allCards = [...rowCards, bottomCard];
 
   return (
-    <div ref={container} className="relative w-full px-6">
+    <div ref={container} className="relative w-full px-5">
       {allCards.map((card, index) => {
         const targetScale =
           index === allCards.length - 1
@@ -66,28 +66,24 @@ export default function TitleCards() {
   const bottomCard = CardBottomIdentiteVisuelle;
 
   return isMobile ? (
-    <section className="w-full flex flex-col gap-6 items-center relative">
-      <div className="absolute inset-0 z-0 opacity-80 pointer-events-none overflow-hidden">
-        <div className="sticky top-0 h-screen w-full">
-          <div className="absolute left-1/2 -translate-x-1/2 w-[200%] h-full">
-            <Suspense fallback={<div />}>
-              <img
-                src="./images/homepage/bg-halo.png"
-                alt="background"
-                className="absolute right-0 h-auto w-full rotate-180 top-0"
-              />
-            </Suspense>
-          </div>
+    <div className="relative w-full">
+      <div className="sticky top-0 w-full h-screen z-0 pointer-events-none">
+        <div className="-translate-x-1/2 w-[200%] h-full">
+          <img
+            src="./images/homepage/bg-halo.png"
+            alt="background"
+            className=" h-auto w-full rotate-180"
+          />
         </div>
       </div>
-      <div className="relative z-10 h-[3px] w-16 holographic-bg rounded-full" />
-      <h2 className="relative z-10 text-center glassy font-jakarta-semi-bold text-[34px] leading-[40px] tracking-[-1px] whitespace-pre-line">
-        {`Reprenez la main\nsur votre\nidentité visuelle !`}
-      </h2>
-      <div className="relative z-10 w-full">
+      <section className="relative w-full flex flex-col gap-6 items-center z-10 -mt-[90vh]">
+        <div className="relative z-10 h-[3px] w-16 holographic-bg rounded-full" />
+        <h2 className="relative z-10 text-center glassy font-jakarta-semi-bold text-[34px] leading-[40px] tracking-[-1px] whitespace-pre-line">
+          {`Reprenez la main\nsur votre\nidentité visuelle !`}
+        </h2>
         <TitleCardsParallaxMobile />
-      </div>
-    </section>
+      </section>
+    </div>
   ) : (
     <div className="w-screen">
       <div className="absolute left-0 right-0 h-auto z-0 opacity-80 flex flex-row justify-between w-screen">

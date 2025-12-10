@@ -17,7 +17,7 @@ function AccompagnementCardsParallax() {
   return (
     <div ref={container} className="relative -mt-20">
       {cardsAccompagnement.map((card, index) => {
-        const data = CardsAccompagnement(card);
+        const data = CardsAccompagnement({ ...card, isMobile: false });
         const targetScale =
           index === cardsAccompagnement.length - 1
             ? 1
@@ -44,26 +44,28 @@ export default function TitleFullWidthCard() {
   const isMobile = useViewport();
 
   return isMobile ? (
-    <section className="w-full px-5 flex flex-col gap-8">
+    <section className="w-full pt-20 flex flex-col items-center justify-center gap-6">
       <div className="h-[3px] w-16 holographic-bg rounded-full" />
-      <h2 className="font-jakarta-semi-bold text-[30px] leading-[36px] text-left glassy tracking-[-1px]">
+      <h2 className="font-jakarta-semi-bold text-[30px] leading-[36px] text-center glassy tracking-[-1px]">
         Accompagnement sur-mesure
       </h2>
-      <div className="flex flex-row items-center gap-2 w-full text-white font-jakarta-semibold text-[16px] flex-wrap">
+      <div className="flex flex-col items-center gap-2 w-full text-white font-jakarta-semibold text-[16px] ">
         <p>En co-conception :</p>
-        <p>Simple</p>
-        <Arrow className="w-[18px]" />
-        <p>Efficace</p>
-        <Arrow className="w-[18px]" />
-        <p>Prouvée</p>
+        <div className="flex flex-row items-center gap-2">
+          <p>Simple</p>
+          <Arrow className="w-[18px]" />
+          <p>Efficace</p>
+          <Arrow className="w-[18px]" />
+          <p>Prouvée</p>
+        </div>
       </div>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 w-full px-4">
         {cardsAccompagnement.map((card) => {
-          const data = CardsAccompagnement(card);
+          const data = CardsAccompagnement({ ...card, isMobile: true });
           return (
             <Card
               key={data.title}
-              height="auto"
+              height="575px"
               borderRadius="28px"
               borderClass="light-border rounded-[28px]"
               content={data.content}
@@ -122,12 +124,16 @@ export const CardsAccompagnement = ({
   icon,
   title,
   bgImage,
+  bgImageMobile,
   liste,
+  isMobile,
 }: {
   icon: string;
   title: string;
   bgImage: string;
+  bgImageMobile: string;
   liste: string[];
+  isMobile: boolean;
 }) => {
   return {
     height: 490,
@@ -135,19 +141,20 @@ export const CardsAccompagnement = ({
     title,
     borderClass: "light-border rounded-[40px]",
     content: (
-      <div className="h-full w-full md:w-[988px] relative md:p-14 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px] max-h-full">
+      <div className="h-full w-full md:w-[988px] relative md:p-14 p-6 cursor-pointer shadow-lg overflow-hidden rounded-[40px] max-h-full flex flex-col items-center justify-end">
         <div
-          className="absolute top-0 left-0 w-full h-full object-cover bg-center bg-no-repeat bg-cover z-0"
+          className="absolute top-0 left-0 w-full h-full bg-center bg-no-repeat z-0"
           style={{
-            backgroundImage: `url("${bgImage}")`,
+            backgroundImage: `url("${isMobile ? bgImageMobile : bgImage}")`,
+            backgroundSize: isMobile ? "contain" : "cover",
           }}
         />
-        <div className="border-grey-animed z-10 relative h-full w-[335px] justify-center rounded-[40px] bg-black/90 max-h-full">
-          <div className="relative flex flex-col gap-4 justify-center py-2 overflow-hidden size-full rounded-[40px] p-12 max-h-full">
+        <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center rounded-[40px] bg-black/90 max-h-full">
+          <div className="relative flex flex-col md:gap-4 gap-2 justify-center py-2 overflow-hidden size-full rounded-[40px] md:p-12 p-6 max-h-full">
             <div className="purple-halo absolute -bottom-100 translate-y-2/3 left-0 w-full h-full z-0" />
-            <div className="flex flex-col gap-4 z-10">
-              <div className="p-4 metal w-fit h-fit">
-                <img src={icon} alt={title} className="h-8" />
+            <div className="flex flex-col md:gap-4 gap-2 z-10">
+              <div className="md:p-4 p-3 metal w-fit h-fit">
+                <img src={icon} alt={title} className="md:h-8 h-5" />
               </div>
               <p className="glassy font-jakarta-semi-bold text-[39px] leading-[61px] tracking-[-1px] whitespace-pre-line">
                 {title}
@@ -156,7 +163,7 @@ export const CardsAccompagnement = ({
                 {liste.map((item) => (
                   <li key={item} className="flex flex-row items-center gap-2">
                     <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF]" />
-                    <p className="text-white font-jakarta text-[16px] leading-[18px] tracking-[-1px] whitespace-pre-line">
+                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[18px] md:tracking-[-1px] tracking-[-0.5px] whitespace-pre-line">
                       {item}
                     </p>
                   </li>
@@ -175,6 +182,7 @@ const cardsAccompagnement = [
     icon: "images/homepage/card-accompagnement/ampoule.png",
     title: "On conseille",
     bgImage: "images/homepage/card-accompagnement/bg-1.png",
+    bgImageMobile: "images/homepage/card-accompagnement/bg-1-mobile.png",
     liste: [
       "Brief stratégique et audit de l’existant",
       "Benchmark concurrentiel",
@@ -185,6 +193,7 @@ const cardsAccompagnement = [
     icon: "images/homepage/card-accompagnement/pen.png",
     title: "On Design",
     bgImage: "images/homepage/card-accompagnement/bg-2.png",
+    bgImageMobile: "images/homepage/card-accompagnement/bg-2-mobile.png",
     liste: [
       "Moodboard et ateliers",
       "3 pistes créatives uniques",
@@ -196,6 +205,7 @@ const cardsAccompagnement = [
     icon: "images/homepage/card-accompagnement/setting.png",
     title: "On Équipe",
     bgImage: "images/homepage/card-accompagnement/bg-3.png",
+    bgImageMobile: "images/homepage/card-accompagnement/bg-3-mobile.png",
     liste: [
       "Livraison fichiers sources et guide d’utilisation",
       "Formation des équipes",
