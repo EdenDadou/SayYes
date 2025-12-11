@@ -14,6 +14,14 @@ const BackgroundProject3 = memo(function BackgroundProject3(
 ) {
   const svgProps = props;
 
+  // Fonction helper pour créer les styles de filtre avec support mobile
+  const getBlurStyle = (blurValue: number): CSSProperties => ({
+    filter: `blur(${blurValue}px)`,
+    WebkitFilter: `blur(${blurValue}px)`,
+    willChange: "filter",
+    transform: "translateZ(0)",
+  });
+
   // blurScale = 1 pour un rendu identique sur desktop et mobile
   const blurScale = 1;
 
@@ -29,7 +37,7 @@ const BackgroundProject3 = memo(function BackgroundProject3(
     >
       <g clipPath="url(#bg3-clip)">
         <rect width="1280" height="1604" fill="#080809" />
-        <g style={{ filter: `blur(${187.04 * blurScale}px)` }}>
+        <g style={getBlurStyle(187.04 * blurScale)}>
           <path
             d="M-968.671 -1.85459C-926.162 -164.435 -633.393 238.77 643.972 560.54C1693.12 840.55 2450.71 697.49 2408.2 860.07C2365.69 1022.65 1692.19 1367.59 527.679 1072.87C-636.83 778.159 -1011.18 160.726 -968.671 -1.85459Z"
             fill={svgProps.fill || "#1255CB"}

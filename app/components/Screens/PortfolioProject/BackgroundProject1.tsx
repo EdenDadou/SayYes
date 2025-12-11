@@ -31,6 +31,14 @@ const BackgroundProject1 = memo(function BackgroundProject1(
     return `#${toHex(newR)}${toHex(newG)}${toHex(newB)}`;
   };
 
+  // Fonction helper pour créer les styles de filtre avec support mobile
+  const getBlurStyle = (blurValue: number): CSSProperties => ({
+    filter: `blur(${blurValue}px)`,
+    WebkitFilter: `blur(${blurValue}px)`,
+    willChange: "filter",
+    transform: "translateZ(0)",
+  });
+
   const baseColor = svgProps.fill || "#1255CB";
   const darkerColor = getDarkerColor(baseColor);
   const blurScale = 1;
@@ -60,10 +68,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           >
             <path fill="#080809" d="M.188 0h1280v704H.188z" />
           </mask>
-          <g
-            mask="url(#bg1-c)"
-            style={{ filter: `blur(${274.777 * blurScale}px)` }}
-          >
+          <g mask="url(#bg1-c)" style={getBlurStyle(274.777 * blurScale)}>
             <ellipse
               cx={152.646}
               cy={781.921}
@@ -74,26 +79,26 @@ const BackgroundProject1 = memo(function BackgroundProject1(
             />
           </g>
         </g>
-        <g style={{ filter: `blur(${43.65 * blurScale}px)` }}>
+        <g style={getBlurStyle(43.65 * blurScale)}>
           <path
             fill={darkerColor}
             d="M-226.515 218.584c25.703-198.081 165.722 225.868 811.554 387.791 530.061 151.46 921.211-144.56 895.511 53.521S1101.82 1376.83 513.081 1227.6-252.218 416.666-226.515 218.584"
           />
         </g>
-        <g style={{ filter: `blur(${68.65 * blurScale}px)` }}>
+        <g style={getBlurStyle(68.65 * blurScale)}>
           <path
             fill={svgProps.fill || "#1255CB"}
             d="M-227.445 310.023c27.367-210.9 164.227 237.387 810.074 399.198 529.921 152.532 924.281-168.247 896.921 42.654-27.37 210.9-385.34 767.865-974.078 618.635-588.74-149.23-760.283-849.587-732.917-1060.487"
           />
         </g>
-        <g style={{ filter: `blur(${43.65 * blurScale}px)` }}>
+        <g style={getBlurStyle(43.65 * blurScale)}>
           <path
             fill="#fff"
             d="M-382.81 885.501c12.557-270.696 393.198-114.418 905.36-71.661 512.16 42.756 961.9-44.201 949.34 226.49-12.55 270.7-437.92 455.48-950.085 412.73C9.642 1410.3-395.368 1156.2-382.81 885.501"
           />
         </g>
       </g>
-      <g style={{ filter: `blur(${54.917 * blurScale}px)` }}>
+      <g style={getBlurStyle(54.917 * blurScale)}>
         <ellipse
           cx={732.708}
           cy={190.536}
@@ -103,7 +108,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           transform="matrix(-.81582 .5783 .60034 .79975 1540.98 -633.949)"
         />
       </g>
-      <g style={{ filter: `blur(${19.221 * blurScale}px)` }}>
+      <g style={getBlurStyle(19.221 * blurScale)}>
         <ellipse
           cx={706.052}
           cy={41.396}
@@ -113,7 +118,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           transform="matrix(-.81582 .5783 .60034 .79975 1835.73 -660.531)"
         />
       </g>
-      <g style={{ filter: `blur(${15 * blurScale}px)` }}>
+      <g style={getBlurStyle(15 * blurScale)}>
         <ellipse
           cx={729.285}
           cy={191.517}
@@ -123,7 +128,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           transform="matrix(-.72914 .68437 .71336 .7008 1585.5 -693.998)"
         />
       </g>
-      <g style={{ filter: `blur(${19.221 * blurScale}px)` }}>
+      <g style={getBlurStyle(19.221 * blurScale)}>
         <ellipse
           cx={702.752}
           cy={24.468}

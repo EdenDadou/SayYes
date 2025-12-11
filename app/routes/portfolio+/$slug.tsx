@@ -64,7 +64,9 @@ export default function PortfolioSlug() {
       // Stage 2: hero title après 300ms
       timers.push(setTimeout(() => setLoadStage(2), 300));
       // Stage 3: photo main après 500ms (le stage 4 sera déclenché par onImageLoad)
-      timers.push(setTimeout(() => setLoadStage((prev) => Math.max(prev, 3)), 500));
+      timers.push(
+        setTimeout(() => setLoadStage((prev) => Math.max(prev, 3)), 500)
+      );
       // Fallback: si l'image prend trop de temps, passer au stage 4 après 2s
       timers.push(setTimeout(() => setLoadStage(4), 2000));
 
@@ -112,10 +114,7 @@ export default function PortfolioSlug() {
     <>
       {isLoading && <LoadingBar />}
       {isMobile ? (
-        <PortfolioProjectMobile
-          portfolio={portfolio}
-          allPortfolios={allPortfolios as PortfolioData[]}
-        />
+        <PortfolioProjectMobile portfolio={portfolio} />
       ) : (
         <Desktoplayout>
           {/* Fond - Stage 1 */}
