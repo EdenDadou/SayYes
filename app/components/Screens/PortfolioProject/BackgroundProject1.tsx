@@ -52,7 +52,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       viewBox="0 0 1280 1044"
       aria-hidden="true"
       preserveAspectRatio="xMidYMid slice"
-      style={{ ...gpuOptimizedStyle, ...svgProps.style }}
+      style={{ ...svgProps.style }}
       {...svgProps}
     >
       <g clipPath="url(#bg1-a)">
