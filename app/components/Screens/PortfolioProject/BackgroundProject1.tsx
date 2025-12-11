@@ -64,9 +64,9 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
-      <g clipPath="url(#bg1-a)">
+      <g>
         <path fill="#080809" d="M0 0h1280v1044H0z" />
-        <g clipPath="url(#bg1-b)">
+        <g>
           <path fill="#080809" d="M.188 0h1280v729H.188z" />
           <mask
             id="bg1-c"
