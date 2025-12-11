@@ -65,31 +65,16 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       {...svgProps}
     >
       <g>
-        <path fill="#080809" d="M0 0h1280v1044H0z" />
-        <g>
-          <path fill="#080809" d="M.188 0h1280v729H.188z" />
-          <mask
-            id="bg1-c"
-            width={1281}
-            height={704}
-            x={0}
-            y={0}
-            maskUnits="userSpaceOnUse"
-            style={{ maskType: "alpha" }}
-          >
-            <path fill="#080809" d="M.188 0h1280v704H.188z" />
-          </mask>
-          <g mask="url(#bg1-c)" filter={isMobile ? "url(#bg1-d)" : undefined}>
-            <ellipse
-              cx={152.646}
-              cy={781.921}
-              fill={svgProps.fill || "#1255CB"}
-              rx={152.646}
-              ry={781.921}
-              transform="matrix(-.52678 .85 .7861 .61811 -356.828 -9.07)"
-              style={!isMobile ? blur(274.777) : undefined}
-            />
-          </g>
+        <g mask="url(#bg1-c)" filter={isMobile ? "url(#bg1-d)" : undefined}>
+          <ellipse
+            cx={152.646}
+            cy={781.921}
+            fill={svgProps.fill || "#1255CB"}
+            rx={152.646}
+            ry={781.921}
+            transform="matrix(-.52678 .85 .7861 .61811 -356.828 -9.07)"
+            style={!isMobile ? blur(274.777) : undefined}
+          />
         </g>
         <g
           filter={isMobile ? "url(#bg1-e)" : undefined}
