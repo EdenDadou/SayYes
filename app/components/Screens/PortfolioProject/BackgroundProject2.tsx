@@ -14,12 +14,14 @@ const BackgroundProject2 = memo(function BackgroundProject2(
 ) {
   const svgProps = props;
 
-  // Fonction helper pour créer les styles de filtre avec support mobile
+  // Fonction helper pour créer les styles de filtre avec support mobile optimisé
   const getBlurStyle = (blurValue: number): CSSProperties => ({
     filter: `blur(${blurValue}px)`,
     WebkitFilter: `blur(${blurValue}px)`,
     willChange: "filter",
     transform: "translateZ(0)",
+    WebkitTransform: "translateZ(0)",
+    isolation: "isolate" as const,
   });
 
   // blurScale = 1 pour un rendu identique sur desktop et mobile
@@ -37,20 +39,25 @@ const BackgroundProject2 = memo(function BackgroundProject2(
       {/* Rectangle de fond blanc */}
       <rect width="1280" height="1044" fill="white" />
       <g clipPath="url(#bg2-clip)">
-        <g style={getBlurStyle(43.65 * blurScale)}>
+        <g>
           <path
             d="M-226.516 218.585C-200.813 20.5032 -60.7942 444.453 585.038 606.375C1115.1 757.835 1506.25 461.815 1480.55 659.897C1454.84 857.978 1101.82 1376.83 513.08 1227.6C-75.6594 1078.37 -252.219 416.666 -226.516 218.585Z"
             fill={svgProps.fill || "#1255CB"}
+            style={getBlurStyle(43.65 * blurScale)}
           />
         </g>
-        <g style={getBlurStyle(68.65 * blurScale)}>
+        <g>
           {/* Ce path hérite fill="white" du SVG parent */}
-          <path d="M-227.446 310.023C-200.079 99.1226 -63.2192 547.411 582.628 709.222C1112.55 861.753 1506.91 540.975 1479.55 751.875C1452.18 962.775 1094.21 1519.74 505.471 1370.51C-83.2688 1221.28 -254.812 520.923 -227.446 310.023Z" />
+          <path
+            d="M-227.446 310.023C-200.079 99.1226 -63.2192 547.411 582.628 709.222C1112.55 861.753 1506.91 540.975 1479.55 751.875C1452.18 962.775 1094.21 1519.74 505.471 1370.51C-83.2688 1221.28 -254.812 520.923 -227.446 310.023Z"
+            style={getBlurStyle(68.65 * blurScale)}
+          />
         </g>
-        <g style={getBlurStyle(43.65 * blurScale)}>
+        <g>
           <path
             d="M-382.811 885.501C-370.254 614.806 10.3866 771.084 522.549 813.84C1034.71 856.596 1484.45 769.64 1471.89 1040.34C1459.33 1311.03 1033.97 1495.81 521.804 1453.06C9.64139 1410.3 -395.369 1156.2 -382.811 885.501Z"
             fill="black"
+            style={getBlurStyle(43.65 * blurScale)}
           />
         </g>
       </g>
