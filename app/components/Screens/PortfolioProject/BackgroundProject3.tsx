@@ -9,7 +9,9 @@ const gpuOptimizedStyle: CSSProperties = {
   pointerEvents: "none",
 };
 
-const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGSVGElement>) {
+const BackgroundProject3 = memo(function BackgroundProject3(
+  props: SVGProps<SVGSVGElement>
+) {
   const svgProps = props;
 
   // blurScale = 1 pour un rendu identique sur desktop et mobile
@@ -27,7 +29,7 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGS
     >
       <g clipPath="url(#bg3-clip)">
         <rect width="1280" height="1604" fill="#080809" />
-        <g filter="url(#bg3-filter)">
+        <g style={{ filter: `blur(${187.04 * blurScale}px)` }}>
           <path
             d="M-968.671 -1.85459C-926.162 -164.435 -633.393 238.77 643.972 560.54C1693.12 840.55 2450.71 697.49 2408.2 860.07C2365.69 1022.65 1692.19 1367.59 527.679 1072.87C-636.83 778.159 -1011.18 160.726 -968.671 -1.85459Z"
             fill={svgProps.fill || "#1255CB"}
@@ -35,21 +37,13 @@ const BackgroundProject3 = memo(function BackgroundProject3(props: SVGProps<SVGS
         </g>
       </g>
       <defs>
-        <filter
-          id="bg3-filter"
-          x={-1345.95}
-          y={-413.178}
-          width={4129.94}
-          height={1975.29}
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity={0} result="BackgroundImageFix" />
-          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-          <feGaussianBlur stdDeviation={187.04 * blurScale} result="effect1" />
-        </filter>
         <clipPath id="bg3-clip">
-          <rect width={1281} height={1710} fill="white" transform="translate(0 -162)" />
+          <rect
+            width={1281}
+            height={1710}
+            fill="white"
+            transform="translate(0 -162)"
+          />
         </clipPath>
       </defs>
     </svg>
