@@ -73,13 +73,19 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           transform="matrix(-.52678 .85 .7861 .61811 -356.828 -9.07)"
         />
       </g> */}
-      <g style={blur(isMobile ? 40 : 68.65)}>
+      <g
+        filter={isMobile ? "url(#blur-main)" : undefined}
+        style={!isMobile ? blur(68.65) : undefined}
+      >
         <path
           fill={svgProps.fill || "#1255CB"}
           d="M-227.445 310.023c27.367-210.9 164.227 237.387 810.074 399.198 529.921 152.532 924.281-168.247 896.921 42.654-27.37 210.9-385.34 767.865-974.078 618.635-588.74-149.23-760.283-849.587-732.917-1060.487"
         />
       </g>
-      <g style={blur(isMobile ? 25 : 43.65)}>
+      <g
+        filter={isMobile ? "url(#blur-white)" : undefined}
+        style={!isMobile ? blur(43.65) : undefined}
+      >
         <path
           fill="#fff"
           d="M-382.81 885.501c12.557-270.696 393.198-114.418 905.36-71.661 512.16 42.756 961.9-44.201 949.34 226.49-12.55 270.7-437.92 455.48-950.085 412.73C9.642 1410.3-395.368 1156.2-382.81 885.501"
@@ -126,6 +132,30 @@ const BackgroundProject1 = memo(function BackgroundProject1(
         />
       </g> */}
       <defs>
+        {isMobile && (
+          <>
+            <filter
+              id="blur-main"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+              colorInterpolationFilters="sRGB"
+            >
+              <feGaussianBlur stdDeviation={10} />
+            </filter>
+            <filter
+              id="blur-white"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+              colorInterpolationFilters="sRGB"
+            >
+              <feGaussianBlur stdDeviation={10} />
+            </filter>
+          </>
+        )}
         <radialGradient
           id="bg1-i"
           cx={0}
