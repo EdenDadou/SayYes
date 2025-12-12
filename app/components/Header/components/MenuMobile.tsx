@@ -30,11 +30,12 @@ const menuItemVariants = {
   }),
   exit: (i: number) => ({
     opacity: 0,
-    y: -10,
+    y: 15,
+    scale: 0.98,
     transition: {
-      delay: i * 0.03,
-      duration: 0.2,
-      ease: [0.4, 0, 1, 1],
+      delay: (6 - i) * 0.04,
+      duration: 0.35,
+      ease: [0.4, 0, 0.2, 1],
     },
   }),
 };
@@ -51,9 +52,9 @@ const containerVariants = {
   exit: {
     opacity: 0,
     transition: {
-      duration: 0.3,
-      ease: [0.4, 0, 1, 1],
-      delay: 0.1,
+      duration: 0.5,
+      ease: [0.4, 0, 0.2, 1],
+      delay: 0.2,
     },
   },
 };
@@ -70,10 +71,11 @@ const backgroundVariants = {
   },
   exit: {
     opacity: 0,
-    scale: 1.05,
+    scale: 1.02,
     transition: {
-      duration: 0.3,
-      ease: [0.4, 0, 1, 1],
+      duration: 0.45,
+      ease: [0.4, 0, 0.2, 1],
+      delay: 0.1,
     },
   },
 };
@@ -117,7 +119,7 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
     close();
     setTimeout(() => {
       navigate(path);
-    }, 350);
+    }, 550);
   }
 
   return (
@@ -142,7 +144,7 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
               className="w-full h-full object-cover"
             />
           </motion.div>
-          <div className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10">
+          <div className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10" style={{ paddingBottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))' }}>
             <motion.div
               custom={0}
               variants={menuItemVariants}

@@ -76,17 +76,14 @@ const OptimizedVideo = memo(function OptimizedVideo({
   const videoRef = useRef<HTMLVideoElement>(null);
   const isInView = useInView(ref, { once: false, margin: "100px" });
 
-  // Initialiser la vidéo pour iOS - muted doit être défini via JS
-  useEffect(() => {
+  // Fonction pour tenter de lancer la vidéo
+  const attemptPlay = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Forcer muted via JS (requis pour iOS)
     video.muted = true;
-    video.setAttribute("muted", "");
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "");
-  }, []);
+    video.play().catch(() => {});
+  };
 
   // Déclencher la lecture quand la vidéo entre dans le viewport
   useEffect(() => {
@@ -94,18 +91,7 @@ const OptimizedVideo = memo(function OptimizedVideo({
     if (!video) return;
 
     if (isInView) {
-      // Assurer que muted est toujours true avant de jouer
-      video.muted = true;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Réessayer après un court délai
-          setTimeout(() => {
-            video.muted = true;
-            video.play().catch(() => {});
-          }, 100);
-        });
-      }
+      attemptPlay();
     } else {
       video.pause();
     }
@@ -131,13 +117,16 @@ const OptimizedVideo = memo(function OptimizedVideo({
           filter: isLoaded ? "blur(0px)" : "blur(8px)",
           transform: isLoaded ? "scale(1)" : "scale(1.02)",
         }}
+        onLoadedMetadata={attemptPlay}
+        onCanPlay={() => {
+          setIsLoaded(true);
+          attemptPlay();
+        }}
         muted
         autoPlay
         loop
         playsInline
-        webkit-playsinline=""
         preload="auto"
-        onCanPlay={() => setIsLoaded(true)}
       >
         Votre navigateur ne prend pas en charge la lecture de vidéos.
       </video>
