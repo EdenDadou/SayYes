@@ -1,5 +1,5 @@
 import LogoSayYes from "~/components/Header/assets/LogoSayYes";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useNavigate } from "@remix-run/react";
 import Button from "~/components/Button";
@@ -24,8 +24,20 @@ const HeaderMobile = ({
   const lastScrollY = useRef(0);
   const { scrollY } = useScroll();
 
+  // Force header visible when menu opens
+  useEffect(() => {
+    if (isOpenMenu) {
+      setIsVisible(true);
+    }
+  }, [isOpenMenu]);
+
   // Listen to scroll changes
   useMotionValueEvent(scrollY, "change", (latest) => {
+    // Keep header visible when menu is open
+    if (isOpenMenu) {
+      setIsVisible(true);
+      return;
+    }
     const direction = latest > lastScrollY.current ? "down" : "up";
     if (latest > 100 && direction === "down") {
       setIsVisible(false);
@@ -37,7 +49,7 @@ const HeaderMobile = ({
 
   return (
     <motion.div
-      className="header-custom border-custom flex flex-row justify-between items-center mx-4 h-[60px] px-2 mb-20"
+      className="header-custom border-custom flex flex-row justify-between items-center mx-4 h-[60px] px-2 mb-20 z-[60]"
       initial={{ y: 0, opacity: 1 }}
       animate={{
         y: isVisible ? 0 : -130,

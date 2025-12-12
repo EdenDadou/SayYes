@@ -68,7 +68,6 @@ export default function Portfolio() {
                       slug={portfolio.slug}
                     />
                   }
-                  borderClass="card-hover"
                 />
               </motion.div>
             ))}

@@ -82,6 +82,37 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Disable body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      // Restore scroll position
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.documentElement.style.overflow = "";
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [isOpen]);
+
   function handleNaviation(path: string) {
     close();
     setTimeout(() => {
@@ -97,7 +128,7 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-20 flex flex-col items-center w-full h-screen overflow-y-auto pt-20 px-4 bg-black/90"
+          className="fixed inset-0 z-[50] flex flex-col items-center w-full h-screen overflow-y-auto pt-20 px-4 bg-black/90"
         >
           <motion.div
             variants={backgroundVariants}
@@ -106,7 +137,10 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
             exit="exit"
             className="w-full h-full inset-0 absolute z-0"
           >
-            <img src="/images/bg-menu-mobile.png" className="w-full h-full object-cover" />
+            <img
+              src="/images/bg-menu-mobile.png"
+              className="w-full h-full object-cover"
+            />
           </motion.div>
           <div className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10">
             <motion.div
