@@ -9,6 +9,7 @@ interface PropsContent {
   titre?: string;
   topTitle?: string;
   slug?: string;
+  isMobile?: boolean;
 }
 
 export default function CardHomePagePortfolio({
@@ -17,6 +18,7 @@ export default function CardHomePagePortfolio({
   titre,
   topTitle,
   slug,
+  isMobile,
 }: PropsContent) {
   console.log(topTitle);
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ export default function CardHomePagePortfolio({
 
   return (
     <div
-      className="size-full relative overflow-hidden md:rounded-[45px] rounded-[10px] md:p-2 p-1 cursor-pointer
+      className="size-full relative overflow-hidden md:rounded-[45px] rounded-[14px]  p-2 cursor-pointer
       shadow-lg"
       onClick={() => {
         navigate(`/portfolio/${slug}`);
@@ -38,12 +40,12 @@ export default function CardHomePagePortfolio({
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          borderRadius: "40px",
+          borderRadius: isMobile ? "20px" : "40px",
         }}
         className={`${imageClasses}`}
       >
         {/* Gradient overlay - seulement sur les 20% inférieurs */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] md:rounded-[40px] rounded-[24px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] md:rounded-[40px] rounded-[14px]" />
       </div>
       <div className="size-full absolute top-0 left-0 bottom-0 md:p-4 p-2">
         <div className="flex flex-col items-center justify-end w-full h-full p-4">

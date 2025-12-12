@@ -67,17 +67,18 @@ function HomeProjectCarouselMobile({
             style={{
               scrollSnapAlign: "start",
               width: "calc(100vw - 60px)",
-              maxWidth: "420px",
+              maxWidth: "100%",
             }}
           >
             <Card
-              height="280px"
+              height="260px"
               content={
                 <CardHomePagePortfolio
                   imageUrl={project.photoCouverture}
                   titre={project.titre}
                   topTitle={project?.topTitle}
                   slug={project.slug}
+                  isMobile
                 />
               }
               borderClass="light-border rounded-[28px]"

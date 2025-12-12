@@ -124,7 +124,7 @@ export default function TitleStepImage() {
           </div>
           <div className="flex flex-col gap-1 pt-1">
             <h3
-              className="font-jakarta-semi-bold text-[24px] text-white leading-[28px] tracking-[-1px]"
+              className="font-jakarta-semi-bold md:text-[24px] text-[16px] text-white leading-[28px] tracking-[-1px]"
               style={{
                 animation:
                   justCompletedStep === stepNumber
@@ -176,7 +176,7 @@ export default function TitleStepImage() {
             )}
           </div>
           <div className="flex flex-col gap-1 pt-1">
-            <h3 className="font-jakarta-semi-bold text-[24px] text-white/90 leading-[28px] tracking-[-1px]">
+            <h3 className="font-jakarta-semi-bold md:text-[24px] text-[16px] text-white/90 leading-[28px] tracking-[-1px]">
               {title}
             </h3>
             <p className="font-jakarta text-[14px] text-white/50 leading-[18px]">
@@ -212,7 +212,7 @@ export default function TitleStepImage() {
             )}
           </div>
           <div className="flex flex-col gap-1 pt-1">
-            <h3 className="font-jakarta-semi-bold text-[24px] text-white/50 leading-[28px] tracking-[-1px]">
+            <h3 className="font-jakarta-semi-bold md:text-[24px] text-[16px] text-white/50 leading-[28px] tracking-[-1px]">
               {title}
             </h3>
             <p className="font-jakarta text-[14px] text-white/30 leading-[18px]">
@@ -242,7 +242,7 @@ export default function TitleStepImage() {
         <p className="font-jakarta text-[16px] text-white text-center">
           Les 4 étapes pour lancer votre projet :
         </p>
-        <div className="relative flex flex-col gap-4 w-full">
+        <div className="relative flex flex-col w-full">
           {renderStep(
             1,
             "01. Indiquez vos coordonnées",
