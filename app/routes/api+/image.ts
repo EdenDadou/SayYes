@@ -31,7 +31,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   // Sécurité: empêcher le path traversal
-  if (imagePath.includes("..") || !imagePath.startsWith("/uploads/")) {
+  if (imagePath.includes("..")) {
+    return new Response("Invalid path", { status: 403 });
+  }
+
+  // Autoriser /uploads/ et /images/ (fichiers statiques)
+  const allowedPrefixes = ["/uploads/", "/images/"];
+  if (!allowedPrefixes.some(prefix => imagePath.startsWith(prefix))) {
     return new Response("Invalid path", { status: 403 });
   }
 

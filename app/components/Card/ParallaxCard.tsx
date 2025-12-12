@@ -56,8 +56,8 @@ export default function ParallaxCard({
     <div
       ref={container}
       className={cn(
-        "flex items-center justify-center sticky top-0",
-        isMobile ? "h-[85vh]" : "h-screen"
+        "flex items-center justify-center sticky",
+        isMobile ? "h-[85vh] top-8" : "h-screen top-0"
       )}
     >
       <motion.div

@@ -4,6 +4,8 @@ import ArrowLight from "~/assets/icons/ArrowLight";
 import Card from "~/components/Card";
 import NoteStar from "~/assets/icons/NoteStar";
 import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
+import OptimizedImage from "~/components/ui/OptimizedImage";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 export default function TemoignagesCards({}) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,10 +67,14 @@ export default function TemoignagesCards({}) {
     <div
       className={`relative w-full flex flex-col pt-8 md:pt-16 gap-8 md:gap-16 z-10`}
     >
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo.png"
         alt="background"
         className="absolute inset-0 w-full md:w-1/2 h-full object-cover z-[-1] opacity-60 md:opacity-100"
+        mobileSize="tablet"
+        desktopSize="tablet"
+        noPlaceholder
+        noMobileOptimization
       />
       {/* Title Section */}
       <div className="max-w-[990px] m-auto flex flex-col items-center gap-4 px-4">
@@ -245,6 +251,7 @@ export const CardsTemoignage = ({
   auteur: string;
   poste: string;
 }) => {
+  const optimizedLogo = logo ? getOptimizedImageUrl(logo, "thumbnail") : "";
   return {
     height: 413,
     image: "./images/homepage/identite-visuelle-1.png",
@@ -256,12 +263,14 @@ export const CardsTemoignage = ({
           <div className="white-halo absolute -top-100 -translate-y-[60%] -left-100 -translate-x-1/2 w-full h-full z-0" />
           <div className="purple-halo absolute -bottom-100 translate-y-[60%] left-0 w-full h-full z-0" />
           <div className="flex flex-col p-8 gap-6">
-            <img
-              src={logo}
-              alt="logo entreprise"
-              width={120}
-              className="aspect-ratio "
-            />
+            {optimizedLogo && (
+              <img
+                src={optimizedLogo}
+                alt="logo entreprise"
+                width={120}
+                className="aspect-ratio"
+              />
+            )}
             <p className="font-jakarta-semi-bold text-[14px] leading-[20px]">
               {texte}
             </p>

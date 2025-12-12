@@ -5,6 +5,8 @@ import { useRef } from "react";
 import Coche from "~/assets/icons/Coche";
 import { useScroll } from "framer-motion";
 import "~/styles/tailwind.css";
+import OptimizedImage from "~/components/ui/OptimizedImage";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 // Composant Cards parallax pour mobile (comme TitleCards)
 function AccompagnementCardsParallaxMobile() {
@@ -19,7 +21,7 @@ function AccompagnementCardsParallaxMobile() {
   );
 
   return (
-    <div ref={container} className="relative w-full px-4">
+    <div ref={container} className="relative w-full px-4 py-6 flex flex-col gap-20">
       {allCards.map((card, index) => {
         const targetScale =
           index === allCards.length - 1
@@ -80,21 +82,24 @@ export default function TitleFullWidthCard() {
   const isMobile = useViewport();
 
   return isMobile ? (
-    <section className="w-full pt-20 flex flex-col items-center justify-center gap-6">
+    <section className="w-full pt-20 flex flex-col items-center justify-center gap-10">
       <div className="h-[3px] w-16 holographic-bg rounded-full" />
-      <h2 className="font-jakarta-semi-bold text-[30px] leading-[36px] text-center glassy tracking-[-1px]">
-        Accompagnement sur-mesure
-      </h2>
-      <div className="flex flex-col items-center gap-2 w-full text-white font-jakarta-semibold text-[16px] ">
-        <p>En co-conception :</p>
-        <div className="flex flex-row items-center gap-2">
-          <p>Simple</p>
-          <Arrow className="w-[18px]" />
-          <p>Efficace</p>
-          <Arrow className="w-[18px]" />
-          <p>Prouvée</p>
+      <div className="flex flex-col gap-4">
+        <h2 className="font-jakarta-semi-bold text-[34px] leading-[36px] text-center glassy tracking-[-1px] px-4">
+          Accompagnement sur-mesure
+        </h2>
+        <div className="flex flex-col items-center w-full text-white font-jakarta-semibold text-[24px] ">
+          <p>En co-conception :</p>
+          <div className="flex flex-row items-center gap-2">
+            <p>Simple</p>
+            <Arrow className="w-[18px]" />
+            <p>Efficace</p>
+            <Arrow className="w-[18px]" />
+            <p>Prouvée</p>
+          </div>
         </div>
       </div>
+
       <AccompagnementCardsParallaxMobile />
       <div className="flex flex-col gap-4 px-4 w-full">
         {cardsAccompagnementSmall.map((card) => {
@@ -111,10 +116,12 @@ export default function TitleFullWidthCard() {
     <section className="w-screen">
       <div className="relative">
         <div className="sticky top-0 -mt-20 w-full h-[120vh] z-0 pointer-events-none overflow-hidden flex items-start">
-          <img
+          <OptimizedImage
             src="./images/homepage/bg-halo.png"
             alt="background"
             className="absolute left-0 top-0 w-[60%] max-w-none h-auto opacity-90 scale-x-[-1] rotate-180"
+            desktopSize="tablet"
+            noPlaceholder
           />
         </div>
         <div className="relative z-10 -mt-[90vh] flex flex-col justify-center items-center gap-8 w-full">
@@ -158,6 +165,11 @@ export const CardsAccompagnement = ({
   liste: string[];
   isMobile: boolean;
 }) => {
+  const optimizedBg = getOptimizedImageUrl(
+    isMobile ? bgImageMobile : bgImage,
+    isMobile ? "mobile" : "desktop"
+  );
+  const optimizedIcon = getOptimizedImageUrl(icon, "thumbnail");
   return {
     height: 490,
     borderRadius: 40,
@@ -168,16 +180,16 @@ export const CardsAccompagnement = ({
         <div
           className="absolute top-0 left-0 w-full h-full bg-center bg-no-repeat z-0"
           style={{
-            backgroundImage: `url("${isMobile ? bgImageMobile : bgImage}")`,
+            backgroundImage: `url("${optimizedBg}")`,
             backgroundSize: "cover",
           }}
         />
-        <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center rounded-[40px] bg-black/90 max-h-full">
+        <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center rounded-[40px] bg-black/90 max-h-full w-full">
           <div className="relative flex flex-col md:gap-4 gap-2 justify-center py-2 overflow-hidden size-full rounded-[40px] md:p-12 p-6 max-h-full">
             <div className="purple-halo absolute -bottom-100 translate-y-2/3 left-0 w-full h-full z-0" />
             <div className="flex flex-col md:gap-4 gap-2 z-10">
               <div className="md:p-4 p-3 metal w-fit h-fit">
-                <img src={icon} alt={title} className="md:h-8 h-5" />
+                <img src={optimizedIcon} alt={title} className="md:h-8 h-5" />
               </div>
               <p className="glassy font-jakarta-semi-bold text-[39px] leading-[61px] tracking-[-1px] whitespace-pre-line">
                 {title}
@@ -246,6 +258,7 @@ export const CardsAccompagnementSmall = ({
   title: string;
   liste: string[];
 }) => {
+  const optimizedIcon = getOptimizedImageUrl(icon, "thumbnail");
   return {
     content: (
       <div className="border-grey-animed z-10 relative h-[230px] w-full md:w-[476px] justify-center rounded-[40px] bg-black/90">
@@ -268,7 +281,7 @@ export const CardsAccompagnementSmall = ({
               </ul>
             </div>
             <div className="p-4 metal w-fit h-fit">
-              <img src={icon} alt={title} className="h-8" />
+              <img src={optimizedIcon} alt={title} className="h-8" />
             </div>
           </div>
         </div>

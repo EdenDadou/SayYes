@@ -9,6 +9,7 @@ import {
   CardsIdentiteVisuelle,
   contentIdentiteVisuelle,
 } from "./TitleCards.helpers";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 
 // Composant Cards parallax pour mobile
 function TitleCardsParallaxMobile() {
@@ -69,10 +70,13 @@ export default function TitleCards() {
     <div className="relative w-full">
       <div className="sticky top-0 w-full h-screen z-0 pointer-events-none">
         <div className="-translate-x-1/2 w-[200%] h-full">
-          <img
+          <OptimizedImage
             src="./images/homepage/bg-halo.png"
             alt="background"
-            className=" h-auto w-full rotate-180"
+            className="h-auto w-full rotate-180"
+            mobileSize="tablet"
+            noPlaceholder
+            noMobileOptimization
           />
         </div>
       </div>
@@ -89,18 +93,22 @@ export default function TitleCards() {
       <div className="absolute left-0 right-0 h-auto z-0 opacity-80 flex flex-row justify-between w-screen">
         <Suspense fallback={<div className="scale-x-[-1]" />}>
           {/* <BackgroundSideLueur className="scale-x-[-1]" /> */}
-          <img
+          <OptimizedImage
             src="./images/homepage/bg-halo.png"
             alt="background"
             className="scale-x-[-1] absolute left-0 h-auto z-0 w-1/2 rotate-180 top-0"
+            desktopSize="tablet"
+            noPlaceholder
           />
         </Suspense>
 
         <Suspense fallback={<div />}>
-          <img
+          <OptimizedImage
             src="./images/homepage/bg-halo.png"
             alt="background"
             className="absolute right-0 h-auto z-0 w-1/2 rotate-180 top-0"
+            desktopSize="tablet"
+            noPlaceholder
           />
           {/* <BackgroundSideLueur /> */}
         </Suspense>

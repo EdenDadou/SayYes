@@ -1,16 +1,20 @@
 import { useViewport } from "~/utils/hooks/useViewport";
 import Arrow from "~/assets/icons/Arrow";
 import "~/styles/tailwind.css";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 
 export default function RowTitlePicture() {
   const isMobile = useViewport();
 
   return isMobile ? (
     <section className="w-full relative px-5 pb-4 flex flex-col gap-8">
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo.png"
         alt="background"
         className="absolute -top-10 left-0 w-full h-auto z-0 opacity-70 rotate-180"
+        mobileSize="tablet"
+        noPlaceholder
+        noMobileOptimization
       />
       <div className="relative z-10 flex flex-col items-center gap-12">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
@@ -53,11 +57,7 @@ export default function RowTitlePicture() {
           </div>
         </div>
         <div className="relative overflow-hidden rounded-3xl border border-white/5">
-          <img
-            src="./images/homepage/grid-partenaire.png"
-            alt="partenaires"
-            className="w-screen"
-          />
+          <img src="./images/homepage/grid-partenaire.png" />
           <div className="absolute inset-0 grid grid-cols-3 grid-rows-5 pointer-events-none py-5 gap-2">
             {[...Array(15)].map((_, i) => {
               const row = Math.floor(i / 3);
@@ -78,10 +78,12 @@ export default function RowTitlePicture() {
   ) : (
     <div className="w-screen relative">
       {/* <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-1/2" /> */}
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo.png"
         alt="background"
         className="scale-x-[-1] absolute left-0 h-auto z-0 w-1/2 top-0 rotate-180"
+        desktopSize="tablet"
+        noPlaceholder
       />
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-row gap-16 pt-32 pb-20">
         <div className="w-2/5 flex flex-col gap-8">

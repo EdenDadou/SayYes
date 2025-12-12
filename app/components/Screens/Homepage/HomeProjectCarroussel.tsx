@@ -9,6 +9,7 @@ import Arrow from "~/assets/icons/Arrow";
 import CardHomePagePortfolio from "./components/CardHomePagePortfolio";
 import { useNavigate } from "@remix-run/react";
 import { useViewport } from "~/utils/hooks/useViewport";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 
 interface ProjectCarouselProps {
   className?: string;
@@ -36,10 +37,13 @@ function HomeProjectCarouselMobile({
     <div
       className={`relative w-full flex flex-col items-center pt-8 gap-6 z-10 ${className}`}
     >
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo-2.png"
         alt="background"
         className="absolute right-0 left-0 h-auto z-0 w-full top-0"
+        mobileSize="tablet"
+        noPlaceholder
+        noMobileOptimization
       />
       {/* Title Section */}
       <div className="flex flex-col items-center gap-10 px-4 mb-6">
@@ -170,10 +174,12 @@ function HomeProjectCarouselDesktop({
     <div
       className={`relative w-full flex flex-col items-center pt-16 gap-6 z-10 ${className}`}
     >
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo-2.png"
         alt="background"
         className="absolute right-0 left-0 h-auto z-0 w-full top-0"
+        desktopSize="desktop"
+        noPlaceholder
       />
       {/* Title Section */}
       <div className="max-w-[990px] m-auto flex flex-col items-center gap-4 px-4">

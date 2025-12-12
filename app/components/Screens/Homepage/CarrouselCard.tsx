@@ -5,6 +5,8 @@ import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import "~/styles/tailwind.css";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import OptimizedImage from "~/components/ui/OptimizedImage";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 export default function CarouselCard() {
   const isMobile = useViewport();
@@ -37,10 +39,13 @@ export default function CarouselCard() {
   return isMobile ? (
     <section className="w-full  flex flex-col  gap-6 relative overflow-x-clip">
       <div className="absolute -translate-x-1 w-[200%] h-full">
-        <img
+        <OptimizedImage
           src="./images/homepage/bg-halo.png"
           alt="background"
-          className=" h-auto w-full rotate-180 scale-x-[-1]"
+          className="h-auto w-full rotate-180 scale-x-[-1]"
+          mobileSize="tablet"
+          noPlaceholder
+          noMobileOptimization
         />
       </div>
       <div className="flex flex-col items-center gap-6 px-5">
@@ -60,9 +65,12 @@ export default function CarouselCard() {
         <Arrow className="w-[18px]" />
         <p>Facilitation graphique</p>
       </div>
-      <div className="flex gap-4 overflow-x-auto pb-2 px-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div
+        className="flex gap-4 overflow-x-auto pb-2 px-8 scrollbar-hide"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
         {supports.map((card, index) => {
-          const data = CardsSupport(card);
+          const data = CardsSupport({ ...card, isMobile: true });
           return (
             <div
               key={`card_${index}`}
@@ -116,7 +124,7 @@ export default function CarouselCard() {
               className="flex gap-10 mt-12 pl-[calc(24vw)] pr-[calc(24vw)]"
             >
               {supports.map((card, index) => {
-                const data = CardsSupport(card);
+                const data = CardsSupport({ ...card, isMobile: false });
                 return (
                   <div key={`card_${index}`} className="flex-shrink-0">
                     <Card
@@ -140,10 +148,16 @@ export default function CarouselCard() {
 export const CardsSupport = ({
   name,
   image,
+  isMobile = false,
 }: {
   name: string;
   image: string;
+  isMobile?: boolean;
 }) => {
+  const optimizedImage = getOptimizedImageUrl(
+    image,
+    isMobile ? "mobile" : "desktop"
+  );
   return {
     height: 422,
     image: "./images/homepage/identite-visuelle-1.png",
@@ -155,11 +169,11 @@ export const CardsSupport = ({
         <div
           className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[34px]"
           style={{
-            backgroundImage: `url("${image}")`,
+            backgroundImage: `url("${optimizedImage}")`,
           }}
         />
         <div className="z-10 relative flex flex-col gap-4 h-full justify-end pt-4 pb-2 text-white">
-          <p className="glassy font-jakarta-semi-bold text-[36px] leading-[36px] tracking-[-1px] whitespace-pre-line text-center pb-1">
+          <p className="glassy font-jakarta-semi-bold md:text-[36px] text-[24px] leading-[36px] tracking-[-1px] whitespace-pre-line text-center pb-1">
             {name}
           </p>
         </div>

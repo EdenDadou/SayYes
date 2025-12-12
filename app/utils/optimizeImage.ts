@@ -59,8 +59,14 @@ export function getOptimizedImageUrl(
     return originalUrl;
   }
 
-  // Si ce n'est pas une image uploadée, retourner l'URL originale
-  if (!originalUrl.startsWith("/uploads/")) {
+  // Si ce n'est pas une image dans /uploads/ ou /images/, retourner l'URL originale
+  if (!originalUrl.startsWith("/uploads/") && !originalUrl.startsWith("/images/")) {
+    // Gérer les chemins relatifs comme "./images/..."
+    if (originalUrl.startsWith("./images/")) {
+      const normalizedUrl = originalUrl.replace("./images/", "/images/");
+      const config = SIZE_CONFIG[size];
+      return `/api/image?src=${encodeURIComponent(normalizedUrl)}&w=${config.width}&q=${config.quality}`;
+    }
     return originalUrl;
   }
 

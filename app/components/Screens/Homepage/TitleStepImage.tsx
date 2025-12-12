@@ -3,6 +3,7 @@ import { useViewport } from "~/utils/hooks/useViewport";
 import "~/styles/tailwind.css";
 import Card from "~/components/Card";
 import Coche from "~/assets/icons/Coche";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 
 export default function TitleStepImage() {
   const isMobile = useViewport();
@@ -229,10 +230,13 @@ export default function TitleStepImage() {
       ref={sectionRef}
       className="w-full relative px-5 pt-20 pb-12 flex flex-col gap-10 overflow-hidden"
     >
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo.png"
         alt="background"
         className="absolute left-1/2 -translate-x-1/2 top-0 w-full h-auto z-0 opacity-60 rotate-180"
+        mobileSize="tablet"
+        noPlaceholder
+        noMobileOptimization
       />
       <div className="relative z-10 flex flex-col gap-6 items-center">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
@@ -271,22 +275,31 @@ export default function TitleStepImage() {
         borderClass="light-border rounded-[30px] p-3"
         content={
           <div>
-            <img src="./images/homepage/step-img.png" alt="step-image" />
+            <OptimizedImage
+              src="./images/homepage/step-img.png"
+              alt="step-image"
+              mobileSize="mobile"
+              priority
+            />
           </div>
         }
       />
     </section>
   ) : (
     <div className="w-screen relative">
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo.png"
         alt="background"
         className="scale-x-[-1] absolute left-0 h-auto z-0 w-1/2 top-0 rotate-180"
+        desktopSize="tablet"
+        noPlaceholder
       />
-      <img
+      <OptimizedImage
         src="./images/homepage/bg-halo.png"
         alt="background"
         className="absolute right-0 h-auto z-0 w-1/2 top-40 rotate-180"
+        desktopSize="tablet"
+        noPlaceholder
       />
       <section
         ref={sectionRef}
@@ -332,7 +345,12 @@ export default function TitleStepImage() {
             borderClass="light-border rounded-[45px] p-3"
             content={
               <div>
-                <img src="./images/homepage/step-img.png" alt="step-image" />
+                <OptimizedImage
+                  src="./images/homepage/step-img.png"
+                  alt="step-image"
+                  desktopSize="desktop"
+                  priority
+                />
               </div>
             }
           />

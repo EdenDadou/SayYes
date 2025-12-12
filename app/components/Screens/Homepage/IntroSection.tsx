@@ -14,6 +14,7 @@ import Pause from "~/assets/icons/Pause";
 import { useModalContact } from "~/contexts/ModalContactContext";
 import GridBg from "~/assets/icons/GridBg";
 import SvgLogoAllClients from "~/assets/icons/LogoAllClients";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -43,15 +44,24 @@ export default function IntroSection() {
 
   return isMobile ? (
     <section className="relative w-full flex flex-col gap-10 px-5 pb-4 text-white">
-      <img
+      <OptimizedImage
         src="/images/homepage/bg-halo-mobile.png"
         alt="background"
         className="absolute -top-36 left-0 w-full h-auto z-0 opacity-80"
+        mobileSize="tablet"
+        noPlaceholder
+        noMobileOptimization
       />
       <GridBg className="absolute -top-36 w-full left-0 right-0 h-auto z-0 opacity-80" />
       <div className="relative z-10 flex flex-col items-center gap-7">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
-        <img src="images/homepage/mobile/title.png" />
+        <OptimizedImage
+          src="/images/homepage/mobile/title.png"
+          alt="Say Yes"
+          mobileSize="mobile"
+          className="w-full"
+          priority
+        />
         <div className="flex flex-col gap-1 text-[18px] leading-[22px] font-jakarta-semibold items-center">
           <div className="flex flex-row items-center gap-2">
             <Arrow className="w-4" />
@@ -144,10 +154,12 @@ export default function IntroSection() {
               <div className="absolute left-0 w-full h-auto z-0 opacity-80" />
             }
           >
-            <img
+            <OptimizedImage
               src="/images/homepage/bg-section-1.png"
               alt="background"
               className="absolute -top-[88px] left-0 w-full h-auto z-0 opacity-80"
+              desktopSize="desktop"
+              noPlaceholder
             />
             {/* <BackgroundHomepage className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" /> */}
           </Suspense>

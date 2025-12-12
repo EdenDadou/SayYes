@@ -3,6 +3,8 @@ import { lazy, Suspense, useRef } from "react";
 import AnimatedText from "~/components/AnimatedText";
 import { motion, useScroll, useTransform } from "framer-motion";
 import "~/styles/tailwind.css";
+import OptimizedImage from "~/components/ui/OptimizedImage";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 // Lazy load du composant Background volumineux
 const BackgroundTemoignage = lazy(
@@ -37,17 +39,22 @@ export default function BigTemoignage() {
       <Suspense
         fallback={<div className="absolute right-0 h-auto z-0 top-0" />}
       >
-        <img
+        <OptimizedImage
           src="./images/homepage/bg-temoignage-mobile.png"
           alt="background"
-          className="absolute right-0 h-auto z-0 opacity-90 top-0 "
+          className="absolute right-0 h-auto z-0 top-0 w-full"
+          mobileSize="tablet"
+          noPlaceholder
+          noMobileOptimization
         />
       </Suspense>
       <div className="relative z-10 flex flex-col items-center h-fit gap-2 text-center">
-        <img
+        <OptimizedImage
           src="./images/homepage/logo-generali.png"
           alt="logo Generali"
           className="w-12"
+          mobileSize="thumbnail"
+          noPlaceholder
         />
         <AnimatedText
           text={temoignageTextMobile}
@@ -63,17 +70,25 @@ export default function BigTemoignage() {
           </span>
         </p>
       </div>
-      <div className="relative w-full flex justify-center mt-20">
+      <div className="relative w-full flex justify-center mt-40">
         <div className="relative w-screen h-56" ref={imagesContainerRefMobile}>
           <motion.img
-            src="images/homepage/icone-logiciel-mobile-1.png"
+            src={getOptimizedImageUrl(
+              "/images/homepage/icone-logiciel-mobile-1.png",
+              "mobile"
+            )}
             style={{ y: y1Mobile }}
             className="relative z-0 top-6 w-[60%] mx-auto"
+            alt="icones logiciels"
           />
           <motion.img
-            src="images/homepage/icone-logiciel-mobile-2.png"
+            src={getOptimizedImageUrl(
+              "/images/homepage/icone-logiciel-mobile-2.png",
+              "mobile"
+            )}
             style={{ y: y2Mobile }}
             className="absolute top-0 z-10 w-full"
+            alt="icones logiciels"
           />
         </div>
       </div>
@@ -84,7 +99,12 @@ export default function BigTemoignage() {
         <BackgroundTemoignage className="absolute right-0 h-auto z-0" />
       </Suspense>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-8 pt-52">
-        <img src="./images/homepage/logo-generali.png" alt="logo Generali" />
+        <OptimizedImage
+          src="./images/homepage/logo-generali.png"
+          alt="logo Generali"
+          desktopSize="thumbnail"
+          noPlaceholder
+        />
         <AnimatedText
           text={temoignageText}
           className="text-center font-jakarta-sans text-[36px] leading-[44px]"
@@ -95,14 +115,22 @@ export default function BigTemoignage() {
         </p>
         <div className="relative my-32" ref={imagesContainerRef}>
           <motion.img
-            src="./images/homepage/icone-logiciel-1.png"
+            src={getOptimizedImageUrl(
+              "./images/homepage/icone-logiciel-1.png",
+              "desktop"
+            )}
             style={{ y: y1 }}
             className="relative z-0 top-10"
+            alt="icones logiciels"
           />
           <motion.img
-            src="./images/homepage/icone-logiciel-2.png"
+            src={getOptimizedImageUrl(
+              "./images/homepage/icone-logiciel-2.png",
+              "desktop"
+            )}
             style={{ y: y2 }}
             className="absolute top-0 left-0 z-10"
+            alt="icones logiciels"
           />
         </div>
       </section>

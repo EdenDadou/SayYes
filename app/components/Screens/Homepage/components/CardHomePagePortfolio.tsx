@@ -2,6 +2,7 @@ import { cn } from "~/utils/ui/ui";
 import { useNavigate } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import "~/styles/tailwind.css";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 interface PropsContent {
   imageUrl?: string;
@@ -20,11 +21,14 @@ export default function CardHomePagePortfolio({
   slug,
   isMobile,
 }: PropsContent) {
-  console.log(topTitle);
   const navigate = useNavigate();
   const imageClasses = cn(
     "h-full flex items-center justify-center md:rounded-[45px] rounded-[10px] relative"
   );
+
+  const optimizedImageUrl = imageUrl
+    ? getOptimizedImageUrl(imageUrl, isMobile ? "mobile" : "desktop")
+    : undefined;
 
   return (
     <div
@@ -36,7 +40,7 @@ export default function CardHomePagePortfolio({
     >
       <div
         style={{
-          backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
+          backgroundImage: videoUrl ? undefined : `url(${optimizedImageUrl})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
