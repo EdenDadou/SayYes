@@ -274,26 +274,22 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
             {/* Description */}
-            <AnimatedSection>
-              <p className="text-black text-[24px] font-jakarta leading-relaxed">
-                {portfolio.description}
-              </p>
-            </AnimatedSection>
-            <AnimatedSection delay={0.1}>
-              <div className="md:col-span-1">
-                <div className="flex flex-col gap-4">
-                  <p
-                    className="text-black text-[16px] leading-relaxed font-jakarta"
-                    dangerouslySetInnerHTML={{
-                      __html: portfolio.kicker.replaceAll(
-                        "<b>",
-                        "<b class='font-jakarta-bold mb-2'>"
-                      ),
-                    }}
-                  />
-                </div>
+            <p className="text-black text-[24px] font-jakarta leading-relaxed">
+              {portfolio.description}
+            </p>
+            <div className="md:col-span-1">
+              <div className="flex flex-col gap-4">
+                <p
+                  className="text-black text-[16px] leading-relaxed font-jakarta"
+                  dangerouslySetInnerHTML={{
+                    __html: portfolio.kicker.replaceAll(
+                      "<b>",
+                      "<b class='font-jakarta-bold mb-2'>"
+                    ),
+                  }}
+                />
               </div>
-            </AnimatedSection>
+            </div>
           </motion.section>
 
           {/* Deliverables - Stage 4 */}
@@ -303,12 +299,10 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
             animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
           >
-            <AnimatedSection>
-              <h3 className="flex flex-row items-center gap-2 text-[20px] text-black font-jakarta-semi-bold tracking-[-1px]">
-                <Star className="w-4 h-4" fill="black" />
-                Notre accompagnement
-              </h3>
-            </AnimatedSection>
+            <h3 className="flex flex-row items-center gap-2 text-[20px] text-black font-jakarta-semi-bold tracking-[-1px]">
+              <Star className="w-4 h-4" fill="black" />
+              Notre accompagnement
+            </h3>
             <motion.div
               ref={deliverablesRef}
               className="flex flex-row flex-nowrap gap-2 w-screen overflow-x-scroll scrollbar-hide"
