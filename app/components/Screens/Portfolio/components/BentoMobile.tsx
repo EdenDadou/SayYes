@@ -1,4 +1,4 @@
-import { memo, useState, useRef } from "react";
+import { memo, useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { BentoItem } from "~/server/portfolio.server";
 import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/optimizeImage";
@@ -73,7 +73,22 @@ const OptimizedVideo = memo(function OptimizedVideo({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isInView = useInView(ref, { once: false, margin: "0px" });
+
+  // Déclencher la lecture quand la vidéo entre dans le viewport (nécessaire sur mobile)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isInView) {
+      video.play().catch(() => {
+        // Ignorer les erreurs de lecture (politique du navigateur)
+      });
+    } else {
+      video.pause();
+    }
+  }, [isInView]);
 
   return (
     <motion.div
@@ -88,6 +103,7 @@ const OptimizedVideo = memo(function OptimizedVideo({
       }}
     >
       <video
+        ref={videoRef}
         src={src}
         className="w-full h-full object-cover object-center transition-all duration-500"
         style={{
