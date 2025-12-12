@@ -14,6 +14,7 @@ import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
 import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
+import SvgBackgroundProjectMobile1 from "./BackgroundProjectMobile1";
 
 // Style pour optimiser le scroll sur mobile
 const mobileScrollContainerStyle: CSSProperties = {
@@ -156,19 +157,20 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
         animate={{ opacity: loadStage >= 1 ? 1 : 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <BackgroundProject1
-          fill={portfolio.couleur}
-          className="absolute inset-0 w-screen h-[1200px] object-cover"
+        <SvgBackgroundProjectMobile1
+          className="absolute inset-0 w-screen object-cover z-10"
+          color={portfolio.couleur}
         />
+        <div className="absolute z-2 bg-white inset-0 h-[1500px]" />
       </motion.div>
       <main
-        className="w-screen h-fit relative overflow-hidden py-8 mobile-optimized-scroll"
+        className="w-screen h-fit relative overflow-hidden py-8 mobile-optimized-scroll z-30"
         style={mobileScrollContainerStyle}
       >
         {/* Main Content */}
-        <div className="relative z-10 flex flex-col gap-0">
+        <div className="relative flex flex-col gap-0">
           {/* Hero Section */}
-          <section className="flex flex-col gap-12">
+          <section className="flex flex-col gap-12 relative">
             {/* Title and Kicker - Stage 2 */}
             <motion.div
               ref={heroRef}
@@ -266,7 +268,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
 
           {/* Content Grid - Stage 4 */}
           <motion.section
-            className="flex flex-col gap-8 pb-16 bg-white px-8 mt-40 -mb-1"
+            className="flex flex-col gap-8 pb-16 bg-white px-8 -mb-1 my-20"
             initial={{ opacity: 0 }}
             animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
