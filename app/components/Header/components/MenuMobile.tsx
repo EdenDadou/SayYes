@@ -17,6 +17,67 @@ interface MenuMobileProps {
   close: () => void;
 }
 
+const menuItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.15 + i * 0.08,
+      duration: 0.4,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  }),
+  exit: (i: number) => ({
+    opacity: 0,
+    y: -10,
+    transition: {
+      delay: i * 0.03,
+      duration: 0.2,
+      ease: [0.4, 0, 1, 1],
+    },
+  }),
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.3,
+      ease: [0.4, 0, 1, 1],
+      delay: 0.1,
+    },
+  },
+};
+
+const backgroundVariants = {
+  hidden: { opacity: 0, scale: 1.1 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 1.05,
+    transition: {
+      duration: 0.3,
+      ease: [0.4, 0, 1, 1],
+    },
+  },
+};
+
 export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,59 +86,83 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
     close();
     setTimeout(() => {
       navigate(path);
-    }, 200);
+    }, 350);
   }
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
           className="fixed inset-0 z-20 flex flex-col items-center w-full h-screen overflow-y-auto pt-20 px-4 bg-black/90"
-          style={{ transformOrigin: "top center" }}
         >
           <motion.div
-            initial={{ scaleY: 0, opacity: 0 }}
-            animate={{ scaleY: 1, opacity: 1 }}
-            exit={{ scaleY: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            variants={backgroundVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             className="w-full h-full inset-0 absolute z-0"
-            style={{ transformOrigin: "top center" }}
           >
-            {/* <BackgroundMenuMobile className="w-full h-full" /> */}
-            <img src="/images/bg-menu-mobile.png" className="w-full h-full" />
+            <img src="/images/bg-menu-mobile.png" className="w-full h-full object-cover" />
           </motion.div>
-          <motion.div
-            initial={{ scaleY: 0.95 }}
-            animate={{ scaleY: 1 }}
-            exit={{ scaleY: 0.95 }}
-            transition={{ duration: 0.1, delay: 0.1, ease: "easeOut" }}
-            className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10"
-          >
-            <div className="font-jakarta-bold text-[14px]">
+          <div className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10">
+            <motion.div
+              custom={0}
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="font-jakarta-bold text-[14px]"
+            >
               Communication visuelle*
-            </div>
-            <button
+            </motion.div>
+            <motion.button
+              custom={1}
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               onClick={() => handleNaviation("/solutions")}
               className={`text-[28px] font-jakarta ${
                 location.pathname === "/solutions" ? "holographic-text" : ""
               }`}
+              whileTap={{ scale: 0.95 }}
             >
               Solutions
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              custom={2}
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
               onClick={() => handleNaviation("/portfolio")}
               className={`text-[28px] font-jakarta${
                 location.pathname === "/portfolio" ? "holographic-text" : ""
               }`}
+              whileTap={{ scale: 0.95 }}
             >
               Portfolio
-            </button>
-            <div className="h-[3px] w-20 holographic-bg mb-6 rounded-full" />
-            <div className="flex items-center gap-2">
+            </motion.button>
+            <motion.div
+              custom={3}
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="h-[3px] w-20 holographic-bg mb-6 rounded-full"
+            />
+            <motion.div
+              custom={4}
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex items-center gap-2"
+            >
               <Localisation
                 color="rgb(255 255 255 / 0.6)"
                 className="w-4 h-4"
@@ -85,23 +170,36 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
               <span className="text-[14px] font-jakarta">
                 40 Rue Sèvres - 75015 Paris
               </span>
-            </div>
-            <div className="flex flex-row h-5 gap-3">
+            </motion.div>
+            <motion.div
+              custom={5}
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex flex-row h-5 gap-3"
+            >
               <SvgBtnLinkedin className="w-8 h-8" />
               <SvgBtnFacebook className="w-8 h-8" />
               <SvgBtnInstagram className="w-8 h-8" />
               <SvgBtnTiktok className="w-8 h-8" />
               <SvgBtnYoutube className="w-8 h-8" />
-            </div>
-            <div className="mt-8">
+            </motion.div>
+            <motion.div
+              custom={6}
+              variants={menuItemVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="mt-8"
+            >
               <Button
                 label="Parlons design !"
-                // onClick={() => navigate("/portfolio")}
                 type="plain"
                 leftIcon={<ChatBuble />}
               />
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -64,7 +64,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
-      {/* <g mask="url(#bg1-c)" filter={isMobile ? "url(#bg1-d)" : undefined}>
+      <g mask="url(#bg1-c)" filter={isMobile ? "url(#bg1-d)" : undefined}>
         <ellipse
           cx={152.646}
           cy={781.921}
@@ -92,8 +92,8 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           fill={svgProps.fill || "#1255CB"}
           d="M-227.445 310.023c27.367-210.9 164.227 237.387 810.074 399.198 529.921 152.532 924.281-168.247 896.921 42.654-27.37 210.9-385.34 767.865-974.078 618.635-588.74-149.23-760.283-849.587-732.917-1060.487"
         />
-      </g> */}
-      <g
+      </g>
+      {/* <g
         filter={isMobile ? "url(#bg1-g)" : undefined}
         style={!isMobile ? blur(43.65) : undefined}
       >
@@ -101,7 +101,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           fill="#fff"
           d="M-382.81 885.501c12.557-270.696 393.198-114.418 905.36-71.661 512.16 42.756 961.9-44.201 949.34 226.49-12.55 270.7-437.92 455.48-950.085 412.73C9.642 1410.3-395.368 1156.2-382.81 885.501"
         />
-      </g>
+      </g> */}
       <g
         filter={isMobile ? "url(#bg1-h)" : undefined}
         style={!isMobile ? blur(54.917) : undefined}
