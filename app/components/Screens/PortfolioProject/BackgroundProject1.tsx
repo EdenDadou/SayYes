@@ -63,7 +63,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
-      <g mask="url(#bg1-c)" style={blur(isMobile ? 150 : 274.777)}>
+      {/* <g mask="url(#bg1-c)" style={blur(isMobile ? 150 : 274.777)}>
         <ellipse
           cx={152.646}
           cy={781.921}
@@ -72,13 +72,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           ry={781.921}
           transform="matrix(-.52678 .85 .7861 .61811 -356.828 -9.07)"
         />
-      </g>
-      <g style={blur(isMobile ? 25 : 43.65)}>
-        <path
-          fill={darkerColor}
-          d="M-226.515 218.584c25.703-198.081 165.722 225.868 811.554 387.791 530.061 151.46 921.211-144.56 895.511 53.521S1101.82 1376.83 513.081 1227.6-252.218 416.666-226.515 218.584"
-        />
-      </g>
+      </g> */}
       <g style={blur(isMobile ? 40 : 68.65)}>
         <path
           fill={svgProps.fill || "#1255CB"}
@@ -91,7 +85,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           d="M-382.81 885.501c12.557-270.696 393.198-114.418 905.36-71.661 512.16 42.756 961.9-44.201 949.34 226.49-12.55 270.7-437.92 455.48-950.085 412.73C9.642 1410.3-395.368 1156.2-382.81 885.501"
         />
       </g>
-      <g style={blur(isMobile ? 30 : 54.917)}>
+      {/* <g style={blur(isMobile ? 30 : 54.917)}>
         <ellipse
           cx={732.708}
           cy={190.536}
@@ -130,7 +124,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
           ry={24.468}
           transform="matrix(-.72914 .68437 .71336 .7008 1671.87 -600.162)"
         />
-      </g>
+      </g> */}
       <defs>
         <radialGradient
           id="bg1-i"
