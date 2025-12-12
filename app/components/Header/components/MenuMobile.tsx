@@ -47,7 +47,8 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
             className="w-full h-full inset-0 absolute z-0"
             style={{ transformOrigin: "top center" }}
           >
-            <BackgroundMenuMobile className="w-full h-full" />
+            {/* <BackgroundMenuMobile className="w-full h-full" /> */}
+            <img src="/images/bg-menu-mobile.png" className="w-full h-full" />
           </motion.div>
           <motion.div
             initial={{ scaleY: 0.95 }}
