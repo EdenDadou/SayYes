@@ -67,45 +67,8 @@ const generatePNGFromSVG = async (
 const BackgroundProjectMobile1 = memo(function BackgroundProjectMobile1(
   props: SVGProps<SVGSVGElement>
 ) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  // const [pngDataUrl, setPngDataUrl] = useState<string | null>(null);
-
-  // Générer l'image PNG au montage
-  // useEffect(() => {
-  //   if (svgRef.current && !pngDataUrl) {
-  //     // Attendre que le SVG soit rendu
-  //     setTimeout(() => {
-  //       if (svgRef.current) {
-  //         generatePNGFromSVG(svgRef.current)
-  //           .then(setPngDataUrl)
-  //           .catch(console.error);
-  //       }
-  //     }, 100);
-  //   }
-  // }, [pngDataUrl]);
-
-  // Si le PNG est disponible, l'utiliser
-  // if (pngDataUrl) {
-  //   return (
-  //     <img
-  //       src={pngDataUrl}
-  //       alt=""
-  //       style={{
-  //         ...gpuOptimizedStyle,
-  //         ...props.style,
-  //         width: "100%",
-  //         height: "100%",
-  //         objectFit: "cover",
-  //       }}
-  //       className={props.className}
-  //     />
-  //   );
-  // }
-
-  // Sinon, rendre le SVG (pour la génération PNG)
   return (
     <svg
-      ref={svgRef}
       viewBox="0 0 390 749"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

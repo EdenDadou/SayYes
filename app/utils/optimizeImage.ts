@@ -59,19 +59,27 @@ export function getOptimizedImageUrl(
     return originalUrl;
   }
 
+  // Normaliser les chemins relatifs
+  let normalizedUrl = originalUrl;
+
+  // Gérer les chemins relatifs comme "./images/..." ou "images/..."
+  if (originalUrl.startsWith("./images/")) {
+    normalizedUrl = originalUrl.replace("./images/", "/images/");
+  } else if (originalUrl.startsWith("images/")) {
+    normalizedUrl = "/" + originalUrl;
+  } else if (originalUrl.startsWith("./uploads/")) {
+    normalizedUrl = originalUrl.replace("./uploads/", "/uploads/");
+  } else if (originalUrl.startsWith("uploads/")) {
+    normalizedUrl = "/" + originalUrl;
+  }
+
   // Si ce n'est pas une image dans /uploads/ ou /images/, retourner l'URL originale
-  if (!originalUrl.startsWith("/uploads/") && !originalUrl.startsWith("/images/")) {
-    // Gérer les chemins relatifs comme "./images/..."
-    if (originalUrl.startsWith("./images/")) {
-      const normalizedUrl = originalUrl.replace("./images/", "/images/");
-      const config = SIZE_CONFIG[size];
-      return `/api/image?src=${encodeURIComponent(normalizedUrl)}&w=${config.width}&q=${config.quality}`;
-    }
+  if (!normalizedUrl.startsWith("/uploads/") && !normalizedUrl.startsWith("/images/")) {
     return originalUrl;
   }
 
   const config = SIZE_CONFIG[size];
-  return `/api/image?src=${encodeURIComponent(originalUrl)}&w=${config.width}&q=${config.quality}`;
+  return `/api/image?src=${encodeURIComponent(normalizedUrl)}&w=${config.width}&q=${config.quality}`;
 }
 
 /**
