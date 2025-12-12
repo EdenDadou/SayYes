@@ -169,7 +169,7 @@ export const CardsAccompagnement = ({
           className="absolute top-0 left-0 w-full h-full bg-center bg-no-repeat z-0"
           style={{
             backgroundImage: `url("${isMobile ? bgImageMobile : bgImage}")`,
-            backgroundSize: isMobile ? "contain" : "cover",
+            backgroundSize: "cover",
           }}
         />
         <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center rounded-[40px] bg-black/90 max-h-full">

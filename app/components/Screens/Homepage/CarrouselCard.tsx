@@ -60,7 +60,7 @@ export default function CarouselCard() {
         <Arrow className="w-[18px]" />
         <p>Facilitation graphique</p>
       </div>
-      <div className="flex gap-4 overflow-x-auto pb-2 px-8">
+      <div className="flex gap-4 overflow-x-auto pb-2 px-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {supports.map((card, index) => {
           const data = CardsSupport(card);
           return (

@@ -1,5 +1,5 @@
-import SvgLogoAllClients from "~/components/Sections/Section-2/components/assets/LogoAllClients";
-import SvgStars from "../Sections/Section-1/components/Stars";
+import SvgLogoAllClients from "~/assets/icons/LogoAllClients";
+import SvgStars from "../../assets/icons/Stars";
 
 const ScrollingBanner = () => {
   return (

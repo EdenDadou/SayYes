@@ -1,4 +1,4 @@
-import SvgLogoAllClients from "~/components/Sections/Section-2/components/assets/LogoAllClients";
+import SvgLogoAllClients from "~/assets/icons/LogoAllClients";
 
 const ScrollingBannerMobile = () => {
   return (

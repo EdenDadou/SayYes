@@ -13,7 +13,7 @@ import Play from "~/assets/icons/Play";
 import Pause from "~/assets/icons/Pause";
 import { useModalContact } from "~/contexts/ModalContactContext";
 import GridBg from "~/assets/icons/GridBg";
-import SvgLogoAllClients from "~/components/Sections/Section-2/components/assets/LogoAllClients";
+import SvgLogoAllClients from "~/assets/icons/LogoAllClients";
 
 export const VIDEO_DURATION = 4.5;
 

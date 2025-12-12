@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useViewport } from "~/utils/hooks/useViewport";
-import Arrow from "~/assets/icons/Arrow";
-import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import "~/styles/tailwind.css";
 import Card from "~/components/Card";
 import Coche from "~/assets/icons/Coche";
@@ -229,22 +227,22 @@ export default function TitleStepImage() {
   return isMobile ? (
     <section
       ref={sectionRef}
-      className="w-full relative px-5 pt-20 pb-12 flex flex-col gap-10"
+      className="w-full relative px-5 pt-20 pb-12 flex flex-col gap-10 overflow-hidden"
     >
       <img
         src="./images/homepage/bg-halo.png"
         alt="background"
-        className="absolute left-0 top-0 w-3/4 h-auto z-0 opacity-60 rotate-180"
+        className="absolute left-1/2 -translate-x-1/2 top-0 w-full h-auto z-0 opacity-60 rotate-180"
       />
-      <div className="relative z-10 flex flex-col gap-6">
+      <div className="relative z-10 flex flex-col gap-6 items-center">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
-        <h2 className="glassy font-jakarta-semi-bold text-[32px] leading-[34px] tracking-[-2px] whitespace-pre-line">
-          {`Prêt à transformer\n votre image`}
+        <h2 className="glassy font-jakarta-semi-bold text-[32px] leading-[34px] tracking-[-2px] whitespace-pre-line text-center">
+          {`Prêt à transformer\nvotre image`}
         </h2>
-        <p className="font-jakarta text-[16px] text-white">
+        <p className="font-jakarta text-[16px] text-white text-center">
           Les 4 étapes pour lancer votre projet :
         </p>
-        <div className="relative flex flex-col gap-4">
+        <div className="relative flex flex-col gap-4 w-full">
           {renderStep(
             1,
             "01. Indiquez vos coordonnées",
