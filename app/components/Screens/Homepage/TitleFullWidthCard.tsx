@@ -5,7 +5,43 @@ import { useRef } from "react";
 import Coche from "~/assets/icons/Coche";
 import { useScroll } from "framer-motion";
 import "~/styles/tailwind.css";
-import Card from "~/components/Card";
+
+// Composant Cards parallax pour mobile (comme TitleCards)
+function AccompagnementCardsParallaxMobile() {
+  const container = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  const allCards = cardsAccompagnement.map((card) =>
+    CardsAccompagnement({ ...card, isMobile: true })
+  );
+
+  return (
+    <div ref={container} className="relative w-full px-4">
+      {allCards.map((card, index) => {
+        const targetScale =
+          index === allCards.length - 1
+            ? 1
+            : 1 - (allCards.length - index) * 0.03;
+        return (
+          <ParallaxCard
+            key={card.title}
+            index={index}
+            totalCards={allCards.length}
+            content={card.content}
+            borderClass={card.borderClass}
+            progress={scrollYProgress}
+            targetScale={targetScale}
+            isMobile
+            height="575px"
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 function AccompagnementCardsParallax() {
   const container = useRef<HTMLDivElement>(null);
@@ -59,21 +95,8 @@ export default function TitleFullWidthCard() {
           <p>Prouvée</p>
         </div>
       </div>
-      <div className="flex flex-col gap-5 w-full px-4">
-        {cardsAccompagnement.map((card) => {
-          const data = CardsAccompagnement({ ...card, isMobile: true });
-          return (
-            <Card
-              key={data.title}
-              height="575px"
-              borderRadius="28px"
-              borderClass="light-border rounded-[28px]"
-              content={data.content}
-            />
-          );
-        })}
-      </div>
-      <div className="flex flex-col gap-4">
+      <AccompagnementCardsParallaxMobile />
+      <div className="flex flex-col gap-4 px-4 w-full">
         {cardsAccompagnementSmall.map((card) => {
           const data = CardsAccompagnementSmall(card);
           return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Card from "~/components/Card";
@@ -8,6 +8,7 @@ import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
 export default function TemoignagesCards({}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const itemsPerView = 4; // Affiche 4 cartes: 2 complètes au centre + 2 bouts sur les côtés
 
   const nextSlide = () => {
@@ -37,6 +38,7 @@ export default function TemoignagesCards({}) {
 
   // Card width + gap
   const cardWidth = 314;
+  const mobileCardWidth = 280;
   const gap = 16;
 
   const slideVariants = {
@@ -60,25 +62,68 @@ export default function TemoignagesCards({}) {
   };
 
   return (
-    <div className={`relative w-full flex  flex-col pt-16 gap-16 z-10 `}>
+    <div
+      className={`relative w-full flex flex-col pt-8 md:pt-16 gap-8 md:gap-16 z-10`}
+    >
       <img
         src="./images/homepage/bg-halo.png"
         alt="background"
-        className="absolute inset-0 w-1/2 h-full object-cover z-[-1]"
+        className="absolute inset-0 w-full md:w-1/2 h-full object-cover z-[-1] opacity-60 md:opacity-100"
       />
       {/* Title Section */}
-      <div className="max-w-[990px] m-auto flex flex-col items-center gap-4">
-        <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full my-8" />
-        <div className="flex flex-row font-jakarta-semibold text-[27px] leading-[30px] text-white items-center gap-2">
-          <NoteStar className="w-6 h-6 flex-shrink-0" />
+      <div className="max-w-[990px] m-auto flex flex-col items-center gap-4 px-4">
+        <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full my-4 md:my-8" />
+        <div className="flex flex-row font-jakarta-semibold text-[20px] md:text-[27px] leading-[24px] md:leading-[30px] text-white items-center gap-2">
+          <NoteStar className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0" />
           <span>Sortlist 4.9 I 5</span>
         </div>
-        <h2 className="font-jakarta-semi-bold text-[48px] leading-[50px] text-center glassy tracking-[-1px] whitespace-pre-line">
+        <h2 className="font-jakarta-semi-bold text-[28px] md:text-[48px] leading-[32px] md:leading-[50px] text-center glassy tracking-[-1px] whitespace-pre-line">
           {`Ils en parlent mieux que nous !`}
         </h2>
       </div>
-      {/* Carousel Container */}
-      <div className="relative w-full overflow-hidden">
+
+      {/* Mobile Carousel - Scroll horizontal */}
+      <div className="md:hidden w-full">
+        <div
+          ref={scrollContainerRef}
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-4 pb-4"
+          style={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          {temoignagesCards.map((temoignage, index) => {
+            const data = CardsTemoignage(temoignage);
+            return (
+              <div
+                key={`mobile-${temoignage.auteur}-${index}`}
+                className="flex-shrink-0 snap-center first:ml-0 last:mr-0"
+                style={{ width: `${mobileCardWidth}px` }}
+              >
+                <Card
+                  height="380px"
+                  borderRadius={data.borderRadius + "px"}
+                  content={data.content}
+                  borderClass={data.borderClass}
+                />
+              </div>
+            );
+          })}
+        </div>
+        {/* Indicateurs de pagination mobile */}
+        <div className="flex justify-center gap-2 mt-4">
+          {temoignagesCards.map((_, index) => (
+            <div
+              key={`dot-${index}`}
+              className="w-2 h-2 rounded-full bg-white/30"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Carousel Container */}
+      <div className="hidden md:block relative w-full overflow-hidden">
         {/* Carousel Content */}
         <div className="relative h-[420px] w-full">
           {/* Navigation Arrows - centered vertically with cards */}

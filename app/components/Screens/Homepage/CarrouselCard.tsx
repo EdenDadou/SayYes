@@ -35,8 +35,15 @@ export default function CarouselCard() {
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   return isMobile ? (
-    <section className="w-full px-5 flex flex-col  gap-6">
-      <div className="flex flex-col items-center gap-6">
+    <section className="w-full  flex flex-col  gap-6 relative overflow-x-clip">
+      <div className="absolute -translate-x-1 w-[200%] h-full">
+        <img
+          src="./images/homepage/bg-halo.png"
+          alt="background"
+          className=" h-auto w-full rotate-180 scale-x-[-1]"
+        />
+      </div>
+      <div className="flex flex-col items-center gap-6 px-5">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
         <h2 className="font-jakarta-semi-bold text-[30px] leading-[36px] text-center glassy tracking-[-1px] whitespace-pre-line">
           {`Nous designons tous vos\nsupports de communication !`}
@@ -53,7 +60,7 @@ export default function CarouselCard() {
         <Arrow className="w-[18px]" />
         <p>Facilitation graphique</p>
       </div>
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div className="flex gap-4 overflow-x-auto pb-2 px-8">
         {supports.map((card, index) => {
           const data = CardsSupport(card);
           return (
