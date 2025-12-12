@@ -69,12 +69,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const fileBuffer = await readFile(filePath);
 
     // Détecter le format de sortie optimal
+    // Note: On désactive AVIF par défaut car il peut causer des problèmes sur iOS Safari
     const acceptHeader = request.headers.get("Accept") || "";
+    const userAgent = request.headers.get("User-Agent") || "";
+    const isIOSSafari = /iPhone|iPad|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+
     let outputFormat: "webp" | "avif" | "jpeg" = "jpeg";
 
     if (format) {
       outputFormat = format;
-    } else if (acceptHeader.includes("image/avif")) {
+    } else if (acceptHeader.includes("image/avif") && !isIOSSafari) {
+      // Désactiver AVIF sur iOS Safari - problèmes de compatibilité
       outputFormat = "avif";
     } else if (acceptHeader.includes("image/webp")) {
       outputFormat = "webp";

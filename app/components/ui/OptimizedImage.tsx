@@ -51,6 +51,7 @@ export const OptimizedImage = memo(function OptimizedImage({
   ...props
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(noPlaceholder);
+  const [hasError, setHasError] = useState(false);
   const [isMobile, setIsMobile] = useState(forceMobile ?? false);
 
   useEffect(() => {
@@ -58,6 +59,16 @@ export const OptimizedImage = memo(function OptimizedImage({
       setIsMobile(window.innerWidth < 768);
     }
   }, [forceMobile]);
+
+  // Fallback: si l'image ne charge pas après 5s, la rendre visible quand même
+  useEffect(() => {
+    if (!isLoaded && !noPlaceholder) {
+      const timeout = setTimeout(() => {
+        setIsLoaded(true);
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isLoaded, noPlaceholder]);
 
   if (!src) return null;
 
@@ -69,13 +80,16 @@ export const OptimizedImage = memo(function OptimizedImage({
   // Appliquer les optimisations mobile seulement si activées
   const shouldApplyMobileStyles = isMobile && !noMobileOptimization;
 
+  // En cas d'erreur, utiliser l'URL originale
+  const finalSrc = hasError ? src : optimizedSrc;
+
   // Mode sans wrapper - rendu direct de l'img
   if (noWrapper || noPlaceholder) {
     return (
       <img
-        src={optimizedSrc}
-        srcSet={srcSet}
-        sizes={sizes}
+        src={finalSrc}
+        srcSet={hasError ? undefined : srcSet}
+        sizes={hasError ? undefined : sizes}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
@@ -86,6 +100,11 @@ export const OptimizedImage = memo(function OptimizedImage({
           setIsLoaded(true);
           onImageLoad?.();
         }}
+        onError={() => {
+          if (!hasError) {
+            setHasError(true);
+          }
+        }}
         {...props}
       />
     );
@@ -95,7 +114,7 @@ export const OptimizedImage = memo(function OptimizedImage({
   return (
     <div className={`relative ${className}`} style={shouldApplyMobileStyles ? { ...mobileOptimizedStyle, ...style } : style}>
       {/* Placeholder blur */}
-      {placeholderSrc && !isLoaded && (
+      {placeholderSrc && !isLoaded && !hasError && (
         <img
           src={placeholderSrc}
           alt=""
@@ -105,9 +124,9 @@ export const OptimizedImage = memo(function OptimizedImage({
       )}
 
       <img
-        src={optimizedSrc}
-        srcSet={srcSet}
-        sizes={sizes}
+        src={finalSrc}
+        srcSet={hasError ? undefined : srcSet}
+        sizes={hasError ? undefined : sizes}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
@@ -116,6 +135,12 @@ export const OptimizedImage = memo(function OptimizedImage({
         onLoad={() => {
           setIsLoaded(true);
           onImageLoad?.();
+        }}
+        onError={() => {
+          if (!hasError) {
+            setHasError(true);
+            setIsLoaded(true); // Rendre visible même en cas d'erreur avec fallback
+          }
         }}
         {...props}
       />
