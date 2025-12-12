@@ -63,7 +63,10 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
-      <g mask="url(#bg1-c)" style={blur(isMobile ? 150 : 274.777)}>
+      <g
+        filter={isMobile ? "url(#blur-ellipse)" : undefined}
+        style={!isMobile ? blur(274.777) : undefined}
+      >
         <ellipse
           cx={152.646}
           cy={781.921}
@@ -134,6 +137,16 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       <defs>
         {isMobile && (
           <>
+            <filter
+              id="blur-ellipse"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+              colorInterpolationFilters="sRGB"
+            >
+              <feGaussianBlur stdDeviation={150} />
+            </filter>
             <filter
               id="blur-main"
               x="-50%"
