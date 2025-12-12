@@ -1,11 +1,34 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import sharp from "sharp";
-import { readFile } from "fs/promises";
+import { readFile, writeFile, mkdir, stat } from "fs/promises";
 import { join } from "path";
+import { createHash } from "crypto";
 
-// Cache en mémoire simple pour les images redimensionnées
+// Cache en mémoire simple pour les images redimensionnées (cache L1)
 const imageCache = new Map<string, { buffer: Buffer; timestamp: number }>();
-const CACHE_DURATION = 1000 * 60 * 60; // 1 heure
+const MEMORY_CACHE_DURATION = 1000 * 60 * 60; // 1 heure en mémoire
+const DISK_CACHE_DURATION = 1000 * 60 * 60 * 24 * 7; // 7 jours sur disque
+
+// Dossier de cache sur disque
+const CACHE_DIR = join(process.cwd(), ".cache", "images");
+
+// Créer le dossier de cache si nécessaire
+let cacheDirectoryReady = false;
+async function ensureCacheDirectory() {
+  if (cacheDirectoryReady) return;
+  try {
+    await mkdir(CACHE_DIR, { recursive: true });
+    cacheDirectoryReady = true;
+  } catch {
+    // Ignorer si déjà existant
+  }
+}
+
+// Générer un hash pour le nom de fichier cache
+function getCacheFileName(key: string): string {
+  const hash = createHash("md5").update(key).digest("hex");
+  return join(CACHE_DIR, `${hash}.cache`);
+}
 
 // Tailles prédéfinies (20px pour placeholder blur)
 const ALLOWED_WIDTHS = [20, 150, 320, 480, 640, 768, 1024, 1280, 1920];
@@ -46,21 +69,44 @@ export async function loader({ request }: LoaderFunctionArgs) {
     Math.abs(curr - width) < Math.abs(prev - width) ? curr : prev
   ) : 0;
 
-  // Clé de cache
+  // Clé de cache (inclut le format demandé)
   const cacheKey = `${imagePath}-${finalWidth}-${quality}-${format || "auto"}`;
+  const diskCacheFile = getCacheFileName(cacheKey);
 
-  // Vérifier le cache
-  const cached = imageCache.get(cacheKey);
-  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+  // 1. Vérifier le cache mémoire (L1)
+  const memoryCached = imageCache.get(cacheKey);
+  if (memoryCached && Date.now() - memoryCached.timestamp < MEMORY_CACHE_DURATION) {
     const contentType = format === "avif" ? "image/avif" :
                         format === "webp" ? "image/webp" : "image/jpeg";
-    return new Response(new Uint8Array(cached.buffer), {
+    return new Response(new Uint8Array(memoryCached.buffer), {
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=31536000, immutable",
-        "X-Cache": "HIT",
+        "X-Cache": "HIT-MEMORY",
       },
     });
+  }
+
+  // 2. Vérifier le cache disque (L2)
+  try {
+    await ensureCacheDirectory();
+    const diskStats = await stat(diskCacheFile);
+    if (Date.now() - diskStats.mtimeMs < DISK_CACHE_DURATION) {
+      const diskBuffer = await readFile(diskCacheFile);
+      // Remettre en cache mémoire
+      imageCache.set(cacheKey, { buffer: diskBuffer as Buffer, timestamp: Date.now() });
+      const contentType = format === "avif" ? "image/avif" :
+                          format === "webp" ? "image/webp" : "image/jpeg";
+      return new Response(new Uint8Array(diskBuffer), {
+        headers: {
+          "Content-Type": contentType,
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "X-Cache": "HIT-DISK",
+        },
+      });
+    }
+  } catch {
+    // Fichier cache n'existe pas, on continue
   }
 
   try {
@@ -120,17 +166,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
         contentType = "image/jpeg";
     }
 
-    // Mettre en cache
+    // Mettre en cache mémoire (L1)
     imageCache.set(cacheKey, {
       buffer: outputBuffer,
       timestamp: Date.now(),
     });
 
-    // Nettoyer le cache si trop grand (max 100 entrées)
+    // Nettoyer le cache mémoire si trop grand (max 100 entrées)
     if (imageCache.size > 100) {
       const oldestKey = imageCache.keys().next().value;
       if (oldestKey) imageCache.delete(oldestKey);
     }
+
+    // Écrire sur disque (L2) en arrière-plan
+    writeFile(diskCacheFile, outputBuffer).catch(() => {
+      // Ignorer les erreurs d'écriture cache
+    });
 
     return new Response(new Uint8Array(outputBuffer), {
       headers: {
