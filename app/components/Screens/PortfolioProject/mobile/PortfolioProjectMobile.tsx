@@ -3,7 +3,7 @@ import { motion, useInView } from "framer-motion";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Star from "~/assets/icons/Star";
 import Coche from "~/assets/icons/Coche";
-import BackgroundProject1 from "~/components/Screens/PortfolioProject/BackgroundProject1";
+
 import BackgroundProject2 from "~/components/Screens/PortfolioProject/BackgroundProject2";
 import PhotoMain from "~/components/Screens/Portfolio/components/PhotoMain";
 import BackgroundProject3 from "~/components/Screens/PortfolioProject/BackgroundProject3";
@@ -14,7 +14,7 @@ import BentoMobile from "~/components/Screens/Portfolio/components/BentoMobile";
 import ProjectCarouselMobile from "~/components/Screens/Portfolio/components/ProjetCarrouselMobile";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
-import SvgBackgroundProjectMobile1 from "./BackgroundProjectMobile1";
+import BackgroundProjectMobile1 from "./BackgroundProjectMobile1";
 
 // Style pour optimiser le scroll sur mobile
 const mobileScrollContainerStyle: CSSProperties = {
@@ -157,7 +157,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
         animate={{ opacity: loadStage >= 1 ? 1 : 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <SvgBackgroundProjectMobile1
+        <BackgroundProjectMobile1
           className="absolute inset-0 w-screen object-cover z-10"
           color={portfolio.couleur}
         />

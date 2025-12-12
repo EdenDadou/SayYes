@@ -1,11 +1,117 @@
-import type { SVGProps } from "react";
-const SvgBackgroundProjectMobile1 = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 390 749"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+import {
+  memo,
+  type SVGProps,
+  type CSSProperties,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+// Styles pour l'optimisation GPU
+const gpuOptimizedStyle: CSSProperties = {
+  transform: "translateZ(0)",
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+  contain: "layout paint",
+  pointerEvents: "none",
+};
+
+// Fonction pour générer une image PNG à partir du SVG avec filtres
+const generatePNGFromSVG = async (
+  svgElement: SVGSVGElement,
+  width: number = 390,
+  height: number = 749
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        reject(new Error("Canvas context not available"));
+        return;
+      }
+
+      // Cloner le SVG pour éviter de modifier l'original
+      const clonedSvg = svgElement.cloneNode(true) as SVGSVGElement;
+      clonedSvg.setAttribute("width", width.toString());
+      clonedSvg.setAttribute("height", height.toString());
+
+      // Convertir le SVG en data URL
+      const svgData = new XMLSerializer().serializeToString(clonedSvg);
+      const svgBlob = new Blob([svgData], {
+        type: "image/svg+xml;charset=utf-8",
+      });
+      const url = URL.createObjectURL(svgBlob);
+
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, width, height);
+        URL.revokeObjectURL(url);
+        const pngDataUrl = canvas.toDataURL("image/png");
+        resolve(pngDataUrl);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Failed to load SVG image"));
+      };
+      img.src = url;
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+const BackgroundProjectMobile1 = memo(function BackgroundProjectMobile1(
+  props: SVGProps<SVGSVGElement>
+) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [pngDataUrl, setPngDataUrl] = useState<string | null>(null);
+
+  // Générer l'image PNG au montage
+  useEffect(() => {
+    if (svgRef.current && !pngDataUrl) {
+      // Attendre que le SVG soit rendu
+      setTimeout(() => {
+        if (svgRef.current) {
+          generatePNGFromSVG(svgRef.current)
+            .then(setPngDataUrl)
+            .catch(console.error);
+        }
+      }, 100);
+    }
+  }, [pngDataUrl]);
+
+  // Si le PNG est disponible, l'utiliser
+  if (pngDataUrl) {
+    return (
+      <img
+        src={pngDataUrl}
+        alt=""
+        style={{
+          ...gpuOptimizedStyle,
+          ...props.style,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+        className={props.className}
+      />
+    );
+  }
+
+  // Sinon, rendre le SVG (pour la génération PNG)
+  return (
+    <svg
+      ref={svgRef}
+      viewBox="0 0 390 749"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ ...gpuOptimizedStyle, ...props.style }}
+      {...props}
+    >
     <g clipPath="url(#clip0_521_1635)">
       <rect width={390} height={749} fill="black" />
       <g clipPath="url(#clip1_521_1635)">
@@ -325,6 +431,8 @@ const SvgBackgroundProjectMobile1 = (props: SVGProps<SVGSVGElement>) => (
         <rect width={390} height={825} fill="white" />
       </clipPath>
     </defs>
-  </svg>
-);
-export default SvgBackgroundProjectMobile1;
+    </svg>
+  );
+});
+
+export default BackgroundProjectMobile1;

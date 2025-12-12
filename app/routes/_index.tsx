@@ -6,11 +6,6 @@ import Desktoplayout from "~/components/Layout/Desktop";
 import IntroSection from "~/components/Screens/Homepage/IntroSection";
 import "~/styles/tailwind.css";
 import TitleCards from "~/components/Screens/Homepage/TitleCards/TitleCards";
-import {
-  CardBottomIdentiteVisuelle,
-  CardsIdentiteVisuelle,
-  contentIdentiteVisuelle,
-} from "~/components/Screens/Homepage/TitleCards/TitleCards.helpers";
 import RowTitlePicture from "~/components/Screens/Homepage/RowTitlePicture";
 import CarouselCard from "~/components/Screens/Homepage/CarrouselCard";
 import LoadingBar from "~/components/LoadingBar";

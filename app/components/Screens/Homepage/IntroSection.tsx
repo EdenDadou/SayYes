@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useViewport } from "~/utils/hooks/useViewport";
 import { AnimatePresence, motion } from "framer-motion";
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import TitleHomepage from "~/assets/icons/TitleHomepage";
 import "~/styles/tailwind.css";
 import Arrow from "~/assets/icons/Arrow";
@@ -51,7 +51,7 @@ export default function IntroSection() {
       <GridBg className="absolute -top-36 w-full left-0 right-0 h-auto z-0 opacity-80" />
       <div className="relative z-10 flex flex-col items-center gap-7">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
-        <TitleHomepage className="w-full" />
+        <img src="images/homepage/mobile/title.png" />
         <div className="flex flex-col gap-1 text-[18px] leading-[22px] font-jakarta-semibold items-center">
           <div className="flex flex-row items-center gap-2">
             <Arrow className="w-4" />
