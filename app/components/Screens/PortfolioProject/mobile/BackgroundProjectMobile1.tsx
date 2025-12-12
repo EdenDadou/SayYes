@@ -31,7 +31,7 @@ const SvgBackgroundProjectMobile1 = (props: SVGProps<SVGSVGElement>) => (
               rx={152.646}
               ry={781.921}
               transform="matrix(-0.526779 0.850003 0.786091 0.618111 -357.016 10.9297)"
-              fill={props.fill || "#1255CB"}
+              fill={props.color || "#1255CB"}
             />
           </g>
         </g>
@@ -39,7 +39,7 @@ const SvgBackgroundProjectMobile1 = (props: SVGProps<SVGSVGElement>) => (
       <g filter="url(#filter1_f_521_1635)">
         <path
           d="M-120.582 255.36C-104.613 119.911 -21.3046 410.231 367.35 522.393C686.291 627.149 922.646 425.49 906.677 560.939C890.708 696.389 676.773 1050.56 322.48 947.209C-31.8129 843.853 -136.551 390.809 -120.582 255.36Z"
-          fill={props.fill || "#1255CB"}
+          fill={props.color || "#1255CB"}
         />
       </g>
       <g filter="url(#filter2_f_521_1635)">
@@ -282,8 +282,8 @@ const SvgBackgroundProjectMobile1 = (props: SVGProps<SVGSVGElement>) => (
         gradientUnits="userSpaceOnUse"
         gradientTransform="translate(362.992 94.3939) scale(362.992 94.3939)"
       >
-        <stop stopColor="#1255CB" />
-        <stop offset={1} stopColor="#1255CB" stopOpacity={0} />
+        <stop stopColor={props.color || "#1255CB"} />
+        <stop offset={1} stopColor={props.color || "#1255CB"} stopOpacity={0} />
       </radialGradient>
       <radialGradient
         id="paint1_radial_521_1635"
@@ -304,8 +304,8 @@ const SvgBackgroundProjectMobile1 = (props: SVGProps<SVGSVGElement>) => (
         gradientUnits="userSpaceOnUse"
         gradientTransform="translate(361.296 94.8798) scale(361.296 94.8798)"
       >
-        <stop offset={0.331731} stopColor="#1255CB" />
-        <stop offset={1} stopColor="#1255CB" stopOpacity={0} />
+        <stop offset={0.331731} stopColor={props.color || "#1255CB"} />
+        <stop offset={1} stopColor={props.color || "#1255CB"} stopOpacity={0} />
       </radialGradient>
       <radialGradient
         id="paint3_radial_521_1635"
