@@ -64,26 +64,6 @@ const BackgroundProject1 = memo(function BackgroundProject1(
       style={{ ...gpuOptimizedStyle, ...svgProps.style }}
       {...svgProps}
     >
-      <g mask="url(#bg1-c)" filter={isMobile ? "url(#bg1-d)" : undefined}>
-        <ellipse
-          cx={152.646}
-          cy={781.921}
-          fill={svgProps.fill || "#1255CB"}
-          rx={152.646}
-          ry={781.921}
-          transform="matrix(-.52678 .85 .7861 .61811 -356.828 -9.07)"
-          style={!isMobile ? blur(274.777) : undefined}
-        />
-      </g>
-      <g
-        filter={isMobile ? "url(#bg1-e)" : undefined}
-        style={!isMobile ? blur(43.65) : undefined}
-      >
-        <path
-          fill={darkerColor}
-          d="M-226.515 218.584c25.703-198.081 165.722 225.868 811.554 387.791 530.061 151.46 921.211-144.56 895.511 53.521S1101.82 1376.83 513.081 1227.6-252.218 416.666-226.515 218.584"
-        />
-      </g>
       <g
         filter={isMobile ? "url(#bg1-f)" : undefined}
         style={!isMobile ? blur(68.65) : undefined}
@@ -97,19 +77,6 @@ const BackgroundProject1 = memo(function BackgroundProject1(
         <path
           fill="#fff"
           d="M-382.81 885.501c12.557-270.696 393.198-114.418 905.36-71.661 512.16 42.756 961.9-44.201 949.34 226.49-12.55 270.7-437.92 455.48-950.085 412.73C9.642 1410.3-395.368 1156.2-382.81 885.501"
-        />
-      </g>
-      <g
-        filter={isMobile ? "url(#bg1-h)" : undefined}
-        style={!isMobile ? blur(54.917) : undefined}
-      >
-        <ellipse
-          cx={732.708}
-          cy={190.536}
-          fill="url(#bg1-i)"
-          rx={732.708}
-          ry={190.536}
-          transform="matrix(-.81582 .5783 .60034 .79975 1540.98 -633.949)"
         />
       </g>
       <g
@@ -229,10 +196,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
                 in2="BackgroundImageFix"
                 result="shape"
               />
-              <feGaussianBlur
-                result="effect1"
-                stdDeviation={25 * blurScale}
-              />
+              <feGaussianBlur result="effect1" stdDeviation={25 * blurScale} />
             </filter>
             <filter
               id="bg1-h"
