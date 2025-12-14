@@ -1,15 +1,10 @@
 import { useViewport } from "~/utils/hooks/useViewport";
-import { lazy, Suspense, useRef } from "react";
+import { Suspense, useRef } from "react";
 import AnimatedText from "~/components/AnimatedText";
 import { motion, useScroll, useTransform } from "framer-motion";
 import "~/styles/tailwind.css";
 import OptimizedImage from "~/components/ui/OptimizedImage";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
-
-// Lazy load du composant Background volumineux
-const BackgroundTemoignage = lazy(
-  () => import("~/assets/icons/BackgroundTemoignage")
-);
 
 const temoignageText = `"L'expérience se résume ainsi :\nOn a envie de recommencer ! Ils sont très\nprofessionnels, disponibles, fiables et fournissent\nun travail de grande qualité. Je ne compte plus les\npersonnes qui m'ont félicité de mon choix de les\navoir engagés ou qui me demandent leur\ncoordonnées."`;
 const temoignageTextMobile = `"L'expérience se résume ainsi :\nOn a envie de recommencer ! Ils sont\ntrès professionnels, disponibles,\nfiables et fournissent un travail de\ngrande qualité. Je ne compte plus\nles personnes qui m'ont félicité de\nmon choix de les avoir engagés ou\nqui me demandent leur\ncoordonnées."`;
@@ -29,10 +24,10 @@ export default function BigTemoignage() {
   });
 
   // Différentes vitesses de parallax pour chaque image - effet accentué
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -250]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -400]);
-  const y1Mobile = useTransform(scrollYProgressMobile, [0, 1], [50, -350]);
-  const y2Mobile = useTransform(scrollYProgressMobile, [0, 1], [0, -450]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const y1Mobile = useTransform(scrollYProgressMobile, [0, 1], [250, -380]);
+  const y2Mobile = useTransform(scrollYProgressMobile, [0, 1], [300, -380]);
 
   return isMobile ? (
     <section className="w-full relative px-5 pt-48 flex flex-col items-center gap-10">
@@ -70,7 +65,7 @@ export default function BigTemoignage() {
           </span>
         </p>
       </div>
-      <div className="relative w-full flex justify-center mt-40">
+      <div className="relative w-full flex justify-center">
         <div className="relative w-screen h-56" ref={imagesContainerRefMobile}>
           <motion.img
             src={getOptimizedImageUrl(
@@ -96,7 +91,11 @@ export default function BigTemoignage() {
   ) : (
     <div className="w-screen relative">
       <Suspense fallback={<div className="absolute right-0 h-auto z-0" />}>
-        <BackgroundTemoignage className="absolute right-0 h-auto z-0" />
+        {/* <BackgroundTemoignage className="absolute right-0 h-auto z-0" /> */}
+        <img
+          src="images/homepage/bg-temoignage.png"
+          className="absolute right-0 h-auto z-0 w-full"
+        />
       </Suspense>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-8 pt-52">
         <OptimizedImage

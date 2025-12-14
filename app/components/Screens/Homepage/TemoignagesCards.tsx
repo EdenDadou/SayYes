@@ -6,8 +6,11 @@ import NoteStar from "~/assets/icons/NoteStar";
 import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
 import OptimizedImage from "~/components/ui/OptimizedImage";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
+import { useViewport } from "~/utils/hooks/useViewport";
+import ScrollingBannerMobile from "~/components/BrandBanner/ScrollingBannerMobile";
 
 export default function TemoignagesCards({}) {
+  const isMobile = useViewport();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -204,7 +207,7 @@ export default function TemoignagesCards({}) {
           </AnimatePresence>
         </div>
       </div>
-      <ScrollingBanner />
+      {isMobile ? <ScrollingBannerMobile /> : <ScrollingBanner />}
     </div>
   );
 }

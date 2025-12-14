@@ -21,7 +21,10 @@ function AccompagnementCardsParallaxMobile() {
   );
 
   return (
-    <div ref={container} className="relative w-full px-4 py-6 flex flex-col gap-20">
+    <div
+      ref={container}
+      className="relative w-full px-4 py-6 flex flex-col gap-20"
+    >
       {allCards.map((card, index) => {
         const targetScale =
           index === allCards.length - 1
@@ -119,7 +122,7 @@ export default function TitleFullWidthCard() {
           <OptimizedImage
             src="./images/homepage/bg-halo.png"
             alt="background"
-            className="absolute left-0 top-0 w-[60%] max-w-none h-auto opacity-90 scale-x-[-1] rotate-180"
+            className="absolute left-0 top-0 w-[60%] max-w-none h-auto opacity-90 scale-x-[-1] rotate-180 blur-xl"
             desktopSize="tablet"
             noPlaceholder
           />
@@ -176,7 +179,7 @@ export const CardsAccompagnement = ({
     title,
     borderClass: "light-border rounded-[40px]",
     content: (
-      <div className="h-full w-full md:w-[988px] relative md:p-14 p-6 cursor-pointer shadow-lg overflow-hidden rounded-[40px] max-h-full flex flex-col items-center justify-end">
+      <div className="h-full w-full md:w-[988px] relative md:p-14 p-6 cursor-pointer shadow-lg overflow-hidden rounded-[40px] max-h-full flex flex-col items-center md:items-start justify-end">
         <div
           className="absolute top-0 left-0 w-full h-full bg-center bg-no-repeat z-0"
           style={{
@@ -184,7 +187,7 @@ export const CardsAccompagnement = ({
             backgroundSize: "cover",
           }}
         />
-        <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center rounded-[40px] bg-black/90 max-h-full w-full">
+        <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center md:justify-start rounded-[40px] md:bg-black/90 bg-black/40 max-h-full w-full backdrop-blur-sm">
           <div className="relative flex flex-col md:gap-4 gap-2 justify-center py-2 overflow-hidden size-full rounded-[40px] md:p-12 p-6 max-h-full">
             <div className="purple-halo absolute -bottom-100 translate-y-2/3 left-0 w-full h-full z-0" />
             <div className="flex flex-col md:gap-4 gap-2 z-10">
@@ -261,27 +264,27 @@ export const CardsAccompagnementSmall = ({
   const optimizedIcon = getOptimizedImageUrl(icon, "thumbnail");
   return {
     content: (
-      <div className="border-grey-animed z-10 relative h-[230px] w-full md:w-[476px] justify-center rounded-[40px] bg-black/90">
-        <div className="relative flex flex-col gap-4 justify-center py-2 overflow-hidden size-full rounded-[40px] p-12">
+      <div className="border-grey-animed z-10 relative md:h-[230px] h-full w-full md:w-[476px] justify-center md:rounded-[40px] rounded-[36px] bg-black/90 py-5 overflow-hidden">
+        <div className="relative flex flex-col gap-4 justify-center py-2 size-full rounded-[40px] md:p-12 p-6">
           <div className="purple-halo absolute -bottom-100 translate-y-2/3 left-0 w-full h-full z-0" />
           <div className="flex flex-row items-start justify-between">
             <div className="flex flex-col gap-4 z-10">
-              <p className="glassy font-jakarta-semi-bold text-[33px] leading-[36px] tracking-[-1px] whitespace-pre-line">
+              <p className="glassy font-jakarta-semi-bold text-[33px] leading-[40px] tracking-[-1px] whitespace-pre-line">
                 {title}
               </p>
-              <ul className="flex flex-col gap-4">
+              <ul className="flex flex-col md:gap-4 gap-2">
                 {liste.map((item) => (
                   <li key={item} className="flex flex-row items-center gap-2">
                     <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF]" />
-                    <p className="text-white font-jakarta text-[16px] leading-[18px] tracking-[-1px] whitespace-pre-line">
+                    <p className="text-white font-jakarta  md:text-[16px] text-[14px] leading-[18px] md:tracking-[-1px] tracking-[-0.5px]whitespace-pre-line">
                       {item}
                     </p>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="p-4 metal w-fit h-fit">
-              <img src={optimizedIcon} alt={title} className="h-8" />
+            <div className="md:p-4 p-3 metal w-fit h-fit">
+              <img src={optimizedIcon} alt={title} className="md:h-8 h-5" />
             </div>
           </div>
         </div>

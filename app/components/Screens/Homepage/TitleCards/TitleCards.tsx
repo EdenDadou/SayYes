@@ -26,7 +26,7 @@ function TitleCardsParallaxMobile() {
   const allCards = [...rowCards, bottomCard];
 
   return (
-    <div ref={container} className="relative w-full px-5">
+    <div ref={container} className="relative w-full px-5 -mt-16">
       {allCards.map((card, index) => {
         const targetScale =
           index === allCards.length - 1

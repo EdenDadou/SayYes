@@ -37,7 +37,7 @@ export default function CarouselCard() {
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   return isMobile ? (
-    <section className="w-full  flex flex-col  gap-6 relative overflow-x-clip">
+    <section className="w-full  flex flex-col  gap-6 relative overflow-x-clip ">
       <div className="absolute -translate-x-1 w-[200%] h-full">
         <OptimizedImage
           src="./images/homepage/bg-halo.png"
@@ -97,8 +97,24 @@ export default function CarouselCard() {
         {/* Sticky container qui reste fixe pendant le scroll */}
         <div className="sticky top-0 h-screen flex flex-col justify-center items-center">
           {/* Backgrounds positionnés en dehors du flux */}
-          <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80 pointer-events-none" />
-          <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%] pointer-events-none" />
+          {/* <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80 pointer-events-none" />
+          <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%] pointer-events-none" /> */}
+          <OptimizedImage
+            src="./images/homepage/bg-halo.png"
+            alt="background"
+            className="absolute right-0 h-auto z-0 w-1/2 top-80 pointer-events-none scale-x-[-1]"
+            mobileSize="tablet"
+            noPlaceholder
+            noMobileOptimization
+          />
+          <OptimizedImage
+            src="./images/homepage/bg-halo.png"
+            alt="background"
+            className="absolute left-0 h-auto z-0 w-[60%] pointer-events-none"
+            mobileSize="tablet"
+            noPlaceholder
+            noMobileOptimization
+          />
 
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
           <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line mt-6">
