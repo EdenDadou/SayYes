@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { BlocCards, Card } from "~/types/landing-page";
+import AnimatedTitle from "./AnimatedTitle";
 
 interface BlocCardsFrontProps {
   bloc: BlocCards;
@@ -76,11 +77,6 @@ function CardItem({ card, color, index }: { card: Card; color: string; index: nu
 }
 
 export default function BlocCardsFront({ bloc, color }: BlocCardsFrontProps) {
-  // Parse le titre pour colorer une partie
-  const titleParts = bloc.title.split(",");
-  const mainTitle = titleParts[0];
-  const coloredPart = titleParts.length > 1 ? titleParts.slice(1).join(",") : "";
-
   return (
     <section className="relative py-20 px-4 bg-black overflow-hidden">
       {/* Subtitle */}
@@ -96,20 +92,16 @@ export default function BlocCardsFront({ bloc, color }: BlocCardsFrontProps) {
       </motion.div>
 
       {/* Title */}
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-center text-3xl md:text-4xl lg:text-5xl font-bold mb-12"
-        style={{ fontFamily: "Jakarta Bold" }}
-      >
-        <span className="text-white">{mainTitle}</span>
-        {coloredPart && (
-          <span className="italic" style={{ color }}>
-            {coloredPart}
-          </span>
-        )}
-      </motion.h2>
+      {bloc.lineTitle && bloc.lineTitle.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12"
+        >
+          <AnimatedTitle lines={bloc.lineTitle} color={color} />
+        </motion.div>
+      )}
 
       {/* Cards grid */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

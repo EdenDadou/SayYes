@@ -1,5 +1,6 @@
 import type { BlocFAQ } from "~/types/landing-page";
 import CollapsibleCard from "./CollapsibleCard";
+import LineTitleEditor from "./LineTitleEditor";
 
 interface BlocFAQEditorProps {
   bloc: BlocFAQ;
@@ -44,17 +45,11 @@ export default function BlocFAQEditor({
   return (
     <div className="space-y-4">
       {/* Titre */}
-      <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          Titre
-        </label>
-        <input
-          type="text"
-          value={bloc.title}
-          onChange={(e) => onUpdate({ ...bloc, title: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
+      <LineTitleEditor
+        lines={bloc.lineTitle}
+        onChange={(lineTitle) => onUpdate({ ...bloc, lineTitle })}
+        label="Titre"
+      />
 
       {/* Questions */}
       <div className="border border-gray-700 rounded-lg p-4">

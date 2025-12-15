@@ -59,7 +59,8 @@ export interface CardOffre {
   type: "offre";
   titre: string;
   image?: Media;
-  lines?: string;
+  logo?: Media;
+  lines?: string[];
   mention?: string;
   cta: string;
 }
@@ -69,7 +70,7 @@ export type Card = CardConcurrence | CardOffre;
 // Bloc Cards
 export interface BlocCards {
   type: "cards";
-  title: string;
+  lineTitle: TitleLine[];
   cards: Card[];
   cta: {
     label: string;
@@ -137,7 +138,7 @@ export interface BlocEtape {
 // Bloc FAQ
 export interface BlocFAQ {
   type: "faq";
-  title: string;
+  lineTitle: TitleLine[];
   blocs: {
     question: string;
     answer: string;
@@ -217,7 +218,7 @@ export function createEmptyBloc(type: Bloc["type"]): Bloc {
     case "cards":
       return {
         type: "cards",
-        title: "",
+        lineTitle: [],
         cards: [],
         cta: { label: "", ctaType: "color" },
       };
@@ -262,7 +263,7 @@ export function createEmptyBloc(type: Bloc["type"]): Bloc {
     case "faq":
       return {
         type: "faq",
-        title: "",
+        lineTitle: [],
         blocs: [],
       };
     case "footer":

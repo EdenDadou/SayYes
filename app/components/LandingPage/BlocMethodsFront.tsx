@@ -32,7 +32,7 @@ const IconMap: Record<string, ReactNode> = {
   arrowWhite: <ArrowFull />,
   arrow: <Arrow className="w-6 inline-block" />,
   arrowBig: <ArrowBig className="w-6 inline-block" />,
-  coche: <Coche />,
+  coche: <Coche className="w-5" />,
   close: <Close className="w-5 inline-block" />,
   pause: <Pause className="w-5 inline-block" />,
   play: <Play className="w-5 inline-block" />,
@@ -148,7 +148,7 @@ export default function BlocMethodsFront({
                     <ul className="space-y-2">
                       {card.lines.map((line, lineIndex) => (
                         <li key={lineIndex} className="flex items-center gap-2">
-                          <Coche />
+                          <Coche className="w-5" />
                           <span
                             className="text-white/80"
                             style={{ fontFamily: "Jakarta" }}
@@ -167,57 +167,57 @@ export default function BlocMethodsFront({
             />
           </motion.div>
         ))}
-      </div>
 
-      {/* Conclusion */}
-      {bloc.conclusion && bloc.conclusion.elements.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="w-fit mx-auto mt-12"
-        >
-          <Card
-            height="auto"
-            borderClass="light-border p-4 w-fit"
-            content={
-              <div>
-                <p
-                  className="text-lg md:text-xl flex items-center justify-center gap-1 flex-wrap"
-                  style={{ fontFamily: "Jakarta" }}
-                >
-                  {bloc.conclusion.elements.map((elem, i) =>
-                    elem.type === "icon" ? (
-                      <span key={i} className="mx-1 inline-flex items-center">
-                        {IconMap[elem.name] || elem.name}
-                      </span>
-                    ) : (
-                      <span
-                        key={i}
-                        className={`
+        {/* Conclusion */}
+        {bloc.conclusion && bloc.conclusion.elements.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="w-full mx-auto mt-12"
+          >
+            <Card
+              height="auto"
+              borderClass="light-border p-4 w-full"
+              content={
+                <div>
+                  <p
+                    className="text-lg md:text-xl flex items-center justify-center gap-1 flex-wrap"
+                    style={{ fontFamily: "Jakarta" }}
+                  >
+                    {bloc.conclusion.elements.map((elem, i) =>
+                      elem.type === "icon" ? (
+                        <span key={i} className="mx-1 inline-flex items-center">
+                          {IconMap[elem.name] || elem.name}
+                        </span>
+                      ) : (
+                        <span
+                          key={i}
+                          className={`
                         text-[36px] tracking-[-2px] leading-[78px]
                           ${elem.color === "animed" ? "holographic-text" : ""}
                           `}
-                        style={{
-                          color:
-                            elem.color === "animed"
-                              ? undefined
-                              : bloc.conclusion.colorType === "color"
-                                ? color
-                                : "white",
-                        }}
-                      >
-                        {elem.text}
-                      </span>
-                    )
-                  )}
-                </p>
-              </div>
-            }
-          />
-        </motion.div>
-      )}
+                          style={{
+                            color:
+                              elem.color === "animed"
+                                ? undefined
+                                : bloc.conclusion.colorType === "color"
+                                  ? color
+                                  : "white",
+                          }}
+                        >
+                          {elem.text}
+                        </span>
+                      )
+                    )}
+                  </p>
+                </div>
+              }
+            />
+          </motion.div>
+        )}
+      </div>
     </section>
   );
 }

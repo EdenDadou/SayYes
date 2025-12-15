@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { BlocFAQ } from "~/types/landing-page";
+import AnimatedTitle from "./AnimatedTitle";
 
 interface BlocFAQFrontProps {
   bloc: BlocFAQ;
@@ -80,11 +81,6 @@ function FAQItem({
 export default function BlocFAQFront({ bloc, color }: BlocFAQFrontProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  // Parse le titre pour colorer une partie
-  const titleParts = bloc.title.split("?");
-  const mainTitle = titleParts[0] + "?";
-  const coloredPart = titleParts.length > 1 ? titleParts[1] : "";
-
   return (
     <section className="relative py-20 px-4 bg-black overflow-hidden">
       {/* Subtitle */}
@@ -100,20 +96,16 @@ export default function BlocFAQFront({ bloc, color }: BlocFAQFrontProps) {
       </motion.div>
 
       {/* Title */}
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-center text-3xl md:text-4xl lg:text-5xl font-bold mb-12"
-        style={{ fontFamily: "Jakarta Bold" }}
-      >
-        <span className="text-white">{mainTitle}</span>
-        {coloredPart && (
-          <span style={{ color }}>
-            {coloredPart}
-          </span>
-        )}
-      </motion.h2>
+      {bloc.lineTitle && bloc.lineTitle.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-12"
+        >
+          <AnimatedTitle lines={bloc.lineTitle} color={color} />
+        </motion.div>
+      )}
 
       {/* FAQ items */}
       <div className="max-w-3xl mx-auto space-y-3">

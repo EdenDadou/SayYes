@@ -113,7 +113,7 @@ function FeatureRow({ text, color }: { text: string; color: string }) {
     >
       <div className="flex items-center justify-between w-full  gap-3">
         <div className="flex flex-row items-center gap-2">
-          <Coche holographic />
+          <Coche holographic className="w-5" />
           <span className="text-white/80" style={{ fontFamily: "Jakarta" }}>
             {text}
           </span>

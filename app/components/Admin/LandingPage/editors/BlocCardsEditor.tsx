@@ -1,6 +1,7 @@
-import type { BlocCards, Card, CardConcurrence } from "~/types/landing-page";
+import type { BlocCards, Card, CardConcurrence, CardOffre } from "~/types/landing-page";
 import MediaEditor from "./MediaEditor";
 import CollapsibleCard from "./CollapsibleCard";
+import LineTitleEditor from "./LineTitleEditor";
 
 interface BlocCardsEditorProps {
   bloc: BlocCards;
@@ -76,18 +77,11 @@ export default function BlocCardsEditor({
   return (
     <div className="space-y-4">
       {/* Titre */}
-      <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          Titre *
-        </label>
-        <input
-          type="text"
-          value={bloc.title}
-          onChange={(e) => onUpdate({ ...bloc, title: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          required
-        />
-      </div>
+      <LineTitleEditor
+        lines={bloc.lineTitle}
+        onChange={(lineTitle) => onUpdate({ ...bloc, lineTitle })}
+        label="Titre"
+      />
 
       {/* CTA global */}
       <div className="grid grid-cols-2 gap-4">
@@ -195,25 +189,114 @@ export default function BlocCardsEditor({
                 className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
 
-              <input
-                type="text"
-                value={card.lines || ""}
-                onChange={(e) =>
-                  updateCard(cardIndex, { ...card, lines: e.target.value })
-                }
-                placeholder="Lignes (optionnel)"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+              {/* Champs spécifiques à Offre */}
+              {card.type === "offre" && (
+                <>
+                  {/* Logo */}
+                  {(card as CardOffre).logo ? (
+                    <div className="space-y-2">
+                      <MediaEditor
+                        media={(card as CardOffre).logo!}
+                        onChange={(media) =>
+                          updateCard(cardIndex, { ...card, logo: media })
+                        }
+                        label="Logo"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const { logo, ...rest } = card as CardOffre;
+                          updateCard(cardIndex, rest as Card);
+                        }}
+                        className="text-xs text-red-400 hover:text-red-300"
+                      >
+                        Supprimer le logo
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateCard(cardIndex, {
+                          ...card,
+                          logo: { type: "image", url: "" },
+                        })
+                      }
+                      className="text-sm text-blue-400 hover:text-blue-300 px-2 py-1 border border-blue-400/30 rounded"
+                    >
+                      + Ajouter un logo
+                    </button>
+                  )}
 
-              <input
-                type="text"
-                value={card.mention || ""}
-                onChange={(e) =>
-                  updateCard(cardIndex, { ...card, mention: e.target.value })
-                }
-                placeholder="Mention (optionnel)"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+                  {/* Lines multiples */}
+                  {(() => {
+                    const rawLines = (card as CardOffre).lines;
+                    const lines = Array.isArray(rawLines)
+                      ? rawLines
+                      : typeof rawLines === "string" && rawLines
+                        ? [rawLines]
+                        : [];
+                    return (
+                      <div className="border border-gray-700 rounded-lg p-3 space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-white/70">
+                            Lignes ({lines.length})
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              updateCard(cardIndex, {
+                                ...card,
+                                lines: [...lines, ""],
+                              });
+                            }}
+                            className="text-xs text-blue-400 hover:text-blue-300 px-2 py-1 border border-blue-400/30 rounded"
+                          >
+                            + Ajouter une ligne
+                          </button>
+                        </div>
+                        {lines.map((line, lineIndex) => (
+                          <div key={lineIndex} className="flex gap-2">
+                            <input
+                              type="text"
+                              value={line}
+                              onChange={(e) => {
+                                const newLines = [...lines];
+                                newLines[lineIndex] = e.target.value;
+                                updateCard(cardIndex, { ...card, lines: newLines });
+                              }}
+                              placeholder={`Ligne ${lineIndex + 1}`}
+                              className="flex-1 px-3 py-1.5 bg-gray-800 border border-gray-700 rounded text-white text-sm"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newLines = lines.filter((_, i) => i !== lineIndex);
+                                updateCard(cardIndex, { ...card, lines: newLines });
+                              }}
+                              className="text-red-400 hover:text-red-300 px-2"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
+
+                  <input
+                    type="text"
+                    value={(card as CardOffre).mention || ""}
+                    onChange={(e) =>
+                      updateCard(cardIndex, { ...card, mention: e.target.value })
+                    }
+                    placeholder="Mention (optionnel)"
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </>
+              )}
 
               {/* Image optionnelle */}
               {card.image && (
