@@ -128,7 +128,7 @@ export default function TitleFullWidthCard() {
           />
         </div>
         <div className="relative z-10 -mt-[90vh] flex flex-col justify-center items-center gap-8 w-full">
-          <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
+          <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full my-6" />
           <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
             {`Accompagnement sur-mesure`}
           </h2>

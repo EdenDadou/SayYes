@@ -116,7 +116,7 @@ export default function CarouselCard() {
             noMobileOptimization
           />
 
-          <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
+          <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full md:my-6" />
           <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line mt-6">
             {`Nous designons tous vos\n supports de communication !`}
           </h2>
