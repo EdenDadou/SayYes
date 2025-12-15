@@ -13,6 +13,7 @@ import BlocEtapeEditor from "./editors/BlocEtapeEditor";
 import BlocFAQEditor from "./editors/BlocFAQEditor";
 import BlocFooterEditor from "./editors/BlocFooterEditor";
 import BlocUseCaseEditor from "./editors/BlocUseCaseEditor";
+import BlocSeparatorEditor from "./editors/BlocSeparatorEditor";
 
 interface BlocEditorProps {
   bloc: Bloc;
@@ -22,6 +23,12 @@ interface BlocEditorProps {
   onRemove: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
+  // Drag & drop props
+  isDragging?: boolean;
+  onDragStart?: () => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDrop?: () => void;
+  onDragEnd?: () => void;
 }
 
 export default function BlocEditor({
@@ -32,6 +39,11 @@ export default function BlocEditor({
   onRemove,
   onMoveUp,
   onMoveDown,
+  isDragging,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onDragEnd,
 }: BlocEditorProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -62,6 +74,8 @@ export default function BlocEditor({
         return <BlocFooterEditor bloc={bloc} onUpdate={onUpdate} />;
       case "useCase":
         return <BlocUseCaseEditor bloc={bloc} onUpdate={onUpdate} />;
+      case "separator":
+        return <BlocSeparatorEditor bloc={bloc} onUpdate={onUpdate} />;
       default:
         return (
           <p className="text-white/70">
@@ -72,77 +86,31 @@ export default function BlocEditor({
   };
 
   return (
-    <div className="border border-gray-700 rounded-lg overflow-hidden">
+    <div
+      className={`border border-gray-700 rounded-lg overflow-hidden transition-all ${
+        isDragging ? "opacity-50 border-blue-500" : ""
+      }`}
+      draggable
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      onDragEnd={onDragEnd}
+    >
       {/* Header du bloc */}
       <div
         className="flex items-center justify-between px-4 py-3 bg-gray-800 cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-3">
+          {/* Drag handle */}
+          <span className="text-white/50 cursor-grab active:cursor-grabbing select-none" title="Glisser pour réorganiser">
+            ⋮⋮
+          </span>
           <span className="text-white/70 font-mono text-sm">#{index + 1}</span>
           <span className="text-white font-medium">{blocLabel}</span>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Boutons de déplacement */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onMoveUp();
-            }}
-            disabled={index === 0}
-            className={`p-1 rounded ${
-              index === 0
-                ? "text-gray-500 cursor-not-allowed"
-                : "text-white hover:text-white/80 hover:bg-gray-700"
-            }`}
-            title="Monter"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 15l7-7 7 7"
-              />
-            </svg>
-          </button>
-
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onMoveDown();
-            }}
-            disabled={index === totalBlocs - 1}
-            className={`p-1 rounded ${
-              index === totalBlocs - 1
-                ? "text-gray-500 cursor-not-allowed"
-                : "text-white hover:text-white/80 hover:bg-gray-700"
-            }`}
-            title="Descendre"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
           {/* Bouton supprimer */}
           <button
             type="button"

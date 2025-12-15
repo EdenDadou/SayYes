@@ -44,6 +44,7 @@ export interface BlocIntro {
 export interface CardConcurrence {
   type: "concurrence";
   titre: string;
+  subtitle?: string;
   image?: Media;
   lines?: string;
   mention?: string;
@@ -58,6 +59,7 @@ export interface CardConcurrence {
 export interface CardOffre {
   type: "offre";
   titre: string;
+  subtitle?: string;
   image?: Media;
   logo?: Media;
   lines?: string[];
@@ -71,6 +73,7 @@ export type Card = CardConcurrence | CardOffre;
 export interface BlocCards {
   type: "cards";
   lineTitle: TitleLine[];
+  subtitle?: string;
   cards: Card[];
   cta: {
     label: string;
@@ -160,6 +163,12 @@ export interface BlocUseCase {
   portfolioIds: string[]; // IDs des portfolios à afficher
 }
 
+// Bloc Separator
+export interface BlocSeparator {
+  type: "separator";
+  direction: "horizontal" | "vertical";
+}
+
 // Union de tous les types de blocs
 export type Bloc =
   | BlocIntro
@@ -171,7 +180,8 @@ export type Bloc =
   | BlocEtape
   | BlocFAQ
   | BlocFooter
-  | BlocUseCase;
+  | BlocUseCase
+  | BlocSeparator;
 
 // Type principal Landing Page
 export interface LandingPage {
@@ -200,6 +210,7 @@ export const BLOC_TYPES = [
   { value: "faq", label: "FAQ" },
   { value: "footer", label: "Footer" },
   { value: "useCase", label: "Use Cases" },
+  { value: "separator", label: "Séparateur" },
 ] as const;
 
 // Fonction helper pour créer un bloc vide par type
@@ -278,6 +289,11 @@ export function createEmptyBloc(type: Bloc["type"]): Bloc {
         type: "useCase",
         title: "",
         portfolioIds: [],
+      };
+    case "separator":
+      return {
+        type: "separator",
+        direction: "horizontal",
       };
   }
 }

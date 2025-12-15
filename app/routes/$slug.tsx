@@ -52,7 +52,7 @@ export default function LandingPagePublic() {
       )}
 
       {/* Render all blocs */}
-      <div className="w-screen h-fit relative pt-20">
+      <div className="w-screen h-fit relative pt-">
         <AnimatePresence>
           <motion.div
             initial={{ opacity: 0 }}
@@ -64,7 +64,7 @@ export default function LandingPagePublic() {
             <img
               src="/images/portfolio/bg.png"
               alt="Background"
-              className="absolute top-32 left-0 w-full h-auto z-0 opacity-80"
+              className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80"
             />
           </motion.div>
         </AnimatePresence>

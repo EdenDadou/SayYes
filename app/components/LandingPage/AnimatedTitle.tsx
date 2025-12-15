@@ -44,7 +44,7 @@ const IconMap: Record<string, ReactNode> = {
   chat: <ChatBuble />,
 };
 
-function renderElement(element: TitleElement, index: number) {
+function renderElement(element: TitleElement, index: number, color?: string) {
   if (element.type === "icon") {
     return (
       <span key={index} className="mx-2 opacity-80">
@@ -55,7 +55,7 @@ function renderElement(element: TitleElement, index: number) {
 
   if (element.color === "animed") {
     return (
-      <span key={index} className="holographic-text">
+      <span key={index} className="holographic-text" style={color ? { color } : undefined}>
         {element.text}
       </span>
     );
@@ -68,7 +68,7 @@ function renderElement(element: TitleElement, index: number) {
   );
 }
 
-export default function AnimatedTitle({ lines }: AnimatedTitleProps) {
+export default function AnimatedTitle({ lines, color }: AnimatedTitleProps) {
   // Filtrer les lignes invalides (qui ne sont pas des objets TitleLine)
   const validLines = (lines || []).filter(
     (line): line is TitleLine =>
@@ -95,7 +95,7 @@ export default function AnimatedTitle({ lines }: AnimatedTitleProps) {
             style={{ fontFamily: "Jakarta Bold" }}
           >
             {line.elements.map((element, elemIndex) =>
-              renderElement(element, elemIndex)
+              renderElement(element, elemIndex, color)
             )}
           </Tag>
         );

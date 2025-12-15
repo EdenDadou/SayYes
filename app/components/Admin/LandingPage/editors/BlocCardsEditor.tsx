@@ -83,6 +83,20 @@ export default function BlocCardsEditor({
         label="Titre"
       />
 
+      {/* Sous-titre global */}
+      <div>
+        <label className="block text-sm font-medium text-white mb-2">
+          Sous-titre
+        </label>
+        <input
+          type="text"
+          value={bloc.subtitle || ""}
+          onChange={(e) => onUpdate({ ...bloc, subtitle: e.target.value })}
+          placeholder="Sous-titre (optionnel)"
+          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
       {/* CTA global */}
       <div className="grid grid-cols-2 gap-4">
         <div>
@@ -197,16 +211,22 @@ export default function BlocCardsEditor({
                     <div className="space-y-2">
                       <MediaEditor
                         media={(card as CardOffre).logo!}
-                        onChange={(media) =>
-                          updateCard(cardIndex, { ...card, logo: media })
-                        }
+                        onChange={(media) => {
+                          // Si l'URL est vide après suppression, on retire le logo
+                          if (!media.url) {
+                            const { logo, ...rest } = card as CardOffre;
+                            updateCard(cardIndex, { ...rest, type: "offre" } as Card);
+                          } else {
+                            updateCard(cardIndex, { ...card, logo: media });
+                          }
+                        }}
                         label="Logo"
                       />
                       <button
                         type="button"
                         onClick={() => {
                           const { logo, ...rest } = card as CardOffre;
-                          updateCard(cardIndex, rest as Card);
+                          updateCard(cardIndex, { ...rest, type: "offre" } as Card);
                         }}
                         className="text-xs text-red-400 hover:text-red-300"
                       >
@@ -299,16 +319,33 @@ export default function BlocCardsEditor({
               )}
 
               {/* Image optionnelle */}
-              {card.image && (
-                <MediaEditor
-                  media={card.image}
-                  onChange={(media) =>
-                    updateCard(cardIndex, { ...card, image: media })
-                  }
-                  label="Image"
-                />
-              )}
-              {!card.image && (
+              {card.image ? (
+                <div className="space-y-2">
+                  <MediaEditor
+                    media={card.image}
+                    onChange={(media) => {
+                      // Si l'URL est vide après suppression, on retire l'image
+                      if (!media.url) {
+                        const { image, ...rest } = card;
+                        updateCard(cardIndex, rest as Card);
+                      } else {
+                        updateCard(cardIndex, { ...card, image: media });
+                      }
+                    }}
+                    label="Image"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const { image, ...rest } = card;
+                      updateCard(cardIndex, rest as Card);
+                    }}
+                    className="text-xs text-red-400 hover:text-red-300"
+                  >
+                    Supprimer l'image
+                  </button>
+                </div>
+              ) : (
                 <button
                   type="button"
                   onClick={() =>

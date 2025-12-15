@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useId } from "react";
 import type { Media } from "~/types/landing-page";
 
 interface MediaEditorProps {
@@ -15,6 +15,7 @@ export default function MediaEditor({
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const uniqueId = useId();
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -75,10 +76,10 @@ export default function MediaEditor({
             accept="image/*,video/*"
             onChange={handleFileSelect}
             className="hidden"
-            id={`media-upload-${label}`}
+            id={`media-upload-${uniqueId}`}
           />
           <label
-            htmlFor={`media-upload-${label}`}
+            htmlFor={`media-upload-${uniqueId}`}
             className={`flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer hover:border-blue-500 transition-colors ${
               isUploading ? "opacity-50 cursor-not-allowed" : ""
             }`}
@@ -160,7 +161,7 @@ export default function MediaEditor({
             {/* Overlay avec actions */}
             <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
               <label
-                htmlFor={`media-upload-${label}`}
+                htmlFor={`media-upload-${uniqueId}`}
                 className="p-2 bg-blue-600 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors"
               >
                 <svg
@@ -206,7 +207,7 @@ export default function MediaEditor({
             accept="image/*,video/*"
             onChange={handleFileSelect}
             className="hidden"
-            id={`media-upload-${label}`}
+            id={`media-upload-${uniqueId}`}
           />
 
           {/* Infos du média */}

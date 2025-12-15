@@ -10,6 +10,7 @@ import BlocFooterFront from "./BlocFooterFront";
 import BlocUseCaseFront from "./BlocUseCaseFront";
 import BlocCommentaireClientFront from "./BlocCommentaireClientFront";
 import BlocOffresFront from "./BlocOffresFront";
+import BlocSeparatorFront from "./BlocSeparatorFront";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
 interface BlocRendererProps {
@@ -60,6 +61,9 @@ export default function BlocRenderer({
 
     case "commentaireClient":
       return <BlocCommentaireClientFront bloc={bloc} color={color} />;
+
+    case "separator":
+      return <BlocSeparatorFront bloc={bloc} />;
 
     default:
       return (

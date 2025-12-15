@@ -65,7 +65,9 @@ export default function BlocMethodsFront({
             className="text-white/50 text-sm tracking-widest"
             style={{ fontFamily: "Jakarta" }}
           >
-            ✦ {bloc.subTitle} ✦
+            <Star className="w-3" fill="rgba(255,255,255,0.5)" />
+            {bloc.subTitle}
+            <Star className="w-3" fill="rgba(255,255,255,0.5)" />
           </span>
         </motion.div>
       )}

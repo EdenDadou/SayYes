@@ -39,6 +39,7 @@ export default function LandingPageForm({
     }
   );
   const [blocs, setBlocs] = useState<Bloc[]>(initialData?.blocs || []);
+  const [draggedBlocIndex, setDraggedBlocIndex] = useState<number | null>(null);
 
   // Reset le formulaire quand resetTrigger change
   useEffect(() => {
@@ -96,6 +97,32 @@ export default function LandingPageForm({
     const newIndex = direction === "up" ? index - 1 : index + 1;
     [newBlocs[index], newBlocs[newIndex]] = [newBlocs[newIndex], newBlocs[index]];
     setBlocs(newBlocs);
+  };
+
+  // Drag & drop handlers
+  const handleDragStart = (index: number) => {
+    setDraggedBlocIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (targetIndex: number) => {
+    if (draggedBlocIndex === null || draggedBlocIndex === targetIndex) {
+      setDraggedBlocIndex(null);
+      return;
+    }
+
+    const newBlocs = [...blocs];
+    const [movedBloc] = newBlocs.splice(draggedBlocIndex, 1);
+    newBlocs.splice(targetIndex, 0, movedBloc);
+    setBlocs(newBlocs);
+    setDraggedBlocIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedBlocIndex(null);
   };
 
   // Soumission du formulaire
@@ -308,6 +335,11 @@ export default function LandingPageForm({
                 onRemove={() => removeBloc(index)}
                 onMoveUp={() => moveBloc(index, "up")}
                 onMoveDown={() => moveBloc(index, "down")}
+                isDragging={draggedBlocIndex === index}
+                onDragStart={() => handleDragStart(index)}
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop(index)}
+                onDragEnd={handleDragEnd}
               />
             ))}
           </div>
