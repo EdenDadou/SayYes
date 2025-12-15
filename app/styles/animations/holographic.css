@@ -73,8 +73,8 @@
     #b7eeef,
     #4ffff5
   );
-  background-size: 200% 100%;
-  animation: holographicFlow 6s linear infinite;
+  background-size: 400% 400%;
+  animation: holographicGradient 6s ease infinite alternate;
   will-change: background-position;
 }
 .holographic-bg {
@@ -123,6 +123,36 @@
   }
   100% {
     background-position: -200% 0%;
+  }
+}
+
+@keyframes holographicFlowDiagonal {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: -100% 100%;
+  }
+}
+
+@keyframes holographicSlide {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 250px 0;
+  }
+}
+
+@keyframes holographicGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
   }
 }
 
