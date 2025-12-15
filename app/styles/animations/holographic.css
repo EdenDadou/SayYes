@@ -64,18 +64,21 @@
 /* Background holographique simple au hover */
 .holographic-bg-hover:hover,
 .group:hover .holographic-bg-hover {
-  background: linear-gradient(
+ background: linear-gradient(
     150deg,
     #4ffff5,
     #fe77b7,
     #feab71,
     #e6ff9c,
     #b7eeef,
-    #4ffff5
+    #4ffff5,
+    #fe77b7,
+    #feab71,
+    #e6ff9c,
+    #b7eeef
   );
-  background-size: 400% 400%;
-  animation: holographicGradient 6s ease infinite alternate;
-  will-change: background-position;
+  background-size: 500% 500%;
+  animation: moveGradient 10s linear infinite;
 }
 .holographic-bg {
   background: linear-gradient(
