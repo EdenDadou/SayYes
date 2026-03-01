@@ -15,12 +15,59 @@ export default function MentionLegale() {
   return isMobile ? (
     <MobileLayout>
       <BackgroundMobile className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
-      <section className="glass-card relative z-10 px-6 flex flex-col gap-6 justify-center items-center pt-20">
+      <section className="glass-card relative z-10 px-6 flex flex-col gap-6 justify-center items-center pt-20 pb-10">
         <h1 className="text-3xl font-jakarta-bold text-white">
           Mentions Légales
         </h1>
-        <div className="text-white text-sm">
-          {/* Contenu des mentions légales à ajouter */}
+        <div className="text-white text-sm flex flex-col gap-4 w-full">
+          <h2 className="font-jakarta-semi-bold text-lg">Éditeur du site</h2>
+          <p>
+            Le site say-yes.fr est édité par la société LA SAINTE PAIRE, société par actions simplifiée au capital de 12 500 €, dont le siège social est situé 40 rue Servan, 75011 Paris, immatriculée au RCS de Paris sous le numéro 850 858 820.
+          </p>
+          <p>Numéro de TVA intracommunautaire : FR35 850 858 820</p>
+          <p>Email : contact@lasaintepaire.com</p>
+          <p>Téléphone : +33 (0)9 83 79 05 06</p>
+          <p>La marque SAY YES est une marque appartenant à la société LA SAINTE PAIRE.</p>
+          <p>Directeur de la publication : Javier Millan</p>
+
+          <h2 className="font-jakarta-semi-bold text-lg mt-2">Hébergement</h2>
+          <p>
+            Le site est hébergé par OVH SAS,<br />
+            2 rue Kellermann, 59100 Roubaix, France<br />
+            Téléphone : 1007
+          </p>
+
+          <h2 className="font-jakarta-semi-bold text-lg mt-2">Propriété intellectuelle</h2>
+          <p>
+            L'ensemble du site say-yes.fr, incluant notamment les textes, images, graphismes, illustrations, logos et contenus, est protégé par le droit de la propriété intellectuelle.
+          </p>
+          <p>
+            Toute reproduction, représentation, modification ou exploitation, totale ou partielle, du site ou de l'un de ses éléments, sans autorisation écrite préalable de LA SAINTE PAIRE, est strictement interdite.
+          </p>
+
+          <h2 className="font-jakarta-semi-bold text-lg mt-2">Données personnelles</h2>
+          <p>Le site say-yes.fr est un site vitrine permettant la prise de contact.</p>
+          <p>Des données personnelles peuvent être collectées via les formulaires afin de répondre aux demandes des utilisateurs.</p>
+          <p>
+            Le traitement de ces données est assuré par LA SAINTE PAIRE, responsable du traitement, exclusivement pour la gestion des demandes de contact et la communication professionnelle.
+          </p>
+          <p>Les données sont conservées pendant une durée strictement nécessaire au traitement des demandes.</p>
+          <p>
+            Conformément à la réglementation en vigueur, les utilisateurs disposent d'un droit d'accès, de rectification, d'opposition et de suppression de leurs données, qu'ils peuvent exercer en écrivant à : contact@lasaintepaire.com.
+          </p>
+          <p>Ils disposent également du droit d'introduire une réclamation auprès de la CNIL.</p>
+
+          <h2 className="font-jakarta-semi-bold text-lg mt-2">Cookies</h2>
+          <p>
+            Le site utilise des cookies de mesure d'audience et de diffusion publicitaire, notamment via CookieYes et Google Ads.
+          </p>
+          <p>
+            Le dépôt de ces cookies est soumis au consentement de l'utilisateur, qui peut les accepter, les refuser ou les paramétrer à tout moment via le bandeau de gestion des cookies.
+          </p>
+
+          <h2 className="font-jakarta-semi-bold text-lg mt-2">Crédits</h2>
+          <p>Design graphique : From Paris with love by SAY YES</p>
+          <p>Développement : réalisé avec soin, talent et une bonne dose de café par Eden Wisnievski.</p>
         </div>
       </section>
     </MobileLayout>
@@ -46,72 +93,70 @@ export default function MentionLegale() {
 
         <h2 className="flex flex-row gap-4 font-jakarta-semi-bold text-2xl items-center">
           <div className="h-[3px] w-8 holographic-bg my-2 rounded-full" />
-          Publication
+          Éditeur du site
         </h2>
         <p>
-          Le site www.harfanglab.io (ci-après le « Site ») est la propriété
-          d'HarfangLab, dont le siège social se situe au 55 rue de la Boétie
-          75008 Paris et les bureaux se situent au 336 rue Saint-Honoré 75001
-          Paris.
+          Le site say-yes.fr est édité par la société LA SAINTE PAIRE, société par actions simplifiée au capital de 12 500 €, dont le siège social est situé 40 rue Servan, 75011 Paris, immatriculée au RCS de Paris sous le numéro 850 858 820.
         </p>
+        <p>Numéro de TVA intracommunautaire : FR35 850 858 820</p>
+        <p>Email : contact@lasaintepaire.com</p>
+        <p>Téléphone : +33 (0)9 83 79 05 06</p>
+        <p>La marque SAY YES est une marque appartenant à la société LA SAINTE PAIRE.</p>
+        <p>Directeur de la publication : Javier Millan</p>
+
+        <h2 className="flex flex-row gap-4 font-jakarta-semi-bold text-2xl items-center">
+          <div className="h-[3px] w-8 holographic-bg my-2 rounded-full" />
+          Hébergement
+        </h2>
         <p>
-          E-mail : contact@harfanglab.fr / Directeur de publication : Mr
-          Grégoire Germain.‍
+          Le site est hébergé par OVH SAS,<br />
+          2 rue Kellermann, 59100 Roubaix, France<br />
+          Téléphone : 1007
         </p>
 
         <h2 className="flex flex-row gap-4 font-jakarta-semi-bold text-2xl items-center">
           <div className="h-[3px] w-8 holographic-bg my-2 rounded-full" />
-          Hébergement du site
+          Propriété intellectuelle
         </h2>
         <p>
-          Ce site web est hébergé par un prestataire de services externe
-          (Webflow, Inc.). Les données personnelles collectées sur ce site web
-          sont stockées sur les serveurs de l'hébergeur. Il peut s'agir
-          d'adresses IP, de demandes de contact, de métadonnées et de données de
-          communication, de données contractuelles, de coordonnées, de noms,
-          d'accès au site web et d'autres données générées par un site web. Le
-          recours à l'hébergeur a pour but d'exécuter le contrat avec nos
-          clients potentiels et existants (art. 6 al. 1 lit. b GDPR) et dans
-          l'intérêt d'une mise à disposition sûre, rapide et efficace de notre
-          offre en ligne par un prestataire professionnel (art. 6 al. 1 lit. f
-          GDPR). Notre hébergeur ne traitera vos données que dans la mesure où
-          cela est nécessaire pour remplir ses obligations de performance et
-          suivra nos instructions en ce qui concerne ces données.
+          L’ensemble du site say-yes.fr, incluant notamment les textes, images, graphismes, illustrations, logos et contenus, est protégé par le droit de la propriété intellectuelle.
         </p>
+        <p>
+          Toute reproduction, représentation, modification ou exploitation, totale ou partielle, du site ou de l’un de ses éléments, sans autorisation écrite préalable de LA SAINTE PAIRE, est strictement interdite.
+        </p>
+
         <h2 className="flex flex-row gap-4 font-jakarta-semi-bold text-2xl items-center">
           <div className="h-[3px] w-8 holographic-bg my-2 rounded-full" />
-          ‍Contenu et propriété intellectuelle
+          Données personnelles
+        </h2>
+        <p>Le site say-yes.fr est un site vitrine permettant la prise de contact.</p>
+        <p>Des données personnelles peuvent être collectées via les formulaires afin de répondre aux demandes des utilisateurs.</p>
+        <p>
+          Le traitement de ces données est assuré par LA SAINTE PAIRE, responsable du traitement, exclusivement pour la gestion des demandes de contact et la communication professionnelle.
+        </p>
+        <p>Les données sont conservées pendant une durée strictement nécessaire au traitement des demandes.</p>
+        <p>
+          Conformément à la réglementation en vigueur, les utilisateurs disposent d’un droit d’accès, de rectification, d’opposition et de suppression de leurs données, qu’ils peuvent exercer en écrivant à : contact@lasaintepaire.com.
+        </p>
+        <p>Ils disposent également du droit d’introduire une réclamation auprès de la CNIL.</p>
+
+        <h2 className="flex flex-row gap-4 font-jakarta-semi-bold text-2xl items-center">
+          <div className="h-[3px] w-8 holographic-bg my-2 rounded-full" />
+          Cookies
         </h2>
         <p>
-          exactitude, leur complétude et leur actualité. Elles peuvent être
-          périodiquement modifiées et les modifications seront incorporées dans
-          les nouvelles éditions. Les informations de ce site peuvent contenir
-          des erreurs typographiques ou des inexactitudes techniques.
+          Le site utilise des cookies de mesure d’audience et de diffusion publicitaire, notamment via CookieYes et Google Ads.
         </p>
         <p>
-          L’entreprise mettra cependant tout en œuvre pour corriger les
-          éventuelles erreurs qui lui seront signalées, merci d’utiliser le
-          formulaire de contact pour nous faire part de vos remarques et
-          observations.
+          Le dépôt de ces cookies est soumis au consentement de l’utilisateur, qui peut les accepter, les refuser ou les paramétrer à tout moment via le bandeau de gestion des cookies.
         </p>
-        <p>
-          HarfangLab peut, à tout moment et sans préavis, apporter des
-          améliorations ou des changements aux produits, aux programmes ou aux
-          services présentés sur ce site. Toute reproduction, représentation,
-          modification, publication, transmission, dénaturation, totale ou
-          partielle du site ou de son contenu, par quelque procédé que ce soit,
-          et sur quelque support que ce soit est interdite. Toute exploitation
-          non autorisée du site ou de son contenu, des informations qui y sont
-          divulguées engagerait la responsabilité de l’utilisateur et
-          constituerait une contrefaçon sanctionnée par les articles L 335-2 et
-          suivants du Code de la Propriété Intellectuelle. Il en est de même des
-          bases de données figurant, le cas échéant, sur le Site qui sont
-          protégées par les dispositions de la loi du 1er juillet 1998 portant
-          transposition dans le Code de la Propriété Intellectuelle de la
-          Directive Européenne du 11 mars 1996 relative à la protection
-          juridique des bases de données. A ce titre, toute reproduction ou
-          extraction engagerait la responsabilité de l’utilisateur.
-        </p>
+
+        <h2 className="flex flex-row gap-4 font-jakarta-semi-bold text-2xl items-center">
+          <div className="h-[3px] w-8 holographic-bg my-2 rounded-full" />
+          Crédits
+        </h2>
+        <p>Design graphique : From Paris with love by SAY YES</p>
+        <p>Développement : réalisé avec soin, talent et une bonne dose de café par Eden Wisnievski.</p>
       </section>
     </Desktoplayout>
   );
