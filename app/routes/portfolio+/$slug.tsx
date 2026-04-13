@@ -1,4 +1,11 @@
-import { useParams } from "@remix-run/react";
+import {
+  json,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+} from "@remix-run/node";
+import { useParams, useLoaderData } from "@remix-run/react";
+import { getPortfolioBySlug } from "~/server/portfolio.server";
+import type { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 import { useViewport } from "~/utils/hooks/useViewport";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import LoadingBar from "~/components/LoadingBar";
@@ -19,6 +26,28 @@ import { useEffect, useState, useCallback } from "react";
 import { useMetaData } from "~/utils/hooks/useMetaData";
 import { AnimatePresence, motion } from "framer-motion";
 
+export async function loader({ params }: LoaderFunctionArgs) {
+  const slug = params.slug;
+  if (!slug) throw new Response("Not found", { status: 404 });
+
+  const portfolio = await getPortfolioBySlug(slug);
+  if (!portfolio) throw new Response("Not found", { status: 404 });
+
+  return json({ portfolio });
+}
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data?.portfolio) return [{ title: "Portfolio — SayYes" }];
+  const p = data.portfolio;
+  return [
+    { title: p.metaTitle || p.titre },
+    { name: "description", content: p.metaDescription || p.description },
+    { property: "og:title", content: p.metaTitle || p.titre },
+    { property: "og:description", content: p.metaDescription || p.description },
+    { property: "og:image", content: p.metaImage || p.photoCouverture },
+  ];
+};
+
 // Variants pour les animations d'entrée
 const staggerContainer = {
   animate: {
@@ -31,12 +60,17 @@ const staggerContainer = {
 
 export default function PortfolioSlug() {
   const { slug } = useParams();
+  const { portfolio: loaderPortfolio } = useLoaderData<typeof loader>();
   const {
-    portfolio,
+    portfolio: contextPortfolio,
     allPortfolios: _allPortfolios,
     fetchPortfolioBySlug,
     fetchAllPortfolios,
   } = usePortfolio();
+
+  // Pour les visites directes : utiliser les données du loader si le contexte n'est pas encore chargé
+  const portfolio =
+    contextPortfolio ?? (loaderPortfolio as unknown as PortfolioData);
 
   const isMobile = useViewport();
   // Update meta tags dynamically when portfolio is loaded
@@ -114,7 +148,7 @@ export default function PortfolioSlug() {
   // Attendre que le viewport soit détecté pour éviter le flash
   // Show loading or error states
   // Attendre que le viewport soit détecté pour éviter le flash
-  if (isMobile === null || !portfolio) {
+  if (isMobile === null) {
     return <LoadingBar />;
   }
 
