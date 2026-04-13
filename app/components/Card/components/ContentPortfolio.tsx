@@ -1,6 +1,8 @@
+import { useCallback, useRef } from "react";
 import { cn } from "~/utils/ui/ui";
 import { Link } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
 
 interface PropsContent {
@@ -18,6 +20,19 @@ export default function ContentPortfolio({
   topTitle,
   slug,
 }: PropsContent) {
+  const prefetchedRef = useRef(false);
+
+  const handleMouseEnter = useCallback(() => {
+    // Prefetch une seule fois par carte, desktop uniquement
+    if (prefetchedRef.current || !imageUrl || !slug) return;
+    if (typeof window === "undefined" || window.innerWidth < 768) return;
+    prefetchedRef.current = true;
+
+    const url = getOptimizedImageUrl(imageUrl, "desktop");
+    const img = new Image();
+    img.src = url;
+  }, [imageUrl, slug]);
+
   const imageClasses = cn(
     "h-full flex items-center justify-center md:rounded-[20px] rounded-[10px] relative card-image"
   );
@@ -25,7 +40,7 @@ export default function ContentPortfolio({
   return (
     <Link
       to={`/portfolio/${slug}`}
-      reloadDocument
+      onMouseEnter={handleMouseEnter}
       className="size-full relative overflow-hidden md:rounded-[16px] hover:rounded-[26px] rounded-[10px]  md:p-2 p-1 cursor-pointer
       shadow-lg block"
     >
