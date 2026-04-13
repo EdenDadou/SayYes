@@ -259,7 +259,7 @@ function HomeProjectCarouselDesktop({
       </div>
 
       {/* Navigation Arrows */}
-      <div className="w-full flex flex-row justify-center items-center z-20 gap-8">
+      <div className="w-full flex flex-row justify-center items-center z-20 gap-16">
         <button
           onClick={prevSlide}
           className="z-20 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"

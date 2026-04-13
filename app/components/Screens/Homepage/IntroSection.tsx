@@ -166,11 +166,11 @@ export default function IntroSection() {
         </motion.div>
       </AnimatePresence>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden">
-        <div className="flex flex-col items-center w-[988px] justify-center gap-9 py-20">
+        <div className="flex flex-col items-center w-[988px] justify-center gap-5 py-20">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
           <TitleHomepage width={940} />
 
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center gap-1">
             <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
               <p>Branding</p>
               <Arrow className="w-[22px]" />
@@ -184,12 +184,12 @@ export default function IntroSection() {
               <Arrow className="w-[22px]" />
               <p>Illustration</p>
             </div>
-            <p className="text-white font-jakarta-semibold text-[28px]">
+            <p className="text-white font-jakarta-semibold text-[28px] -mt-1">
               Say Yes réunit toutes les expertises créatives
             </p>
           </div>
           <Button
-            className="mt-4"
+            className=""
             type="border"
             label="Démarrer un projet"
             leftIcon={<ChatBuble color="white" className="w-6 h-6" />}

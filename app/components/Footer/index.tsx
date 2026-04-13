@@ -46,6 +46,9 @@ export default function Footer({
             </span>
             <span>aura changer de dimension !</span>
           </h2>
+          <p className="font-jakarta-semibold text-[24px] leading-[27px] text-white text-center mt-2">
+            Deux mots à dire : Say Yes !
+          </p>
         </div>
       ) : (
         <>

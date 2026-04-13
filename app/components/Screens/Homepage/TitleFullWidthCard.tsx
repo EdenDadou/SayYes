@@ -129,7 +129,7 @@ export default function TitleFullWidthCard() {
         </div>
         <div className="relative z-10 -mt-[90vh] flex flex-col justify-center items-center gap-8 w-full">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full my-6" />
-          <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line">
+          <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line pb-2">
             {`Accompagnement sur-mesure`}
           </h2>
           <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
@@ -141,7 +141,7 @@ export default function TitleFullWidthCard() {
             <p>Prouvée</p>
           </div>
           <AccompagnementCardsParallax />
-          <div className="flex flex-row items-center gap-8 justify-center -mt-20 w-[988px]">
+          <div className="flex flex-row items-center gap-8 justify-center -mt-32 w-[988px]">
             {cardsAccompagnementSmall.map((card) => {
               const data = CardsAccompagnementSmall(card);
               return data.content;
@@ -172,7 +172,7 @@ export const CardsAccompagnement = ({
     isMobile ? bgImageMobile : bgImage,
     isMobile ? "mobile" : "desktop"
   );
-  const optimizedIcon = getOptimizedImageUrl(icon, "thumbnail");
+  const optimizedIcon = getOptimizedImageUrl(icon, "mobile");
   return {
     height: 490,
     borderRadius: 40,
@@ -199,9 +199,9 @@ export const CardsAccompagnement = ({
               </p>
               <ul className="flex flex-col gap-4">
                 {liste.map((item) => (
-                  <li key={item} className="flex flex-row items-center gap-2">
-                    <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF]" />
-                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[18px] md:tracking-[-1px] tracking-[-0.5px] whitespace-pre-line">
+                  <li key={item} className="flex flex-row items-start gap-2">
+                    <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF] mt-0.5" />
+                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[18px] md:tracking-[0px] tracking-[0px] whitespace-pre-line">
                       {item}
                     </p>
                   </li>
@@ -261,7 +261,7 @@ export const CardsAccompagnementSmall = ({
   title: string;
   liste: string[];
 }) => {
-  const optimizedIcon = getOptimizedImageUrl(icon, "thumbnail");
+  const optimizedIcon = getOptimizedImageUrl(icon, "mobile");
   return {
     content: (
       <div className="border-grey-animed z-10 relative md:h-[230px] h-full w-full md:w-[476px] justify-center md:rounded-[40px] rounded-[36px] bg-black/90 py-5 overflow-hidden">
@@ -274,9 +274,9 @@ export const CardsAccompagnementSmall = ({
               </p>
               <ul className="flex flex-col md:gap-4 gap-2">
                 {liste.map((item) => (
-                  <li key={item} className="flex flex-row items-center gap-2">
-                    <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF]" />
-                    <p className="text-white font-jakarta  md:text-[16px] text-[14px] leading-[18px] md:tracking-[-1px] tracking-[-0.5px]whitespace-pre-line">
+                  <li key={item} className="flex flex-row items-start gap-2">
+                    <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF] mt-0.5" />
+                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[18px] md:tracking-[0px] tracking-[0px] whitespace-pre-line">
                       {item}
                     </p>
                   </li>

@@ -33,7 +33,7 @@ export default function TitleStepImage() {
         });
       },
       {
-        threshold: 0.2, // Déclencher quand 20% de la section est visible
+        threshold: 0.1, // Déclencher quand 10% de la section est visible
       }
     );
 
@@ -51,22 +51,21 @@ export default function TitleStepImage() {
   useEffect(() => {
     if (!isVisible) return;
 
-    // Incrémenter le nombre d'étapes actives toutes les 3 secondes
+    // Incrémenter le nombre d'étapes actives toutes les 500ms, puis boucle
     const interval = setInterval(() => {
       setActiveSteps((prev) => {
-        if (prev < 4) {
-          const newStep = prev + 1;
-          // Déclencher l'animation pour l'étape qui vient d'être complétée
-          setJustCompletedStep(newStep);
-          // Réinitialiser après l'animation (0.6s)
-          setTimeout(() => {
-            setJustCompletedStep(null);
-          }, 600);
-          return newStep;
+        // Après la 4ème étape, on repart à 0 pour boucler l'animation
+        if (prev >= 4) {
+          return 0;
         }
-        return prev; // Arrêter à 4 étapes
+        const newStep = prev + 1;
+        setJustCompletedStep(newStep);
+        setTimeout(() => {
+          setJustCompletedStep(null);
+        }, 300);
+        return newStep;
       });
-    }, 3000);
+    }, 500);
 
     return () => clearInterval(interval);
   }, [isVisible]);

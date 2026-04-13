@@ -19,8 +19,8 @@ export default function CarouselCard() {
     if (horizontalRef.current) {
       const totalWidth = horizontalRef.current.scrollWidth;
       const viewportWidth = window.innerWidth;
-      // Padding supplémentaire après la dernière carte (24vw)
-      const endPadding = viewportWidth * 0.24;
+      // Léger padding pour que la dernière carte soit légèrement rognée à droite
+      const endPadding = viewportWidth * 0.06;
       setScrollRange(totalWidth - viewportWidth + endPadding);
     }
   }, []);
@@ -136,7 +136,7 @@ export default function CarouselCard() {
             <motion.div
               ref={horizontalRef}
               style={{ x }}
-              className="flex gap-10 mt-12 pl-[calc(24vw)] pr-[calc(24vw)]"
+              className="flex gap-10 mt-12 pl-0"
             >
               {supports.map((card, index) => {
                 const data = CardsSupport({ ...card, isMobile: false });
