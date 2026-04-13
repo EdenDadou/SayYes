@@ -1,5 +1,8 @@
 import Background404 from "../Background404";
 
+// Shared with Page404Mobile — both must match for content to sit exactly below the GIF
+export const GIF_HEIGHT_VH = "55vh";
+
 export default function Background404Mobile() {
   return (
     <div className="absolute inset-0 z-0" aria-hidden="true">
@@ -11,7 +14,7 @@ export default function Background404Mobile() {
           backgroundSize: "180vw",
           backgroundPositionX: "-40vw",
           backgroundRepeat: "no-repeat",
-          height: "55vh",
+          height: GIF_HEIGHT_VH,
         }}
       >
         {/* Gradient haut */}
@@ -22,13 +25,13 @@ export default function Background404Mobile() {
               "linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, rgba(0,0,0,0))",
           }}
         />
-        {/* Gradient bas */}
+        {/* Gradient bas — léger fondu, Kermit reste visible */}
         <div
           className="absolute bottom-0 left-0 w-full"
           style={{
-            height: "40vh",
+            height: "18vh",
             background:
-              "linear-gradient(to top, rgba(0, 0, 0, 1) 60%, rgba(0,0,0,0))",
+              "linear-gradient(to top, rgba(0, 0, 0, 1) 30%, rgba(0,0,0,0))",
           }}
         />
         {/* Gradient gauche */}
@@ -49,51 +52,50 @@ export default function Background404Mobile() {
         />
       </div>
 
-      {/* Glow ellipses violet/bleu sous le gif */}
+      {/* Glow violet/bleu — même teinte que purple-halo du projet (#4f0bac) */}
       <div
-        className="absolute w-full opacity-80 pointer-events-none"
-        style={{ top: "42vh", height: "65vh" }}
+        className="absolute w-full pointer-events-none"
+        style={{ top: "28vh", height: "72vh", opacity: 0.9 }}
       >
-        {/* Ellipse 1 — large, violette, inclinée */}
+        {/* Halo principal — violet profond */}
         <div
           className="absolute"
           style={{
-            width: "180%",
-            height: "65%",
-            left: "-40%",
-            top: "0",
+            width: "130%",
+            height: "45%",
+            left: "-15%",
+            top: "5%",
             background:
-              "radial-gradient(ellipse at center, rgba(90, 70, 190, 0.45) 0%, rgba(50, 110, 200, 0.2) 45%, transparent 70%)",
-            filter: "blur(45px)",
-            transform: "rotate(-10deg) skewX(7deg)",
+              "radial-gradient(ellipse at 50% 50%, #4f0bac 0%, rgba(50, 80, 200, 0.5) 40%, transparent 70%)",
+            filter: "blur(40px)",
+            transform: "rotate(-12deg) scaleY(0.6)",
           }}
         />
-        {/* Ellipse 2 — légèrement décalée, plus bleue */}
+        {/* Halo bleu complémentaire */}
         <div
           className="absolute"
           style={{
-            width: "180%",
-            height: "75%",
-            left: "-40%",
-            top: "8%",
+            width: "130%",
+            height: "45%",
+            left: "-15%",
+            top: "15%",
             background:
-              "radial-gradient(ellipse at center, rgba(70, 50, 170, 0.35) 0%, rgba(40, 90, 185, 0.15) 45%, transparent 70%)",
+              "radial-gradient(ellipse at 50% 50%, rgba(40, 80, 220, 0.6) 0%, rgba(79, 11, 172, 0.3) 40%, transparent 70%)",
             filter: "blur(55px)",
-            transform: "rotate(-15deg) skewX(7deg)",
+            transform: "rotate(-8deg) scaleY(0.5)",
           }}
         />
-        {/* Ellipse 3 — plus basse, fondu */}
+        {/* Halo bas — extension progressive */}
         <div
           className="absolute"
           style={{
-            width: "200%",
-            height: "55%",
-            left: "-50%",
-            top: "35%",
+            width: "160%",
+            height: "50%",
+            left: "-30%",
+            top: "30%",
             background:
-              "radial-gradient(ellipse at center, rgba(50, 30, 150, 0.25) 0%, transparent 70%)",
-            filter: "blur(65px)",
-            transform: "rotate(-5deg) skewX(2deg)",
+              "radial-gradient(ellipse at 50% 30%, rgba(79, 11, 172, 0.4) 0%, transparent 60%)",
+            filter: "blur(60px)",
           }}
         />
       </div>

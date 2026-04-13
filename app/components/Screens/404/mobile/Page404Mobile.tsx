@@ -8,7 +8,7 @@ import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import Button from "~/components/Button";
 import ArrowFull from "~/assets/icons/ArrowFull";
-import Background404Mobile from "./Background404Mobile";
+import Background404Mobile, { GIF_HEIGHT_VH } from "./Background404Mobile";
 
 export default function Page404Mobile() {
   const navigate = useNavigate();
@@ -25,10 +25,9 @@ export default function Page404Mobile() {
       <main className="fixed inset-0 flex flex-col bg-black">
         <Background404Mobile />
 
-        {/* Contenu — démarre à 55vh, là où le gif se termine */}
         <div
           className="relative z-10 flex flex-col flex-1"
-          style={{ marginTop: "55vh" }}
+          style={{ marginTop: "47vh" }}
         >
           {/* Loading bar + titre */}
           <div className="ml-10">
