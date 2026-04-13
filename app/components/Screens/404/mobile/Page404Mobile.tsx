@@ -22,33 +22,47 @@ export default function Page404Mobile() {
 
   return (
     <MobileLayout footer={false}>
-      <main className="fixed inset-0 flex flex-col items-start justify-end pb-20 px-8">
+      <main className="fixed inset-0 flex flex-col bg-black">
         <Background404Mobile />
 
-        <div className="h-[3px] w-28 holographic-bg mb-6 mt-4" />
-
+        {/* Contenu — démarre à 55vh, là où le gif se termine */}
         <div
-          className="w-[85vw] aspect-[16/10] z-10"
-          style={{
-            backgroundImage: 'url("images/404/Title404.png")',
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "80vw auto",
-          }}
-        />
-        <div className="flex flex-col items-start justify-between h-40">
-          <Button
-            type="border"
-            onClick={() => navigate(`/`)}
-            leftIcon={<ArrowFull className="w-6 h-6" />}
-            label="Accueil"
-            textSize="L"
-          />
-          <div className="flex flex-row gap-3 z-20">
-            <SvgBtnLinkedin className="w-8 h-8" />
-            <SvgBtnFacebook className="w-8 h-8" />
-            <SvgBtnInstagram className="w-8 h-8" />
-            <SvgBtnTiktok className="w-8 h-8" />
-            <SvgBtnYoutube className="w-8 h-8" />
+          className="relative z-10 flex flex-col flex-1"
+          style={{ marginTop: "55vh" }}
+        >
+          {/* Loading bar + titre */}
+          <div className="ml-10">
+            <div className="h-[4px] w-[106px] holographic-bg rounded-full" />
+            <div
+              className="mt-3"
+              style={{
+                width: "77vw",
+                aspectRatio: "302 / 178",
+                backgroundImage: 'url("/images/404/Title404.png")',
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "100% 100%",
+              }}
+            />
+          </div>
+
+          {/* Bouton + réseaux — poussés en bas */}
+          <div className="flex flex-col mt-auto mb-8 gap-6">
+            <div className="flex justify-center">
+              <Button
+                type="border"
+                onClick={() => navigate("/")}
+                leftIcon={<ArrowFull className="w-6 h-6" />}
+                label="Accueil"
+                textSize="L"
+              />
+            </div>
+            <div className="flex flex-row gap-3 ml-[45px]">
+              <SvgBtnLinkedin className="w-[30px] h-[30px]" />
+              <SvgBtnFacebook className="w-[30px] h-[30px]" />
+              <SvgBtnInstagram className="w-[30px] h-[30px]" />
+              <SvgBtnTiktok className="w-[30px] h-[30px]" />
+              <SvgBtnYoutube className="w-[30px] h-[30px]" />
+            </div>
           </div>
         </div>
       </main>
