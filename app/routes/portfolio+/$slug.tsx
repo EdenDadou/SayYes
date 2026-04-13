@@ -39,12 +39,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   if (!data?.portfolio) return [{ title: "Portfolio — SayYes" }];
   const p = data.portfolio;
+  const BASE_URL = "https://vps-f16913b8.vps.ovh.net";
+  const rawImage = p.metaImage || p.photoCouverture || "";
+  const absoluteImage = rawImage.startsWith("http")
+    ? rawImage
+    : `${BASE_URL}${rawImage}`;
   return [
     { title: p.metaTitle || p.titre },
     { name: "description", content: p.metaDescription || p.description },
     { property: "og:title", content: p.metaTitle || p.titre },
     { property: "og:description", content: p.metaDescription || p.description },
-    { property: "og:image", content: p.metaImage || p.photoCouverture },
+    { property: "og:image", content: absoluteImage },
   ];
 };
 
@@ -70,7 +75,7 @@ export default function PortfolioSlug() {
 
   // Pour les visites directes : utiliser les données du loader si le contexte n'est pas encore chargé
   const portfolio =
-    contextPortfolio ?? (loaderPortfolio as unknown as PortfolioData);
+    contextPortfolio ?? (loaderPortfolio as PortfolioData);
 
   const isMobile = useViewport();
   // Update meta tags dynamically when portfolio is loaded
