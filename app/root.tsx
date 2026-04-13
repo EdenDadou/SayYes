@@ -7,12 +7,23 @@ import {
   isRouteErrorResponse,
   useRouteError,
 } from "@remix-run/react";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import * as styles from "./styles/index.css";
 import Page404 from "./components/Screens/404";
-import { useViewport } from "./utils/hooks/useViewport";
+import {
+  useViewport,
+  isMobileUserAgent,
+} from "./utils/hooks/useViewport";
 import Page404Mobile from "./components/Screens/404/mobile/Page404Mobile";
 import { PortfolioProvider } from "./contexts/PortfolioContext";
 import { ScrollLockProvider } from "./contexts/ScrollLockContext";
+
+export type RootLoaderData = { isMobileSSR: boolean };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userAgent = request.headers.get("User-Agent") || "";
+  return json<RootLoaderData>({ isMobileSSR: isMobileUserAgent(userAgent) });
+}
 
 export function links() {
   return styles;

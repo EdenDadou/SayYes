@@ -2,13 +2,19 @@ import { useEffect, useState } from "react";
 
 export const MOBILE_BREAKPOINT = 768;
 
+const MOBILE_UA_REGEX =
+  /Android|webOS|Mobile|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+
+/** Détecte un mobile à partir d'une chaîne User-Agent (fonctionne côté serveur et client) */
+export function isMobileUserAgent(userAgent: string): boolean {
+  return MOBILE_UA_REGEX.test(userAgent);
+}
+
 function detectMobile(): boolean {
-  const isMobileDevice =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-  const isMobileWidth = window.innerWidth < MOBILE_BREAKPOINT;
-  return isMobileDevice || isMobileWidth;
+  return (
+    isMobileUserAgent(navigator.userAgent) ||
+    window.innerWidth < MOBILE_BREAKPOINT
+  );
 }
 
 export function useViewport() {

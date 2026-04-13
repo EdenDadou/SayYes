@@ -5,6 +5,7 @@ import {
   type CSSProperties,
   type ImgHTMLAttributes,
 } from "react";
+import { useRouteLoaderData } from "@remix-run/react";
 import {
   getOptimizedImageUrl,
   generateSrcSet,
@@ -12,6 +13,7 @@ import {
   type ImageSize,
 } from "~/utils/optimizeImage";
 import { MOBILE_BREAKPOINT } from "~/utils/hooks/useViewport";
+import type { RootLoaderData } from "~/root";
 
 const mobileOptimizedStyle: CSSProperties = {
   willChange: "auto",
@@ -58,11 +60,18 @@ export const OptimizedImage = memo(function OptimizedImage({
   style,
   ...props
 }: OptimizedImageProps) {
+  const rootData = useRouteLoaderData<RootLoaderData>("root");
   const [isLoaded, setIsLoaded] = useState(noPlaceholder);
   const [hasError, setHasError] = useState(false);
-  const [isMobile, setIsMobile] = useState(
-    () => forceMobile ?? (typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false)
-  );
+  const [isMobile, setIsMobile] = useState(() => {
+    if (forceMobile !== undefined) return forceMobile;
+    // La valeur SSR (User-Agent) garantit que le serveur et le client initialisent
+    // le même état, évitant un double fetch d'image au chargement sur mobile.
+    if (rootData?.isMobileSSR !== undefined) return rootData.isMobileSSR;
+    if (typeof window !== "undefined")
+      return window.innerWidth < MOBILE_BREAKPOINT;
+    return false;
+  });
 
   useEffect(() => {
     if (forceMobile !== undefined && forceMobile !== isMobile) {

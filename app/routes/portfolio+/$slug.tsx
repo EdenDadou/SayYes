@@ -71,12 +71,12 @@ export default function PortfolioSlug() {
       timers.push(setTimeout(() => setLoadStage(1), 50));
       // Stage 2: hero title après 150ms
       timers.push(setTimeout(() => setLoadStage(2), 150));
-      // Stage 3: photo main après 250ms (le stage 4 sera déclenché par onImageLoad)
+      // Stage 3: photo main après 250ms
       timers.push(
         setTimeout(() => setLoadStage((prev) => Math.max(prev, 3)), 250)
       );
-      // Fallback: si l'image prend trop de temps, passer au stage 4 après 2s
-      timers.push(setTimeout(() => setLoadStage(4), 2000));
+      // Stage 4: contenu après 400ms (ne pas attendre onLoad — image déjà en cache)
+      timers.push(setTimeout(() => setLoadStage(4), 400));
 
       return () => timers.forEach(clearTimeout);
     }
@@ -241,147 +241,141 @@ export default function PortfolioSlug() {
                 </motion.div>
               </section>
 
-              {/* Content Grid - Stage 4 */}
-              <motion.section
-                className="flex justify-center py-12 bg-white px-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              >
-                <div className="w-[990px] flex flex-row">
-                  <div className="w-[487px] pr-10">
-                    <p className="text-black text-[26px] font-jakarta leading-relaxed">
-                      {portfolio.description}
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-4 w-[495px]">
-                    <p
-                      className="text-black text-[14px] leading-relaxed font-jakarta"
-                      dangerouslySetInnerHTML={{
-                        __html: portfolio.kicker.replaceAll(
-                          "<b>",
-                          "<b class='font-jakarta-bold text-[18px]'>"
-                        ),
-                      }}
-                    />
-                  </div>
-                </div>
-              </motion.section>
+              {/* Tout le contenu sous la photo - Stage 4 */}
+              {/* Rendu conditionnel pour éviter le grand espace noir (opacity:0 occupe l'espace) */}
+              {loadStage >= 4 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  {/* Content Grid */}
+                  <section className="flex justify-center py-12 bg-white px-8">
+                    <div className="w-[990px] flex flex-row">
+                      <div className="w-[487px] pr-10">
+                        <p className="text-black text-[26px] font-jakarta leading-relaxed">
+                          {portfolio.description}
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-4 w-[495px]">
+                        <p
+                          className="text-black text-[14px] leading-relaxed font-jakarta"
+                          dangerouslySetInnerHTML={{
+                            __html: portfolio.kicker.replaceAll(
+                              "<b>",
+                              "<b class='font-jakarta-bold text-[18px]'>"
+                            ),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </section>
 
-              {/* Deliverables - Stage 4 */}
-              <motion.div
-                className="flex justify-center pb-[100px] bg-white px-8 z-20"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
-                transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-              >
-                <div className="w-[990px] flex flex-col">
-                  <h3 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-semi-bold tracking-[-1px]">
-                    <Star className="w-6 h-6" fill="black" />
-                    Notre accompagnement
-                  </h3>
-                  <div className="flex flex-row gap-5 w-full">
-                    {portfolio.livrable.map((item: string, index: number) => (
-                      <span
-                        key={index}
-                        className="flex flex-row items-center gap-2 px-4 py-3 rounded-full text-[13px] border font-jakarta-bold"
-                        style={{
-                          color: portfolio.couleur,
-                          borderColor: portfolio.couleur,
-                        }}
-                      >
-                        <Coche className="w-4 h-4" />
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Bento Section 1 - Stage 4 */}
-              <motion.section
-                className="relative px-32"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
-                transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-              >
-                <BackgroundProject2
-                  fill={portfolio.couleur}
-                  className="absolute -top-[150px] left-0 right-0 w-screen z-0"
-                />
-                <div className="relative z-50">
-                  <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-semi-bold mb-12 z-50 tracking-[-2px]">
-                    <Star className="w-5 h-5" fill={portfolio.couleur} />
-                    {portfolio.sousTitre.split(" ").slice(0, 3).join(" ")}
-                    <span style={{ color: portfolio.couleur }}>
-                      {portfolio.sousTitre.split(" ").slice(3).join(" ")}
-                    </span>
-                    <Star className="w-5 h-5" fill={portfolio.couleur} />
-                  </h2>
-                </div>
-
-                <div className="space-y-4">
-                  {portfolio.bento[0] && <Bento bento={portfolio.bento[0]} />}
-                </div>
-              </motion.section>
-
-              {/* Testimonial - Stage 4 */}
-              <motion.section
-                className="flex flex-col items-center justify-center py-[100px] w-[814px] self-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
-                transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-              >
-                <div className="h-[3px] w-28 holographic-bg" />
-                {/* Témoignage */}
-                {portfolio.temoignage && portfolio.temoignage.contenu ? (
-                  <div className="pt-8 flex flex-col items-center justify-center gap-8 ">
-                    <blockquote className="text-white text-[22px] leading-[32px] text-center font-jakarta">
-                      {portfolio.temoignage.contenu}
-                    </blockquote>
-                    <div className="flex flex-col gap-1">
-                      <cite className="text-white font-jakarta-bold text-[18px]">
-                        {`${portfolio.temoignage.auteur} ${portfolio.temoignage.poste ? ` - ${portfolio.temoignage.poste}` : ""}`}
-                      </cite>
+                  {/* Deliverables */}
+                  <div className="flex justify-center pb-[100px] bg-white px-8 z-20">
+                    <div className="w-[990px] flex flex-col">
+                      <h3 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-semi-bold tracking-[-1px]">
+                        <Star className="w-6 h-6" fill="black" />
+                        Notre accompagnement
+                      </h3>
+                      <div className="flex flex-row gap-5 w-full">
+                        {portfolio.livrable.map(
+                          (item: string, index: number) => (
+                            <span
+                              key={index}
+                              className="flex flex-row items-center gap-2 px-4 py-3 rounded-full text-[13px] border font-jakarta-bold"
+                              style={{
+                                color: portfolio.couleur,
+                                borderColor: portfolio.couleur,
+                              }}
+                            >
+                              <Coche className="w-4 h-4" />
+                              {item}
+                            </span>
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
-                ) : null}
-              </motion.section>
 
-              {/* Bento Section 2 - Stage 4 */}
-              <motion.section
-                className="mb-16 relative px-32 z-10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
-                transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-              >
-                <div className="space-y-4">
-                  {portfolio.bento[1] && <Bento bento={portfolio.bento[1]} />}
-                </div>
-              </motion.section>
+                  {/* Bento Section 1 */}
+                  <section className="relative px-32">
+                    <BackgroundProject2
+                      fill={portfolio.couleur}
+                      className="absolute -top-[150px] left-0 right-0 w-screen z-0"
+                    />
+                    <div className="relative z-50">
+                      <h2 className="flex flex-row justify-center items-center gap-2 text-[40px] font-bold text-black font-jakarta-semi-bold mb-12 z-50 tracking-[-2px]">
+                        <Star className="w-5 h-5" fill={portfolio.couleur} />
+                        {portfolio.sousTitre.split(" ").slice(0, 3).join(" ")}
+                        <span style={{ color: portfolio.couleur }}>
+                          {portfolio.sousTitre.split(" ").slice(3).join(" ")}
+                        </span>
+                        <Star className="w-5 h-5" fill={portfolio.couleur} />
+                      </h2>
+                    </div>
+
+                    <div className="space-y-4">
+                      {portfolio.bento[0] && (
+                        <Bento bento={portfolio.bento[0]} />
+                      )}
+                    </div>
+                  </section>
+
+                  {/* Testimonial */}
+                  <section className="flex flex-col items-center justify-center py-[100px] w-[814px] mx-auto">
+                    <div className="h-[3px] w-28 holographic-bg" />
+                    {portfolio.temoignage && portfolio.temoignage.contenu ? (
+                      <div className="pt-8 flex flex-col items-center justify-center gap-8 ">
+                        <blockquote className="text-white text-[22px] leading-[32px] text-center font-jakarta">
+                          {portfolio.temoignage.contenu}
+                        </blockquote>
+                        <div className="flex flex-col gap-1">
+                          <cite className="text-white font-jakarta-bold text-[18px]">
+                            {`${portfolio.temoignage.auteur} ${portfolio.temoignage.poste ? ` - ${portfolio.temoignage.poste}` : ""}`}
+                          </cite>
+                        </div>
+                      </div>
+                    ) : null}
+                  </section>
+
+                  {/* Bento Section 2 */}
+                  <section className="mb-16 relative px-32 z-10">
+                    <div className="space-y-4">
+                      {portfolio.bento[1] && (
+                        <Bento bento={portfolio.bento[1]} />
+                      )}
+                    </div>
+                  </section>
+                </motion.div>
+              )}
             </div>
 
             {/* Carousel - Stage 4 */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
-              transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-            >
-              <ProjectCarousel />
-            </motion.div>
+            {loadStage >= 4 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                <ProjectCarousel />
+              </motion.div>
+            )}
           </motion.main>
 
           {/* Background 3 - Stage 4 */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
-            transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-          >
-            <BackgroundProject3
-              fill={portfolio.couleur}
-              className="absolute bottom-[620px] left-0 right-0 w-screen h-auto z-0"
-            />
-          </motion.div>
+          {loadStage >= 4 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <BackgroundProject3
+                fill={portfolio.couleur}
+                className="absolute bottom-[620px] left-0 right-0 w-screen h-auto z-0"
+              />
+            </motion.div>
+          )}
         </Desktoplayout>
       )}
     </>
