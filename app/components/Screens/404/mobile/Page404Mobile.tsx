@@ -34,6 +34,8 @@ export default function Page404Mobile() {
           <div className="ml-10">
             <div className="h-[4px] w-[106px] holographic-bg rounded-full" />
             <div
+              role="img"
+              aria-label="Erreur 404 - Page introuvable"
               className="mt-3"
               style={{
                 width: "77vw",
