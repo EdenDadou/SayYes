@@ -1,7 +1,14 @@
-import type { BlocCards, Card, CardConcurrence, CardOffre } from "~/types/landing-page";
+import type {
+  BlocCards,
+  Card,
+  CardConcurrence,
+  CardOffre,
+} from "~/types/landing-page";
 import MediaEditor from "./MediaEditor";
 import CollapsibleCard from "./CollapsibleCard";
 import LineTitleEditor from "./LineTitleEditor";
+import { ADMIN_INPUT_CLASS, swapItems } from "~/utils/admin/landing-page-constants";
+import { RemoveIcon } from "~/components/icons";
 
 interface BlocCardsEditorProps {
   bloc: BlocCards;
@@ -67,11 +74,8 @@ export default function BlocCardsEditor({
   };
 
   const moveCard = (index: number, direction: "up" | "down") => {
-    const newCards = [...bloc.cards];
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= newCards.length) return;
-    [newCards[index], newCards[targetIndex]] = [newCards[targetIndex], newCards[index]];
-    onUpdate({ ...bloc, cards: newCards });
+    const result = swapItems(bloc.cards, index, direction);
+    if (result !== bloc.cards) onUpdate({ ...bloc, cards: result });
   };
 
   return (
@@ -93,7 +97,7 @@ export default function BlocCardsEditor({
           value={bloc.subtitle || ""}
           onChange={(e) => onUpdate({ ...bloc, subtitle: e.target.value })}
           placeholder="Sous-titre (optionnel)"
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -109,7 +113,7 @@ export default function BlocCardsEditor({
             onChange={(e) =>
               onUpdate({ ...bloc, cta: { ...bloc.cta, label: e.target.value } })
             }
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={ADMIN_INPUT_CLASS}
           />
         </div>
         <div>
@@ -127,7 +131,7 @@ export default function BlocCardsEditor({
                 },
               })
             }
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={ADMIN_INPUT_CLASS}
           >
             <option value="color">Couleur</option>
             <option value="transparent">Transparent</option>
@@ -173,7 +177,10 @@ export default function BlocCardsEditor({
               previewImage={card.image?.url}
               itemCount={
                 card.type === "concurrence"
-                  ? { count: (card as CardConcurrence).blocs.length, label: "blocs" }
+                  ? {
+                      count: (card as CardConcurrence).blocs.length,
+                      label: "blocs",
+                    }
                   : undefined
               }
               onRemove={() => removeCard(cardIndex)}
@@ -190,7 +197,7 @@ export default function BlocCardsEditor({
                   updateCard(cardIndex, { ...card, titre: e.target.value })
                 }
                 placeholder="Titre de la card"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={ADMIN_INPUT_CLASS}
               />
 
               <input
@@ -200,7 +207,7 @@ export default function BlocCardsEditor({
                   updateCard(cardIndex, { ...card, cta: e.target.value })
                 }
                 placeholder="CTA"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={ADMIN_INPUT_CLASS}
               />
 
               {/* Champs spécifiques à Offre */}
@@ -214,8 +221,11 @@ export default function BlocCardsEditor({
                         onChange={(media) => {
                           // Si l'URL est vide après suppression, on retire le logo
                           if (!media.url) {
-                            const { logo, ...rest } = card as CardOffre;
-                            updateCard(cardIndex, { ...rest, type: "offre" } as Card);
+                            const { logo: _logo, ...rest } = card as CardOffre;
+                            updateCard(cardIndex, {
+                              ...rest,
+                              type: "offre",
+                            } as Card);
                           } else {
                             updateCard(cardIndex, { ...card, logo: media });
                           }
@@ -225,8 +235,11 @@ export default function BlocCardsEditor({
                       <button
                         type="button"
                         onClick={() => {
-                          const { logo, ...rest } = card as CardOffre;
-                          updateCard(cardIndex, { ...rest, type: "offre" } as Card);
+                          const { logo: _logo, ...rest } = card as CardOffre;
+                          updateCard(cardIndex, {
+                            ...rest,
+                            type: "offre",
+                          } as Card);
                         }}
                         className="text-xs text-red-400 hover:text-red-300"
                       >
@@ -283,7 +296,10 @@ export default function BlocCardsEditor({
                               onChange={(e) => {
                                 const newLines = [...lines];
                                 newLines[lineIndex] = e.target.value;
-                                updateCard(cardIndex, { ...card, lines: newLines });
+                                updateCard(cardIndex, {
+                                  ...card,
+                                  lines: newLines,
+                                });
                               }}
                               placeholder={`Ligne ${lineIndex + 1}`}
                               className="flex-1 px-3 py-1.5 bg-gray-800 border border-gray-700 rounded text-white text-sm"
@@ -291,14 +307,17 @@ export default function BlocCardsEditor({
                             <button
                               type="button"
                               onClick={() => {
-                                const newLines = lines.filter((_, i) => i !== lineIndex);
-                                updateCard(cardIndex, { ...card, lines: newLines });
+                                const newLines = lines.filter(
+                                  (_, i) => i !== lineIndex
+                                );
+                                updateCard(cardIndex, {
+                                  ...card,
+                                  lines: newLines,
+                                });
                               }}
                               className="text-red-400 hover:text-red-300 px-2"
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                              </svg>
+                              <RemoveIcon className="w-4 h-4" />
                             </button>
                           </div>
                         ))}
@@ -310,10 +329,13 @@ export default function BlocCardsEditor({
                     type="text"
                     value={(card as CardOffre).mention || ""}
                     onChange={(e) =>
-                      updateCard(cardIndex, { ...card, mention: e.target.value })
+                      updateCard(cardIndex, {
+                        ...card,
+                        mention: e.target.value,
+                      })
                     }
                     placeholder="Mention (optionnel)"
-                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={ADMIN_INPUT_CLASS}
                   />
                 </>
               )}
@@ -326,7 +348,7 @@ export default function BlocCardsEditor({
                     onChange={(media) => {
                       // Si l'URL est vide après suppression, on retire l'image
                       if (!media.url) {
-                        const { image, ...rest } = card;
+                        const { image: _image, ...rest } = card;
                         updateCard(cardIndex, rest as Card);
                       } else {
                         updateCard(cardIndex, { ...card, image: media });
@@ -337,7 +359,7 @@ export default function BlocCardsEditor({
                   <button
                     type="button"
                     onClick={() => {
-                      const { image, ...rest } = card;
+                      const { image: _image, ...rest } = card;
                       updateCard(cardIndex, rest as Card);
                     }}
                     className="text-xs text-red-400 hover:text-red-300"
@@ -365,7 +387,8 @@ export default function BlocCardsEditor({
                 <div className="border-t border-gray-700 pt-3 mt-3">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm text-white/70">
-                      Blocs concurrence ({(card as CardConcurrence).blocs.length})
+                      Blocs concurrence (
+                      {(card as CardConcurrence).blocs.length})
                     </span>
                     <button
                       type="button"
@@ -402,19 +425,7 @@ export default function BlocCardsEditor({
                             }
                             className="ml-2 text-red-400 hover:text-red-300 p-1"
                           >
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
+                            <RemoveIcon className="w-4 h-4" />
                           </button>
                         </div>
 

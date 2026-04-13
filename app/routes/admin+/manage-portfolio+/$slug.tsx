@@ -4,7 +4,7 @@ import {
   redirect,
   json,
 } from "@remix-run/node";
-import { useLoaderData, Link, useNavigate, useFetcher } from "@remix-run/react";
+import { useLoaderData, Link, useFetcher } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { requireAuth, getSessionData } from "~/server/auth.server";
 import {
@@ -62,9 +62,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   try {
     if (request.method === "DELETE") {
-      console.log(`🗑️ Suppression du portfolio demandée: ${slug}`);
       await deletePortfolioBySlug(slug);
-      console.log(`✅ Portfolio ${slug} supprimé avec succès`);
 
       // Rediriger immédiatement vers la liste des portfolios après suppression
       return redirect("/admin/manage-portfolio", {
@@ -201,8 +199,6 @@ export default function EditPortfolio() {
       )
     ) {
       try {
-        console.log("🗑️ Début de la suppression du portfolio:", portfolio.slug);
-
         const response = await fetch(
           `/admin/manage-portfolio/${portfolio.slug}`,
           {
@@ -214,14 +210,8 @@ export default function EditPortfolio() {
           }
         );
 
-        console.log("📊 Réponse DELETE:", response.status, response.statusText);
-
         if (response.ok) {
-          console.log(
-            "✅ Portfolio supprimé avec succès - redirection automatique"
-          );
           // La redirection se fait automatiquement côté serveur
-          // Pas besoin de navigation manuelle
         } else {
           console.error(
             "❌ Erreur lors de la suppression:",

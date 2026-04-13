@@ -4,7 +4,9 @@ import { type PortfolioFormData } from "~/utils/admin/portfolio-form-handlers";
 interface GeneralInfoSectionProps {
   formData: PortfolioFormData;
   setFormData: React.Dispatch<React.SetStateAction<PortfolioFormData>>;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handlePhotoMainChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   photoCouverturePreview: { url: string; name: string }[];
@@ -267,9 +269,7 @@ export default function GeneralInfoSection({
             </li>
             <li>
               • Pour faire un retour à la ligne, mettre une balise{" "}
-              <code className="bg-blue-800/30 px-1 rounded">
-                &lt;br/&gt;
-              </code>
+              <code className="bg-blue-800/30 px-1 rounded">&lt;br/&gt;</code>
             </li>
           </ul>
         </div>

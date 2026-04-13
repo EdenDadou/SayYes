@@ -16,7 +16,6 @@ export default defineConfig({
     },
   },
 
-
   // Configuration pour gérer le cache en développement
   cacheDir:
     process.env.NODE_ENV === "development"
@@ -35,7 +34,6 @@ export default defineConfig({
     "**/*.avi",
     "**/*.mkv",
   ],
-
 
   // Plugins
   plugins: [
@@ -112,12 +110,7 @@ export default defineConfig({
   // Optimisation des dépendances pour les temps de démarrage
   // Configuration améliorée pour mieux gérer les imports dynamiques de Remix
   optimizeDeps: {
-    include: [
-      "@remix-run/react",
-      "@remix-run/node",
-      "react",
-      "react-dom",
-    ], // Liste des dépendances essentielles
+    include: ["@remix-run/react", "@remix-run/node", "react", "react-dom"], // Liste des dépendances essentielles
     esbuildOptions: {
       // Permet à Vite de mieux gérer les imports dynamiques
       target: "esnext",

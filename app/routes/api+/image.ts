@@ -44,7 +44,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const width = parseInt(url.searchParams.get("w") || "0");
   const quality = Math.min(
     MAX_QUALITY,
-    Math.max(MIN_QUALITY, parseInt(url.searchParams.get("q") || String(DEFAULT_QUALITY)))
+    Math.max(
+      MIN_QUALITY,
+      parseInt(url.searchParams.get("q") || String(DEFAULT_QUALITY))
+    )
   );
   const format = url.searchParams.get("f") as "webp" | "avif" | "jpeg" | null;
 
@@ -60,14 +63,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   // Autoriser /uploads/ et /images/ (fichiers statiques)
   const allowedPrefixes = ["/uploads/", "/images/"];
-  if (!allowedPrefixes.some(prefix => imagePath.startsWith(prefix))) {
+  if (!allowedPrefixes.some((prefix) => imagePath.startsWith(prefix))) {
     return new Response("Invalid path", { status: 403 });
   }
 
   // Valider la largeur (doit être une des tailles autorisées ou 0 pour original)
-  const finalWidth = width > 0 ? ALLOWED_WIDTHS.reduce((prev, curr) =>
-    Math.abs(curr - width) < Math.abs(prev - width) ? curr : prev
-  ) : 0;
+  const finalWidth =
+    width > 0
+      ? ALLOWED_WIDTHS.reduce((prev, curr) =>
+          Math.abs(curr - width) < Math.abs(prev - width) ? curr : prev
+        )
+      : 0;
 
   // Clé de cache (inclut le format demandé)
   const cacheKey = `${imagePath}-${finalWidth}-${quality}-${format || "auto"}`;
@@ -75,9 +81,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   // 1. Vérifier le cache mémoire (L1)
   const memoryCached = imageCache.get(cacheKey);
-  if (memoryCached && Date.now() - memoryCached.timestamp < MEMORY_CACHE_DURATION) {
-    const contentType = format === "avif" ? "image/avif" :
-                        format === "webp" ? "image/webp" : "image/jpeg";
+  if (
+    memoryCached &&
+    Date.now() - memoryCached.timestamp < MEMORY_CACHE_DURATION
+  ) {
+    // Rafraîchir l'entrée en fin de Map (LRU)
+    imageCache.delete(cacheKey);
+    imageCache.set(cacheKey, memoryCached);
+
+    const contentType =
+      format === "avif"
+        ? "image/avif"
+        : format === "webp"
+          ? "image/webp"
+          : "image/jpeg";
     return new Response(new Uint8Array(memoryCached.buffer), {
       headers: {
         "Content-Type": contentType,
@@ -94,9 +111,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (Date.now() - diskStats.mtimeMs < DISK_CACHE_DURATION) {
       const diskBuffer = await readFile(diskCacheFile);
       // Remettre en cache mémoire
-      imageCache.set(cacheKey, { buffer: diskBuffer as Buffer, timestamp: Date.now() });
-      const contentType = format === "avif" ? "image/avif" :
-                          format === "webp" ? "image/webp" : "image/jpeg";
+      imageCache.set(cacheKey, {
+        buffer: diskBuffer as Buffer,
+        timestamp: Date.now(),
+      });
+      const contentType =
+        format === "avif"
+          ? "image/avif"
+          : format === "webp"
+            ? "image/webp"
+            : "image/jpeg";
       return new Response(new Uint8Array(diskBuffer), {
         headers: {
           "Content-Type": contentType,
@@ -118,7 +142,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // Note: On désactive AVIF par défaut car il peut causer des problèmes sur iOS Safari
     const acceptHeader = request.headers.get("Accept") || "";
     const userAgent = request.headers.get("User-Agent") || "";
-    const isIOSSafari = /iPhone|iPad|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    const isIOSSafari =
+      /iPhone|iPad|iPod/.test(userAgent) &&
+      /Safari/.test(userAgent) &&
+      !/Chrome|CriOS|FxiOS/.test(userAgent);
 
     let outputFormat: "webp" | "avif" | "jpeg" = "jpeg";
 
@@ -188,7 +215,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         "Content-Type": contentType,
         "Cache-Control": "public, max-age=31536000, immutable",
         "X-Cache": "MISS",
-        "Vary": "Accept",
+        Vary: "Accept",
       },
     });
   } catch (error) {

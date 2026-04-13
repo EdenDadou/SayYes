@@ -28,13 +28,14 @@ export default function BlocRenderer({
     case "blocIntro":
       return <BlocIntroFront bloc={bloc} color={color} />;
 
-    case "cards":
+    case "cards": {
       // Check if cards are "offre" type (pricing cards) or "concurrence" type (problem cards)
       const hasOffreCards = bloc.cards.some((c) => c.type === "offre");
       if (hasOffreCards) {
         return <BlocOffresFront bloc={bloc} color={color} />;
       }
       return <BlocCardsFront bloc={bloc} color={color} />;
+    }
 
     case "methods":
       return <BlocMethodsFront bloc={bloc} color={color} />;

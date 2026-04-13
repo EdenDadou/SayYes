@@ -114,7 +114,11 @@ export function useFormulaireState({
     setFormData(EMPTY_FORM_DATA);
     setCurrentLivrable("");
     setCurrentBento({ lines: [] });
-    setCurrentBentoLine({ format: "1/3 - 2/3", listImage: [], listImageAlt: [] });
+    setCurrentBentoLine({
+      format: "1/3 - 2/3",
+      listImage: [],
+      listImageAlt: [],
+    });
     setPhotoCouverturePreview([]);
     setPhotoMainPreview([]);
     setPhotoCouvertureFile(new Map());
@@ -158,14 +162,16 @@ export function useFormulaireState({
     setTotalFiles,
   };
 
+  // Both hooks must be called unconditionally (React rules of hooks)
+  const editHandlers = usePortfolioEditFormHandlers({
+    ...baseHandlerState,
+    bentoFiles,
+    setBentoFiles,
+  });
+  const createHandlers = usePortfolioFormHandlers(baseHandlerState);
+
   // Use appropriate handlers based on mode
-  const handlers = isEditing
-    ? usePortfolioEditFormHandlers({
-        ...baseHandlerState,
-        bentoFiles,
-        setBentoFiles,
-      })
-    : usePortfolioFormHandlers(baseHandlerState);
+  const handlers = isEditing ? editHandlers : createHandlers;
 
   // Meta image handlers
   const handleMetaImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

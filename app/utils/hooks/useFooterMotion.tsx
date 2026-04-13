@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
-import { useViewport } from "./useViewport";
 
 export const useFooterMotion = () => {
   const footerRef = useRef<HTMLDivElement>(null);

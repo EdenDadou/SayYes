@@ -12,7 +12,7 @@ interface BlocOffresFrontProps {
 
 function OffreCard({
   card,
-  color,
+  color: _color,
   index,
 }: {
   card: CardOffre;

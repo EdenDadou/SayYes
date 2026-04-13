@@ -1,7 +1,6 @@
 import Button from "../Button";
 import { motion } from "framer-motion";
 import { useFooterMotion } from "~/utils/hooks/useFooterMotion";
-import { useViewport } from "~/utils/hooks/useViewport";
 import SvgBtnInstagram from "~/components/Footer/components/BtnInstagram";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
@@ -17,18 +16,21 @@ import { Link } from "@remix-run/react";
 interface IFooterProps {
   setIsOpenModalContact: (value: boolean) => void;
   footerType?: "default" | "home";
+  paddingTop?: number;
 }
 
 export default function Footer({
   setIsOpenModalContact,
   footerType,
+  paddingTop = 160,
 }: IFooterProps) {
   const { footerRef, opacity, opacitySecondary } = useFooterMotion();
 
   return (
     <div
       ref={footerRef}
-      className="relative w-full flex flex-col justify-center items-center filter pt-40"
+      className="relative w-full flex flex-col justify-center items-center filter"
+      style={{ paddingTop }}
     >
       {footerType === "home" ? (
         <div className="max-w-[990px] m-auto flex flex-col items-center gap-4">

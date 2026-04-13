@@ -1,16 +1,13 @@
 import { useNavigate } from "@remix-run/react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Button from "../Button";
 import LogoSayYes from "~/components/Header/assets/LogoSayYes";
 import { useViewport } from "~/utils/hooks/useViewport";
 import { useScrollLock } from "~/contexts/ScrollLockContext";
-import HeaderMobile from "./components/HeaderMobile";
 import ChatBuble from "./assets/ChatBuble";
 import Flamme from "./assets/Flamme";
 import Coeur from "./assets/Coeur";
-import Smile from "./assets/Smile";
-import Idea from "./assets/Idea";
 
 interface IHeaderProps {
   setIsOpenModalContact: (value: boolean) => void;
@@ -18,24 +15,22 @@ interface IHeaderProps {
 
 const Header = ({ setIsOpenModalContact }: IHeaderProps) => {
   const navigate = useNavigate();
-  const isMobile = useViewport();
+  const _isMobile = useViewport();
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
   const { scrollY } = useScroll();
   const { isScrollLocked } = useScrollLock();
 
-  // Listen to scroll changes
   useMotionValueEvent(scrollY, "change", (latest) => {
-    // Ignorer les changements de scroll pendant l'animation des cartes
     if (isScrollLocked) return;
 
-    const direction = latest > lastScrollY ? "down" : "up";
+    const direction = latest > lastScrollYRef.current ? "down" : "up";
     if (latest > 50 && direction === "down") {
       setIsVisible(false);
     } else if (direction === "up" || latest < 100) {
       setIsVisible(true);
     }
-    setLastScrollY(latest);
+    lastScrollYRef.current = latest;
   });
 
   return (

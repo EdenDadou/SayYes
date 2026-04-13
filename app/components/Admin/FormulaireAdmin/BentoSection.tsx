@@ -34,7 +34,7 @@ interface BentoSectionProps {
 export default function BentoSection({
   formData,
   currentBento,
-  setCurrentBento,
+  setCurrentBento: _setCurrentBento,
   currentBentoLine,
   setCurrentBentoLine,
   bentoPreviewImages,
@@ -168,7 +168,10 @@ export default function BentoSection({
             {/* Alt text inputs for each image */}
             {currentBentoLine.listImage.length > 0 && (
               <div className="bg-gray-800/30 border border-gray-600/30 rounded-lg p-4">
-                <label className="block text-sm font-medium text-gray-300 mb-3" style={{ fontFamily: "Jakarta Medium" }}>
+                <label
+                  className="block text-sm font-medium text-gray-300 mb-3"
+                  style={{ fontFamily: "Jakarta Medium" }}
+                >
                   Textes alternatifs (alt) pour chaque média
                 </label>
                 <div className="space-y-2 max-h-48 overflow-y-auto">
@@ -178,12 +181,19 @@ export default function BentoSection({
                       : image.split("/").pop() || `Image ${index + 1}`;
                     return (
                       <div key={index} className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400 w-6 text-center">{index + 1}</span>
+                        <span className="text-xs text-gray-400 w-6 text-center">
+                          {index + 1}
+                        </span>
                         <input
                           type="text"
                           placeholder={`Alt pour ${imageName}`}
                           value={currentBentoLine.listImageAlt?.[index] || ""}
-                          onChange={(e) => handlers.updateCurrentBentoImageAlt(index, e.target.value)}
+                          onChange={(e) =>
+                            handlers.updateCurrentBentoImageAlt(
+                              index,
+                              e.target.value
+                            )
+                          }
                           className="flex-1 bg-gray-700/50 border border-gray-600 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none"
                           style={{ fontFamily: "Jakarta" }}
                         />
@@ -202,7 +212,8 @@ export default function BentoSection({
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center gap-2"
               style={{ fontFamily: "Jakarta Semi Bold" }}
             >
-              ➕ Ajouter cette ligne ({currentBentoLine.listImage.length} médias)
+              ➕ Ajouter cette ligne ({currentBentoLine.listImage.length}{" "}
+              médias)
             </button>
           </div>
         </div>
@@ -336,7 +347,11 @@ interface BentoItemPreviewProps {
   onRemove: (index: number) => void;
 }
 
-function BentoItemPreview({ bento, bentoIndex, onRemove }: BentoItemPreviewProps) {
+function BentoItemPreview({
+  bento,
+  bentoIndex,
+  onRemove,
+}: BentoItemPreviewProps) {
   return (
     <div className="bg-green-800/10 border border-green-600/20 rounded-lg p-4">
       <div className="flex items-center justify-between mb-3">
@@ -357,7 +372,6 @@ function BentoItemPreview({ bento, bentoIndex, onRemove }: BentoItemPreviewProps
         <button
           type="button"
           onClick={() => {
-            console.log("🗑️ Tentative suppression bento", bentoIndex);
             onRemove(bentoIndex);
           }}
           className="text-red-400 hover:text-red-300 transition-colors duration-200"

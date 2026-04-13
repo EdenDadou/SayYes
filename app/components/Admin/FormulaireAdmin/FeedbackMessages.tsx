@@ -6,7 +6,9 @@ interface FeedbackMessagesProps {
   };
 }
 
-export default function FeedbackMessages({ actionData }: FeedbackMessagesProps) {
+export default function FeedbackMessages({
+  actionData,
+}: FeedbackMessagesProps) {
   if (!actionData) return null;
 
   return (

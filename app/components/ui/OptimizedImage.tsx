@@ -1,10 +1,17 @@
-import { useState, useEffect, memo, type CSSProperties, type ImgHTMLAttributes } from "react";
+import {
+  useState,
+  useEffect,
+  memo,
+  type CSSProperties,
+  type ImgHTMLAttributes,
+} from "react";
 import {
   getOptimizedImageUrl,
   generateSrcSet,
   generateSizes,
   type ImageSize,
 } from "~/utils/optimizeImage";
+import { MOBILE_BREAKPOINT } from "~/utils/hooks/useViewport";
 
 const mobileOptimizedStyle: CSSProperties = {
   willChange: "auto",
@@ -14,7 +21,8 @@ const mobileOptimizedStyle: CSSProperties = {
   contain: "layout style paint",
 };
 
-interface OptimizedImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
+interface OptimizedImageProps
+  extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
   src: string;
   alt: string;
   /** Taille à utiliser sur mobile (default: "mobile") */
@@ -52,11 +60,13 @@ export const OptimizedImage = memo(function OptimizedImage({
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(noPlaceholder);
   const [hasError, setHasError] = useState(false);
-  const [isMobile, setIsMobile] = useState(forceMobile ?? false);
+  const [isMobile, setIsMobile] = useState(
+    () => forceMobile ?? (typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false)
+  );
 
   useEffect(() => {
-    if (forceMobile === undefined) {
-      setIsMobile(window.innerWidth < 768);
+    if (forceMobile !== undefined && forceMobile !== isMobile) {
+      setIsMobile(forceMobile);
     }
   }, [forceMobile]);
 
@@ -72,10 +82,15 @@ export const OptimizedImage = memo(function OptimizedImage({
 
   if (!src) return null;
 
-  const optimizedSrc = getOptimizedImageUrl(src, isMobile ? mobileSize : desktopSize);
-  const placeholderSrc = noPlaceholder ? undefined : getOptimizedImageUrl(src, "placeholder");
+  const optimizedSrc = getOptimizedImageUrl(
+    src,
+    isMobile ? mobileSize : desktopSize
+  );
+  const placeholderSrc = noPlaceholder
+    ? undefined
+    : getOptimizedImageUrl(src, "placeholder");
   const srcSet = isMobile ? undefined : generateSrcSet(src) || undefined;
-  const sizes = isMobile ? undefined : (srcSet ? generateSizes() : undefined);
+  const sizes = isMobile ? undefined : srcSet ? generateSizes() : undefined;
 
   // Appliquer les optimisations mobile seulement si activées
   const shouldApplyMobileStyles = isMobile && !noMobileOptimization;
@@ -95,7 +110,11 @@ export const OptimizedImage = memo(function OptimizedImage({
         decoding="async"
         fetchPriority={priority ? "high" : "auto"}
         className={className}
-        style={shouldApplyMobileStyles ? { ...mobileOptimizedStyle, ...style } : style}
+        style={
+          shouldApplyMobileStyles
+            ? { ...mobileOptimizedStyle, ...style }
+            : style
+        }
         onLoad={() => {
           setIsLoaded(true);
           onImageLoad?.();
@@ -112,7 +131,12 @@ export const OptimizedImage = memo(function OptimizedImage({
 
   // Mode avec wrapper et placeholder blur
   return (
-    <div className={`relative ${className}`} style={shouldApplyMobileStyles ? { ...mobileOptimizedStyle, ...style } : style}>
+    <div
+      className={`relative ${className}`}
+      style={
+        shouldApplyMobileStyles ? { ...mobileOptimizedStyle, ...style } : style
+      }
+    >
       {/* Placeholder blur */}
       {placeholderSrc && !isLoaded && !hasError && (
         <img

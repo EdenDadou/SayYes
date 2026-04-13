@@ -1,6 +1,20 @@
 import { prisma } from "./db.server";
 import { deleteMedia } from "./media.server";
 
+function safeParse<T = unknown>(
+  data: string | null | undefined,
+  fallback: T = [] as unknown as T
+): T {
+  if (!data || data === "undefined" || data === "null") {
+    return fallback;
+  }
+  try {
+    return JSON.parse(data);
+  } catch {
+    return fallback;
+  }
+}
+
 // Types pour les données du portfolio (repris du fichier existant)
 export interface BentoLine {
   format:
@@ -201,18 +215,6 @@ export async function getPortfolio(
   if (!portfolio) return null;
 
   // Fonction helper pour parser les données JSON de manière sécurisée
-  const safeParse = (data: string | null | undefined, fallback: any = []) => {
-    if (!data || data === "undefined" || data === "null") {
-      return fallback;
-    }
-    try {
-      return JSON.parse(data);
-    } catch (e) {
-      console.warn("Erreur parsing JSON:", e, "data:", data);
-      return fallback;
-    }
-  };
-
   return {
     id: portfolio.id,
     titre: portfolio.titre,
@@ -268,18 +270,6 @@ export async function getPortfolioBySlug(
       return null;
     }
 
-    // Fonction helper pour parser les données JSON de manière sécurisée
-    const safeParse = (data: string | null | undefined, fallback: any = []) => {
-      if (!data || data === "undefined" || data === "null") {
-        return fallback;
-      }
-      try {
-        return JSON.parse(data);
-      } catch (e) {
-        return fallback;
-      }
-    };
-
     return {
       id: portfolio.id,
       titre: portfolio.titre,
@@ -331,19 +321,6 @@ export async function getAllPortfolios(): Promise<PortfolioWithMedia[]> {
       },
       orderBy: { createdAt: "desc" },
     });
-
-    // Fonction helper pour parser les données JSON de manière sécurisée
-    const safeParse = (data: string | null | undefined, fallback: any = []) => {
-      if (!data || data === "undefined" || data === "null") {
-        return fallback;
-      }
-      try {
-        return JSON.parse(data);
-      } catch (e) {
-        console.warn("Erreur parsing JSON:", e, "data:", data);
-        return fallback;
-      }
-    };
 
     return portfolios.map((portfolio) => ({
       id: portfolio.id,
@@ -439,19 +416,10 @@ export async function deletePortfolioBySlug(slug: string): Promise<void> {
     throw new Error("Portfolio non trouvé");
   }
 
-  // Supprimer tous les médias associés
-  for (const media of portfolio.medias) {
-    try {
-      await deleteMedia(media.id);
-    } catch (error) {
-      console.error(
-        `Erreur lors de la suppression du média ${media.id}:`,
-        error
-      );
-    }
-  }
+  await Promise.allSettled(
+    portfolio.medias.map((media) => deleteMedia(media.id))
+  );
 
-  // Supprimer le portfolio
   await prisma.portfolio.delete({
     where: { slug },
   });
@@ -459,7 +427,6 @@ export async function deletePortfolioBySlug(slug: string): Promise<void> {
 
 // Supprimer un portfolio
 export async function deletePortfolio(id: string): Promise<void> {
-  // Récupérer le portfolio avec ses médias
   const portfolio = await prisma.portfolio.findUnique({
     where: { id },
     include: { medias: true },
@@ -469,19 +436,10 @@ export async function deletePortfolio(id: string): Promise<void> {
     throw new Error("Portfolio non trouvé");
   }
 
-  // Supprimer tous les médias associés
-  for (const media of portfolio.medias) {
-    try {
-      await deleteMedia(media.id);
-    } catch (error) {
-      console.error(
-        `Erreur lors de la suppression du média ${media.id}:`,
-        error
-      );
-    }
-  }
+  await Promise.allSettled(
+    portfolio.medias.map((media) => deleteMedia(media.id))
+  );
 
-  // Supprimer le portfolio
   await prisma.portfolio.delete({
     where: { id },
   });
@@ -510,18 +468,6 @@ export async function getPublicPortfolios() {
       },
       orderBy: { createdAt: "desc" },
     });
-
-    // Fonction helper pour parser les données JSON de manière sécurisée
-    const safeParse = (data: string | null | undefined, fallback: any = []) => {
-      if (!data || data === "undefined" || data === "null") {
-        return fallback;
-      }
-      try {
-        return JSON.parse(data);
-      } catch (e) {
-        return fallback;
-      }
-    };
 
     return portfolios.map((portfolio) => {
       try {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
-interface MetaDataOptions {
+interface _MetaDataOptions {
   title?: string;
   description?: string;
   image?: string;

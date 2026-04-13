@@ -164,8 +164,7 @@ export default function ManageLandingPage() {
       if (fetcher.data.success) {
         setToast({
           show: true,
-          message:
-            fetcher.data.message || "Landing page créée avec succès!",
+          message: fetcher.data.message || "Landing page créée avec succès!",
           type: "success",
         });
         setResetTrigger((prev) => prev + 1);

@@ -5,7 +5,10 @@ interface TabNavigationProps {
   onTabChange: (tab: TabType) => void;
 }
 
-export default function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
+export default function TabNavigation({
+  activeTab,
+  onTabChange,
+}: TabNavigationProps) {
   return (
     <div className="flex gap-2 border-b border-gray-700 mb-8">
       <button

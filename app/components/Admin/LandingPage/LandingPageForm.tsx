@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import type { FetcherWithComponents } from "@remix-run/react";
-import type {
-  LandingPage,
-  LandingPageSEO,
-  Bloc,
-} from "~/types/landing-page";
+import type { LandingPage, LandingPageSEO, Bloc } from "~/types/landing-page";
 import { BLOC_TYPES, createEmptyBloc } from "~/types/landing-page";
 import BlocEditor from "./BlocEditor";
+import { ADMIN_INPUT_CLASS, swapItems } from "~/utils/admin/landing-page-constants";
 
 interface LandingPageFormProps {
   initialData?: Partial<LandingPage>;
@@ -86,17 +83,8 @@ export default function LandingPageForm({
   };
 
   const moveBloc = (index: number, direction: "up" | "down") => {
-    if (
-      (direction === "up" && index === 0) ||
-      (direction === "down" && index === blocs.length - 1)
-    ) {
-      return;
-    }
-
-    const newBlocs = [...blocs];
-    const newIndex = direction === "up" ? index - 1 : index + 1;
-    [newBlocs[index], newBlocs[newIndex]] = [newBlocs[newIndex], newBlocs[index]];
-    setBlocs(newBlocs);
+    const result = swapItems(blocs, index, direction);
+    if (result !== blocs) setBlocs(result);
   };
 
   // Drag & drop handlers
@@ -164,7 +152,7 @@ export default function LandingPageForm({
               id="title"
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={ADMIN_INPUT_CLASS}
               required
             />
           </div>
@@ -182,7 +170,7 @@ export default function LandingPageForm({
               id="slug"
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={ADMIN_INPUT_CLASS}
               required
             />
           </div>
@@ -237,7 +225,7 @@ export default function LandingPageForm({
               id="metaTitle"
               value={seo.metaTitle}
               onChange={(e) => setSeo({ ...seo, metaTitle: e.target.value })}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={ADMIN_INPUT_CLASS}
             />
           </div>
 
@@ -256,7 +244,7 @@ export default function LandingPageForm({
                 setSeo({ ...seo, metaDescription: e.target.value })
               }
               rows={3}
-              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={ADMIN_INPUT_CLASS}
             />
           </div>
 
@@ -362,7 +350,9 @@ export default function LandingPageForm({
           type="submit"
           disabled={fetcher.state === "submitting"}
           className={`ml-auto bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-lg font-semibold transition-colors duration-200 ${
-            fetcher.state === "submitting" ? "opacity-50 cursor-not-allowed" : ""
+            fetcher.state === "submitting"
+              ? "opacity-50 cursor-not-allowed"
+              : ""
           }`}
           style={{ fontFamily: "Jakarta Semi Bold" }}
         >

@@ -1,14 +1,8 @@
 import {
   type LoaderFunctionArgs,
   type ActionFunctionArgs,
-  json,
 } from "@remix-run/node";
-import {
-  useLoaderData,
-  useActionData,
-  Link,
-  useFetcher,
-} from "@remix-run/react";
+import { useLoaderData, Link, useFetcher } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { requireAuth, getSessionData } from "~/server/auth.server";
 import {
@@ -62,11 +56,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Action pour gérer la soumission du formulaire
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    console.log("🚀 Début de l'action");
-    console.log("📋 Méthode de la requête:", request.method);
-    console.log("📋 Content-Type:", request.headers.get("Content-Type"));
-    console.log("📋 URL de la requête:", request.url);
-
     await requireAuth(request);
 
     // Gérer la suppression
@@ -85,9 +74,7 @@ export async function action({ request }: ActionFunctionArgs) {
       }
 
       try {
-        console.log(`🗑️ Suppression du portfolio demandée: ${slug}`);
         await deletePortfolioBySlug(slug);
-        console.log(`✅ Portfolio ${slug} supprimé avec succès`);
 
         return createJsonResponse(true, "Portfolio supprimé avec succès!");
       } catch (error) {
@@ -100,37 +87,17 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Parse les données du formulaire
-    console.log("📝 Parsing des données du formulaire...");
-
-    // Debug: essayons de voir le contenu brut de la requête
-    try {
-      const clonedRequest = request.clone();
-      const rawBody = await clonedRequest.text();
-      console.log(
-        "📋 Corps brut de la requête (premiers 500 caractères):",
-        rawBody.substring(0, 500)
-      );
-    } catch (debugError) {
-      console.log("❌ Impossible de lire le corps brut:", debugError);
-    }
-
     const formData = await parseFormData(request);
 
     // Extraire les données du portfolio
-    console.log("🔍 Extraction des données du portfolio...");
     const portfolioData = extractPortfolioData(formData);
 
     // Valider les données (incluant la vérification d'unicité du slug)
-    console.log("✅ Validation des données...");
     const errors = await validatePortfolioDataAsync(
       portfolioData,
       isSlugUnique
     );
     if (errors.length > 0) {
-      console.log("❌ Erreurs de validation:", errors);
-      console.log(
-        "🔧 Appel de createJsonResponse pour erreurs de validation..."
-      );
       try {
         const errorResponse = createJsonResponse(
           false,
@@ -138,7 +105,6 @@ export async function action({ request }: ActionFunctionArgs) {
           undefined,
           400
         );
-        console.log("✅ Response d'erreur créée avec succès");
         return errorResponse;
       } catch (error) {
         console.error(
@@ -150,33 +116,19 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Créer d'abord le portfolio pour avoir l'ID
-    console.log("💾 Création du portfolio en base...");
     const portfolioId = await createPortfolio(portfolioData);
-    console.log("✅ Portfolio créé avec l'ID:", portfolioId);
 
     // Traiter les fichiers uploadés
-    console.log("📸 Traitement de la photo de couverture...");
     const photoCouverture = await processPhotoCouverture(formData, portfolioId);
-    console.log("✅ Photo de couverture traitée:", photoCouverture);
-
-    console.log("📸 Traitement de la photo main...");
     const photoMain = await processPhotoMain(formData, portfolioId);
-    console.log("✅ Photo main traitée:", photoMain);
-
-    console.log("📸 Traitement de la meta image...");
     const metaImage = await processMetaImage(formData, portfolioId);
-    console.log("✅ Meta image traitée:", metaImage);
-
-    console.log("🎯 Traitement des fichiers bento...");
     const updatedBento = await processBentoFiles(
       formData,
       portfolioId,
       portfolioData.bento
     );
-    console.log("✅ Fichiers bento traités:", updatedBento.length, "bentos");
 
     // Mettre à jour le portfolio avec les URLs finales
-    console.log("🔄 Mise à jour du portfolio avec les URLs finales...");
     await updatePortfolio(portfolioId, {
       photoCouverture,
       photoMain,
@@ -184,8 +136,6 @@ export async function action({ request }: ActionFunctionArgs) {
       bento: updatedBento,
     });
 
-    console.log("🎉 Portfolio créé avec succès!");
-    console.log("🔧 Appel de createJsonResponse pour succès...");
     try {
       const successResponse = createJsonResponse(
         true,
@@ -194,7 +144,6 @@ export async function action({ request }: ActionFunctionArgs) {
           portfolioId,
         }
       );
-      console.log("✅ Response de succès créée avec succès");
       return successResponse;
     } catch (error) {
       console.error(

@@ -34,11 +34,11 @@ interface BlocEditorProps {
 export default function BlocEditor({
   bloc,
   index,
-  totalBlocs,
+  totalBlocs: _totalBlocs,
   onUpdate,
   onRemove,
-  onMoveUp,
-  onMoveDown,
+  onMoveUp: _onMoveUp,
+  onMoveDown: _onMoveDown,
   isDragging,
   onDragStart,
   onDragOver,
@@ -103,7 +103,10 @@ export default function BlocEditor({
       >
         <div className="flex items-center gap-3">
           {/* Drag handle */}
-          <span className="text-white/50 cursor-grab active:cursor-grabbing select-none" title="Glisser pour réorganiser">
+          <span
+            className="text-white/50 cursor-grab active:cursor-grabbing select-none"
+            title="Glisser pour réorganiser"
+          >
             ⋮⋮
           </span>
           <span className="text-white/70 font-mono text-sm">#{index + 1}</span>
@@ -167,9 +170,7 @@ export default function BlocEditor({
       </div>
 
       {/* Contenu du bloc */}
-      {isExpanded && (
-        <div className="p-4 bg-gray-900/50">{renderEditor()}</div>
-      )}
+      {isExpanded && <div className="p-4 bg-gray-900/50">{renderEditor()}</div>}
     </div>
   );
 }

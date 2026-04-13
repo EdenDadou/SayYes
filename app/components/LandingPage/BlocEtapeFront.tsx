@@ -42,7 +42,10 @@ export default function BlocEtapeFront({ bloc, color }: BlocEtapeFrontProps) {
             viewport={{ once: true }}
             className="text-center mb-4"
           >
-            <span className="text-white/50 text-sm tracking-widest" style={{ fontFamily: "Jakarta" }}>
+            <span
+              className="text-white/50 text-sm tracking-widest"
+              style={{ fontFamily: "Jakarta" }}
+            >
               ✦ {bloc.subTitle} ✦
             </span>
           </motion.div>

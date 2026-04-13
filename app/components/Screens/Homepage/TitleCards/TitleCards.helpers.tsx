@@ -1,4 +1,3 @@
-import Arrow from "~/assets/icons/Arrow";
 import ArrowLight from "~/assets/icons/ArrowLight";
 export const CardsIdentiteVisuelle = ({
   title,

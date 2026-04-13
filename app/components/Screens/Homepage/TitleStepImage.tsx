@@ -79,7 +79,7 @@ export default function TitleStepImage() {
   ) => {
     const isCompleted = stepNumber <= activeSteps;
     const isPending = stepNumber === activeSteps + 1;
-    const isInactive = stepNumber > activeSteps + 1;
+    const _isInactive = stepNumber > activeSteps + 1;
     const showBar = stepNumber < 4; // Toujours afficher la barre pour les 3 premières étapes
 
     // Déterminer l'opacité selon l'état pour le fade

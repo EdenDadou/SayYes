@@ -1,6 +1,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect, memo, type CSSProperties } from "react";
-import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/optimizeImage";
+import {
+  getOptimizedImageUrl,
+  generateSrcSet,
+  generateSizes,
+} from "~/utils/optimizeImage";
 
 // Styles pour forcer le caching GPU sur mobile
 const mobileOptimizedStyle: CSSProperties = {
@@ -47,7 +51,11 @@ const PhotoMain = memo(function PhotoMain({
   });
 
   // Sur mobile, pas d'effet scale (cause des saccades au scroll up)
-  const scale = useTransform(scrollYProgress, [0.2, 1], isMobile ? [1, 1] : [1, 1.5]);
+  const scale = useTransform(
+    scrollYProgress,
+    [0.2, 1],
+    isMobile ? [1, 1] : [1, 1.5]
+  );
 
   if (!photo) {
     return null;
@@ -55,14 +63,17 @@ const PhotoMain = memo(function PhotoMain({
 
   // Sur mobile: image optimisée 640px sans srcSet (on sait déjà la taille)
   // Sur desktop: srcSet complet pour responsive
-  const optimizedSrc = getOptimizedImageUrl(photo, isMobile ? "mobile" : "desktop");
+  const optimizedSrc = getOptimizedImageUrl(
+    photo,
+    isMobile ? "mobile" : "desktop"
+  );
 
   // Placeholder ultra léger (20px, très compressé) pour effet blur pendant le chargement
   const placeholderSrc = getOptimizedImageUrl(photo, "placeholder");
 
   // Sur mobile, pas besoin de srcSet - on charge directement la bonne taille
   const srcSet = isMobile ? undefined : generateSrcSet(photo) || undefined;
-  const sizes = isMobile ? undefined : (srcSet ? generateSizes() : undefined);
+  const sizes = isMobile ? undefined : srcSet ? generateSizes() : undefined;
 
   return (
     <div

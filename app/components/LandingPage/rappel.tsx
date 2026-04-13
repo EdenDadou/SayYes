@@ -95,6 +95,7 @@ export default function BlocMethodsFront({
                 <div className="relative rounded-2xl overflow-hidden border border-white/10 h-full">
                   <img
                     src="images/landingpage/bgCardMethod.png"
+                    alt=""
                     className="w-full h-full object-cover absolute inset-0 z-0"
                   />
                   <p

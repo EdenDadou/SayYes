@@ -1,11 +1,9 @@
 import Coche from "~/assets/icons/Coche";
 import Star from "~/assets/icons/Star";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import { useViewport } from "~/utils/hooks/useViewport";
 import { cn } from "~/utils/ui/ui";
 
 import "~/styles/tailwind.css";
-import MasqueMobile from "./MasqueMobile";
 
 interface PropsContent {
   imageUrl?: string;
@@ -89,8 +87,8 @@ export default function ContentSolutionMobile({
             </span>
             <div className="flex flex-col items-start justify-center gap-3 font-jakarta text-[12px] md:text-[16px] md:mt-6">
               {bulletPoints.map((bullet) => (
-                <span className="flex flex-row items-start gap-2" key={bullet}>
-                  <Coche className="flex-shrink-0 w-4" />
+                <span className="flex flex-row items-center gap-2" key={bullet}>
+                  <Coche className="flex-shrink-0 w-4 h-4" />
                   <span className="leading-tight text-[16px]">{bullet}</span>
                 </span>
               ))}

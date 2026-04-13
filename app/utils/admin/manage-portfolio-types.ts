@@ -55,4 +55,4 @@ export const BENTO_FORMATS = [
 
 // Constantes
 export const MAX_BENTO_LINES = 10;
-export const MAX_FILE_SIZE = 40 * 1024 * 1024; // 10MB
+export const MAX_FILE_SIZE = 40 * 1024 * 1024; // 40MB

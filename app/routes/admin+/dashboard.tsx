@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData, useNavigate, Link } from "@remix-run/react";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { requireAuth, getSessionData, logout } from "~/server/auth.server";
 import { getPortfolioCount } from "~/server/portfolio.server";
 

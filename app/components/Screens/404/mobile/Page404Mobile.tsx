@@ -7,8 +7,6 @@ import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import Button from "~/components/Button";
 import ArrowFull from "~/assets/icons/ArrowFull";
-import Background404 from "../Background404";
-import MasqueGif from "../MasqueGif";
 import Background404Mobile from "./Background404Mobile";
 
 export default function Page404Mobile() {

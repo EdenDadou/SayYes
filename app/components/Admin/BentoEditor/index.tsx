@@ -19,8 +19,12 @@ export default function BentoEditor({
   bentoPreviewImages,
 }: BentoEditorProps) {
   const [draggedLineIndex, setDraggedLineIndex] = useState<number | null>(null);
-  const [draggedImageIndex, setDraggedImageIndex] = useState<number | null>(null);
-  const [draggedFromLineIndex, setDraggedFromLineIndex] = useState<number | null>(null);
+  const [draggedImageIndex, setDraggedImageIndex] = useState<number | null>(
+    null
+  );
+  const [draggedFromLineIndex, setDraggedFromLineIndex] = useState<
+    number | null
+  >(null);
   const processingFiles = useRef<Set<string>>(new Set());
 
   // Handler pour déplacer une ligne
@@ -58,11 +62,15 @@ export default function BentoEditor({
     e.preventDefault();
   };
 
-  const handleImageDrop = (targetLineIndex: number, targetImageIndex: number) => {
+  const handleImageDrop = (
+    targetLineIndex: number,
+    targetImageIndex: number
+  ) => {
     if (
       draggedImageIndex === null ||
       draggedFromLineIndex === null ||
-      (draggedFromLineIndex === targetLineIndex && draggedImageIndex === targetImageIndex)
+      (draggedFromLineIndex === targetLineIndex &&
+        draggedImageIndex === targetImageIndex)
     ) {
       setDraggedImageIndex(null);
       setDraggedFromLineIndex(null);
@@ -72,7 +80,10 @@ export default function BentoEditor({
     const newLines = [...bento.lines];
 
     // Retirer l'image source
-    const [movedImage] = newLines[draggedFromLineIndex].listImage.splice(draggedImageIndex, 1);
+    const [movedImage] = newLines[draggedFromLineIndex].listImage.splice(
+      draggedImageIndex,
+      1
+    );
 
     // Insérer l'image à la nouvelle position
     newLines[targetLineIndex].listImage.splice(targetImageIndex, 0, movedImage);
@@ -153,7 +164,9 @@ export default function BentoEditor({
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => handlers.removeExistingBentoLine(bentoIndex, lineIndex)}
+                  onClick={() =>
+                    handlers.removeExistingBentoLine(bentoIndex, lineIndex)
+                  }
                   className="text-xs bg-red-600/20 hover:bg-red-600/30 text-red-300 px-2 py-1 rounded border border-red-600/30"
                 >
                   🗑️ Ligne
@@ -170,19 +183,31 @@ export default function BentoEditor({
 
                 // Pour les images pending, chercher le blob URL dans bentoPreviewImages
                 if (image.startsWith("pending_")) {
-                  const preview = bentoPreviewImages.find((p) => p.name === image);
+                  const preview = bentoPreviewImages.find(
+                    (p) => p.name === image
+                  );
                   imageUrl = preview
                     ? preview.url
                     : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect width='150' height='150' fill='%2322c55e'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='white' font-size='40'%3E📁%3C/text%3E%3C/svg%3E";
 
                   // Vérifier si c'est une vidéo dans le nom du fichier
-                  if (image.includes('.mp4') || image.includes('.mov') || image.includes('.webm') || image.includes('.avi')) {
+                  if (
+                    image.includes(".mp4") ||
+                    image.includes(".mov") ||
+                    image.includes(".webm") ||
+                    image.includes(".avi")
+                  ) {
                     isVideo = true;
                   }
                 } else {
                   // Vérifier l'extension pour les URLs normales
                   const ext = image.toLowerCase();
-                  if (ext.includes('.mp4') || ext.includes('.mov') || ext.includes('.webm') || ext.includes('.avi')) {
+                  if (
+                    ext.includes(".mp4") ||
+                    ext.includes(".mov") ||
+                    ext.includes(".webm") ||
+                    ext.includes(".avi")
+                  ) {
                     isVideo = true;
                   }
                 }
@@ -191,11 +216,14 @@ export default function BentoEditor({
                   <div
                     key={imgIndex}
                     draggable
-                    onDragStart={() => handleImageDragStart(lineIndex, imgIndex)}
+                    onDragStart={() =>
+                      handleImageDragStart(lineIndex, imgIndex)
+                    }
                     onDragOver={handleImageDragOver}
                     onDrop={() => handleImageDrop(lineIndex, imgIndex)}
                     className={`relative group cursor-move rounded-lg overflow-hidden aspect-square bg-green-800/20 hover:bg-green-700/30 border-2 border-green-600/30 hover:border-green-500/50 transition-all ${
-                      draggedImageIndex === imgIndex && draggedFromLineIndex === lineIndex
+                      draggedImageIndex === imgIndex &&
+                      draggedFromLineIndex === lineIndex
                         ? "opacity-50"
                         : ""
                     }`}
@@ -216,11 +244,12 @@ export default function BentoEditor({
                     ) : (
                       <img
                         src={imageUrl}
-                        alt={`Image ${imgIndex + 1}`}
+                        alt={`Bento ${imgIndex + 1}`}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           // Fallback si l'image ne charge pas
-                          e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect width='150' height='150' fill='%23374151'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%239CA3AF' font-size='40'%3E🖼️%3C/text%3E%3C/svg%3E";
+                          e.currentTarget.src =
+                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect width='150' height='150' fill='%23374151'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%239CA3AF' font-size='40'%3E🖼️%3C/text%3E%3C/svg%3E";
                         }}
                       />
                     )}
@@ -234,8 +263,12 @@ export default function BentoEditor({
 
                     {/* Overlay avec numéro */}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-1">
-                      <span className="text-white text-xs font-bold" style={{ fontFamily: "Jakarta" }}>
-                        {isVideo ? '🎬 ' : ''}{imgIndex + 1}
+                      <span
+                        className="text-white text-xs font-bold"
+                        style={{ fontFamily: "Jakarta" }}
+                      >
+                        {isVideo ? "🎬 " : ""}
+                        {imgIndex + 1}
                       </span>
                     </div>
 
@@ -249,7 +282,11 @@ export default function BentoEditor({
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handlers.removeExistingBentoImage(bentoIndex, lineIndex, imgIndex);
+                        handlers.removeExistingBentoImage(
+                          bentoIndex,
+                          lineIndex,
+                          imgIndex
+                        );
                       }}
                       className="absolute top-1 right-1 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-lg"
                     >
@@ -263,7 +300,10 @@ export default function BentoEditor({
             {/* Champs alt pour les images de cette ligne */}
             {line.listImage.length > 0 && (
               <div className="mt-2 space-y-1">
-                <span className="text-xs text-green-400" style={{ fontFamily: "Jakarta" }}>
+                <span
+                  className="text-xs text-green-400"
+                  style={{ fontFamily: "Jakarta" }}
+                >
                   Textes alt :
                 </span>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
@@ -273,12 +313,21 @@ export default function BentoEditor({
                       : image.split("/").pop() || `Image ${imgIndex + 1}`;
                     return (
                       <div key={imgIndex} className="flex items-center gap-1">
-                        <span className="text-xs text-gray-500 w-4">{imgIndex + 1}</span>
+                        <span className="text-xs text-gray-500 w-4">
+                          {imgIndex + 1}
+                        </span>
                         <input
                           type="text"
                           placeholder={`Alt ${imageName}`}
                           value={line.listImageAlt?.[imgIndex] || ""}
-                          onChange={(e) => handlers.updateExistingBentoImageAlt(bentoIndex, lineIndex, imgIndex, e.target.value)}
+                          onChange={(e) =>
+                            handlers.updateExistingBentoImageAlt(
+                              bentoIndex,
+                              lineIndex,
+                              imgIndex,
+                              e.target.value
+                            )
+                          }
                           className="flex-1 bg-gray-700/50 border border-gray-600/50 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"
                           style={{ fontFamily: "Jakarta" }}
                         />
@@ -298,15 +347,16 @@ export default function BentoEditor({
                 onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {
                     // Créer une clé unique pour cet upload
-                    const uploadKey = `${bentoIndex}-${lineIndex}-${Array.from(e.target.files).map(f => f.name + f.size).join(',')}`;
+                    const uploadKey = `${bentoIndex}-${lineIndex}-${Array.from(
+                      e.target.files
+                    )
+                      .map((f) => f.name + f.size)
+                      .join(",")}`;
 
                     // Vérifier si on n'est pas déjà en train de traiter ces fichiers
                     if (processingFiles.current.has(uploadKey)) {
-                      console.log(`⚠️ Upload déjà en cours, ignoré: ${uploadKey}`);
                       return;
                     }
-
-                    console.log(`🎯 BentoEditor onChange appelé pour bento ${bentoIndex}, ligne ${lineIndex}, ${e.target.files.length} fichiers`);
 
                     // Marquer comme en cours de traitement
                     processingFiles.current.add(uploadKey);

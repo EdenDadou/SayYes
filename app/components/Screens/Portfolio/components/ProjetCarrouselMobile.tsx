@@ -1,7 +1,6 @@
 import Card from "~/components/Card";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import Star from "~/assets/icons/Star";
-import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 import { usePortfolio } from "~/contexts/PortfolioContext";
 
 interface ProjectCarouselProps {

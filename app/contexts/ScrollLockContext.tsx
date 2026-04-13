@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  ReactNode,
+} from "react";
 
 interface ScrollLockContextType {
   isScrollLocked: boolean;
@@ -12,8 +18,13 @@ const ScrollLockContext = createContext<ScrollLockContextType | undefined>(
 export const ScrollLockProvider = ({ children }: { children: ReactNode }) => {
   const [isScrollLocked, setIsScrollLocked] = useState(false);
 
+  const value = useMemo(
+    () => ({ isScrollLocked, setIsScrollLocked }),
+    [isScrollLocked]
+  );
+
   return (
-    <ScrollLockContext.Provider value={{ isScrollLocked, setIsScrollLocked }}>
+    <ScrollLockContext.Provider value={value}>
       {children}
     </ScrollLockContext.Provider>
   );

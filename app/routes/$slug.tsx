@@ -9,9 +9,8 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { getLandingPageBySlug } from "~/server/landing-page.server";
-import { prisma } from "~/server/db.server";
 import { BlocRenderer } from "~/components/LandingPage";
-import type { Bloc, BlocUseCase } from "~/types/landing-page";
+import type { Bloc } from "~/types/landing-page";
 import { useViewport } from "~/utils/hooks/useViewport";
 import Page404 from "~/components/Screens/404";
 import Page404Mobile from "~/components/Screens/404/mobile/Page404Mobile";

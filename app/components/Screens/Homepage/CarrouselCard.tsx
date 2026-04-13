@@ -1,7 +1,6 @@
 import { useViewport } from "~/utils/hooks/useViewport";
 import Card from "~/components/Card";
 import Arrow from "~/assets/icons/Arrow";
-import BackgroundSideLueur from "~/assets/icons/BacgroundSideLueur";
 import "~/styles/tailwind.css";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";

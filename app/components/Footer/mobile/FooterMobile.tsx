@@ -22,9 +22,7 @@ export default function FooterMobile({
   const isInView = useInView(haloRef, { once: true });
 
   return (
-    <div
-      className="relative w-full flex flex-col justify-center items-center filter mt-20 gap-6"
-    >
+    <div className="relative w-full flex flex-col justify-center items-center filter mt-20 gap-6">
       <span className="font-jakarta text-[36px] leading-[40px] text-center">
         Ça vous inspire ? <br />
         <span className="holographic-text">Parlons design !</span>

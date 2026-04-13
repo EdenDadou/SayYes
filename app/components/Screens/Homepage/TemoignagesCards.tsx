@@ -9,7 +9,7 @@ import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import { useViewport } from "~/utils/hooks/useViewport";
 import ScrollingBannerMobile from "~/components/BrandBanner/ScrollingBannerMobile";
 
-export default function TemoignagesCards({}) {
+export default function TemoignagesCards() {
   const isMobile = useViewport();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -55,7 +55,7 @@ export default function TemoignagesCards({}) {
       x: 0,
       opacity: 1,
     },
-    exit: (direction: number) => ({
+    exit: (_direction: number) => ({
       zIndex: 0,
       opacity: 1,
     }),

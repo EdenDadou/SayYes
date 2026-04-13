@@ -19,7 +19,14 @@ module.exports = {
     commonjs: true,
     es6: true,
   },
-  ignorePatterns: ["!**/.server", "!**/.client"],
+  ignorePatterns: [
+    "!**/.server",
+    "!**/.client",
+    "public/sw.js",
+    "public/icons/**",
+    "build/**",
+    "node_modules/**",
+  ],
 
   // Base config
   extends: ["eslint:recommended"],
@@ -35,6 +42,17 @@ module.exports = {
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
       ],
+      rules: {
+        // Apostrophes francaises dans le JSX
+        "react/no-unescaped-entities": "off",
+        // Labels admin - formulaires custom
+        "jsx-a11y/label-has-associated-control": "warn",
+        // Media captions pas necessaires pour un portfolio
+        "jsx-a11y/media-has-caption": "off",
+        // Interactions clavier sur elements non-interactifs (admin)
+        "jsx-a11y/click-events-have-key-events": "warn",
+        "jsx-a11y/no-static-element-interactions": "warn",
+      },
       settings: {
         react: {
           version: "detect",
@@ -71,11 +89,24 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules: {
+        // any est acceptable dans le code admin et les handlers complexes
+        "@typescript-eslint/no-explicit-any": "warn",
+        // Prefixer les vars non utilisees avec _ pour les ignorer
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            argsIgnorePattern: "^_",
+            varsIgnorePattern: "^_",
+            caughtErrorsIgnorePattern: "^_",
+          },
+        ],
+      },
     },
 
     // Node
     {
-      files: [".eslintrc.cjs"],
+      files: [".eslintrc.cjs", "ecosystem.config.cjs"],
       env: {
         node: true,
       },

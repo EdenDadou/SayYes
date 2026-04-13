@@ -94,6 +94,7 @@ export default function BigTemoignage() {
         {/* <BackgroundTemoignage className="absolute right-0 h-auto z-0" /> */}
         <img
           src="images/homepage/bg-temoignage.png"
+          alt=""
           className="absolute right-0 h-auto z-0 w-full"
         />
       </Suspense>

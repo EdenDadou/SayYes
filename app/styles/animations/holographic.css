@@ -64,7 +64,7 @@
 /* Background holographique simple au hover */
 .holographic-bg-hover:hover,
 .group:hover .holographic-bg-hover {
- background: linear-gradient(
+  background: linear-gradient(
     150deg,
     #4ffff5,
     #fe77b7,
@@ -96,7 +96,7 @@
   will-change: background-position;
   backface-visibility: hidden;
   transform: translateZ(0);
-      box-shadow:
+  box-shadow:
     0 0 10px #dcc4ff,
     0 0 20px #b0f5ff,
     0 0 30px #e1ff8b;

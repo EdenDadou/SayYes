@@ -13,15 +13,36 @@ const TwoDiamonds = ({ holographic, ...props }: TwoDiamondsProps) => (
   >
     {holographic && (
       <defs>
-        <linearGradient id="holographic-diamonds" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient
+          id="holographic-diamonds"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="0%"
+        >
           <stop offset="0%" stopColor="#4ffff5">
-            <animate attributeName="stop-color" values="#4ffff5;#fe77b7;#feab71;#e6ff9c;#b7eeef;#4ffff5" dur="4s" repeatCount="indefinite" />
+            <animate
+              attributeName="stop-color"
+              values="#4ffff5;#fe77b7;#feab71;#e6ff9c;#b7eeef;#4ffff5"
+              dur="4s"
+              repeatCount="indefinite"
+            />
           </stop>
           <stop offset="50%" stopColor="#fe77b7">
-            <animate attributeName="stop-color" values="#fe77b7;#feab71;#e6ff9c;#b7eeef;#4ffff5;#fe77b7" dur="4s" repeatCount="indefinite" />
+            <animate
+              attributeName="stop-color"
+              values="#fe77b7;#feab71;#e6ff9c;#b7eeef;#4ffff5;#fe77b7"
+              dur="4s"
+              repeatCount="indefinite"
+            />
           </stop>
           <stop offset="100%" stopColor="#feab71">
-            <animate attributeName="stop-color" values="#feab71;#e6ff9c;#b7eeef;#4ffff5;#fe77b7;#feab71" dur="4s" repeatCount="indefinite" />
+            <animate
+              attributeName="stop-color"
+              values="#feab71;#e6ff9c;#b7eeef;#4ffff5;#fe77b7;#feab71"
+              dur="4s"
+              repeatCount="indefinite"
+            />
           </stop>
         </linearGradient>
       </defs>

@@ -39,7 +39,7 @@ const BackgroundProject1 = memo(function BackgroundProject1(
   };
 
   const baseColor = svgProps.fill || "#1255CB";
-  const darkerColor = getDarkerColor(baseColor);
+  const _darkerColor = getDarkerColor(baseColor);
 
   // Styles de blur CSS (utilisés pour desktop et mobile)
   const getBlurStyle = (blurValue: number): CSSProperties => ({

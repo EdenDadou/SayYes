@@ -1,48 +1,13 @@
 import type { TitleLine, TitleElement } from "~/types/landing-page";
-import { ReactNode } from "react";
-// Icons from assets/icons
-import Star from "~/assets/icons/Star";
-import NoteStar from "~/assets/icons/NoteStar";
-import TwoDiamonds from "~/assets/icons/TwoDiamonds";
-import ArrowLight from "~/assets/icons/ArrowLight";
-import ArrowFull from "~/assets/icons/ArrowFull";
-import Arrow from "~/assets/icons/Arrow";
-import ArrowBig from "~/assets/icons/ArrowBig";
-import Close from "~/assets/icons/Close";
-import Coche from "~/assets/icons/Coche";
-import Pause from "~/assets/icons/Pause";
-import Play from "~/assets/icons/Play";
-// Icons from Header/assets
-import Coeur from "../Header/assets/Coeur";
-import Flamme from "../Header/assets/Flamme";
-import Idea from "../Header/assets/Idea";
-import Smile from "../Header/assets/Smile";
-import ChatBuble from "../Header/assets/ChatBuble";
+import type { ReactNode } from "react";
+import { getIconMap } from "~/utils/admin/landing-page-constants";
 
 interface AnimatedTitleProps {
   lines: TitleLine[];
   color?: string;
 }
 
-// Mapping des icônes par nom
-const IconMap: Record<string, ReactNode> = {
-  heart: <Coeur />,
-  star: <Star />,
-  "2 stars": <NoteStar />,
-  "2 diamonds": <TwoDiamonds className="w-12" />,
-  arrowLight: <ArrowLight className="w-12" />,
-  arrowWhite: <ArrowFull />,
-  arrow: <Arrow className="w-12" />,
-  arrowBig: <ArrowBig className="w-12" />,
-  coche: <Coche />,
-  close: <Close className="w-8" />,
-  pause: <Pause className="w-8" />,
-  play: <Play className="w-8" />,
-  flamme: <Flamme />,
-  idea: <Idea />,
-  smile: <Smile />,
-  chat: <ChatBuble />,
-};
+const IconMap = getIconMap("lg");
 
 function renderElement(element: TitleElement, index: number, color?: string) {
   if (element.type === "icon") {
@@ -55,7 +20,11 @@ function renderElement(element: TitleElement, index: number, color?: string) {
 
   if (element.color === "animed") {
     return (
-      <span key={index} className="holographic-text" style={color ? { color } : undefined}>
+      <span
+        key={index}
+        className="holographic-text"
+        style={color ? { color } : undefined}
+      >
         {element.text}
       </span>
     );

@@ -132,7 +132,7 @@ export interface FormState {
 // Fonction factory pour créer les handlers
 export function createFormHandlers(state: FormState): FormHandlers {
   const {
-    formData,
+    formData: _formData,
     setFormData,
     currentLivrable,
     setCurrentLivrable,
@@ -170,8 +170,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
     const file = files[0]; // Une seule photo de couverture
     if (file && file.type.startsWith("image/")) {
-      console.log("🔍 handleFileChange appelé avec:", file.name);
-
       // Stocker le fichier réel pour l'envoi avec Map
       setPhotoCouvertureFile((prev) => {
         const newFiles = new Map(prev);
@@ -185,7 +183,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
       reader.onload = (event) => {
         const imageUrl = event.target?.result as string;
         setPhotoCouverturePreview([{ url: imageUrl, name: file.name }]);
-        console.log("✅ Photo de couverture chargée:", file.name);
       };
 
       reader.onerror = () => {
@@ -245,8 +242,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
     const file = files[0]; // Une seule photo main
     if (file && file.type.startsWith("image/")) {
-      console.log("🔍 handlePhotoMainChange appelé avec:", file.name);
-
       // Stocker le fichier réel pour l'envoi avec Map
       setPhotoMainFile((prev) => {
         const newFiles = new Map(prev);
@@ -260,7 +255,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
       reader.onload = (event) => {
         const imageUrl = event.target?.result as string;
         setPhotoMainPreview([{ url: imageUrl, name: file.name }]);
-        console.log("✅ Photo main chargée:", file.name);
       };
 
       reader.onerror = () => {
@@ -305,14 +299,13 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
   // Gestion de l'upload de fichiers multiples pour les médias bento (images et vidéos)
   const handleBentoFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("🔍 handleBentoFilesChange appelé", e.target.files);
     const files = e.target.files;
     if (files) {
       // Activer l'état de chargement
       setIsUploadingFiles(true);
 
       const validFiles: File[] = [];
-      const newPreviews: { url: string; name: string }[] = [];
+      const _newPreviews: { url: string; name: string }[] = [];
       const newMediaNames: string[] = [];
 
       Array.from(files).forEach((file) => {
@@ -322,14 +315,8 @@ export function createFormHandlers(state: FormState): FormHandlers {
           const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${file.name}`;
           validFiles.push(file);
           newMediaNames.push(`pending_${fileId}`);
-          console.log(
-            `✅ Valid file added: ${file.name} with ID: ${fileId} (${file.type})`
-          );
         }
       });
-
-      console.log(`🔍 Total valid files: ${validFiles.length}`);
-      console.log(`🔍 New media names: ${newMediaNames.join(", ")}`);
 
       // Mettre à jour les fichiers et les noms de médias de manière synchrone
       if (validFiles.length > 0) {
@@ -341,16 +328,11 @@ export function createFormHandlers(state: FormState): FormHandlers {
         // Stocker les fichiers réels pour l'envoi avec Map en utilisant l'ID unique
         setBentoFiles((prev) => {
           const newFiles = new Map(prev);
-          console.log(`🔍 Previous bentoFiles size: ${prev.size}`);
           validFiles.forEach((file, index) => {
             // Extraire l'ID unique du nom généré
             const fileId = newMediaNames[index].replace("pending_", "");
             newFiles.set(fileId, file);
-            console.log(
-              `✅ Added to bentoFiles Map: ${file.name} with unique ID: ${fileId}`
-            );
           });
-          console.log(`🔍 New bentoFiles size: ${newFiles.size}`);
           return newFiles;
         });
 
@@ -365,7 +347,7 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
         // Créer les aperçus de manière asynchrone avec barre de progression
         let loadedCount = 0;
-        validFiles.forEach((file, index) => {
+        validFiles.forEach((file, _index) => {
           const reader = new FileReader();
 
           reader.onprogress = (event) => {
@@ -390,10 +372,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
             const totalProgress = (loadedCount / validFiles.length) * 100;
             setUploadProgress(Math.round(totalProgress));
 
-            console.log(
-              `📁 Fichier ${loadedCount}/${validFiles.length} chargé: ${file.name}`
-            );
-
             // Désactiver le loader quand tous les fichiers sont chargés
             if (loadedCount === validFiles.length) {
               setTimeout(() => {
@@ -401,7 +379,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
                 setUploadProgress(0);
                 setUploadedCount(0);
                 setTotalFiles(0);
-                console.log("✅ Tous les fichiers bento sont chargés");
               }, 500); // Petit délai pour voir la progression complète
             }
           };
@@ -452,7 +429,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
       setBentoFiles((prevFiles) => {
         const newFiles = new Map(prevFiles);
         newFiles.delete(fileId);
-        console.log(`🗑️ Fichier supprimé de la Map: ${fileId}`);
         return newFiles;
       });
     }
@@ -460,11 +436,6 @@ export function createFormHandlers(state: FormState): FormHandlers {
 
   // Gestion des lignes de bento
   const addBentoLine = () => {
-    console.log(
-      "addBentoLine appelé, currentBentoLine.listImage:",
-      currentBentoLine.listImage
-    );
-    console.log("currentBento.lines.length:", currentBento.lines.length);
     if (
       currentBentoLine.listImage.length > 0 &&
       currentBento.lines.length < 10
@@ -507,11 +478,8 @@ export function createFormHandlers(state: FormState): FormHandlers {
   };
 
   const removeBento = (index: number) => {
-    console.log("🗑️ removeBento appelé avec index:", index);
-    console.log("🗑️ Nombre de bentos avant:", formData.bento.length);
     setFormData((prev) => {
       const newBento = prev.bento.filter((_, i) => i !== index);
-      console.log("🗑️ Nombre de bentos après:", newBento.length);
       return {
         ...prev,
         bento: newBento,

@@ -11,7 +11,7 @@ import {
 import { requireAuth } from "~/server/auth.server";
 
 // GET /api/portfolios/:id - Récupérer un portfolio spécifique
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
 
   if (!id) {

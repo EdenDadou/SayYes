@@ -21,7 +21,11 @@ export default function FadeInView({
   threshold = 0.1,
 }: FadeInViewProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, amount: threshold, margin: "100px 0px" });
+  const isInView = useInView(ref, {
+    once,
+    amount: threshold,
+    margin: "100px 0px",
+  });
 
   return (
     <motion.div

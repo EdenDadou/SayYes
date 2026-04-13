@@ -42,7 +42,10 @@ function FAQItem({
           >
             →
           </span>
-          <span className="text-white font-medium" style={{ fontFamily: "Jakarta Semi Bold" }}>
+          <span
+            className="text-white font-medium"
+            style={{ fontFamily: "Jakarta Semi Bold" }}
+          >
             {question}
           </span>
         </div>
@@ -66,7 +69,10 @@ function FAQItem({
           >
             <div className="px-5 pb-5 pt-0">
               <div className="pl-11">
-                <p className="text-white/70 leading-relaxed" style={{ fontFamily: "Jakarta" }}>
+                <p
+                  className="text-white/70 leading-relaxed"
+                  style={{ fontFamily: "Jakarta" }}
+                >
                   {answer}
                 </p>
               </div>
@@ -90,7 +96,10 @@ export default function BlocFAQFront({ bloc, color }: BlocFAQFrontProps) {
         viewport={{ once: true }}
         className="text-center mb-4"
       >
-        <span className="text-white/50 text-sm tracking-widest" style={{ fontFamily: "Jakarta" }}>
+        <span
+          className="text-white/50 text-sm tracking-widest"
+          style={{ fontFamily: "Jakarta" }}
+        >
           ✦ FAQ ✦
         </span>
       </motion.div>

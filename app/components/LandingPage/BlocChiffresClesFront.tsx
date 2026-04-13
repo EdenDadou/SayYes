@@ -17,6 +17,7 @@ export default function BlocChiffresClesFront({
     <section className="relative py-20 px-4 bg-black overflow-hidden flex flex-col gap-2">
       <img
         src="images/landingpage/bgChiffreCle.png"
+        alt=""
         className="absolute -top-32"
       />
       {/* Punchline */}
@@ -103,7 +104,7 @@ export default function BlocChiffresClesFront({
   );
 }
 
-function FeatureRow({ text, color }: { text: string; color: string }) {
+function FeatureRow({ text, color: _color }: { text: string; color: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}

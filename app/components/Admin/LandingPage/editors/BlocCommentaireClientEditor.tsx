@@ -1,4 +1,5 @@
 import type { BlocCommentaireClient } from "~/types/landing-page";
+import { ADMIN_INPUT_CLASS } from "~/utils/admin/landing-page-constants";
 
 interface BlocCommentaireClientEditorProps {
   bloc: BlocCommentaireClient;
@@ -20,7 +21,7 @@ export default function BlocCommentaireClientEditor({
           value={bloc.text}
           onChange={(e) => onUpdate({ ...bloc, text: e.target.value })}
           rows={4}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
           placeholder="Le commentaire du client..."
         />
       </div>
@@ -34,7 +35,7 @@ export default function BlocCommentaireClientEditor({
           type="text"
           value={bloc.author}
           onChange={(e) => onUpdate({ ...bloc, author: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
           placeholder="Nom de l'auteur"
         />
       </div>

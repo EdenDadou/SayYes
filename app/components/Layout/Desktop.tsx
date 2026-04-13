@@ -19,12 +19,14 @@ interface ILayoutProps {
   children: React.ReactNode;
   footer?: boolean;
   footerType?: "default" | "home";
+  footerPaddingTop?: number;
 }
 
 const Desktoplayout = memo(function Desktoplayout({
   children,
   footer = true,
   footerType = "default",
+  footerPaddingTop,
 }: ILayoutProps) {
   const [isOpenModalContact, setIsOpenModalContact] = useState(false);
   const location = useLocation();
@@ -52,6 +54,7 @@ const Desktoplayout = memo(function Desktoplayout({
           <Footer
             setIsOpenModalContact={setIsOpenModalContact}
             footerType={footerType}
+            paddingTop={footerPaddingTop}
           />
         ) : null}
       </main>

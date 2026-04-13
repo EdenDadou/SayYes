@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useFetcher } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Close from "~/assets/icons/Close";
 import Localisation from "~/assets/icons/Localisation";
@@ -67,6 +68,15 @@ export default function ModalContactMobile({
   isOpen,
   close,
 }: ModalModalContactProps) {
+  const fetcher: any = useFetcher();
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      setSuccess(true);
+    }
+  }, [fetcher.state, fetcher.data]);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -204,99 +214,135 @@ export default function ModalContactMobile({
               >
                 <BackgroundModalMobile className="absolute inset-0  w-full h-full z-0 rounded-[20px] object-contain blur-3xl" />
 
-                <form className="relative w-full h-full flex flex-col gap-4 justify-center text-center z-20">
-                  <label className="block">
-                    <span className="text-sm text-white font-jakarta mb-2 block">
-                      Nom et prénom*
-                    </span>
-                    <input
-                      type="text"
-                      name="name"
-                      className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
-                      style={{
-                        background: "rgba(255, 255, 255, 0.10)",
-                        borderBottom: "1px solid #9C9C9C",
-                      }}
-                      placeholder="Nom et prénom"
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="text-sm text-white font-jakarta mb-2 block">
-                      Mail*
-                    </span>
-                    <input
-                      type="email"
-                      name="email"
-                      className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
-                      style={{
-                        background: "rgba(255, 255, 255, 0.10)",
-                        borderBottom: "1px solid #9C9C9C",
-                      }}
-                      placeholder="exemple@gmail.com"
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="text-sm text-white font-jakarta mb-2 block">
-                      Mobile
-                    </span>
-                    <input
-                      type="tel"
-                      name="mobile"
-                      className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
-                      style={{
-                        background: "rgba(255, 255, 255, 0.10)",
-                        borderBottom: "1px solid #9C9C9C",
-                      }}
-                      placeholder="+33 6 00 00 00"
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="text-sm text-white font-jakarta  mb-2 block">
-                      Entreprise
-                    </span>
-                    <input
-                      type="text"
-                      name="company"
-                      className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
-                      style={{
-                        background: "rgba(255, 255, 255, 0.10)",
-                        borderBottom: "1px solid #9C9C9C",
-                      }}
-                      placeholder="Entreprise"
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="text-sm text-white font-jakarta mb-2 block">
-                      Message
-                    </span>
-                    <textarea
-                      name="message"
-                      rows={4}
-                      className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
-                      style={{
-                        background: "rgba(255, 255, 255, 0.10)",
-                        borderBottom: "1px solid #9C9C9C",
-                      }}
-                      placeholder="Bonjour, je vous contacte pour..."
-                    ></textarea>
-                  </label>
-
-                  <div className="flex flex-col gap-4 justify-between items-center">
-                    <p className="flex items-center gap-2 text-sm text-gray-100 text-center">
-                      *Champs obligatoires
+                {success ? (
+                  <div className="relative z-20 flex flex-col items-center justify-center gap-6 py-8 text-center">
+                    <p className="text-white font-jakarta-bold text-xl holographic-text">
+                      Message envoyé !
                     </p>
-
+                    <p className="text-white font-jakarta text-base">
+                      Nous vous rappelons dans les plus brefs délais.
+                    </p>
                     <Button
                       type="border"
-                      label="Envoyer ma demande"
+                      label="Fermer"
+                      onClick={() => {
+                        setSuccess(false);
+                        close();
+                      }}
                       leftIcon={<ArrowFull className="w-6 h-6" />}
                     />
                   </div>
-                </form>
+                ) : (
+                  <fetcher.Form
+                    method="post"
+                    action="/api/contact"
+                    className="relative w-full h-full flex flex-col gap-4 justify-center text-center z-20"
+                  >
+                    <label className="block">
+                      <span className="text-sm text-white font-jakarta mb-2 block">
+                        Nom et prénom*
+                      </span>
+                      <input
+                        type="text"
+                        name="name"
+                        className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.10)",
+                          borderBottom: "1px solid #9C9C9C",
+                        }}
+                        placeholder="Nom et prénom"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm text-white font-jakarta mb-2 block">
+                        Mail*
+                      </span>
+                      <input
+                        type="email"
+                        name="email"
+                        className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.10)",
+                          borderBottom: "1px solid #9C9C9C",
+                        }}
+                        placeholder="exemple@gmail.com"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm text-white font-jakarta mb-2 block">
+                        Mobile
+                      </span>
+                      <input
+                        type="tel"
+                        name="mobile"
+                        className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.10)",
+                          borderBottom: "1px solid #9C9C9C",
+                        }}
+                        placeholder="+33 6 00 00 00"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm text-white font-jakarta  mb-2 block">
+                        Entreprise
+                      </span>
+                      <input
+                        type="text"
+                        name="company"
+                        className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.10)",
+                          borderBottom: "1px solid #9C9C9C",
+                        }}
+                        placeholder="Entreprise"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm text-white font-jakarta mb-2 block">
+                        Message
+                      </span>
+                      <textarea
+                        name="message"
+                        rows={4}
+                        className="w-full px-4 py-2 text-white placeholder-gray-300 rounded-3xl text-center"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.10)",
+                          borderBottom: "1px solid #9C9C9C",
+                        }}
+                        placeholder="Bonjour, je vous contacte pour..."
+                      ></textarea>
+                    </label>
+
+                    {fetcher.data?.error && (
+                      <p className="text-red-400 text-sm text-center">
+                        Une erreur est survenue, veuillez réessayer.
+                      </p>
+                    )}
+
+                    <div className="flex flex-col gap-4 justify-between items-center">
+                      <p className="flex items-center gap-2 text-sm text-gray-100 text-center">
+                        *Champs obligatoires
+                      </p>
+
+                      <Button
+                        type="border"
+                        label={
+                          fetcher.state === "submitting"
+                            ? "Envoi en cours..."
+                            : "Envoyer ma demande"
+                        }
+                        htmlType="submit"
+                        disabled={fetcher.state === "submitting"}
+                        leftIcon={<ArrowFull className="w-6 h-6" />}
+                      />
+                    </div>
+                  </fetcher.Form>
+                )}
               </Card>
             </motion.div>
           </div>

@@ -64,18 +64,18 @@ export default function HiddenInputs({
         name="photoCouvertureAlt"
         value={formData.photoCouvertureAlt}
       />
-      <input
-        type="hidden"
-        name="photoMainAlt"
-        value={formData.photoMainAlt}
-      />
+      <input type="hidden" name="photoMainAlt" value={formData.photoMainAlt} />
 
       {/* Inputs cachés pour les champs généraux (seulement si on est dans l'onglet SEO) */}
       {activeTab === "seo" && (
         <>
           <input type="hidden" name="titre" value={formData.titre} />
           <input type="hidden" name="slug" value={formData.slug} />
-          <input type="hidden" name="description" value={formData.description} />
+          <input
+            type="hidden"
+            name="description"
+            value={formData.description}
+          />
           <input type="hidden" name="kicker" value={formData.kicker} />
           <input type="hidden" name="sousTitre" value={formData.sousTitre} />
           <input type="hidden" name="topTitle" value={formData.topTitle} />
@@ -112,11 +112,7 @@ export default function HiddenInputs({
         !formData.metaImage.startsWith("pending_") && (
           <input type="hidden" name="metaImageUrl" value={formData.metaImage} />
         )}
-      <input
-        type="hidden"
-        name="metaTitle"
-        value={formData.metaTitle || ""}
-      />
+      <input type="hidden" name="metaTitle" value={formData.metaTitle || ""} />
       <input
         type="hidden"
         name="metaDescription"
@@ -141,7 +137,7 @@ interface BentoFileInputsProps {
 function BentoFileInputs({ formData, bentoFiles }: BentoFileInputsProps) {
   const inputs: React.ReactElement[] = [];
 
-  formData.bento.forEach((bento, bentoIndex) => {
+  formData.bento.forEach((bento, _bentoIndex) => {
     bento.lines.forEach((line) => {
       line.listImage.forEach((image) => {
         if (image.startsWith("pending_")) {

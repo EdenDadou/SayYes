@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { DeleteIcon } from "~/components/icons";
 
 // Fonction utilitaire pour détecter les vidéos
@@ -99,18 +99,10 @@ export default function InputAdmin({
   min,
   max,
 }: InputAdminProps) {
-  const [internalValue, setInternalValue] = useState<string>(
-    Array.isArray(value) ? value.join(", ") : (value as string) || ""
-  );
+  const internalValue = Array.isArray(value)
+    ? value.join(", ")
+    : (value as string) || "";
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Synchroniser la valeur interne avec la prop value
-  useEffect(() => {
-    const newValue = Array.isArray(value)
-      ? value.join(", ")
-      : (value as string) || "";
-    setInternalValue(newValue);
-  }, [value]);
 
   // Classes CSS communes
   const baseInputClasses = `
@@ -141,49 +133,29 @@ export default function InputAdmin({
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const newValue = e.target.value;
-    setInternalValue(newValue);
-    onChange?.(newValue);
+    onChange?.(e.target.value);
   };
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInternalValue(newValue);
-    onChange?.(newValue);
+    onChange?.(e.target.value);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
-    console.log(
-      "InputAdmin handleFileChange appelé avec:",
-      files.length,
-      "fichiers"
-    );
-    console.log(
-      "Type:",
-      type,
-      "Multiple prop:",
-      multiple,
-      "Should be multiple:",
-      type === "file-multiple"
-    );
-
     // Utiliser le type pour déterminer si c'est multiple, pas la prop
     const isMultiple = type === "file-multiple" || multiple;
 
     if (isMultiple) {
       const fileArray = Array.from(files);
-      console.log("Envoi de fileArray:", fileArray);
       onChange?.(fileArray);
     } else {
-      console.log("Envoi d'un seul fichier:", files[0]);
       onChange?.(files[0]);
     }
   };
 
-  const clearFileInput = () => {
+  const _clearFileInput = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -512,52 +484,3 @@ export function InputGroup({
   );
 }
 
-// Hook personnalisé pour gérer les états des inputs
-export function useInputAdmin() {
-  const [values, setValues] = useState<Record<string, any>>({});
-  const [previews, setPreviews] = useState<Record<string, FilePreview[]>>({});
-  const [files, setFiles] = useState<Record<string, File[]>>({});
-
-  const setValue = (name: string, value: any) => {
-    setValues((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const getValue = (name: string) => {
-    return values[name];
-  };
-
-  const setPreview = (name: string, previews: FilePreview[]) => {
-    setPreviews((prev) => ({ ...prev, [name]: previews }));
-  };
-
-  const getPreview = (name: string): FilePreview[] => {
-    return previews[name] || [];
-  };
-
-  const setFile = (name: string, files: File[]) => {
-    setFiles((prev) => ({ ...prev, [name]: files }));
-  };
-
-  const getFile = (name: string): File[] => {
-    return files[name] || [];
-  };
-
-  const reset = () => {
-    setValues({});
-    setPreviews({});
-    setFiles({});
-  };
-
-  return {
-    values,
-    setValue,
-    getValue,
-    previews,
-    setPreview,
-    getPreview,
-    files,
-    setFile,
-    getFile,
-    reset,
-  };
-}

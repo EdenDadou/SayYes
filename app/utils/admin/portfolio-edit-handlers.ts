@@ -27,7 +27,11 @@ export interface EditFormHandlers extends FormHandlers {
   ) => void;
   updateBentoLines: (
     bentoIndex: number,
-    newLines: Array<{ format: string; listImage: string[]; listImageAlt?: string[] }>
+    newLines: Array<{
+      format: string;
+      listImage: string[];
+      listImageAlt?: string[];
+    }>
   ) => void;
   addLineToExistingBento: (bentoIndex: number) => void;
   updateExistingBentoImageAlt: (
@@ -48,148 +52,7 @@ export interface EditFormState extends FormState {
 export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
   const baseHandlers = createFormHandlers(state);
 
-  const {
-    formData,
-    setFormData,
-    currentBentoLine,
-    setCurrentBentoLine,
-    setBentoPreviewImages,
-    bentoFiles,
-    setBentoFiles,
-    setIsUploadingFiles,
-    setUploadProgress,
-    setUploadedCount,
-    setTotalFiles,
-  } = state;
-
-  // Version édition de handleBentoFilesChange (surcharge la version de base)
-  const handleBentoFilesChangeEdit = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    console.log("handleBentoFilesChange EDITION appelé", e.target.files);
-    const files = e.target.files;
-    if (files) {
-      // Activer l'état de chargement
-      setIsUploadingFiles(true);
-
-      const validFiles: File[] = [];
-      const newMediaNames: string[] = [];
-
-      Array.from(files).forEach((file) => {
-        // Vérifier le type de fichier (images et vidéos)
-        if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
-          // Générer un ID unique pour éviter les conflits de noms
-          const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${file.name}`;
-          validFiles.push(file);
-          newMediaNames.push(`pending_${fileId}`);
-          console.log(
-            `✅ Valid file added: ${file.name} with ID: ${fileId} (${file.type})`
-          );
-        }
-      });
-
-      console.log(`🔍 Total valid files: ${validFiles.length}`);
-      console.log(`🔍 New media names: ${newMediaNames.join(", ")}`);
-
-      // Mettre à jour les fichiers et les noms de médias de manière synchrone
-      if (validFiles.length > 0) {
-        // Initialiser les états de progression
-        setTotalFiles(validFiles.length);
-        setUploadedCount(0);
-        setUploadProgress(0);
-
-        // Stocker les fichiers réels pour l'envoi avec Map en utilisant l'ID unique
-        setBentoFiles((prev) => {
-          const newFiles = new Map(prev);
-          validFiles.forEach((file, index) => {
-            // Extraire l'ID unique du nom généré
-            const fileId = newMediaNames[index].replace("pending_", "");
-            newFiles.set(fileId, file);
-            console.log(
-              `✅ Added to bentoFiles Map (EDITION): ${file.name} with unique ID: ${fileId}`
-            );
-          });
-          return newFiles;
-        });
-
-        // Ajouter les placeholders à la ligne bento actuelle immédiatement
-        // Ajouter aussi des alts vides pour chaque nouvelle image
-        const newAlts = newMediaNames.map(() => "");
-        setCurrentBentoLine((prev) => ({
-          ...prev,
-          listImage: [...prev.listImage, ...newMediaNames],
-          listImageAlt: [...(prev.listImageAlt || []), ...newAlts],
-        }));
-
-        // Créer les aperçus de manière asynchrone avec barre de progression
-        let loadedCount = 0;
-        validFiles.forEach((file, index) => {
-          const reader = new FileReader();
-
-          reader.onprogress = (event) => {
-            if (event.lengthComputable) {
-              const fileProgress = (event.loaded / event.total) * 100;
-              const totalProgress =
-                (loadedCount * 100 + fileProgress) / validFiles.length;
-              setUploadProgress(Math.round(totalProgress));
-            }
-          };
-
-          reader.onload = (event) => {
-            const imageUrl = event.target?.result as string;
-            setBentoPreviewImages((prev) => [
-              ...prev,
-              { url: imageUrl, name: file.name },
-            ]);
-
-            // Mettre à jour le compteur et la progression
-            loadedCount++;
-            setUploadedCount(loadedCount);
-            const totalProgress = (loadedCount / validFiles.length) * 100;
-            setUploadProgress(Math.round(totalProgress));
-
-            console.log(
-              `📁 Fichier ${loadedCount}/${validFiles.length} chargé: ${file.name}`
-            );
-
-            // Désactiver le loader quand tous les fichiers sont chargés
-            if (loadedCount === validFiles.length) {
-              setTimeout(() => {
-                setIsUploadingFiles(false);
-                setUploadProgress(0);
-                setUploadedCount(0);
-                setTotalFiles(0);
-                console.log(
-                  "✅ Tous les fichiers bento sont chargés (EDITION)"
-                );
-              }, 500); // Petit délai pour voir la progression complète
-            }
-          };
-
-          reader.onerror = () => {
-            console.error(`❌ Erreur lors du chargement de ${file.name}`);
-            loadedCount++;
-            setUploadedCount(loadedCount);
-
-            if (loadedCount === validFiles.length) {
-              setIsUploadingFiles(false);
-              setUploadProgress(0);
-              setUploadedCount(0);
-              setTotalFiles(0);
-            }
-          };
-
-          reader.readAsDataURL(file);
-        });
-      } else {
-        // Aucun fichier valide, désactiver immédiatement le loader
-        setIsUploadingFiles(false);
-      }
-
-      // Réinitialiser l'input pour permettre de sélectionner les mêmes fichiers si nécessaire
-      e.target.value = "";
-    }
-  };
+  const { setFormData, setBentoPreviewImages, setBentoFiles } = state;
 
   // Fonction pour supprimer une image d'un bento existant
   const removeExistingBentoImage = (
@@ -208,7 +71,6 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
         setBentoFiles((prevFiles) => {
           const newFiles = new Map(prevFiles);
           newFiles.delete(fileId);
-          console.log(`🗑️ Fichier supprimé de la Map (EDITION): ${fileId}`);
           return newFiles;
         });
       }
@@ -275,8 +137,6 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
     files: FileList,
     inputElement?: HTMLInputElement
   ) => {
-    console.log(`📥 addImagesToExistingBento appelé - bento: ${bentoIndex}, ligne: ${lineIndex}, fichiers: ${files.length}`);
-
     const validFiles = Array.from(files).filter(
       (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
     );
@@ -290,24 +150,23 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
       return { file, fileId, pendingId };
     });
 
-    console.log(`✅ IDs générés:`, filesData.map(f => f.pendingId));
-
     // Mettre à jour le formData une seule fois avec toutes les images
     setFormData((prev) => {
       const newBento = [...prev.bento];
 
       // Vérifier qu'on n'ajoute pas de doublons
       if (newBento[bentoIndex].lines[lineIndex]) {
-        const existingImages = new Set(newBento[bentoIndex].lines[lineIndex].listImage);
+        const existingImages = new Set(
+          newBento[bentoIndex].lines[lineIndex].listImage
+        );
         const newImages = filesData
           .map((f) => f.pendingId)
           .filter((id) => !existingImages.has(id));
 
-        console.log(`📝 Ajout de ${newImages.length} nouvelles images (${filesData.length} fichiers, ${existingImages.size} existantes)`);
-
         newBento[bentoIndex].lines[lineIndex].listImage.push(...newImages);
         // Ajouter des alts vides pour les nouvelles images
-        const currentAlts = newBento[bentoIndex].lines[lineIndex].listImageAlt || [];
+        const currentAlts =
+          newBento[bentoIndex].lines[lineIndex].listImageAlt || [];
         newBento[bentoIndex].lines[lineIndex].listImageAlt = [
           ...currentAlts,
           ...newImages.map(() => ""),
@@ -325,9 +184,6 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
       setBentoFiles((prev) => {
         const newFiles = new Map(prev);
         newFiles.set(fileId, file);
-        console.log(
-          `✅ Added to existing bento line ${lineIndex}: ${file.name} with unique ID: ${fileId}`
-        );
         return newFiles;
       });
 
@@ -355,7 +211,11 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
   // Fonction pour mettre à jour les lignes d'un bento (pour le drag & drop)
   const updateBentoLines = (
     bentoIndex: number,
-    newLines: Array<{ format: string; listImage: string[]; listImageAlt?: string[] }>
+    newLines: Array<{
+      format: string;
+      listImage: string[];
+      listImageAlt?: string[];
+    }>
   ) => {
     setFormData((prev) => {
       const newBento = [...prev.bento];
@@ -419,17 +279,12 @@ export function createEditFormHandlers(state: EditFormState): EditFormHandlers {
 
   return {
     ...baseHandlers,
-    handleBentoFilesChange: handleBentoFilesChangeEdit, // Utiliser la version édition
     removeExistingBentoImage,
     removeExistingBentoLine,
     addImagesToExistingBento,
     updateBentoLines,
     addLineToExistingBento,
     updateExistingBentoImageAlt,
-    // S'assurer que les fonctions de base sont bien accessibles
-    removeBento: baseHandlers.removeBento,
-    addBento: baseHandlers.addBento,
-    removeBentoImage: baseHandlers.removeBentoImage,
   };
 }
 

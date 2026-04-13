@@ -36,14 +36,6 @@ export async function action({ request }: ActionFunctionArgs) {
       },
     });
 
-    // Vérification de la configuration
-    console.log("Configuration SMTP:", {
-      host: process.env.BREVOS_SMTP_SERVER,
-      port: process.env.BREVOS_PORT,
-      user: process.env.BREVOS_LOGIN,
-      hasPassword: !!process.env.BREVOS_API_KEY,
-    });
-
     // Préparation du contenu de l'email
     const emailContent = `
 Nouvelle demande de contact depuis Say Yes
@@ -60,7 +52,6 @@ ${message || "Aucun message"}
     // Vérification de la connexion
     try {
       await transporter.verify();
-      console.log("✓ Serveur SMTP prêt à envoyer des emails");
     } catch (verifyError) {
       console.error("✗ Erreur de vérification SMTP:", verifyError);
     }
@@ -101,14 +92,7 @@ ${message || "Aucun message"}
       `,
     };
 
-    console.log("Tentative d'envoi avec:", {
-      from: mailOptions.from,
-      to: mailOptions.to,
-      subject: mailOptions.subject,
-    });
-
-    const result = await transporter.sendMail(mailOptions);
-    console.log("✓ Email envoyé avec succès:", result);
+    await transporter.sendMail(mailOptions);
 
     return json({ success: true, message: "Email envoyé avec succès" });
   } catch (error) {

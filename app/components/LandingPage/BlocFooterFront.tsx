@@ -9,11 +9,16 @@ interface BlocFooterFrontProps {
 
 export default function BlocFooterFront({ bloc, color }: BlocFooterFrontProps) {
   return (
-    <section className="relative py-24 px-4 bg-black overflow-hidden" id="contact">
+    <section
+      className="relative py-24 px-4 bg-black overflow-hidden"
+      id="contact"
+    >
       {/* Halo effect */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-30 blur-[100px] rounded-full"
-        style={{ background: `radial-gradient(ellipse, ${color}, transparent)` }}
+        style={{
+          background: `radial-gradient(ellipse, ${color}, transparent)`,
+        }}
       />
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">

@@ -3,7 +3,9 @@ import { type PortfolioFormData } from "~/utils/admin/portfolio-form-handlers";
 
 interface SEOSectionProps {
   formData: PortfolioFormData;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   metaImagePreview: { url: string; name: string }[];
   handleMetaImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeMetaImagePreview: () => void;

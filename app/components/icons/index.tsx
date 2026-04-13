@@ -1,9 +1,13 @@
-import type { SVGProps } from "react";
+import type { SVGProps, HTMLAttributes } from "react";
 
 // Types pour les propriétés des icônes
 export interface IconProps extends SVGProps<SVGSVGElement> {
   size?: number | string;
   color?: string;
+}
+
+export interface DivIconProps extends HTMLAttributes<HTMLDivElement> {
+  size?: number | string;
 }
 
 /**
@@ -107,6 +111,33 @@ export const CloseIcon = ({
 );
 
 /**
+ * Icône de suppression/retrait (croix stroke)
+ * Utilisée dans les éditeurs admin pour retirer des éléments
+ */
+export const RemoveIcon = ({
+  size = 16,
+  className = "w-4 h-4",
+  ...props
+}: IconProps) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>
+);
+
+/**
  * Icône de chargement (spinner)
  * Utilisée pour indiquer un chargement en cours
  */
@@ -114,7 +145,7 @@ export const LoadingIcon = ({
   size = 20,
   className = "animate-spin rounded-full border-b-2 border-current",
   ...props
-}: IconProps) => (
+}: DivIconProps) => (
   <div className={className} style={{ width: size, height: size }} {...props} />
 );
 

@@ -106,7 +106,10 @@ export interface BlocMethods {
   lineTitle: TitleLine[];
   subTitle: string;
   conclusion: {
-    elements: ({ type: "icon"; name: string } | { type: "text"; text: string; color: "white" | "animed" })[];
+    elements: (
+      | { type: "icon"; name: string }
+      | { type: "text"; text: string; color: "white" | "animed" }
+    )[];
     colorType: "white" | "color";
   };
   cards: {
@@ -196,7 +199,10 @@ export interface LandingPage {
 }
 
 // Type pour la création (sans id ni dates)
-export type LandingPageCreate = Omit<LandingPage, "id" | "createdAt" | "updatedAt">;
+export type LandingPageCreate = Omit<
+  LandingPage,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 // Liste des types de blocs disponibles
 export const BLOC_TYPES = [

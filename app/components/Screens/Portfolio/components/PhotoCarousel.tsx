@@ -78,7 +78,7 @@ export default function PhotoCarousel({
                   <img
                     key={`${columnIndex}-${photoIndex}`}
                     src={photo}
-                    alt={`${title} - Photo ${(globalIndex % photos.length) + 1}`}
+                    alt={`${title} - ${(globalIndex % photos.length) + 1}`}
                     className="w-full h-full object-cover object-center"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />

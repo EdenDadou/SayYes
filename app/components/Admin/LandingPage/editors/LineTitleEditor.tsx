@@ -1,63 +1,13 @@
 import type { TitleLine, TitleElement } from "~/types/landing-page";
-import type { ReactNode } from "react";
 import CollapsibleCard from "./CollapsibleCard";
-// Icons from assets/icons
-import Star from "~/assets/icons/Star";
-import NoteStar from "~/assets/icons/NoteStar";
-import TwoDiamonds from "~/assets/icons/TwoDiamonds";
-import ArrowLight from "~/assets/icons/ArrowLight";
-import ArrowFull from "~/assets/icons/ArrowFull";
-import Arrow from "~/assets/icons/Arrow";
-import ArrowBig from "~/assets/icons/ArrowBig";
-import Close from "~/assets/icons/Close";
-import Coche from "~/assets/icons/Coche";
-import Pause from "~/assets/icons/Pause";
-import Play from "~/assets/icons/Play";
-// Icons from Header/assets
-import Coeur from "~/components/Header/assets/Coeur";
-import Flamme from "~/components/Header/assets/Flamme";
-import Idea from "~/components/Header/assets/Idea";
-import Smile from "~/components/Header/assets/Smile";
-import ChatBuble from "~/components/Header/assets/ChatBuble";
+import { RemoveIcon } from "~/components/icons";
+import {
+  ICON_OPTIONS,
+  getIconMap,
+  swapItems,
+} from "~/utils/admin/landing-page-constants";
 
-const ICON_OPTIONS = [
-  { value: "heart", label: "❤️ Coeur" },
-  { value: "star", label: "⭐ Étoile" },
-  { value: "2 stars", label: "✨ 2 Étoiles" },
-  { value: "2 diamonds", label: "💎 2 Diamants" },
-  { value: "arrowLight", label: "→ Flèche légère" },
-  { value: "arrowWhite", label: "➜ Flèche pleine" },
-  { value: "arrow", label: "↗ Flèche simple" },
-  { value: "arrowBig", label: "⇒ Grande flèche" },
-  { value: "coche", label: "✓ Coche" },
-  { value: "close", label: "✕ Fermer" },
-  { value: "pause", label: "⏸ Pause" },
-  { value: "play", label: "▶ Play" },
-  { value: "flamme", label: "🔥 Flamme" },
-  { value: "idea", label: "💡 Idée" },
-  { value: "smile", label: "😊 Smile" },
-  { value: "chat", label: "💬 Chat" },
-];
-
-// Mapping des icônes par nom (identique à AnimatedTitle)
-const IconMap: Record<string, ReactNode> = {
-  heart: <Coeur />,
-  star: <Star />,
-  "2 stars": <NoteStar />,
-  "2 diamonds": <TwoDiamonds className="w-8" />,
-  arrowLight: <ArrowLight className="w-8" />,
-  arrowWhite: <ArrowFull />,
-  arrow: <Arrow className="w-8" />,
-  arrowBig: <ArrowBig className="w-8" />,
-  coche: <Coche />,
-  close: <Close className="w-6" />,
-  pause: <Pause className="w-6" />,
-  play: <Play className="w-6" />,
-  flamme: <Flamme />,
-  idea: <Idea />,
-  smile: <Smile />,
-  chat: <ChatBuble />,
-};
+const IconMap = getIconMap("md");
 
 interface LineTitleEditorProps {
   lines: TitleLine[];
@@ -88,11 +38,8 @@ export default function LineTitleEditor({
   };
 
   const moveLine = (index: number, direction: "up" | "down") => {
-    const newLines = [...safeLines];
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= newLines.length) return;
-    [newLines[index], newLines[targetIndex]] = [newLines[targetIndex], newLines[index]];
-    onChange(newLines);
+    const result = swapItems(safeLines, index, direction);
+    if (result !== safeLines) onChange(result);
   };
 
   const addElement = (lineIndex: number, type: "icon" | "text") => {
@@ -126,12 +73,20 @@ export default function LineTitleEditor({
     });
   };
 
-  const moveElement = (lineIndex: number, elementIndex: number, direction: "left" | "right") => {
+  const moveElement = (
+    lineIndex: number,
+    elementIndex: number,
+    direction: "left" | "right"
+  ) => {
     const line = safeLines[lineIndex];
     const newElements = [...line.elements];
-    const targetIndex = direction === "left" ? elementIndex - 1 : elementIndex + 1;
+    const targetIndex =
+      direction === "left" ? elementIndex - 1 : elementIndex + 1;
     if (targetIndex < 0 || targetIndex >= newElements.length) return;
-    [newElements[elementIndex], newElements[targetIndex]] = [newElements[targetIndex], newElements[elementIndex]];
+    [newElements[elementIndex], newElements[targetIndex]] = [
+      newElements[targetIndex],
+      newElements[elementIndex],
+    ];
     updateLine(lineIndex, { ...line, elements: newElements });
   };
 
@@ -166,8 +121,13 @@ export default function LineTitleEditor({
           {line.elements.map((el, elIndex) => {
             if (el.type === "icon") {
               return (
-                <span key={elIndex} className="mx-1 opacity-80 inline-flex items-center">
-                  {IconMap[el.name] || <span className="text-cyan-400">{el.name || "◆"}</span>}
+                <span
+                  key={elIndex}
+                  className="mx-1 opacity-80 inline-flex items-center"
+                >
+                  {IconMap[el.name] || (
+                    <span className="text-cyan-400">{el.name || "◆"}</span>
+                  )}
                 </span>
               );
             }
@@ -175,9 +135,7 @@ export default function LineTitleEditor({
               <span
                 key={elIndex}
                 className={
-                  el.color === "animed"
-                    ? "holographic-text"
-                    : "text-white"
+                  el.color === "animed" ? "holographic-text" : "text-white"
                 }
               >
                 {el.text}
@@ -193,7 +151,8 @@ export default function LineTitleEditor({
     <div className="border border-gray-700 rounded-lg p-4 space-y-4">
       <div className="flex justify-between items-center">
         <label className="block text-sm font-medium text-white">
-          {label} ({safeLines.length} {safeLines.length > 1 ? "lignes" : "ligne"})
+          {label} ({safeLines.length}{" "}
+          {safeLines.length > 1 ? "lignes" : "ligne"})
         </label>
         <button
           type="button"
@@ -218,9 +177,17 @@ export default function LineTitleEditor({
             title={getLineSummary(line)}
             badge={{
               label: line.titleType.toUpperCase(),
-              color: line.titleType === "h1" ? "purple" : line.titleType === "h2" ? "blue" : "green",
+              color:
+                line.titleType === "h1"
+                  ? "purple"
+                  : line.titleType === "h2"
+                    ? "blue"
+                    : "green",
             }}
-            itemCount={{ count: line.elements.length, label: line.elements.length > 1 ? "éléments" : "élément" }}
+            itemCount={{
+              count: line.elements.length,
+              label: line.elements.length > 1 ? "éléments" : "élément",
+            }}
             onRemove={() => removeLine(lineIndex)}
             onMoveUp={() => moveLine(lineIndex, "up")}
             onMoveDown={() => moveLine(lineIndex, "down")}
@@ -258,7 +225,9 @@ export default function LineTitleEditor({
                     {/* Bouton gauche */}
                     <button
                       type="button"
-                      onClick={() => moveElement(lineIndex, elementIndex, "left")}
+                      onClick={() =>
+                        moveElement(lineIndex, elementIndex, "left")
+                      }
                       disabled={elementIndex === 0}
                       className={`p-1 rounded transition-colors ${
                         elementIndex === 0
@@ -267,8 +236,18 @@ export default function LineTitleEditor({
                       }`}
                       title="Déplacer à gauche"
                     >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      <svg
+                        className="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
                       </svg>
                     </button>
 
@@ -327,7 +306,9 @@ export default function LineTitleEditor({
                     {/* Bouton droite */}
                     <button
                       type="button"
-                      onClick={() => moveElement(lineIndex, elementIndex, "right")}
+                      onClick={() =>
+                        moveElement(lineIndex, elementIndex, "right")
+                      }
                       disabled={elementIndex === line.elements.length - 1}
                       className={`p-1 rounded transition-colors ${
                         elementIndex === line.elements.length - 1
@@ -336,8 +317,18 @@ export default function LineTitleEditor({
                       }`}
                       title="Déplacer à droite"
                     >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      <svg
+                        className="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
                       </svg>
                     </button>
 
@@ -348,9 +339,7 @@ export default function LineTitleEditor({
                       className="p-1 rounded text-red-400/60 hover:text-red-400 hover:bg-red-900/30 transition-colors"
                       title="Supprimer"
                     >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
+                      <RemoveIcon className="w-3 h-3" />
                     </button>
                   </div>
                 ))}
@@ -362,8 +351,18 @@ export default function LineTitleEditor({
                     onClick={() => addElement(lineIndex, "text")}
                     className="flex items-center gap-1 px-2 py-1.5 text-xs text-blue-400 hover:text-blue-300 border border-blue-400/30 rounded-lg hover:bg-blue-400/10 transition-colors"
                   >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                     Texte
                   </button>
@@ -372,8 +371,18 @@ export default function LineTitleEditor({
                     onClick={() => addElement(lineIndex, "icon")}
                     className="flex items-center gap-1 px-2 py-1.5 text-xs text-green-400 hover:text-green-300 border border-green-400/30 rounded-lg hover:bg-green-400/10 transition-colors"
                   >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                     Icône
                   </button>
@@ -382,7 +391,8 @@ export default function LineTitleEditor({
 
               {line.elements.length === 0 && (
                 <p className="text-white/40 text-xs italic">
-                  Ajoutez des éléments texte ou icône pour construire cette ligne
+                  Ajoutez des éléments texte ou icône pour construire cette
+                  ligne
                 </p>
               )}
             </div>
@@ -392,7 +402,8 @@ export default function LineTitleEditor({
 
       {safeLines.length === 0 && (
         <p className="text-white/40 text-sm text-center py-4">
-          Aucune ligne de titre. Cliquez sur "+ Ajouter une ligne" pour commencer.
+          Aucune ligne de titre. Cliquez sur "+ Ajouter une ligne" pour
+          commencer.
         </p>
       )}
     </div>

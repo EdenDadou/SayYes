@@ -39,23 +39,13 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
     if (activeFilters.length === 0) {
       return allPortfolios;
     }
-    // Filtrer les portfolios qui ont au moins une catégorie correspondante
-    // Utiliser un Set pour éviter les doublons
-    const seen = new Set<string>();
-    return allPortfolios.filter((portfolio) => {
-      if (seen.has(portfolio.id)) return false;
-      const hasMatchingCategory = portfolio.categories?.some((cat) =>
-        activeFilters.includes(cat)
-      );
-      if (hasMatchingCategory) {
-        seen.add(portfolio.id);
-        return true;
-      }
-      return false;
-    });
+    return allPortfolios.filter((portfolio) =>
+      portfolio.categories?.some((cat) => activeFilters.includes(cat))
+    );
   }, [allPortfolios, activeFilters]);
 
   const fetchAllPortfolios = useCallback(async () => {
+    if (allPortfolios.length > 0) return;
     setIsLoading(true);
     setError(null);
     try {
@@ -63,7 +53,9 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors du chargement des portfolios");
+        throw new Error(
+          data.error || "Erreur lors du chargement des portfolios"
+        );
       }
 
       setAllPortfolios(data.portfolios);
@@ -73,7 +65,7 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [allPortfolios.length]);
 
   const fetchPortfolioBySlug = useCallback(async (slug: string) => {
     setIsLoading(true);
@@ -107,7 +99,16 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
       fetchAllPortfolios,
       fetchPortfolioBySlug,
     }),
-    [portfolio, allPortfolios, filteredPortfolios, activeFilters, isLoading, error, fetchAllPortfolios, fetchPortfolioBySlug]
+    [
+      portfolio,
+      allPortfolios,
+      filteredPortfolios,
+      activeFilters,
+      isLoading,
+      error,
+      fetchAllPortfolios,
+      fetchPortfolioBySlug,
+    ]
   );
 
   return (

@@ -192,6 +192,12 @@ export default function ContentContact({
               ></textarea>
             </label>
 
+            {fetcher.data?.error && (
+              <p className="text-red-400 text-sm">
+                Une erreur est survenue, veuillez réessayer.
+              </p>
+            )}
+
             <div className="flex justify-between items-center mt-6">
               <p className="flex items-center gap-2 text-sm text-gray-100">
                 *Champs obligatoires

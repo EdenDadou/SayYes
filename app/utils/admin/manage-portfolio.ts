@@ -42,31 +42,11 @@ export async function parseFormData(request: Request) {
  * Extrait les données du portfolio depuis FormData
  */
 export function extractPortfolioData(formData: FormData): PortfolioFormData {
-  console.log("🔍 Extraction des données du formulaire...");
-
-  // Debug: Afficher tous les champs reçus
-  for (const [key, value] of formData.entries()) {
-    if (typeof value === "string") {
-      console.log(
-        `📋 FormData[${key}]:`,
-        value.substring(0, 100) + (value.length > 100 ? "..." : "")
-      );
-    } else {
-      console.log(
-        `📋 FormData[${key}]:`,
-        value instanceof File ? `File(${value.name})` : value
-      );
-    }
-  }
-
   // Traitement des catégories - peut être un string ou un array
   const categoriesValue = formData.get("categories") as string;
   let categories: string[] = [];
   if (categoriesValue) {
     categories = [categoriesValue];
-    console.log("📂 Catégories extraites:", categories);
-  } else {
-    console.log("⚠️ Aucune catégorie trouvée dans FormData");
   }
 
   // Traitement des livrables - récupérer tous les éléments avec le nom "livrable"
@@ -77,9 +57,6 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
     livrable = livrableValues.filter(
       (value) => value && value.trim().length > 0
     );
-    console.log("📦 Livrables extraits:", livrable);
-  } else {
-    console.log("⚠️ Aucun livrable trouvé dans FormData");
   }
 
   // Extraction de la photo de couverture (priorité au fichier uploadé)
@@ -91,15 +68,7 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
   if (photoCouvertureFile && photoCouvertureFile.size > 0) {
     // Si un fichier est uploadé, on utilisera une URL temporaire pour la création
     // Le fichier sera traité après la création du portfolio
-    console.log(
-      "📸 Fichier photo de couverture détecté:",
-      photoCouvertureFile.name
-    );
     photoCouverture = "temp_" + photoCouvertureFile.name; // URL temporaire
-  } else if (photoCouverture) {
-    console.log("📸 URL photo de couverture:", photoCouverture);
-  } else {
-    console.log("⚠️ Aucune photo de couverture trouvée");
   }
 
   // Extraction de la meta image (priorité au fichier uploadé)
@@ -107,12 +76,7 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
   const metaImageFile = formData.get("metaImageFile") as File | null;
 
   if (metaImageFile && metaImageFile.size > 0) {
-    console.log("📸 Fichier meta image détecté:", metaImageFile.name);
     metaImage = "temp_" + metaImageFile.name; // URL temporaire
-  } else if (metaImage) {
-    console.log("📸 URL meta image:", metaImage);
-  } else {
-    console.log("ℹ️ Aucune meta image trouvée");
   }
 
   const extractedData = {
@@ -138,10 +102,8 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
       try {
         const bentoData = formData.get("bento") as string;
         const parsed = bentoData ? JSON.parse(bentoData) : [];
-        console.log("🎯 Bento extraits:", parsed);
         return parsed;
-      } catch (e) {
-        console.log("⚠️ Erreur parsing bento:", e);
+      } catch (_e) {
         return [];
       }
     })(),
@@ -150,13 +112,6 @@ export function extractPortfolioData(formData: FormData): PortfolioFormData {
     metaImage: metaImage,
     schemaOrg: (formData.get("schemaOrg") as string) || "{}",
   };
-
-  console.log("🔍 Champs SEO extraits:", {
-    metaTitle: extractedData.metaTitle,
-    metaDescription: extractedData.metaDescription,
-    metaImage: extractedData.metaImage,
-    schemaOrg: extractedData.schemaOrg,
-  });
 
   return extractedData;
 }
@@ -176,13 +131,6 @@ export async function processPhotoCouverture(
   ) as File | null;
 
   if (photoCouvertureFile && photoCouvertureFile.size > 0) {
-    console.log(
-      "📸 Traitement du fichier photo de couverture:",
-      photoCouvertureFile.name
-    );
-    console.log("📸 Taille du fichier:", photoCouvertureFile.size, "bytes");
-    console.log("📸 Type du fichier:", photoCouvertureFile.type);
-
     try {
       const savedMedia = await saveMedia(
         photoCouvertureFile,
@@ -190,7 +138,6 @@ export async function processPhotoCouverture(
         portfolioId
       );
       photoCouverture = savedMedia.url;
-      console.log("✅ Photo de couverture sauvegardée:", photoCouverture);
     } catch (error) {
       console.error(
         "❌ Erreur lors de la sauvegarde de la photo de couverture:",
@@ -198,8 +145,6 @@ export async function processPhotoCouverture(
       );
       throw error;
     }
-  } else {
-    console.log("ℹ️ Aucun fichier photo de couverture à traiter");
   }
 
   return photoCouverture;
@@ -217,10 +162,8 @@ export async function processPhotoMain(
   const photoMainFile = formData.get("photoMainFile") as File | null;
 
   if (photoMainFile && photoMainFile.size > 0) {
-    console.log("📸 Traitement du fichier photo main:", photoMainFile.name);
     const savedMedia = await saveMedia(photoMainFile, "portfolio", portfolioId);
     photoMain = savedMedia.url;
-    console.log("✅ Photo main sauvegardée:", photoMain);
   }
 
   return photoMain;
@@ -238,10 +181,8 @@ export async function processMetaImage(
   const metaImageFile = formData.get("metaImageFile") as File | null;
 
   if (metaImageFile && metaImageFile.size > 0) {
-    console.log("📸 Traitement du fichier meta image:", metaImageFile.name);
     const savedMedia = await saveMedia(metaImageFile, "portfolio", portfolioId);
     metaImage = savedMedia.url;
-    console.log("✅ Meta image sauvegardée:", metaImage);
   }
 
   return metaImage;
@@ -255,13 +196,7 @@ export async function processBentoFiles(
   portfolioId: string,
   bentoData: BentoItem[]
 ): Promise<BentoItem[]> {
-  console.log(
-    "🎯 === DÉBUT TRAITEMENT FICHIERS BENTO (BASÉ SUR NOM FICHIER) ==="
-  );
-  console.log("📋 Données bento reçues:", JSON.stringify(bentoData, null, 2));
-
   const updatedBento = [...bentoData];
-  let processedFiles = 0;
 
   // Parcourir les données bento et traiter chaque fichier pending
   for (let bentoIndex = 0; bentoIndex < updatedBento.length; bentoIndex++) {
@@ -280,14 +215,7 @@ export async function processBentoFiles(
           const inputName = `bentoFile_${fileId.replace(/[^a-zA-Z0-9]/g, "_")}`;
           const file = formData.get(inputName) as File | null;
 
-          // Extraire le nom original du fichier depuis l'ID unique
-          const originalFileName = fileId.split("_").slice(2).join("_"); // Récupérer tout après timestamp_random_
-
           if (file && file.size > 0) {
-            console.log(
-              `📸 Traitement du fichier bento: ${file.name} (${file.size} bytes)`
-            );
-
             try {
               // Sauvegarder le fichier exactement comme les autres
               const savedMedia = await saveMedia(
@@ -300,43 +228,18 @@ export async function processBentoFiles(
               updatedBento[bentoIndex].lines[lineIndex].listImage[imgIndex] =
                 savedMedia.url;
 
-              processedFiles++;
-
-              console.log(
-                `✅ Fichier bento sauvegardé: ${originalFileName} -> ${savedMedia.url}`
-              );
             } catch (error) {
               console.error(
                 `❌ Erreur sauvegarde fichier bento ${inputName}:`,
                 error
               );
             }
-          } else {
-            console.warn(
-              `❌ Fichier bento non trouvé: ${inputName} pour l'image ${image}`
-            );
-            console.warn(
-              `📋 Fichier reçu:`,
-              file ? `${file.name} (${file.size} bytes)` : "aucun"
-            );
-
-            // Afficher tous les noms d'inputs disponibles pour déboguer
-            const allInputs: string[] = [];
-            for (const [key] of formData.entries()) {
-              if (key.startsWith("bentoFile_")) {
-                allInputs.push(key);
-              }
-            }
-            console.warn(`📋 Inputs bento disponibles:`, allInputs);
           }
         }
       }
     }
   }
 
-  console.log(
-    `🎯 Traitement bento terminé, ${processedFiles} fichiers traités avec succès`
-  );
   return updatedBento;
 }
 
@@ -451,13 +354,6 @@ export function createJsonResponse(
   data?: any,
   status: number = 200
 ) {
-  console.log("🔧 createJsonResponse appelé avec:", {
-    success,
-    message,
-    data,
-    status,
-  });
-
   try {
     const response = json(
       {
@@ -467,7 +363,6 @@ export function createJsonResponse(
       },
       { status }
     );
-    console.log("✅ Response créée avec succès");
     return response;
   } catch (error) {
     console.error("❌ Erreur dans createJsonResponse:", error);

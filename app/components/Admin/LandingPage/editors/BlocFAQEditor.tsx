@@ -1,16 +1,14 @@
 import type { BlocFAQ } from "~/types/landing-page";
 import CollapsibleCard from "./CollapsibleCard";
 import LineTitleEditor from "./LineTitleEditor";
+import { ADMIN_INPUT_CLASS, swapItems } from "~/utils/admin/landing-page-constants";
 
 interface BlocFAQEditorProps {
   bloc: BlocFAQ;
   onUpdate: (bloc: BlocFAQ) => void;
 }
 
-export default function BlocFAQEditor({
-  bloc,
-  onUpdate,
-}: BlocFAQEditorProps) {
+export default function BlocFAQEditor({ bloc, onUpdate }: BlocFAQEditorProps) {
   const addQuestion = () => {
     onUpdate({
       ...bloc,
@@ -35,11 +33,8 @@ export default function BlocFAQEditor({
   };
 
   const moveQuestion = (index: number, direction: "up" | "down") => {
-    const newBlocs = [...bloc.blocs];
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= newBlocs.length) return;
-    [newBlocs[index], newBlocs[targetIndex]] = [newBlocs[targetIndex], newBlocs[index]];
-    onUpdate({ ...bloc, blocs: newBlocs });
+    const result = swapItems(bloc.blocs, index, direction);
+    if (result !== bloc.blocs) onUpdate({ ...bloc, blocs: result });
   };
 
   return (
@@ -72,10 +67,24 @@ export default function BlocFAQEditor({
               key={index}
               index={index}
               title={q.question}
-              subtitle={q.answer ? `${q.answer.substring(0, 50)}${q.answer.length > 50 ? "..." : ""}` : undefined}
+              subtitle={
+                q.answer
+                  ? `${q.answer.substring(0, 50)}${q.answer.length > 50 ? "..." : ""}`
+                  : undefined
+              }
               icon={
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               }
               onRemove={() => removeQuestion(index)}
@@ -95,7 +104,7 @@ export default function BlocFAQEditor({
                     updateQuestion(index, { ...q, question: e.target.value })
                   }
                   placeholder="Votre question..."
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={ADMIN_INPUT_CLASS}
                 />
               </div>
 
@@ -110,7 +119,7 @@ export default function BlocFAQEditor({
                   }
                   placeholder="Votre réponse..."
                   rows={3}
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y"
+                  className={`${ADMIN_INPUT_CLASS} resize-y`}
                 />
               </div>
             </CollapsibleCard>
@@ -119,7 +128,8 @@ export default function BlocFAQEditor({
 
         {bloc.blocs.length === 0 && (
           <p className="text-white/40 text-sm text-center py-6">
-            Aucune question ajoutée. Cliquez sur "+ Ajouter une question" pour commencer.
+            Aucune question ajoutée. Cliquez sur "+ Ajouter une question" pour
+            commencer.
           </p>
         )}
       </div>

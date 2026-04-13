@@ -1,7 +1,11 @@
 import { memo, useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { BentoItem } from "~/server/portfolio.server";
-import { getOptimizedImageUrl, generateSrcSet, generateSizes } from "~/utils/optimizeImage";
+import {
+  getOptimizedImageUrl,
+  generateSrcSet,
+  generateSizes,
+} from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
 
 // Fonction pour déterminer si un média est une vidéo

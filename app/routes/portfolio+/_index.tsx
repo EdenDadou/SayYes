@@ -11,13 +11,10 @@ import MobileLayout from "~/components/Layout/Mobile";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePortfolio } from "~/contexts/PortfolioContext";
 import { useEffect } from "react";
-import useScrollProgress from "~/utils/hooks/useScrollProgress";
 
 export default function Portfolio() {
   const { filteredPortfolios, fetchAllPortfolios } = usePortfolio();
   const isMobile = useViewport();
-
-  const { imageOpacity, imageScale, bottomCardsOffset } = useScrollProgress();
 
   // Fetch portfolios on mount
   useEffect(() => {
@@ -25,12 +22,8 @@ export default function Portfolio() {
   }, [fetchAllPortfolios]);
 
   // Diviser les portfolios en deux groupes pour l'affichage
-  const portfolioTopCards = filteredPortfolios.slice(0, 4);
-  const portfolioBottomCards = filteredPortfolios.slice(4, 20);
-
-  const imageMobile = isMobile
-    ? "/images/portfolio/ClientsWallMobile.png"
-    : "/images/portfolio/ClientsWall.png";
+  const portfolioTopCards = filteredPortfolios.slice(0, 6);
+  const portfolioBottomCards = filteredPortfolios.slice(6);
 
   return isMobile ? (
     <MobileLayout>
@@ -102,13 +95,8 @@ export default function Portfolio() {
           <div className="flex flex-wrap justify-start gap-[24px] w-[990px] m-auto">
             <Filter />
 
-            {/* Cartes du haut - se déplacent vers le haut quand l'animation est active */}
-            <div
-              className="grid md:grid-cols-2 grid-cols-1 gap-6 w-full z-20 transition-transform duration-100 ease-out"
-              style={{
-                transform: `translateY(-${bottomCardsOffset}vh)`,
-              }}
-            >
+            {/* 6 premières cartes */}
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-6 w-full">
               <AnimatePresence mode="popLayout">
                 {portfolioTopCards.map((portfolio, index) => (
                   <motion.div
@@ -142,35 +130,27 @@ export default function Portfolio() {
               </AnimatePresence>
             </div>
 
-            {/* Image ClientsWall - sticky au centre */}
-            <div
-              className="w-screen h-screen sticky top-0 z-0 flex items-center justify-center pointer-events-none"
-              style={{
-                marginTop: "-50vh",
-                marginBottom: "-50vh",
-              }}
-            >
-              <img
-                src={imageMobile}
-                alt="Clients Wall"
-                className="w-full h-full object-cover transition-all duration-100 ease-out"
-                style={{
-                  opacity: imageOpacity,
-                  transform: `scale(${imageScale})`,
-                }}
-                loading="lazy"
-                width={"100%"}
-                height={"100%"}
-              />
-            </div>
+            {/* Image ClientsWall — fade-in au scroll */}
+            {portfolioBottomCards.length > 0 && (
+              <motion.div
+                className="w-full"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+                viewport={{ once: true, amount: 0.3 }}
+              >
+                <img
+                  src="/images/portfolio/ClientsWall.png"
+                  alt="Clients Wall"
+                  className="w-full h-auto max-h-[220px] object-contain object-center"
+                  loading="lazy"
+                  width="990"
+                />
+              </motion.div>
+            )}
 
-            {/* Cartes du bas - se déplacent vers le bas quand l'animation est active */}
-            <div
-              className="grid md:grid-cols-2 grid-cols-1 gap-6 w-full z-20 transition-transform duration-100 ease-out"
-              style={{
-                transform: `translateY(${bottomCardsOffset}vh)`,
-              }}
-            >
+            {/* Cartes restantes */}
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-6 w-full">
               <AnimatePresence mode="popLayout">
                 {portfolioBottomCards.map((portfolio, index) => (
                   <motion.div

@@ -1,11 +1,4 @@
-import {
-  memo,
-  type SVGProps,
-  type CSSProperties,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { memo, type SVGProps, type CSSProperties } from "react";
 
 // Styles pour l'optimisation GPU
 const gpuOptimizedStyle: CSSProperties = {
@@ -17,7 +10,7 @@ const gpuOptimizedStyle: CSSProperties = {
 };
 
 // Fonction pour générer une image PNG à partir du SVG avec filtres
-const generatePNGFromSVG = async (
+const _generatePNGFromSVG = async (
   svgElement: SVGSVGElement,
   width: number = 390,
   height: number = 749

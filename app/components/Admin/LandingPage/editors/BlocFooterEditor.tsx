@@ -1,5 +1,6 @@
 import type { BlocFooter } from "~/types/landing-page";
 import LineTitleEditor from "./LineTitleEditor";
+import { ADMIN_INPUT_CLASS } from "~/utils/admin/landing-page-constants";
 
 interface BlocFooterEditorProps {
   bloc: BlocFooter;
@@ -28,20 +29,18 @@ export default function BlocFooterEditor({
           type="text"
           value={bloc.subTitle}
           onChange={(e) => onUpdate({ ...bloc, subTitle: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
       {/* CTA */}
       <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          CTA
-        </label>
+        <label className="block text-sm font-medium text-white mb-2">CTA</label>
         <input
           type="text"
           value={bloc.cta}
           onChange={(e) => onUpdate({ ...bloc, cta: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
     </div>

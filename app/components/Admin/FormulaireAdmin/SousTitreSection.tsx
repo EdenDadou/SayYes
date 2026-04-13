@@ -2,7 +2,9 @@ import InputAdmin, { InputGroup } from "~/components/Admin/InputAdmin";
 
 interface SousTitreSectionProps {
   sousTitre: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 }
 
 export default function SousTitreSection({

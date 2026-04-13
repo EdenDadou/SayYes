@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import type { BlocUseCase } from "~/types/landing-page";
 import { usePortfolio } from "~/contexts/PortfolioContext";
+import { RemoveIcon } from "~/components/icons";
+import { ADMIN_INPUT_CLASS } from "~/utils/admin/landing-page-constants";
 
 interface BlocUseCaseEditorProps {
   bloc: BlocUseCase;
@@ -46,7 +48,7 @@ export default function BlocUseCaseEditor({
           type="text"
           value={bloc.title}
           onChange={(e) => onUpdate({ ...bloc, title: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -106,19 +108,7 @@ export default function BlocUseCaseEditor({
                     onClick={() => togglePortfolio(id)}
                     className="hover:text-white"
                   >
-                    <svg
-                      className="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
+                    <RemoveIcon className="w-3 h-3" />
                   </button>
                 </span>
               );

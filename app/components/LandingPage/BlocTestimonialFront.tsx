@@ -6,13 +6,18 @@ interface BlocTestimonialFrontProps {
   color: string;
 }
 
-export default function BlocTestimonialFront({ bloc, color }: BlocTestimonialFrontProps) {
+export default function BlocTestimonialFront({
+  bloc,
+  color,
+}: BlocTestimonialFrontProps) {
   return (
     <section className="relative py-20 px-4 bg-black overflow-hidden">
       {/* Background gradient */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-20 blur-[120px] rounded-full"
-        style={{ background: `radial-gradient(ellipse, ${color}, transparent)` }}
+        style={{
+          background: `radial-gradient(ellipse, ${color}, transparent)`,
+        }}
       />
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
@@ -23,7 +28,9 @@ export default function BlocTestimonialFront({ bloc, color }: BlocTestimonialFro
           viewport={{ once: true }}
           className="mb-8"
         >
-          <span className="text-6xl" style={{ color }}>❝</span>
+          <span className="text-6xl" style={{ color }}>
+            ❝
+          </span>
         </motion.div>
 
         {/* Title/Quote */}
@@ -60,7 +67,9 @@ export default function BlocTestimonialFront({ bloc, color }: BlocTestimonialFro
           className="mt-8 flex justify-center gap-2"
         >
           {[...Array(5)].map((_, i) => (
-            <span key={i} style={{ color }} className="text-xl">★</span>
+            <span key={i} style={{ color }} className="text-xl">
+              ★
+            </span>
           ))}
         </motion.div>
       </div>

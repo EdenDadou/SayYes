@@ -8,6 +8,10 @@ public/build/
 
 # Generated files
 .cache/
+.vite-dev-cache/
+public/sw.js
+public/icons/
+generated/
 
 # Environment files
 .env

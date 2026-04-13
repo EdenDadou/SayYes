@@ -2,25 +2,8 @@ import type { BlocMethods } from "~/types/landing-page";
 import MediaEditor from "./MediaEditor";
 import LineTitleEditor from "./LineTitleEditor";
 import CollapsibleCard from "./CollapsibleCard";
-
-const ICON_OPTIONS = [
-  { value: "heart", label: "❤️ Coeur" },
-  { value: "star", label: "⭐ Étoile" },
-  { value: "2 stars", label: "✨ 2 Étoiles" },
-  { value: "2 diamonds", label: "💎 2 Diamants" },
-  { value: "arrowLight", label: "→ Flèche légère" },
-  { value: "arrowWhite", label: "➜ Flèche pleine" },
-  { value: "arrow", label: "↗ Flèche simple" },
-  { value: "arrowBig", label: "⇒ Grande flèche" },
-  { value: "coche", label: "✓ Coche" },
-  { value: "close", label: "✕ Fermer" },
-  { value: "pause", label: "⏸ Pause" },
-  { value: "play", label: "▶ Play" },
-  { value: "flamme", label: "🔥 Flamme" },
-  { value: "idea", label: "💡 Idée" },
-  { value: "smile", label: "😊 Smile" },
-  { value: "chat", label: "💬 Chat" },
-];
+import { ADMIN_INPUT_CLASS, ICON_OPTIONS, swapItems } from "~/utils/admin/landing-page-constants";
+import { RemoveIcon } from "~/components/icons";
 
 interface BlocMethodsEditorProps {
   bloc: BlocMethods;
@@ -41,10 +24,7 @@ export default function BlocMethodsEditor({
     });
   };
 
-  const updateCard = (
-    index: number,
-    card: BlocMethods["cards"][0]
-  ) => {
+  const updateCard = (index: number, card: BlocMethods["cards"][0]) => {
     const newCards = [...bloc.cards];
     newCards[index] = card;
     onUpdate({ ...bloc, cards: newCards });
@@ -58,11 +38,8 @@ export default function BlocMethodsEditor({
   };
 
   const moveCard = (index: number, direction: "up" | "down") => {
-    const newCards = [...bloc.cards];
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= newCards.length) return;
-    [newCards[index], newCards[targetIndex]] = [newCards[targetIndex], newCards[index]];
-    onUpdate({ ...bloc, cards: newCards });
+    const result = swapItems(bloc.cards, index, direction);
+    if (result !== bloc.cards) onUpdate({ ...bloc, cards: result });
   };
 
   const addConclusionElement = (type: "icon" | "text") => {
@@ -112,7 +89,7 @@ export default function BlocMethodsEditor({
           type="text"
           value={bloc.subTitle}
           onChange={(e) => onUpdate({ ...bloc, subTitle: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -144,8 +121,13 @@ export default function BlocMethodsEditor({
               key={index}
               index={index}
               title={card.title}
-              previewImage={card.media?.type === "image" ? card.media.url : undefined}
-              itemCount={{ count: card.lines.length, label: card.lines.length > 1 ? "lignes" : "ligne" }}
+              previewImage={
+                card.media?.type === "image" ? card.media.url : undefined
+              }
+              itemCount={{
+                count: card.lines.length,
+                label: card.lines.length > 1 ? "lignes" : "ligne",
+              }}
               onRemove={() => removeCard(index)}
               onMoveUp={() => moveCard(index, "up")}
               onMoveDown={() => moveCard(index, "down")}
@@ -159,7 +141,7 @@ export default function BlocMethodsEditor({
                   updateCard(index, { ...card, title: e.target.value })
                 }
                 placeholder="Titre"
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={ADMIN_INPUT_CLASS}
               />
 
               <MediaEditor
@@ -228,9 +210,7 @@ export default function BlocMethodsEditor({
                         }}
                         className="text-red-400 hover:text-red-300 p-1"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <RemoveIcon className="w-4 h-4" />
                       </button>
                     </div>
                   ))}
@@ -251,7 +231,8 @@ export default function BlocMethodsEditor({
 
         {bloc.cards.length === 0 && (
           <p className="text-white/40 text-sm text-center py-6">
-            Aucune card ajoutée. Cliquez sur "+ Ajouter une card" pour commencer.
+            Aucune card ajoutée. Cliquez sur "+ Ajouter une card" pour
+            commencer.
           </p>
         )}
       </div>
@@ -282,14 +263,20 @@ export default function BlocMethodsEditor({
 
         <div className="space-y-2">
           {bloc.conclusion.elements.map((el, index) => (
-            <div key={index} className="flex items-center gap-2 bg-gray-800 p-2 rounded">
+            <div
+              key={index}
+              className="flex items-center gap-2 bg-gray-800 p-2 rounded"
+            >
               {el.type === "icon" ? (
                 <>
                   <span className="text-white/70 text-xs w-12">Icon:</span>
                   <select
                     value={el.name}
                     onChange={(e) =>
-                      updateConclusionElement(index, { ...el, name: e.target.value })
+                      updateConclusionElement(index, {
+                        ...el,
+                        name: e.target.value,
+                      })
                     }
                     className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
                   >
@@ -308,7 +295,10 @@ export default function BlocMethodsEditor({
                     type="text"
                     value={el.text}
                     onChange={(e) =>
-                      updateConclusionElement(index, { ...el, text: e.target.value })
+                      updateConclusionElement(index, {
+                        ...el,
+                        text: e.target.value,
+                      })
                     }
                     placeholder="Texte"
                     className="flex-1 px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
@@ -337,9 +327,7 @@ export default function BlocMethodsEditor({
                 onClick={() => removeConclusionElement(index)}
                 className="text-red-400 hover:text-red-300 p-1"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <RemoveIcon className="w-4 h-4" />
               </button>
             </div>
           ))}

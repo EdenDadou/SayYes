@@ -113,7 +113,7 @@ export default function Solutions() {
       </div>
     </MobileLayout>
   ) : (
-    <Desktoplayout>
+    <Desktoplayout footerPaddingTop={0}>
       <div className="relative">
         <AnimatePresence>
           <motion.div

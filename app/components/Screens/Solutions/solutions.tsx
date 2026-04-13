@@ -34,7 +34,7 @@ export default function Solutions() {
       </section>
     </MobileLayout>
   ) : (
-    <Desktoplayout>
+    <Desktoplayout footerPaddingTop={0}>
       <Background className="absolute top-0 left-0 w-full h-auto z-0 opacity-80" />
       <section className="relative z-10 px-36 flex flex-col gap-6 justify-center items-start pt-20">
         <div className="h-[3px] w-28 holographic-bg my-6 rounded-full" />

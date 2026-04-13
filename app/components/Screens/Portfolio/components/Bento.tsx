@@ -48,11 +48,8 @@ export default function Bento({ bento }: { bento: BentoItem }) {
                 loop
                 playsInline
                 preload="metadata"
-                onError={(e) => {
-                  console.error("❌ Erreur chargement vidéo:", image);
-                }}
-                onCanPlay={() => {
-                  console.log("✅ Vidéo prête:", image);
+                onError={(_e) => {
+                  console.error("Erreur chargement vidéo:", image);
                 }}
               >
                 Votre navigateur ne prend pas en charge la lecture de vidéos.

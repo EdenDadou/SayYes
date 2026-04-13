@@ -1,5 +1,6 @@
 import { useState, useRef, useId } from "react";
 import type { Media } from "~/types/landing-page";
+import { ADMIN_INPUT_CLASS } from "~/utils/admin/landing-page-constants";
 
 interface MediaEditorProps {
   media: Media;
@@ -106,7 +107,9 @@ export default function MediaEditor({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   />
                 </svg>
-                <span className="text-white/70 text-sm">Upload en cours...</span>
+                <span className="text-white/70 text-sm">
+                  Upload en cours...
+                </span>
               </div>
             ) : (
               <div className="flex flex-col items-center">
@@ -234,13 +237,11 @@ export default function MediaEditor({
         value={media.alt || ""}
         onChange={(e) => onChange({ ...media, alt: e.target.value })}
         placeholder="Texte alternatif (alt)"
-        className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className={ADMIN_INPUT_CLASS}
       />
 
       {/* Message d'erreur */}
-      {error && (
-        <p className="text-red-400 text-sm">{error}</p>
-      )}
+      {error && <p className="text-red-400 text-sm">{error}</p>}
     </div>
   );
 }

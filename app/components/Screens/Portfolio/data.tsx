@@ -1,4 +1,4 @@
-import ContentPortfolio from "../Card/components/ContentPortfolio";
+import ContentPortfolio from "../../Card/components/ContentPortfolio";
 
 export const portfolioTopCards = [
   {

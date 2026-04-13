@@ -6,7 +6,10 @@ interface BlocCommentaireClientFrontProps {
   color: string;
 }
 
-export default function BlocCommentaireClientFront({ bloc, color }: BlocCommentaireClientFrontProps) {
+export default function BlocCommentaireClientFront({
+  bloc,
+  color,
+}: BlocCommentaireClientFrontProps) {
   return (
     <section className="relative py-16 px-4 bg-black overflow-hidden">
       <div className="max-w-4xl mx-auto">
@@ -18,10 +21,7 @@ export default function BlocCommentaireClientFront({ bloc, color }: BlocCommenta
         >
           {/* Quote decoration */}
           <div className="absolute -top-4 left-8">
-            <span
-              className="text-6xl opacity-30"
-              style={{ color }}
-            >
+            <span className="text-6xl opacity-30" style={{ color }}>
               ❝
             </span>
           </div>
@@ -62,7 +62,10 @@ export default function BlocCommentaireClientFront({ bloc, color }: BlocCommenta
               >
                 {bloc.author}
               </p>
-              <p className="text-white/50 text-sm" style={{ fontFamily: "Jakarta" }}>
+              <p
+                className="text-white/50 text-sm"
+                style={{ fontFamily: "Jakarta" }}
+              >
                 Client satisfait
               </p>
             </div>
@@ -71,7 +74,9 @@ export default function BlocCommentaireClientFront({ bloc, color }: BlocCommenta
           {/* Stars */}
           <div className="absolute bottom-8 right-8 flex gap-1">
             {[...Array(5)].map((_, i) => (
-              <span key={i} style={{ color }} className="text-lg">★</span>
+              <span key={i} style={{ color }} className="text-lg">
+                ★
+              </span>
             ))}
           </div>
         </motion.div>

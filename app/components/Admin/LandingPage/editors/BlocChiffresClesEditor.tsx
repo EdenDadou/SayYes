@@ -1,5 +1,7 @@
 import type { BlocChiffresCles } from "~/types/landing-page";
 import LineTitleEditor from "./LineTitleEditor";
+import { RemoveIcon } from "~/components/icons";
+import { ADMIN_INPUT_CLASS } from "~/utils/admin/landing-page-constants";
 
 interface BlocChiffresClesEditorProps {
   bloc: BlocChiffresCles;
@@ -45,7 +47,7 @@ export default function BlocChiffresClesEditor({
           value={bloc.punchline || ""}
           onChange={(e) => onUpdate({ ...bloc, punchline: e.target.value })}
           placeholder="Ex: L'agence qui met tout le monde d'accord"
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -100,19 +102,7 @@ export default function BlocChiffresClesEditor({
                 onClick={() => removeNumber(index)}
                 className="p-2 text-red-400 hover:text-red-300"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <RemoveIcon className="w-5 h-5" />
               </button>
             </div>
           ))}
@@ -133,7 +123,9 @@ export default function BlocChiffresClesEditor({
           </label>
           <button
             type="button"
-            onClick={() => onUpdate({ ...bloc, lines: [...(bloc.lines || []), ""] })}
+            onClick={() =>
+              onUpdate({ ...bloc, lines: [...(bloc.lines || []), ""] })
+            }
             className="text-sm text-blue-400 hover:text-blue-300"
           >
             + Ajouter une ligne
@@ -157,24 +149,14 @@ export default function BlocChiffresClesEditor({
               <button
                 type="button"
                 onClick={() => {
-                  const newLines = (bloc.lines || []).filter((_, i) => i !== index);
+                  const newLines = (bloc.lines || []).filter(
+                    (_, i) => i !== index
+                  );
                   onUpdate({ ...bloc, lines: newLines });
                 }}
                 className="p-2 text-red-400 hover:text-red-300"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <RemoveIcon className="w-5 h-5" />
               </button>
             </div>
           ))}

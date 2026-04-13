@@ -2,6 +2,8 @@ import { useState } from "react";
 import type { BlocIntro } from "~/types/landing-page";
 import LineTitleEditor from "./LineTitleEditor";
 import MediaEditor from "./MediaEditor";
+import { RemoveIcon } from "~/components/icons";
+import { ADMIN_INPUT_CLASS } from "~/utils/admin/landing-page-constants";
 
 interface BlocIntroEditorProps {
   bloc: BlocIntro;
@@ -47,7 +49,7 @@ export default function BlocIntroEditor({
           value={bloc.punchline}
           onChange={(e) => updateField("punchline", e.target.value)}
           placeholder="Texte affiché au-dessus du titre..."
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -67,7 +69,7 @@ export default function BlocIntroEditor({
           value={bloc.description}
           onChange={(e) => updateField("description", e.target.value)}
           rows={3}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
           required
         />
       </div>
@@ -81,7 +83,7 @@ export default function BlocIntroEditor({
           type="text"
           value={bloc.cta}
           onChange={(e) => updateField("cta", e.target.value)}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
           required
         />
       </div>
@@ -126,19 +128,7 @@ export default function BlocIntroEditor({
                   onClick={() => removeTag(i)}
                   className="text-blue-300 hover:text-white"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <RemoveIcon className="w-4 h-4" />
                 </button>
               </span>
             ))}
@@ -165,7 +155,7 @@ export default function BlocIntroEditor({
           type="text"
           value={bloc.altTitle || ""}
           onChange={(e) => updateField("altTitle", e.target.value)}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
     </div>

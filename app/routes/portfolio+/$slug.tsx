@@ -1,7 +1,6 @@
 import { useParams } from "@remix-run/react";
 import { useViewport } from "~/utils/hooks/useViewport";
 import ArrowLight from "~/assets/icons/ArrowLight";
-import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 import LoadingBar from "~/components/LoadingBar";
 import BackgroundProject1 from "~/components/Screens/PortfolioProject/BackgroundProject1";
 import BackgroundProject2 from "~/components/Screens/PortfolioProject/BackgroundProject2";
@@ -32,8 +31,12 @@ const staggerContainer = {
 
 export default function PortfolioSlug() {
   const { slug } = useParams();
-  const { portfolio, allPortfolios, fetchPortfolioBySlug, fetchAllPortfolios } =
-    usePortfolio();
+  const {
+    portfolio,
+    allPortfolios: _allPortfolios,
+    fetchPortfolioBySlug,
+    fetchAllPortfolios,
+  } = usePortfolio();
 
   const isMobile = useViewport();
   // Update meta tags dynamically when portfolio is loaded

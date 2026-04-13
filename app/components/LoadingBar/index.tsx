@@ -7,7 +7,10 @@ interface LoadingBarProps {
   indefinite?: boolean;
 }
 
-export default function LoadingBar({ onComplete, indefinite = false }: LoadingBarProps) {
+export default function LoadingBar({
+  onComplete,
+  indefinite = false,
+}: LoadingBarProps) {
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -20,7 +23,8 @@ export default function LoadingBar({ onComplete, indefinite = false }: LoadingBa
             clearInterval(interval);
             return 90;
           }
-          const increment = prev < 60 ? 3 + Math.random() * 4 : 1 + Math.random() * 2;
+          const increment =
+            prev < 60 ? 3 + Math.random() * 4 : 1 + Math.random() * 2;
           return Math.min(prev + increment, 90);
         });
       }, 50);
@@ -59,7 +63,8 @@ export default function LoadingBar({ onComplete, indefinite = false }: LoadingBa
           return 100;
         }
         // Accélération progressive puis ralentissement vers la fin
-        const increment = prev < 70 ? 2 + Math.random() * 3 : 0.5 + Math.random() * 1;
+        const increment =
+          prev < 70 ? 2 + Math.random() * 3 : 0.5 + Math.random() * 1;
         return Math.min(prev + increment, 100);
       });
     }, 50);
@@ -117,4 +122,3 @@ export default function LoadingBar({ onComplete, indefinite = false }: LoadingBa
     </AnimatePresence>
   );
 }
-

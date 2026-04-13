@@ -2,30 +2,31 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useScrollLock } from "~/contexts/ScrollLockContext";
 
 export const useScrollProgress = () => {
-  const [animationProgress, setAnimationProgress] = useState(0); // 0 à 2 (0-1: ouverture, 1-2: fermeture)
+  const [animationProgress, setAnimationProgress] = useState(0);
   const [isLocked, setIsLockedLocal] = useState(false);
-  const [hasCompleted, setHasCompleted] = useState(false);
   const { setIsScrollLocked } = useScrollLock();
 
-  // Sync local state with context
+  const isLockedRef = useRef(false);
+  const hasCompletedRef = useRef(false);
+
   const setIsLocked = useCallback(
     (value: boolean) => {
+      isLockedRef.current = value;
       setIsLockedLocal(value);
       setIsScrollLocked(value);
     },
     [setIsScrollLocked]
   );
 
+  const setHasCompletedState = useCallback((value: boolean) => {
+    hasCompletedRef.current = value;
+  }, []);
+
   const lockPointRef = useRef<number | null>(null);
   const accumulatedDelta = useRef(0);
 
-  // Point de déclenchement
-  const getTriggerPoint = useCallback(() => window.innerHeight * 1.2, []);
-
-  // Vitesse de l'animation (plus petit = plus rapide)
   const ANIMATION_SENSITIVITY = 2000;
 
-  // Dériver les valeurs à partir de animationProgress
   const imageOpacity =
     animationProgress <= 1 ? animationProgress : 2 - animationProgress;
 
@@ -40,26 +41,29 @@ export const useScrollProgress = () => {
       : (2 - animationProgress) * 100;
 
   useEffect(() => {
+    const getTriggerPoint = () => window.innerHeight * 1.2;
+
     const handleWheel = (e: WheelEvent) => {
       const triggerPoint = getTriggerPoint();
       const currentScrollY = window.scrollY;
 
-      // Si l'animation est déjà terminée, laisser le scroll normal
-      if (hasCompleted) {
+      if (hasCompletedRef.current) {
         if (currentScrollY < triggerPoint - 100) {
-          setHasCompleted(false);
+          setHasCompletedState(false);
           setAnimationProgress(0);
         }
         return;
       }
 
-      // Si on n'est pas encore au point de déclenchement
-      if (!isLocked && currentScrollY < triggerPoint) {
+      if (!isLockedRef.current && currentScrollY < triggerPoint) {
         return;
       }
 
-      // Si on arrive au point de déclenchement
-      if (!isLocked && currentScrollY >= triggerPoint && e.deltaY > 0) {
+      if (
+        !isLockedRef.current &&
+        currentScrollY >= triggerPoint &&
+        e.deltaY > 0
+      ) {
         setIsLocked(true);
         lockPointRef.current = currentScrollY;
         accumulatedDelta.current = 0;
@@ -67,8 +71,7 @@ export const useScrollProgress = () => {
         return;
       }
 
-      // Si on est verrouillé
-      if (isLocked) {
+      if (isLockedRef.current) {
         e.preventDefault();
         accumulatedDelta.current += e.deltaY;
 
@@ -76,7 +79,6 @@ export const useScrollProgress = () => {
         const newProgress = Math.min(Math.max(rawProgress, 0), 2);
         setAnimationProgress(newProgress);
 
-        // Débloquer si on revient à 0
         if (newProgress <= 0 && e.deltaY < 0) {
           setIsLocked(false);
           lockPointRef.current = null;
@@ -84,10 +86,9 @@ export const useScrollProgress = () => {
           return;
         }
 
-        // Débloquer si animation terminée
         if (newProgress >= 2) {
           setIsLocked(false);
-          setHasCompleted(true);
+          setHasCompletedState(true);
           lockPointRef.current = null;
           accumulatedDelta.current = 0;
           setAnimationProgress(0);
@@ -99,12 +100,11 @@ export const useScrollProgress = () => {
       const triggerPoint = getTriggerPoint();
       const currentScrollY = window.scrollY;
 
-      // if (isLocked && lockPointRef.current !== null) {
-      //   window.scrollTo(0, lockPointRef.current);
-      //   return;
-      // }
-
-      if (!isLocked && !hasCompleted && currentScrollY > triggerPoint + 50) {
+      if (
+        !isLockedRef.current &&
+        !hasCompletedRef.current &&
+        currentScrollY > triggerPoint + 50
+      ) {
         setIsLocked(true);
         lockPointRef.current = triggerPoint;
         accumulatedDelta.current = 0;
@@ -118,7 +118,7 @@ export const useScrollProgress = () => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isLocked) return;
+      if (!isLockedRef.current) return;
       e.preventDefault();
       const deltaY = touchStartY - e.touches[0].clientY;
       touchStartY = e.touches[0].clientY;
@@ -136,7 +136,7 @@ export const useScrollProgress = () => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [isLocked, hasCompleted, getTriggerPoint, setIsLocked]);
+  }, [setIsLocked, setHasCompletedState]);
 
   return {
     imageOpacity,

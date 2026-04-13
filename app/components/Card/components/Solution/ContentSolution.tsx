@@ -3,7 +3,6 @@ import Star from "~/assets/icons/Star";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Masque from "~/components/Card/components/Solution/Masque";
 import { useViewport } from "~/utils/hooks/useViewport";
-import { cn } from "~/utils/ui/ui";
 
 import "~/styles/tailwind.css";
 import ContentSolutionMobile from "./ContentSolutionMobile";
@@ -58,35 +57,30 @@ export default function ContentSolution({
         ) : null}
 
         <Masque className="absolute inset-0 w-[100%] h-full object-contain rounded-[16px] z-0" />
-        <div className="size-full relative">
-          <div className="relative w-full h-full flex flex-col items-center justify-center">
-            {/* Contenu au premier plan */}
-            <div className="relative z-10 flex flex-col items-start justify-center size-full gap-4 px-20">
-              {subtitle !== "last" && (
-                <div className="flex flex-row items-center justify-center gap-2 text-white/30">
-                  <Star className="w-4 h-4" fill="rgb(255 255 255 / 0.3)" />
-                  <h2 className="text-lg">Say Yes</h2>
-                </div>
-              )}
-              <span className="flex flex-col items-start justify-center font-jakarta-bold md:text-[50px] md:leading-[60px] text-[30px] leading-[36px] tracking-[-2.5px]">
-                <span>{title1}</span>
-                <span className="flex flex-row items-center justify-center -mt-2 gap-2 holographic-text">
-                  <ArrowLight className="w-10 h-10" />
-                  {title2}
-                </span>
-              </span>
-              <div className="flex flex-col items-start justify-center gap-2 font-jakarta text-[12px] md:text-[20px] md:mt-4">
-                {bulletPoints.map((bullet) => (
-                  <span
-                    className="flex flex-row items-center justify-center gap-[10px]"
-                    key={bullet}
-                  >
-                    <Coche className="w-4" />
-                    {bullet}
-                  </span>
-                ))}
-              </div>
+        <div className="relative z-10 flex flex-col items-start justify-center size-full gap-4 px-20">
+          {subtitle !== "last" && (
+            <div className="flex flex-row items-center justify-center gap-2 text-white/30">
+              <Star className="w-4 h-4" fill="rgb(255 255 255 / 0.3)" />
+              <h2 className="text-lg">Say Yes</h2>
             </div>
+          )}
+          <span className="flex flex-col items-start justify-center font-jakarta-bold md:text-[50px] md:leading-[60px] text-[30px] leading-[36px] tracking-[-2.5px]">
+            <span>{title1}</span>
+            <span className="flex flex-row items-center justify-center -mt-2 gap-2 holographic-text">
+              <ArrowLight className="w-10 h-10" />
+              {title2}
+            </span>
+          </span>
+          <div className="flex flex-col items-start justify-center gap-2 font-jakarta text-[12px] md:text-[20px] md:mt-4">
+            {bulletPoints.map((bullet) => (
+              <span
+                className="flex flex-row items-center justify-center gap-[10px]"
+                key={bullet}
+              >
+                <Coche className="w-4" />
+                {bullet}
+              </span>
+            ))}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Card from "~/components/Card";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
@@ -76,7 +76,7 @@ export default function ProjectCarousel({
       x: 0,
       opacity: 1,
     },
-    exit: (direction: number) => ({
+    exit: (_direction: number) => ({
       zIndex: 0,
       opacity: 1,
     }),

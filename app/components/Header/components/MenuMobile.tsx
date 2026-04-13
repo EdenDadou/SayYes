@@ -8,7 +8,6 @@ import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import "~/styles/tailwind.css";
 import Button from "~/components/Button";
 import { useLocation, useNavigate } from "@remix-run/react";
-import BackgroundMenuMobile from "../assets/BackgroundMenuMobile";
 import Localisation from "~/assets/icons/Localisation";
 import ChatBuble from "../assets/ChatBuble";
 
@@ -141,10 +140,16 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
           >
             <img
               src="/images/bg-menu-mobile.png"
+              alt=""
               className="w-full h-full object-cover"
             />
           </motion.div>
-          <div className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10" style={{ paddingBottom: 'calc(2rem + env(safe-area-inset-bottom, 0px))' }}>
+          <div
+            className="w-full h-full flex flex-col items-center gap-8 px-5 pt-20 z-10"
+            style={{
+              paddingBottom: "calc(2rem + env(safe-area-inset-bottom, 0px))",
+            }}
+          >
             <motion.div
               custom={0}
               variants={menuItemVariants}

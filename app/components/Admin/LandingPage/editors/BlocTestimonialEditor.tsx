@@ -1,4 +1,5 @@
 import type { BlocTestimonial } from "~/types/landing-page";
+import { ADMIN_INPUT_CLASS } from "~/utils/admin/landing-page-constants";
 
 interface BlocTestimonialEditorProps {
   bloc: BlocTestimonial;
@@ -20,7 +21,7 @@ export default function BlocTestimonialEditor({
           type="text"
           value={bloc.title}
           onChange={(e) => onUpdate({ ...bloc, title: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -33,7 +34,7 @@ export default function BlocTestimonialEditor({
           value={bloc.conclusion}
           onChange={(e) => onUpdate({ ...bloc, conclusion: e.target.value })}
           rows={3}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
           placeholder="Texte de conclusion des témoignages..."
         />
       </div>

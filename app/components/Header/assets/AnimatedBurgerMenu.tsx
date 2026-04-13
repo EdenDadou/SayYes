@@ -7,7 +7,7 @@ interface AnimatedBurgerMenuProps extends SVGProps<SVGSVGElement> {
 
 const AnimatedBurgerMenu = ({
   isOpen = false,
-  onToggle,
+  onToggle: _onToggle,
   ...props
 }: AnimatedBurgerMenuProps) => {
   return (

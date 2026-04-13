@@ -36,14 +36,11 @@ export default function ParallaxCard({
   const effectiveTargetScale = hasNextCard ? targetScale : 1;
 
   // Scale reste à 1 tant qu'aucune carte ne passe au-dessus, puis réduit au moment du chevauchement
-  const scale = hasNextCard
-    ? useTransform(
-        progress,
-        [0, fadeStart, nextCardStart],
-        [1, 1, effectiveTargetScale],
-        { clamp: true }
-      )
-    : useTransform(progress, [0, 1], [1, 1], { clamp: true });
+  const scaleInput = hasNextCard ? [0, fadeStart, nextCardStart] : [0, 1];
+  const scaleOutput = hasNextCard ? [1, 1, effectiveTargetScale] : [1, 1];
+  const scale = useTransform(progress, scaleInput, scaleOutput, {
+    clamp: true,
+  });
 
   // Opacité qui diminue au moment où la carte suivante entre en vue (sauf pour la dernière)
   const opacityRange = hasNextCard ? [fadeStart, nextCardStart] : [0, 1];

@@ -1,5 +1,5 @@
 import { prisma } from "./db.server";
-import type { LandingPage, LandingPageSEO, Bloc } from "~/types/landing-page";
+import type { LandingPageSEO, Bloc } from "~/types/landing-page";
 
 // Interface pour les données parsées
 export interface LandingPageWithParsedData {
@@ -164,7 +164,9 @@ export async function getLandingPageBySlug(
 }
 
 // Récupérer toutes les landing pages
-export async function getAllLandingPages(): Promise<LandingPageWithParsedData[]> {
+export async function getAllLandingPages(): Promise<
+  LandingPageWithParsedData[]
+> {
   const landingPages = await prisma.landingPage.findMany({
     orderBy: { createdAt: "desc" },
   });
@@ -221,7 +223,11 @@ export async function migrateBlocMethodsTitleToLineTitle(): Promise<number> {
     let modified = false;
 
     for (const bloc of blocs) {
-      if (bloc.type === "methods" && "titre" in bloc && !("lineTitle" in bloc)) {
+      if (
+        bloc.type === "methods" &&
+        "titre" in bloc &&
+        !("lineTitle" in bloc)
+      ) {
         // Convertir l'ancien titre string en lineTitle array
         const oldTitle = bloc.titre || "";
         bloc.lineTitle = oldTitle

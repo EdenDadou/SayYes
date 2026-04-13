@@ -2,6 +2,7 @@ import type { BlocEtape } from "~/types/landing-page";
 import LineTitleEditor from "./LineTitleEditor";
 import MediaEditor from "./MediaEditor";
 import CollapsibleCard from "./CollapsibleCard";
+import { ADMIN_INPUT_CLASS, swapItems } from "~/utils/admin/landing-page-constants";
 
 interface BlocEtapeEditorProps {
   bloc: BlocEtape;
@@ -36,11 +37,8 @@ export default function BlocEtapeEditor({
   };
 
   const moveStep = (index: number, direction: "up" | "down") => {
-    const newSteps = [...bloc.stepLines];
-    const targetIndex = direction === "up" ? index - 1 : index + 1;
-    if (targetIndex < 0 || targetIndex >= newSteps.length) return;
-    [newSteps[index], newSteps[targetIndex]] = [newSteps[targetIndex], newSteps[index]];
-    onUpdate({ ...bloc, stepLines: newSteps });
+    const result = swapItems(bloc.stepLines, index, direction);
+    if (result !== bloc.stepLines) onUpdate({ ...bloc, stepLines: result });
   };
 
   return (
@@ -68,7 +66,7 @@ export default function BlocEtapeEditor({
           type="text"
           value={bloc.subTitle}
           onChange={(e) => onUpdate({ ...bloc, subTitle: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -81,20 +79,18 @@ export default function BlocEtapeEditor({
           value={bloc.text}
           onChange={(e) => onUpdate({ ...bloc, text: e.target.value })}
           rows={3}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
       {/* CTA */}
       <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          CTA
-        </label>
+        <label className="block text-sm font-medium text-white mb-2">CTA</label>
         <input
           type="text"
           value={bloc.cta}
           onChange={(e) => onUpdate({ ...bloc, cta: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={ADMIN_INPUT_CLASS}
         />
       </div>
 
@@ -121,7 +117,9 @@ export default function BlocEtapeEditor({
               title={step.title}
               subtitle={step.subtitle}
               icon={
-                <span className="text-blue-400 font-bold text-lg">{index + 1}</span>
+                <span className="text-blue-400 font-bold text-lg">
+                  {index + 1}
+                </span>
               }
               onRemove={() => removeStep(index)}
               onMoveUp={() => moveStep(index, "up")}
@@ -140,7 +138,7 @@ export default function BlocEtapeEditor({
                     updateStep(index, { ...step, title: e.target.value })
                   }
                   placeholder="Titre de l'étape"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={ADMIN_INPUT_CLASS}
                 />
               </div>
               <div>
@@ -154,7 +152,7 @@ export default function BlocEtapeEditor({
                     updateStep(index, { ...step, subtitle: e.target.value })
                   }
                   placeholder="Sous-titre de l'étape"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={ADMIN_INPUT_CLASS}
                 />
               </div>
             </CollapsibleCard>
@@ -163,7 +161,8 @@ export default function BlocEtapeEditor({
 
         {bloc.stepLines.length === 0 && (
           <p className="text-white/40 text-sm text-center py-6">
-            Aucune étape ajoutée. Cliquez sur "+ Ajouter une étape" pour commencer.
+            Aucune étape ajoutée. Cliquez sur "+ Ajouter une étape" pour
+            commencer.
           </p>
         )}
       </div>

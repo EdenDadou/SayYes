@@ -3,7 +3,13 @@
  * Utilise l'endpoint /api/image pour redimensionner à la volée avec sharp
  */
 
-export type ImageSize = "placeholder" | "thumbnail" | "mobile" | "tablet" | "desktop" | "full";
+export type ImageSize =
+  | "placeholder"
+  | "thumbnail"
+  | "mobile"
+  | "tablet"
+  | "desktop"
+  | "full";
 
 interface ImageDimensions {
   width: number;
@@ -74,7 +80,10 @@ export function getOptimizedImageUrl(
   }
 
   // Si ce n'est pas une image dans /uploads/ ou /images/, retourner l'URL originale
-  if (!normalizedUrl.startsWith("/uploads/") && !normalizedUrl.startsWith("/images/")) {
+  if (
+    !normalizedUrl.startsWith("/uploads/") &&
+    !normalizedUrl.startsWith("/images/")
+  ) {
     return originalUrl;
   }
 
