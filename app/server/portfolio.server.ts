@@ -468,6 +468,7 @@ export async function getPublicPortfolios() {
         bento: true,
         metaTitle: true,
         metaDescription: true,
+        metaImage: true,
         schemaOrg: true,
         createdAt: true,
       },
@@ -499,6 +500,7 @@ export async function getPublicPortfolios() {
           }),
           metaTitle: portfolio.metaTitle || "",
           metaDescription: portfolio.metaDescription || "",
+          metaImage: portfolio.metaImage || "",
           schemaOrg: portfolio.schemaOrg || "{}",
         };
       } catch (error) {
@@ -526,6 +528,7 @@ export async function getPublicPortfolios() {
           },
           metaTitle: "",
           metaDescription: "",
+          metaImage: "",
           schemaOrg: "{}",
         };
       }
