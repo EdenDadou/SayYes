@@ -8,7 +8,7 @@ import SvgBtnTiktok from "~/components/Footer/components/BtnTiktok";
 import SvgBtnYoutube from "~/components/Footer/components/BtnYoutube";
 import Button from "~/components/Button";
 import ArrowFull from "~/assets/icons/ArrowFull";
-import Background404Mobile, { GIF_HEIGHT_VH } from "./Background404Mobile";
+import Background404Mobile from "./Background404Mobile";
 
 export default function Page404Mobile() {
   const navigate = useNavigate();
@@ -22,48 +22,27 @@ export default function Page404Mobile() {
 
   return (
     <MobileLayout footer={false}>
-      <main className="fixed inset-0 flex flex-col bg-black">
+      <main className="fixed inset-0 bg-black">
         <Background404Mobile />
 
-        <div
-          className="relative z-10 flex flex-col flex-1"
-          style={{ marginTop: "47vh" }}
-        >
-          {/* Loading bar + titre */}
-          <div className="ml-10">
-            <div className="h-[4px] w-[106px] holographic-bg rounded-full" />
-            <div
-              role="img"
-              aria-label="Erreur 404 - Page introuvable"
-              className="mt-3"
-              style={{
-                width: "77vw",
-                aspectRatio: "302 / 178",
-                backgroundImage: 'url("/images/404/Title404.png")',
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "100% 100%",
-              }}
-            />
-          </div>
+        {/* Texte accessible pour les lecteurs d'écran (le visuel est dans bgMobile.png) */}
+        <span className="sr-only">Erreur 404 — Page introuvable</span>
 
-          {/* Bouton + réseaux — poussés en bas */}
-          <div className="flex flex-col mt-auto mb-8 gap-6">
-            <div className="flex justify-center">
-              <Button
-                type="border"
-                onClick={() => navigate("/")}
-                leftIcon={<ArrowFull className="w-6 h-6" />}
-                label="Accueil"
-                textSize="L"
-              />
-            </div>
-            <div className="flex flex-row gap-3 ml-[45px]">
-              <SvgBtnLinkedin className="w-[30px] h-[30px]" />
-              <SvgBtnFacebook className="w-[30px] h-[30px]" />
-              <SvgBtnInstagram className="w-[30px] h-[30px]" />
-              <SvgBtnTiktok className="w-[30px] h-[30px]" />
-              <SvgBtnYoutube className="w-[30px] h-[30px]" />
-            </div>
+        {/* Bouton + réseaux — positionnés en bas, par-dessus le fond */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 flex flex-col items-center gap-6 pb-8">
+          <Button
+            type="border"
+            onClick={() => navigate("/")}
+            leftIcon={<ArrowFull className="w-6 h-6" />}
+            label="Accueil"
+            textSize="L"
+          />
+          <div className="flex flex-row gap-3 self-start ml-[45px]">
+            <SvgBtnLinkedin className="w-[30px] h-[30px]" />
+            <SvgBtnFacebook className="w-[30px] h-[30px]" />
+            <SvgBtnInstagram className="w-[30px] h-[30px]" />
+            <SvgBtnTiktok className="w-[30px] h-[30px]" />
+            <SvgBtnYoutube className="w-[30px] h-[30px]" />
           </div>
         </div>
       </main>
