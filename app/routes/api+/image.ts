@@ -176,13 +176,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     switch (outputFormat) {
       case "avif":
         outputBuffer = await sharpInstance
-          .avif({ quality, effort: 4 })
+          .avif({ quality, effort: 2 })
           .toBuffer();
         contentType = "image/avif";
         break;
       case "webp":
         outputBuffer = await sharpInstance
-          .webp({ quality, effort: 4 })
+          .webp({ quality, effort: 2 })
           .toBuffer();
         contentType = "image/webp";
         break;
@@ -199,8 +199,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       timestamp: Date.now(),
     });
 
-    // Nettoyer le cache mémoire si trop grand (max 100 entrées)
-    if (imageCache.size > 100) {
+    // Nettoyer le cache mémoire si trop grand (max 500 entrées)
+    if (imageCache.size > 500) {
       const oldestKey = imageCache.keys().next().value;
       if (oldestKey) imageCache.delete(oldestKey);
     }

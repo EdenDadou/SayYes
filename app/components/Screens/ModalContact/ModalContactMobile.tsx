@@ -116,7 +116,7 @@ export default function ModalContactMobile({
           <div
             className="flex flex-col items-center justify-start gap-8 z-20 pt-20 relative w-full px-4"
             style={{
-              paddingBottom: "calc(2rem + env(safe-area-inset-bottom, 0px))",
+              paddingBottom: "calc(10rem + env(safe-area-inset-bottom, 20px))",
             }}
           >
             <motion.button

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "@remix-run/react";
 import MobileLayout from "~/components/Layout/Mobile";
 import SvgBtnLinkedin from "~/components/Footer/components/BtnLinkedin";
@@ -12,12 +13,19 @@ import Background404Mobile from "./Background404Mobile";
 export default function Page404Mobile() {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.body.style.overflowY = "hidden";
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
+  }, []);
+
   return (
     <MobileLayout footer={false}>
-      <main className="w-screen h-screen flex flex-col items-start justify-center px-8">
+      <main className="fixed inset-0 flex flex-col items-start justify-end pb-20 px-8">
         <Background404Mobile />
 
-        <div className="h-[3px] w-28 holographic-bg my-8" />
+        <div className="h-[3px] w-28 holographic-bg mb-6 mt-4" />
 
         <div
           className="w-[85vw] aspect-[16/10] z-10"
