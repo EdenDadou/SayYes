@@ -2,12 +2,12 @@ import Background404 from "../Background404";
 
 export default function Background404Mobile() {
   return (
-    <div className="absolute inset-0 z-0">
-      {/* Gif Kermit */}
+    <div className="absolute inset-0 z-0" aria-hidden="true">
+      {/* GIF animé — backgroundImage CSS intentionnel car Sharp/OptimizedImage ne supporte pas les GIFs */}
       <div
         className="absolute top-0 left-0 w-full"
         style={{
-          backgroundImage: 'url("images/404/404.gif")',
+          backgroundImage: 'url("/images/404/404.gif")',
           backgroundSize: "180vw",
           backgroundPositionX: "-40vw",
           backgroundRepeat: "no-repeat",
