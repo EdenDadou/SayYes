@@ -62,6 +62,11 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
       }
 
       setAllPortfolios(data.portfolios);
+
+      // Pré-remplir le cache par slug pour un affichage instantané depuis la grille
+      const cache = new Map<string, PortfolioData>();
+      data.portfolios.forEach((p: PortfolioData) => cache.set(p.slug, p));
+      setPortfolioCache(cache);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
       console.error("Erreur fetch portfolios:", err);
