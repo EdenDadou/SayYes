@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, memo } from "react";
 import { cn } from "~/utils/ui/ui";
 import { Link } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
@@ -13,7 +13,7 @@ interface PropsContent {
   slug?: string;
 }
 
-export default function ContentPortfolio({
+export default memo(function ContentPortfolio({
   imageUrl,
   videoUrl,
   titre,
@@ -76,4 +76,4 @@ export default function ContentPortfolio({
       </div>
     </Link>
   );
-}
+});
