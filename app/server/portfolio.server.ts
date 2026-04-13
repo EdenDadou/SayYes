@@ -455,7 +455,9 @@ export async function getPublicPortfolios() {
         categories: true,
         slug: true,
         photoCouverture: true,
+        photoCouvertureAlt: true,
         photoMain: true,
+        photoMainAlt: true,
         description: true,
         kicker: true,
         sousTitre: true,
@@ -464,6 +466,9 @@ export async function getPublicPortfolios() {
         temoignage: true,
         livrable: true,
         bento: true,
+        metaTitle: true,
+        metaDescription: true,
+        schemaOrg: true,
         createdAt: true,
       },
       orderBy: { createdAt: "desc" },
@@ -477,21 +482,24 @@ export async function getPublicPortfolios() {
           categories: safeParse(portfolio.categories, []),
           slug: portfolio.slug,
           photoCouverture: portfolio.photoCouverture,
-          photoCouvertureAlt: (portfolio as any).photoCouvertureAlt || "",
-          photoMain: (portfolio as any).photoMain || "",
-          photoMainAlt: (portfolio as any).photoMainAlt || "",
+          photoCouvertureAlt: portfolio.photoCouvertureAlt || "",
+          photoMain: portfolio.photoMain || "",
+          photoMainAlt: portfolio.photoMainAlt || "",
           description: portfolio.description || "",
           kicker: portfolio.kicker || "",
           sousTitre: portfolio.sousTitre || "",
-          topTitle: (portfolio as any).topTitle || "",
-          couleur: (portfolio as any).couleur || "",
+          topTitle: portfolio.topTitle || "",
+          couleur: portfolio.couleur || "",
           createdAt: portfolio.createdAt,
           livrable: safeParse(portfolio.livrable, []),
           bento: safeParse(portfolio.bento, []),
-          temoignage: safeParse((portfolio as any).temoignage, {
+          temoignage: safeParse(portfolio.temoignage, {
             auteur: "",
             contenu: "",
           }),
+          metaTitle: portfolio.metaTitle || "",
+          metaDescription: portfolio.metaDescription || "",
+          schemaOrg: portfolio.schemaOrg || "{}",
         };
       } catch (error) {
         // En cas d'erreur sur un portfolio, retourner un portfolio par défaut plutôt que de faire planter
@@ -516,6 +524,9 @@ export async function getPublicPortfolios() {
             auteur: "",
             contenu: "",
           },
+          metaTitle: "",
+          metaDescription: "",
+          schemaOrg: "{}",
         };
       }
     });
