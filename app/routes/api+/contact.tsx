@@ -1,4 +1,5 @@
 import { json, type ActionFunctionArgs } from "@remix-run/node";
+import dns from "dns";
 import nodemailer from "nodemailer";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -22,17 +23,23 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    // Configuration du transporteur Brevo
+    // Configuration du transporteur Brevo (force IPv4 pour éviter le timeout IPv6)
     const transporter = nodemailer.createTransport({
       host: process.env.BREVOS_SMTP_SERVER || "smtp-relay.brevo.com",
       port: parseInt(process.env.BREVOS_PORT || "587"),
-      secure: false, // true pour le port 465, false pour les autres ports
+      secure: false,
       auth: {
         user: process.env.BREVOS_LOGIN || "",
         pass: process.env.BREVOS_API_KEY || "",
       },
       tls: {
         rejectUnauthorized: false,
+      },
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 10000,
+      lookup: (hostname, options, callback) => {
+        dns.lookup(hostname, { ...options, family: 4 }, callback);
       },
     });
 
@@ -49,18 +56,10 @@ Message:
 ${message || "Aucun message"}
     `.trim();
 
-    // Vérification de la connexion
-    try {
-      await transporter.verify();
-    } catch (verifyError) {
-      console.error("✗ Erreur de vérification SMTP:", verifyError);
-    }
-
-    // Envoi de l'email
     const mailOptions = {
-      from: `"Say Yes" <${process.env.BREVOS_FROM_EMAIL || process.env.BREVOS_LOGIN}>`, // Utilise l'adresse vérifiée Brevo
-      to: "javier@lasaintepaire.com", // adresse de destination
-      replyTo: email, // L'email du client pour pouvoir répondre directement
+      from: `"Say Yes" <${process.env.BREVOS_FROM_EMAIL || process.env.BREVOS_LOGIN}>`,
+      to: "javier@lasaintepaire.com",
+      replyTo: email,
       subject: `Nouvelle demande de contact - ${name}`,
       text: emailContent,
       html: `
@@ -92,11 +91,14 @@ ${message || "Aucun message"}
       `,
     };
 
-    await transporter.sendMail(mailOptions);
+    // Fire-and-forget : retourner succès immédiatement, envoyer en arrière-plan
+    transporter.sendMail(mailOptions).catch((err) => {
+      console.error("[contact] Erreur envoi email:", err);
+    });
 
     return json({ success: true, message: "Email envoyé avec succès" });
   } catch (error) {
-    console.error("Erreur lors de l'envoi de l'email:", error);
+    console.error("[contact] Erreur:", error);
     return json(
       {
         error: "Une erreur est survenue lors de l'envoi du message",

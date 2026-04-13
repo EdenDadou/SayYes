@@ -35,9 +35,59 @@ export default function Portfolio() {
           <PortfolioTitleMobile />
         </div>
         <Filter />
-        <div className="flex flex-wrap justify-start gap-[14px] w-full m-auto">
+        <div className="flex flex-col gap-[14px] w-full">
+          {/* 6 premières cartes */}
           <AnimatePresence mode="popLayout">
             {portfolioTopCards.map((portfolio, index) => (
+              <motion.div
+                key={portfolio.id}
+                className="w-screen flex-shrink-0 px-4"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.05,
+                  ease: "easeOut",
+                }}
+                layout
+              >
+                <Card
+                  height="260px"
+                  content={
+                    <ContentPortfolio
+                      imageUrl={portfolio.photoCouverture}
+                      titre={portfolio.titre}
+                      topTitle={portfolio.topTitle}
+                      slug={portfolio.slug}
+                    />
+                  }
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {/* Image ClientsWall — fade-in au scroll */}
+          {portfolioBottomCards.length > 0 && (
+            <motion.div
+              className="w-full px-4"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <img
+                src="/images/portfolio/ClientWallmobile.png"
+                alt="Clients Wall"
+                className="w-full h-auto"
+                loading="lazy"
+              />
+            </motion.div>
+          )}
+
+          {/* Cartes restantes */}
+          <AnimatePresence mode="popLayout">
+            {portfolioBottomCards.map((portfolio, index) => (
               <motion.div
                 key={portfolio.id}
                 className="w-screen flex-shrink-0 px-4"
@@ -142,9 +192,8 @@ export default function Portfolio() {
                 <img
                   src="/images/portfolio/ClientsWall.png"
                   alt="Clients Wall"
-                  className="w-full h-auto max-h-[220px] object-contain object-center"
+                  className="w-full h-auto"
                   loading="lazy"
-                  width="990"
                 />
               </motion.div>
             )}

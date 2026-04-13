@@ -40,22 +40,24 @@ export default function Page404() {
         <div className="flex flex-row items-center justify-start gap-8 z-20 w-[990px]">
           <div className="self-stretch w-[3px] holographic-bg-vertical rounded-full" />
           <div className="flex flex-col items-start justify-center gap-10 relative">
-            <div
-              className="w-[608px] h-[359px]"
-              style={{
-                backgroundImage: 'url("images/404/Title404.png")',
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "608px 359px",
-              }}
-            />
-            <div className="absolute bottom-10 right-0">
-              <Button
-                type="border"
-                onClick={() => navigate(`/`)}
-                leftIcon={<ArrowFull className="w-6 h-6" />}
-                label="Accueil"
-                textSize="L"
+            <div className="relative w-[608px] h-[359px]">
+              <div
+                className="w-full h-full"
+                style={{
+                  backgroundImage: 'url("images/404/Title404.png")',
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "608px 359px",
+                }}
               />
+              <div className="absolute bottom-0 right-0">
+                <Button
+                  type="border"
+                  onClick={() => navigate(`/`)}
+                  leftIcon={<ArrowFull className="w-6 h-6" />}
+                  label="Accueil"
+                  textSize="L"
+                />
+              </div>
             </div>
 
             <div className="flex flex-row gap-3">

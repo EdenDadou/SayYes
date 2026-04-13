@@ -58,7 +58,7 @@ export default function ContentSuccess({
               <div className="h-[3px] w-28 holographic-bg" />
               <div className="flex flex-col gap-6">
                 <p className="flex flex-row items-center gap-3 text-white font-jakarta-bold holographic-text text-lg">
-                  <Coche />
+                  <Coche className="w-6 h-6 shrink-0" />
                   Message envoyé !
                 </p>
                 <div>

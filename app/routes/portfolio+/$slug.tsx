@@ -57,18 +57,23 @@ export default function PortfolioSlug() {
     setLoadStage(4);
   }, []);
 
+  // Reset les stages à chaque changement de slug pour une animation cohérente
+  useEffect(() => {
+    setLoadStage(0);
+  }, [slug]);
+
   // Chargement progressif des éléments desktop
   useEffect(() => {
     if (isMobile === false && portfolio) {
       const timers: NodeJS.Timeout[] = [];
 
-      // Stage 1: fond apparaît après 100ms
-      timers.push(setTimeout(() => setLoadStage(1), 100));
-      // Stage 2: hero title après 300ms
-      timers.push(setTimeout(() => setLoadStage(2), 300));
-      // Stage 3: photo main après 500ms (le stage 4 sera déclenché par onImageLoad)
+      // Stage 1: fond apparaît après 50ms
+      timers.push(setTimeout(() => setLoadStage(1), 50));
+      // Stage 2: hero title après 150ms
+      timers.push(setTimeout(() => setLoadStage(2), 150));
+      // Stage 3: photo main après 250ms (le stage 4 sera déclenché par onImageLoad)
       timers.push(
-        setTimeout(() => setLoadStage((prev) => Math.max(prev, 3)), 500)
+        setTimeout(() => setLoadStage((prev) => Math.max(prev, 3)), 250)
       );
       // Fallback: si l'image prend trop de temps, passer au stage 4 après 2s
       timers.push(setTimeout(() => setLoadStage(4), 2000));

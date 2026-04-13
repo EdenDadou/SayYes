@@ -31,6 +31,9 @@ interface PortfolioProviderProps {
 export function PortfolioProvider({ children }: PortfolioProviderProps) {
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [allPortfolios, setAllPortfolios] = useState<PortfolioData[]>([]);
+  const [portfolioCache, setPortfolioCache] = useState<
+    Map<string, PortfolioData>
+  >(new Map());
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,25 +70,40 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
     }
   }, [allPortfolios.length]);
 
-  const fetchPortfolioBySlug = useCallback(async (slug: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`/api/portfolios/slug/${slug}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Erreur lors du chargement du portfolio");
+  const fetchPortfolioBySlug = useCallback(
+    async (slug: string) => {
+      // Utiliser le cache si disponible pour un affichage instantané
+      const cached = portfolioCache.get(slug);
+      if (cached) {
+        setPortfolio(cached);
+        return;
       }
 
-      setPortfolio(data.portfolio);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Une erreur est survenue");
-      console.error("Erreur fetch portfolio:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`/api/portfolios/slug/${slug}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || "Erreur lors du chargement du portfolio"
+          );
+        }
+
+        setPortfolioCache((prev) => new Map(prev).set(slug, data.portfolio));
+        setPortfolio(data.portfolio);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Une erreur est survenue"
+        );
+        console.error("Erreur fetch portfolio:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [portfolioCache]
+  );
 
   const value = useMemo(
     () => ({
@@ -108,6 +126,7 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
       error,
       fetchAllPortfolios,
       fetchPortfolioBySlug,
+      portfolioCache,
     ]
   );
 

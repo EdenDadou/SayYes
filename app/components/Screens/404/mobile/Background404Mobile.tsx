@@ -21,10 +21,11 @@ export default function Background404Mobile() {
         }}
       />
       <div
-        className={`absolute bottom-[95vw] left-0 w-full h-80 z-0`}
+        className={`absolute bottom-0 left-0 w-full z-0`}
         style={{
+          height: "65vh",
           background:
-            "linear-gradient(to top, rgba(0, 0, 0, 1) 15%, transparent)",
+            "linear-gradient(to top, rgba(0, 0, 0, 1) 40%, transparent)",
         }}
       />
       <div

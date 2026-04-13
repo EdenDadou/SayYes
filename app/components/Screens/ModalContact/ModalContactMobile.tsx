@@ -209,7 +209,7 @@ export default function ModalContactMobile({
               className="w-full"
             >
               <Card
-                height="85%"
+                height="auto"
                 borderClass="py-8 px-4 bg-gradient-to-bl from-[#000000] via-[#080809] to-[#4034EB] rounded-[15px] relative"
               >
                 <BackgroundModalMobile className="absolute inset-0  w-full h-full z-0 rounded-[20px] object-contain blur-3xl" />
