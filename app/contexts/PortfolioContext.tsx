@@ -131,7 +131,6 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
       error,
       fetchAllPortfolios,
       fetchPortfolioBySlug,
-      portfolioCache,
     ]
   );
 

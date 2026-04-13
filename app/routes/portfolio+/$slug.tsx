@@ -75,7 +75,7 @@ export default function PortfolioSlug() {
 
   // Pour les visites directes : utiliser les données du loader si le contexte n'est pas encore chargé
   const portfolio =
-    contextPortfolio ?? (loaderPortfolio as PortfolioData);
+    contextPortfolio ?? (loaderPortfolio as unknown as PortfolioData);
 
   const isMobile = useViewport();
   // Update meta tags dynamically when portfolio is loaded

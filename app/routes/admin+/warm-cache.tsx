@@ -26,14 +26,14 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   const sizes = [640, 1280];
-  const requests: Promise<Response>[] = [];
+  const requests: Promise<unknown>[] = [];
 
   imageUrls.forEach((url) => {
     sizes.forEach((w) => {
       requests.push(
         fetch(
           `${baseUrl}/api/image?src=${encodeURIComponent(url)}&w=${w}&q=80`
-        )
+        ).then((r) => r.arrayBuffer())
       );
     });
   });
