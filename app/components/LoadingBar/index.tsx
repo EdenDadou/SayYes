@@ -33,9 +33,10 @@ export default function LoadingBar({
     }
 
     // Mode normal : timeout maximum 400ms pour ne pas bloquer sur les assets lourds (vidéo)
+    let completeTimer: ReturnType<typeof setTimeout>;
     const completeBar = () => {
       setProgress(100);
-      setTimeout(() => {
+      completeTimer = setTimeout(() => {
         setIsComplete(true);
         onComplete?.();
       }, 300);
@@ -44,8 +45,11 @@ export default function LoadingBar({
     // Si la page est déjà chargée, compléter immédiatement
     if (document.readyState === "complete") {
       setProgress(90);
-      setTimeout(completeBar, 200);
-      return;
+      const readyTimer = setTimeout(completeBar, 200);
+      return () => {
+        clearTimeout(readyTimer);
+        clearTimeout(completeTimer);
+      };
     }
 
     // Progression visuelle fluide
@@ -76,6 +80,7 @@ export default function LoadingBar({
     return () => {
       clearInterval(interval);
       clearTimeout(forceComplete);
+      clearTimeout(completeTimer);
       window.removeEventListener("load", handleLoad);
     };
   }, [onComplete, indefinite]);
