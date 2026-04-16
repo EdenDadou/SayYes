@@ -78,22 +78,38 @@ const OptimizedVideo = memo(function OptimizedVideo({
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(ref, { once: false, margin: "100px" });
+  const srcRef = useRef(src);
+  const isInView = useInView(ref, { once: false, margin: "300px" });
 
-  // Fonction pour tenter de lancer la vidéo
+  // Pré-charger la vidéo 600px avant d'entrer dans le viewport
+  useEffect(() => {
+    const wrapper = ref.current;
+    const video = videoRef.current;
+    if (!wrapper || !video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && video) {
+          video.src = srcRef.current;
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "600px" }
+    );
+    observer.observe(wrapper);
+    return () => observer.disconnect();
+  }, []);
+
   const attemptPlay = () => {
     const video = videoRef.current;
-    if (!video) return;
-
+    if (!video || !video.src) return;
     video.muted = true;
     video.play().catch(() => {});
   };
 
-  // Déclencher la lecture quand la vidéo entre dans le viewport
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
     if (isInView) {
       attemptPlay();
     } else {
@@ -115,7 +131,6 @@ const OptimizedVideo = memo(function OptimizedVideo({
     >
       <video
         ref={videoRef}
-        src={src}
         className="w-full h-auto object-contain transition-all duration-500"
         style={{
           filter: isLoaded ? "blur(0px)" : "blur(8px)",
@@ -127,10 +142,9 @@ const OptimizedVideo = memo(function OptimizedVideo({
           attemptPlay();
         }}
         muted
-        autoPlay
         loop
         playsInline
-        preload="auto"
+        preload="none"
       >
         Votre navigateur ne prend pas en charge la lecture de vidéos.
       </video>
