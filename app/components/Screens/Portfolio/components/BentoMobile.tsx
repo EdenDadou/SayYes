@@ -28,7 +28,7 @@ const OptimizedImage = memo(function OptimizedImage({
 }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "300px" });
 
   // Utiliser l'URL optimisée pour mobile
   const optimizedSrc = getOptimizedImageUrl(src, "mobile");
