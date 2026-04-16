@@ -39,12 +39,23 @@ jobs:
           git fetch origin main
           git reset --hard origin/main || { echo "❌ Échec git reset"; exit 1; }
 
+          echo "🧹 Nettoyage préventif du disque..."
+          # Supprimer les vieux backups DB (garder les 3 derniers)
+          ls -t ./prisma/dev.db.backup.* 2>/dev/null | tail -n +4 | xargs rm -f || true
+          # Vider le cache npm global (principale source d'inodes épuisés)
+          npm cache clean --force 2>/dev/null || true
+          # Supprimer les anciens artefacts de build
+          rm -rf build/ .cache/ .vite-dev-cache/ 2>/dev/null || true
+          # Tronquer les gros fichiers de logs PM2
+          find ./logs -name "*.log" -size +10M -exec truncate -s 0 {} \; 2>/dev/null || true
+          # Forcer la suppression de node_modules pour éviter des restes corrompus
+          rm -rf node_modules 2>/dev/null || true
+          echo "✅ Nettoyage terminé. Espace disque disponible :"
+          df -h . || true
+
           echo "📦 Installation des dépendances..."
-          # Nettoyer complètement l'environnement
-          rm -rf node_modules package-lock.json yarn.lock
-          npm cache clean --force
-          # Régénérer le package-lock.json avec les nouvelles versions
-          npm install --legacy-peer-deps || { echo "❌ Échec npm install"; exit 1; }
+          # npm ci installe exactement le package-lock.json (déterministe, plus rapide)
+          npm ci --legacy-peer-deps || { echo "❌ Échec npm ci"; exit 1; }
 
           echo "🗄️ Configuration de la base de données..."
           # Créer le fichier .env avec DATABASE_URL
@@ -66,6 +77,8 @@ jobs:
             if [ -f "./prisma/dev.db" ]; then
               cp ./prisma/dev.db ./prisma/dev.db.backup.$(date +%Y%m%d_%H%M%S)
               echo "✅ Sauvegarde créée."
+              # Garder seulement les 3 derniers backups pour ne pas remplir le disque
+              ls -t ./prisma/dev.db.backup.* 2>/dev/null | tail -n +4 | xargs rm -f || true
             fi
             
             echo "📋 Application des migrations..."
