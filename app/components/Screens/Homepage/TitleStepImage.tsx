@@ -15,6 +15,10 @@ export default function TitleStepImage() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // Attendre que le viewport soit connu pour observer le bon élément
+    // (le ref change quand isMobile passe de null à true/false)
+    if (isMobile === null) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -42,11 +46,9 @@ export default function TitleStepImage() {
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+      observer.disconnect();
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (!isVisible) return;
