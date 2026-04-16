@@ -84,7 +84,23 @@ export default defineConfig({
         enabled: true, // Active en mode dev pour tester la PWA
       },
       workbox: {
-        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024, // Augmente la limite à 50 Mo pour gérer les gros assets
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024, // 50MB — inchangé
+        runtimeCaching: [
+          {
+            // Cache CacheFirst pour les images optimisées par /api/image
+            // Après la 1ère visite, les images sont servies depuis le cache local
+            urlPattern: /^\/api\/image\?/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "optimized-images",
+              expiration: {
+                maxEntries: 200,        // Max 200 images en cache
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 jours
+              },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
       manifest: {
         name: "Mon App Remix",
