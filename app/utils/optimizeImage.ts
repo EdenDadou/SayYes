@@ -25,6 +25,10 @@ const SIZE_CONFIG: Record<ImageSize, ImageDimensions> = {
   full: { width: 2560, quality: 90 },
 };
 
+// Tailles pour lesquelles des WebP statiques sont pré-générés dans /public/images/
+// Doit correspondre aux SIZES dans scripts/optimize-images.js
+const STATIC_WEBP_SIZES: ImageSize[] = ["placeholder", "mobile", "tablet", "desktop"];
+
 /**
  * Détecte si on est sur mobile côté client
  */
@@ -90,6 +94,14 @@ export function getOptimizedImageUrl(
     !normalizedUrl.startsWith("/images/")
   ) {
     return originalUrl;
+  }
+
+  // Images statiques /images/ → WebP pré-généré, bypass /api/image
+  if (normalizedUrl.startsWith("/images/") && STATIC_WEBP_SIZES.includes(size)) {
+    const config = SIZE_CONFIG[size];
+    const dotIndex = normalizedUrl.lastIndexOf(".");
+    const base = dotIndex !== -1 ? normalizedUrl.slice(0, dotIndex) : normalizedUrl;
+    return `${base}-${config.width}.webp`;
   }
 
   const config = SIZE_CONFIG[size];
