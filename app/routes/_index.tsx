@@ -17,6 +17,7 @@ import TemoignagesCards from "~/components/Screens/Homepage/TemoignagesCards";
 import HomeProjectCarousel from "~/components/Screens/Homepage/HomeProjectCarroussel";
 import TitleStepImage from "~/components/Screens/Homepage/TitleStepImage";
 import FadeInView from "~/components/FadeInView";
+import { usePrefetchOnIdle } from "~/utils/hooks/usePrefetchOnIdle";
 
 export const VIDEO_DURATION = 4.5;
 
@@ -50,6 +51,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const isMobile = useViewport();
+  usePrefetchOnIdle();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
