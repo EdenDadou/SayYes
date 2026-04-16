@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useRouteLoaderData } from "@remix-run/react";
+import type { RootLoaderData } from "~/root";
 
 export const MOBILE_BREAKPOINT = 768;
 
@@ -18,9 +20,19 @@ function detectMobile(): boolean {
 }
 
 export function useViewport() {
-  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  const rootData = useRouteLoaderData<RootLoaderData>("root");
+
+  const [isMobile, setIsMobile] = useState<boolean | null>(() => {
+    // Côté serveur : pas de window, on retourne null (sera résolu à l'hydration)
+    if (typeof window === "undefined") return null;
+    // Côté client : utiliser la valeur SSR calculée via User-Agent (disponible immédiatement)
+    if (rootData?.isMobileSSR !== undefined) return rootData.isMobileSSR;
+    // Fallback : détecter directement (cas edge sans rootData)
+    return detectMobile();
+  });
 
   useEffect(() => {
+    // Synchroniser avec la détection client réelle (couvre rotation / resize)
     setIsMobile(detectMobile());
 
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
