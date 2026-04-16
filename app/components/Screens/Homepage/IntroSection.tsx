@@ -8,7 +8,7 @@ import Arrow from "~/assets/icons/Arrow";
 import Button from "~/components/Button";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
 import Card from "~/components/Card";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Play from "~/assets/icons/Play";
 import Pause from "~/assets/icons/Pause";
 import { useModalContact } from "~/contexts/ModalContactContext";
@@ -41,6 +41,28 @@ export default function IntroSection() {
       setIsPlaying(!isPlaying);
     }
   };
+
+  // Lazy loading de la vidéo sur mobile : charge uniquement quand visible
+  useEffect(() => {
+    if (!isMobile || !videoRef.current) return;
+    const video = videoRef.current;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.src = "/video/bureau.mp4";
+          video.play().catch(() => {
+            // Autoplay bloqué par le navigateur — l'utilisateur cliquera
+          });
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [isMobile]);
 
   return isMobile ? (
     <section className="relative w-full flex flex-col gap-10 px-5 text-white">
@@ -117,8 +139,6 @@ export default function IntroSection() {
           >
             <video
               ref={videoRef}
-              src="/video/bureau.mp4"
-              autoPlay
               loop
               muted
               playsInline
