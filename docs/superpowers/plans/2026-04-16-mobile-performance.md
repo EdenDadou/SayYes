@@ -1,592 +1,475 @@
-# Mobile Performance — Cache Médias & Navigation Fluide
+# Mobile Performance Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Éliminer les blocages de rendu mobile (flash null, LoadingBar lente, images full-res) et ajouter un cache Service Worker persistant pour les images optimisées.
+**Goal:** Éliminer le chargement visible des assets au scroll sur mobile, mettre en cache les images/vidéos statiques via le Service Worker, et précharger les pages de navigation après le chargement de la homepage.
 
-**Architecture:** 6 modifications ciblées sur des fichiers existants — `useViewport` lit la valeur SSR immédiatement, `LoadingBar` se libère en 400ms max, la vidéo mobile charge via IntersectionObserver, `ContentPortfolio` passe par `OptimizedImage`, `CardHomePagePortfolio` utilise `<Link prefetch="intent">`, et Workbox met en cache les réponses `/api/image` en CacheFirst.
+**Architecture:** Trois axes indépendants — (1) correction des timings d'animation/lazy-load dans `BentoMobile`, (2) extension du cache Workbox dans `vite.config.ts` pour couvrir les assets statiques, (3) hook de prefetch silencieux déclenché 2s après le montage de la homepage.
 
-**Tech Stack:** Remix v2.14, React 18, TypeScript 5.1, Framer Motion 11, Workbox (vite-plugin-pwa 0.x)
+**Tech Stack:** React 18, Framer Motion (`useInView`), IntersectionObserver API, Workbox (via `vite-plugin-pwa`), Remix.
 
 ---
 
-## Fichiers modifiés
+## Fichiers touchés
 
-| Fichier | Changement |
+| Fichier | Action |
 |---|---|
-| `app/utils/hooks/useViewport.tsx` | Ajoute `useRouteLoaderData` pour init depuis SSR |
-| `app/components/LoadingBar/index.tsx` | Timeout max 400ms pour libérer l'UI |
-| `app/components/Screens/Homepage/IntroSection.tsx` | Vidéo mobile lazy via IntersectionObserver |
-| `app/components/Card/components/ContentPortfolio.tsx` | `OptimizedImage` + `prefetch="intent"` |
-| `app/components/Screens/Homepage/components/CardHomePagePortfolio.tsx` | `<Link prefetch="intent">` au lieu de `div + useNavigate` |
-| `vite.config.ts` | Workbox `runtimeCaching` CacheFirst pour `/api/image` |
+| `app/components/Screens/Portfolio/components/BentoMobile.tsx` | Modifier |
+| `vite.config.ts` | Modifier |
+| `app/utils/hooks/usePrefetchOnIdle.ts` | Créer |
+| `app/routes/_index.tsx` | Modifier |
+| `app/components/Header/components/MenuMobile.tsx` | Modifier |
 
 ---
 
-## Task 1 : `useViewport` — init immédiate depuis la valeur SSR
+## Task 1 : Fix animation timing BentoMobile
 
-**Problème :** `useState<boolean | null>(null)` force `null` au premier rendu client → flash `<LoadingBar>` à chaque navigation.  
-**Fix :** Lire `rootData.isMobileSSR` (déjà disponible via le root loader) dans l'initializer du `useState`.
+**Fichiers :**
+- Modifier : `app/components/Screens/Portfolio/components/BentoMobile.tsx`
 
-**Files:**
-- Modify: `app/utils/hooks/useViewport.tsx`
+**Contexte :** La fonction `OptimizedImage` locale dans ce fichier utilise `useInView(ref, { once: true, margin: "-50px" })`. Une margin négative signifie que l'élément doit être 50px dans le viewport avant que l'animation de reveal se déclenche — l'utilisateur voit une boîte vide pendant qu'il scrolle.
 
-- [ ] **Remplacer le contenu de `useViewport.tsx`**
+- [ ] **Confirmer l'état actuel**
+
+```bash
+grep -n "margin:" app/components/Screens/Portfolio/components/BentoMobile.tsx
+```
+Résultat attendu : deux lignes — une avec `"-50px"` (OptimizedImage) et une avec `"100px"` (OptimizedVideo).
+
+- [ ] **Corriger le margin de OptimizedImage**
+
+Dans `app/components/Screens/Portfolio/components/BentoMobile.tsx`, trouver :
+```tsx
+const isInView = useInView(ref, { once: true, margin: "-50px" });
+```
+Remplacer par :
+```tsx
+const isInView = useInView(ref, { once: true, margin: "300px" });
+```
+
+- [ ] **Vérifier visuellement en dev**
+
+```bash
+npm run dev
+```
+Ouvrir `http://localhost:4000` en mode responsive mobile (DevTools), naviguer vers une page portfolio avec un bento, scroller lentement. Les images doivent être déjà visibles (opacity:1) avant que tu arrives dessus.
+
+- [ ] **Commit**
+
+```bash
+git add app/components/Screens/Portfolio/components/BentoMobile.tsx
+git commit -m "perf: BentoMobile — déclencher animation images 300px avant le viewport"
+```
+
+---
+
+## Task 2 : Lazy loading des vidéos BentoMobile
+
+**Fichiers :**
+- Modifier : `app/components/Screens/Portfolio/components/BentoMobile.tsx`
+
+**Contexte :** Le composant `OptimizedVideo` rend `<video src={src} preload="auto">`. Le `src` est assigné immédiatement au montage — le navigateur démarre le téléchargement de toutes les vidéos bento dès que la page charge, peu importe leur position dans la page.
+
+**Fix :** La `<video>` est rendue sans `src`. Un `IntersectionObserver` natif avec `rootMargin: "600px"` assigne `video.src` 600px avant que l'utilisateur y arrive. Le `useInView` framer-motion (margin: "100px") continue de gérer play/pause.
+
+- [ ] **Remplacer entièrement le composant `OptimizedVideo`**
+
+Dans `app/components/Screens/Portfolio/components/BentoMobile.tsx`, remplacer tout le bloc `const OptimizedVideo = memo(...)` par :
 
 ```tsx
-import { useEffect, useState } from "react";
-import { useRouteLoaderData } from "@remix-run/react";
-import type { RootLoaderData } from "~/root";
+const OptimizedVideo = memo(function OptimizedVideo({
+  src,
+  className,
+  index,
+}: {
+  src: string;
+  className: string;
+  index: number;
+}) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const srcRef = useRef(src);
+  const isInView = useInView(ref, { once: false, margin: "100px" });
 
-export const MOBILE_BREAKPOINT = 768;
-
-const MOBILE_UA_REGEX =
-  /Android|webOS|Mobile|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-
-/** Détecte un mobile à partir d'une chaîne User-Agent (fonctionne côté serveur et client) */
-export function isMobileUserAgent(userAgent: string): boolean {
-  return MOBILE_UA_REGEX.test(userAgent);
-}
-
-function detectMobile(): boolean {
-  return (
-    isMobileUserAgent(navigator.userAgent) ||
-    window.innerWidth < MOBILE_BREAKPOINT
-  );
-}
-
-export function useViewport() {
-  const rootData = useRouteLoaderData<RootLoaderData>("root");
-
-  const [isMobile, setIsMobile] = useState<boolean | null>(() => {
-    // Côté serveur : pas de window, on retourne null (sera résolu à l'hydration)
-    if (typeof window === "undefined") return null;
-    // Côté client : utiliser la valeur SSR calculée via User-Agent (disponible immédiatement)
-    if (rootData?.isMobileSSR !== undefined) return rootData.isMobileSSR;
-    // Fallback : détecter directement (cas edge sans rootData)
-    return detectMobile();
-  });
-
+  // Pré-charger la vidéo 600px avant d'entrer dans le viewport
   useEffect(() => {
-    // Synchroniser avec la détection client réelle (couvre rotation / resize)
-    setIsMobile(detectMobile());
+    const wrapper = ref.current;
+    const video = videoRef.current;
+    if (!wrapper || !video) return;
 
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-    const handleChange = () => setIsMobile(detectMobile());
-    mql.addEventListener("change", handleChange);
-    return () => mql.removeEventListener("change", handleChange);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && video) {
+          video.src = srcRef.current;
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "600px" }
+    );
+    observer.observe(wrapper);
+    return () => observer.disconnect();
   }, []);
 
-  return isMobile;
-}
-```
-
-- [ ] **Vérifier le typage**
-
-```bash
-cd /Users/eden/Desktop/BANZAI/Projets/SayYes/SayYes
-npm run typecheck 2>&1 | head -30
-```
-
-Résultat attendu : pas d'erreur sur `useViewport.tsx`. Si erreur sur `RootLoaderData`, vérifier que `~/root` exporte bien `export type RootLoaderData = { isMobileSSR: boolean }` (c'est déjà le cas dans `root.tsx` ligne 21).
-
-- [ ] **Commit**
-
-```bash
-git add app/utils/hooks/useViewport.tsx
-git commit -m "perf: useViewport init depuis isMobileSSR SSR — supprime le flash null mobile"
-```
-
----
-
-## Task 2 : `LoadingBar` — timeout maximum 400ms
-
-**Problème :** La barre attend `document.readyState === "complete"` qui inclut le téléchargement de `bureau.mp4`. Sur data mobile, la barre bloque l'affichage pendant 5-10s.  
-**Fix :** Ajouter un `setTimeout` de 400ms qui force la complétion de la barre indépendamment du readyState.
-
-**Files:**
-- Modify: `app/components/LoadingBar/index.tsx`
-
-- [ ] **Dans le `useEffect` du mode normal (après `checkPageLoad()`), ajouter le `forceComplete`**
-
-Remplacer le bloc du useEffect (du `if (indefinite)` exclu jusqu'à la fin du `return () => {...}`) par :
-
-```tsx
-useEffect(() => {
-  // Mode indéfini : la barre progresse jusqu'à 90% et reste là
-  if (indefinite) {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(interval);
-          return 90;
-        }
-        const increment =
-          prev < 60 ? 3 + Math.random() * 4 : 1 + Math.random() * 2;
-        return Math.min(prev + increment, 90);
-      });
-    }, 50);
-
-    return () => clearInterval(interval);
-  }
-
-  // Mode normal : timeout maximum 400ms pour ne pas bloquer sur les assets lourds (vidéo)
-  const completeBar = () => {
-    setProgress(100);
-    setTimeout(() => {
-      setIsComplete(true);
-      onComplete?.();
-    }, 300);
+  const attemptPlay = () => {
+    const video = videoRef.current;
+    if (!video || !video.src) return;
+    video.muted = true;
+    video.play().catch(() => {});
   };
 
-  // Si la page est déjà chargée, compléter immédiatement
-  if (document.readyState === "complete") {
-    setProgress(90);
-    setTimeout(completeBar, 200);
-    return;
-  }
-
-  // Progression visuelle fluide
-  const interval = setInterval(() => {
-    setProgress((prev) => {
-      if (prev >= 95) return prev; // Plafonner à 95% en attendant la complétion
-      const increment =
-        prev < 70 ? 2 + Math.random() * 3 : 0.5 + Math.random() * 1;
-      return Math.min(prev + increment, 95);
-    });
-  }, 50);
-
-  // Forcer la complétion après 400ms maximum (ne pas attendre la vidéo)
-  const forceComplete = setTimeout(() => {
-    clearInterval(interval);
-    completeBar();
-  }, 400);
-
-  // Complétion anticipée si la page charge avant 400ms
-  const handleLoad = () => {
-    clearInterval(interval);
-    clearTimeout(forceComplete);
-    setProgress(95);
-    setTimeout(completeBar, 200);
-  };
-  window.addEventListener("load", handleLoad);
-
-  return () => {
-    clearInterval(interval);
-    clearTimeout(forceComplete);
-    window.removeEventListener("load", handleLoad);
-  };
-}, [onComplete, indefinite]);
-```
-
-- [ ] **Vérifier le typage**
-
-```bash
-npm run typecheck 2>&1 | grep "LoadingBar" | head -10
-```
-
-Résultat attendu : pas d'erreur.
-
-- [ ] **Commit**
-
-```bash
-git add app/components/LoadingBar/index.tsx
-git commit -m "perf: LoadingBar timeout max 400ms — ne plus bloquer sur vidéo mobile"
-```
-
----
-
-## Task 3 : Vidéo `bureau.mp4` — lazy loading mobile via IntersectionObserver
-
-**Problème :** `autoPlay` + `src` direct télécharge la vidéo immédiatement au chargement de la page, même si elle est hors viewport.  
-**Fix :** Sur mobile, supprimer `src` et `autoPlay` du JSX — le `src` est affecté programmatiquement via IntersectionObserver quand la vidéo entre dans le viewport.
-
-**Files:**
-- Modify: `app/components/Screens/Homepage/IntroSection.tsx`
-
-- [ ] **Ajouter le `useEffect` IntersectionObserver dans `IntroSection`**
-
-Dans le composant `IntroSection`, après la définition de `togglePlay`, ajouter :
-
-```tsx
-// Lazy loading de la vidéo sur mobile : charge uniquement quand visible
-useEffect(() => {
-  if (!isMobile || !videoRef.current) return;
-  const video = videoRef.current;
-
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        video.src = "/video/bureau.mp4";
-        video.play().catch(() => {
-          // Autoplay bloqué par le navigateur — l'utilisateur cliquera
-        });
-        observer.disconnect();
-      }
-    },
-    { rootMargin: "200px" }
-  );
-
-  observer.observe(video);
-  return () => observer.disconnect();
-}, [isMobile]);
-```
-
-- [ ] **Dans le JSX mobile, supprimer `src` et `autoPlay` de la `<video>`**
-
-Localiser le bloc mobile de `IntroSection` (condition `isMobile ? (...)`). Remplacer la `<video>` par :
-
-```tsx
-<video
-  ref={videoRef}
-  loop
-  muted
-  playsInline
-  onPlay={() => setIsPlaying(true)}
-  onPause={() => setIsPlaying(false)}
-  className="w-full h-full object-cover rounded-[10px]"
-/>
-```
-
-Note : `src` et `autoPlay` sont retirés. Le `src` est affecté par l'observer. `autoPlay` est inutile sans `src` et interférerait avec le `.play()` manuel.
-
-- [ ] **Vérifier le typage**
-
-```bash
-npm run typecheck 2>&1 | grep "IntroSection" | head -10
-```
-
-Résultat attendu : pas d'erreur.
-
-- [ ] **Commit**
-
-```bash
-git add app/components/Screens/Homepage/IntroSection.tsx
-git commit -m "perf: vidéo bureau.mp4 lazy loading mobile — IntersectionObserver 200px rootMargin"
-```
-
----
-
-## Task 4 : `ContentPortfolio` — `OptimizedImage` + `prefetch="intent"`
-
-**Problème :** Les images des cartes passent par `background-image: url(rawUrl)` CSS sans passer par `/api/image` → chargement full-res (~2-4MB par image sur mobile).  
-**Fix :** Remplacer le div background-image par `<OptimizedImage>` en position absolue. Ajouter `prefetch="intent"` sur le `<Link>`.
-
-**Files:**
-- Modify: `app/components/Card/components/ContentPortfolio.tsx`
-
-- [ ] **Remplacer le contenu de `ContentPortfolio.tsx`**
-
-```tsx
-import { useCallback, useRef, memo } from "react";
-import { cn } from "~/utils/ui/ui";
-import { Link } from "@remix-run/react";
-import ArrowLight from "~/assets/icons/ArrowLight";
-import { getOptimizedImageUrl } from "~/utils/optimizeImage";
-import "~/styles/tailwind.css";
-import OptimizedImage from "~/components/ui/OptimizedImage";
-
-interface PropsContent {
-  imageUrl?: string;
-  videoUrl?: string;
-  titre?: string;
-  topTitle?: string;
-  slug?: string;
-}
-
-export default memo(function ContentPortfolio({
-  imageUrl,
-  videoUrl,
-  titre,
-  topTitle,
-  slug,
-}: PropsContent) {
-  const prefetchedRef = useRef(false);
-
-  // Précharge l'image desktop optimisée au survol (desktop uniquement)
-  const handleMouseEnter = useCallback(() => {
-    if (prefetchedRef.current || !imageUrl || !slug) return;
-    if (typeof window === "undefined" || window.innerWidth < 768) return;
-    prefetchedRef.current = true;
-
-    const url = getOptimizedImageUrl(imageUrl, "desktop");
-    const img = new Image();
-    img.src = url;
-  }, [imageUrl, slug]);
-
-  const imageClasses = cn(
-    "h-full flex items-center justify-center md:rounded-[20px] rounded-[10px] relative card-image"
-  );
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (isInView) {
+      attemptPlay();
+    } else {
+      video.pause();
+    }
+  }, [isInView]);
 
   return (
-    <Link
-      to={`/portfolio/${slug}`}
-      prefetch="intent"
-      onMouseEnter={handleMouseEnter}
-      className="size-full relative overflow-hidden md:rounded-[16px] hover:rounded-[26px] rounded-[10px] md:p-2 p-1 cursor-pointer shadow-lg block"
+    <motion.div
+      ref={ref}
+      className={`relative ${className}`}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
     >
-      <div className={imageClasses}>
-        {/* Image optimisée via /api/image — mobile 640px, desktop 1024px */}
-        {imageUrl && !videoUrl && (
-          <OptimizedImage
-            src={imageUrl}
-            alt={titre ?? ""}
-            mobileSize="mobile"
-            desktopSize="tablet"
-            noPlaceholder
-            noWrapper
-            className="absolute inset-0 w-full h-full object-cover md:rounded-[20px] rounded-[10px]"
-          />
-        )}
-        {/* Gradient overlay - seulement sur les 20% inférieurs */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] md:rounded-[15px] rounded-[10px]" />
-      </div>
-      <div className="size-full absolute top-0 left-0 bottom-0 md:p-4 p-2">
-        <div className="flex flex-col items-center justify-end w-full h-full p-4">
-          <div className="flex flex-row items-center justify-between w-full md:p-4">
-            <div className="flex flex-row justify-center items-center">
-              <div className="self-stretch w-[3px] holographic-bg-vertical rounded-full mr-4" />
-              <div className="flex flex-col items-start justify-center">
-                <span className="text-white md:text-3xl text-[18px] font-jakarta-bold">
-                  {titre}
-                </span>
-                <span className="text-white md:text-2xl text-[12px] font-jakarta">
-                  {topTitle}
-                </span>
-              </div>
-            </div>
-            <ArrowLight className="w-8 h-8 md:w-12 md:h-12" />
-          </div>
-        </div>
-      </div>
-    </Link>
+      <video
+        ref={videoRef}
+        className="w-full h-auto object-contain transition-all duration-500"
+        style={{
+          filter: isLoaded ? "blur(0px)" : "blur(8px)",
+          transform: isLoaded ? "scale(1)" : "scale(1.02)",
+        }}
+        onLoadedMetadata={attemptPlay}
+        onCanPlay={() => {
+          setIsLoaded(true);
+          attemptPlay();
+        }}
+        muted
+        loop
+        playsInline
+        preload="none"
+      >
+        Votre navigateur ne prend pas en charge la lecture de vidéos.
+      </video>
+    </motion.div>
   );
 });
 ```
 
-- [ ] **Vérifier le typage**
+Points clés :
+- `preload="none"` → le browser ne télécharge rien avant que l'Observer le décide
+- Pas de `src` sur le `<video>` dans le JSX
+- `srcRef` stocke l'URL, assignée via l'Observer à 600px
+- `autoPlay` supprimé (géré manuellement via `attemptPlay`)
+- `attemptPlay` vérifie `video.src` avant de jouer (guard)
+
+- [ ] **Vérifier : pas de requête vidéo au chargement initial**
 
 ```bash
-npm run typecheck 2>&1 | grep "ContentPortfolio" | head -10
+npm run dev
 ```
-
-Résultat attendu : pas d'erreur.
+DevTools → Network → filter "video". Ouvrir une page portfolio bento sur mobile. Au chargement, **aucune vidéo ne doit apparaître dans le Network**. En scrollant vers une vidéo, elle doit apparaître dans le Network uniquement quand on est à ~600px de distance.
 
 - [ ] **Commit**
 
 ```bash
-git add app/components/Card/components/ContentPortfolio.tsx
-git commit -m "perf: ContentPortfolio OptimizedImage mobile + prefetch intent — images cartes compressées"
+git add app/components/Screens/Portfolio/components/BentoMobile.tsx
+git commit -m "perf: BentoMobile — lazy loading vidéos par IntersectionObserver (rootMargin 600px)"
 ```
 
 ---
 
-## Task 5 : `CardHomePagePortfolio` — `<Link prefetch="intent">`
+## Task 3 : Étendre le cache Workbox (SW)
 
-**Problème :** Navigation via `div + useNavigate + onClick` → impossible pour Remix de précharger la route. L'image est déjà optimisée via `getOptimizedImageUrl`.  
-**Fix :** Convertir la div racine en `<Link prefetch="intent">`. Supprimer `useNavigate`.
+**Fichiers :**
+- Modifier : `vite.config.ts`
 
-**Files:**
-- Modify: `app/components/Screens/Homepage/components/CardHomePagePortfolio.tsx`
+**Contexte :** La config Workbox existante ne cache que `/api/image`. Les images dans `/images/` et les vidéos dans `/video/` et `/uploads/` sont retéléchargées à chaque visite. On ajoute deux règles `CacheFirst` après la règle existante.
 
-- [ ] **Remplacer le contenu de `CardHomePagePortfolio.tsx`**
+Note : `rangeRequests: true` active le `RangeRequestsPlugin` de Workbox — indispensable pour les vidéos qui utilisent des Range requests HTTP (status 206).
 
-```tsx
-import { cn } from "~/utils/ui/ui";
-import { Link } from "@remix-run/react";
-import ArrowLight from "~/assets/icons/ArrowLight";
-import "~/styles/tailwind.css";
-import { getOptimizedImageUrl } from "~/utils/optimizeImage";
+- [ ] **Ajouter les deux règles dans `vite.config.ts`**
 
-interface PropsContent {
-  imageUrl?: string;
-  videoUrl?: string;
-  titre?: string;
-  topTitle?: string;
-  slug?: string;
-  isMobile?: boolean;
-}
-
-export default function CardHomePagePortfolio({
-  imageUrl,
-  videoUrl,
-  titre,
-  topTitle,
-  slug,
-  isMobile,
-}: PropsContent) {
-  const imageClasses = cn(
-    "h-full flex items-center justify-center md:rounded-[45px] rounded-[10px] relative"
-  );
-
-  const optimizedImageUrl = imageUrl
-    ? getOptimizedImageUrl(imageUrl, isMobile ? "mobile" : "desktop")
-    : undefined;
-
-  return (
-    <Link
-      to={`/portfolio/${slug}`}
-      prefetch="intent"
-      className="size-full relative overflow-hidden md:rounded-[45px] rounded-[14px] p-2 cursor-pointer shadow-lg block"
-    >
-      <div
-        style={{
-          backgroundImage: videoUrl ? undefined : `url(${optimizedImageUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          borderRadius: isMobile ? "20px" : "40px",
-        }}
-        className={`${imageClasses}`}
-      >
-        {/* Gradient overlay - seulement sur les 20% inférieurs */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] md:rounded-[40px] rounded-[14px]" />
-      </div>
-      <div className="size-full absolute top-0 left-0 bottom-0 md:p-4 p-2">
-        <div className="flex flex-col items-center justify-end w-full h-full p-4">
-          <div className="flex flex-row items-center justify-between w-full md:p-4">
-            <div className="flex flex-row justify-center items-center">
-              <div className="self-stretch w-[3px] holographic-bg-vertical rounded-full mr-4" />
-              <div className="flex flex-col items-start justify-center">
-                <span className="text-white md:text-3xl text-[18px] font-jakarta-bold">
-                  {titre}
-                </span>
-                <span className="text-white md:text-2xl text-[12px] font-jakarta">
-                  {topTitle}
-                </span>
-              </div>
-            </div>
-            <ArrowLight className="w-8 h-8 md:w-12 md:h-12" />
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
-```
-
-- [ ] **Vérifier le typage**
-
-```bash
-npm run typecheck 2>&1 | grep "CardHomePagePortfolio" | head -10
-```
-
-Résultat attendu : pas d'erreur.
-
-- [ ] **Commit**
-
-```bash
-git add app/components/Screens/Homepage/components/CardHomePagePortfolio.tsx
-git commit -m "perf: CardHomePagePortfolio Link prefetch intent — préchargement route au touch"
-```
-
----
-
-## Task 6 : Service Worker — cache `CacheFirst` pour `/api/image`
-
-**Problème :** Workbox précache les assets statiques mais n'a aucune stratégie pour les URLs dynamiques `/api/image?...`. Les images optimisées sont re-téléchargées à chaque session.  
-**Fix :** Ajouter `runtimeCaching` avec stratégie `CacheFirst`, cache `optimized-images`, TTL 30 jours, max 200 entrées.
-
-**Files:**
-- Modify: `vite.config.ts`
-
-- [ ] **Dans `vite.config.ts`, mettre à jour la config `workbox`**
-
-Localiser le bloc `workbox: { maximumFileSizeToCacheInBytes: ... }` et le remplacer par :
+Dans `vite.config.ts`, trouver le bloc `runtimeCaching: [` (section Workbox). Il contient une entrée pour `/api/image`. Ajouter les deux règles suivantes **après** cette entrée, avant le `]` de fermeture :
 
 ```ts
-workbox: {
-  maximumFileSizeToCacheInBytes: 50 * 1024 * 1024, // 50MB — inchangé
-  runtimeCaching: [
-    {
-      // Cache CacheFirst pour les images optimisées par /api/image
-      // Après la 1ère visite, les images sont servies depuis le cache local
-      urlPattern: /^\/api\/image\?/,
-      handler: "CacheFirst",
-      options: {
-        cacheName: "optimized-images",
-        expiration: {
-          maxEntries: 200,        // Max 200 images en cache
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 jours
-        },
-        cacheableResponse: { statuses: [0, 200] },
-      },
-    },
-  ],
-},
+          {
+            // Images statiques /public/images/
+            urlPattern: /^https?:\/\/[^/]+\/images\//,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "static-images",
+              expiration: {
+                maxEntries: 150,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 jours
+              },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Vidéos /public/video/ et uploads bento
+            urlPattern: /^https?:\/\/[^/]+\/(video|uploads)\//,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "static-videos",
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 jours
+              },
+              cacheableResponse: { statuses: [0, 200] },
+              rangeRequests: true,
+            },
+          },
 ```
 
-- [ ] **Vérifier la syntaxe TypeScript**
+- [ ] **Vérifier le build**
 
 ```bash
-npm run typecheck 2>&1 | grep "vite.config" | head -10
+npm run build 2>&1 | tail -20
 ```
-
-Résultat attendu : pas d'erreur. Si TypeScript se plaint du type `handler: "CacheFirst"`, vérifier que `vite-plugin-pwa` est bien installé (il embarque les types Workbox).
+Résultat attendu : build terminé sans erreur. Le SW généré doit inclure les nouvelles règles.
 
 - [ ] **Commit**
 
 ```bash
 git add vite.config.ts
-git commit -m "perf: Workbox CacheFirst /api/image — images optimisées en cache 30j SW"
+git commit -m "perf: SW Workbox — cache CacheFirst pour /images/, /video/, /uploads/"
 ```
 
 ---
 
-## Task 7 : Build de production & vérification finale
+## Task 4 : Branding manifest PWA
 
-- [ ] **Typecheck complet**
+**Fichiers :**
+- Modifier : `vite.config.ts`
+
+**Contexte :** Le manifest PWA contient encore `"Mon App Remix"` — affiché quand l'utilisateur ajoute le site à son écran d'accueil.
+
+- [ ] **Mettre à jour le manifest dans `vite.config.ts`**
+
+Trouver la section `manifest:` dans `vite.config.ts`. Remplacer :
+```ts
+          name: "Mon App Remix",
+          short_name: "App Remix",
+          description: "Mon application Remix avec Tailwind CSS",
+          theme_color: "#ffffff",
+```
+Par :
+```ts
+          name: "Say Yes",
+          short_name: "Say Yes",
+          description: "Say Yes — Agence créative, branding, digital, vidéo",
+          theme_color: "#0a0a0a",
+```
+
+- [ ] **Commit**
+
+```bash
+git add vite.config.ts
+git commit -m "chore: manifest PWA — branding Say Yes"
+```
+
+---
+
+## Task 5 : Créer le hook `usePrefetchOnIdle`
+
+**Fichiers :**
+- Créer : `app/utils/hooks/usePrefetchOnIdle.ts`
+
+**Contexte :** Après 2 secondes sur la homepage, on injecte des `<link rel="prefetch">` pour les routes `/solutions` et `/portfolio` et pour les images critiques du menu/pages cibles. Le `rel="prefetch"` a une priorité navigateur `Idle` — ne concurrence pas le chargement courant. Les images passent par `/api/image` pour être mises en cache par le SW.
+
+- [ ] **Créer `app/utils/hooks/usePrefetchOnIdle.ts`**
+
+```ts
+import { useEffect } from "react";
+
+const ROUTES_TO_PREFETCH = ["/solutions", "/portfolio"];
+
+const IMAGES_TO_PREFETCH = [
+  "/images/bg-menu-mobile.png",
+  "/images/solutions/Card1.png",
+  "/images/solutions/Card2.png",
+  "/images/solutions/Card3.png",
+  "/images/solutions/Card4.png",
+  "/images/solutions/Card5.png",
+  "/images/solutions/MasqueMobile.png",
+  "/images/portfolio/bg.png",
+  "/images/portfolio/ClientWallmobile.png",
+];
+
+function injectPrefetchLink(href: string, as?: string): HTMLLinkElement {
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.href = href;
+  if (as) link.setAttribute("as", as);
+  document.head.appendChild(link);
+  return link;
+}
+
+/**
+ * Déclenche un prefetch silencieux 2s après le montage.
+ * Mobile uniquement (window.innerWidth < 768). N'affecte pas le chargement initial.
+ */
+export function usePrefetchOnIdle(): void {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.innerWidth >= 768) return;
+
+    const links: HTMLLinkElement[] = [];
+
+    const prefetch = () => {
+      // Routes Remix — précharge les chunks JS + données loader
+      for (const route of ROUTES_TO_PREFETCH) {
+        links.push(injectPrefetchLink(route, "document"));
+      }
+
+      // Images via /api/image → passent dans le SW CacheFirst
+      for (const imgPath of IMAGES_TO_PREFETCH) {
+        const url = `/api/image?src=${encodeURIComponent(imgPath)}&w=640&q=75`;
+        links.push(injectPrefetchLink(url, "image"));
+      }
+    };
+
+    const timer = setTimeout(prefetch, 2000);
+
+    return () => {
+      clearTimeout(timer);
+      links.forEach((link) => link.parentNode?.removeChild(link));
+    };
+  }, []);
+}
+```
+
+- [ ] **Vérifier le typage**
 
 ```bash
 npm run typecheck
 ```
+Résultat attendu : 0 erreurs TypeScript.
 
-Résultat attendu : `0 errors`. Si des erreurs apparaissent, les corriger avant de continuer.
-
-- [ ] **Lint**
-
-```bash
-npm run lint
-```
-
-Résultat attendu : pas d'erreurs (warnings ignorables). Si erreurs ESLint, corriger.
-
-- [ ] **Build de production**
+- [ ] **Commit**
 
 ```bash
-npm run build 2>&1 | tail -20
-```
-
-Résultat attendu : build réussi, pas d'erreurs TypeScript. Des warnings Rollup sur `dynamic-import` sont normaux (filtrés par la config).
-
-- [ ] **Test manuel sur mobile (ou DevTools device emulation + throttling "Slow 4G")**
-
-Vérifications à faire :
-
-1. **Flash null** : Ouvrir `http://localhost:4000` sur mobile → la page s'affiche directement sans LoadingBar systématique
-2. **LoadingBar** : La barre disparaît en < 700ms (avant que la vidéo soit chargée)
-3. **Vidéo lazy** : Dans DevTools Network > Media, `bureau.mp4` ne doit PAS apparaître dans les requêtes initiales — seulement quand on scrolle jusqu'à la vidéo
-4. **Images cartes** : Dans DevTools Network > Img, les requêtes doivent être `/api/image?src=...&w=640&q=75` (et non les URLs `/uploads/...` directes)
-5. **Navigation** : Taper sur une carte portfolio → la page portfolio s'affiche sans LoadingBar (isMobile déjà résolu)
-6. **SW cache** : Recharger la page → dans DevTools Application > Cache Storage > `optimized-images`, les images doivent apparaître après la première visite
-
-- [ ] **Commit final si tout est OK**
-
-```bash
-git add -A
-git status  # Vérifier qu'il ne reste rien de non stagé
-git commit -m "perf: vérification build et tests manuels mobile performance"
+git add app/utils/hooks/usePrefetchOnIdle.ts
+git commit -m "feat: hook usePrefetchOnIdle — prefetch routes et images 2s après homepage"
 ```
 
 ---
 
-## Résumé des commits attendus
+## Task 6 : Intégrer le hook dans la homepage
 
+**Fichiers :**
+- Modifier : `app/routes/_index.tsx`
+
+**Contexte :** Le hook doit être appelé dans le composant `Index()` de la homepage. Il s'auto-limite au mobile et au délai de 2s, aucune condition supplémentaire nécessaire.
+
+- [ ] **Ajouter l'import dans `app/routes/_index.tsx`**
+
+Après la ligne `import FadeInView from "~/components/FadeInView";`, ajouter :
+```tsx
+import { usePrefetchOnIdle } from "~/utils/hooks/usePrefetchOnIdle";
 ```
-perf: useViewport init depuis isMobileSSR SSR — supprime le flash null mobile
-perf: LoadingBar timeout max 400ms — ne plus bloquer sur vidéo mobile
-perf: vidéo bureau.mp4 lazy loading mobile — IntersectionObserver 200px rootMargin
-perf: ContentPortfolio OptimizedImage mobile + prefetch intent — images cartes compressées
-perf: CardHomePagePortfolio Link prefetch intent — préchargement route au touch
-perf: Workbox CacheFirst /api/image — images optimisées en cache 30j SW
+
+- [ ] **Appeler le hook dans `Index()`**
+
+Dans la fonction `Index()`, après la ligne `const isMobile = useViewport();`, ajouter :
+```tsx
+  usePrefetchOnIdle();
 ```
+
+- [ ] **Vérifier : les `<link rel="prefetch">` apparaissent dans le DOM**
+
+```bash
+npm run dev
+```
+Sur mobile (DevTools responsive), ouvrir `http://localhost:4000`. Attendre 2 secondes, puis inspecter le `<head>` dans DevTools Elements. Des éléments `<link rel="prefetch" href="/solutions">`, `<link rel="prefetch" href="/portfolio">` et des `<link rel="prefetch" href="/api/image?src=...">` doivent être présents.
+
+Dans l'onglet Network, des requêtes vers `/api/image?src=%2Fimages%2Fbg-menu-mobile.png...` doivent apparaître environ 2s après le chargement.
+
+- [ ] **Commit**
+
+```bash
+git add app/routes/_index.tsx
+git commit -m "feat: homepage — intégration usePrefetchOnIdle pour navigation mobile"
+```
+
+---
+
+## Task 7 : MenuMobile — image de fond via OptimizedImage
+
+**Fichiers :**
+- Modifier : `app/components/Header/components/MenuMobile.tsx`
+
+**Contexte :** Le fond du menu burger est un `<img src="/images/bg-menu-mobile.png">` direct — servi en PNG brut. En passant par `OptimizedImage`, l'image passe par `/api/image` (WebP 640px) et le SW la met en cache après la première ouverture.
+
+- [ ] **Ajouter l'import `OptimizedImage`**
+
+Dans `app/components/Header/components/MenuMobile.tsx`, après les imports existants, ajouter :
+```tsx
+import OptimizedImage from "~/components/ui/OptimizedImage";
+```
+
+- [ ] **Remplacer le `<img>` par `<OptimizedImage>`**
+
+Trouver :
+```tsx
+            <img
+              src="/images/bg-menu-mobile.png"
+              alt=""
+              className="w-full h-full object-cover"
+            />
+```
+Remplacer par :
+```tsx
+            <OptimizedImage
+              src="/images/bg-menu-mobile.png"
+              alt=""
+              mobileSize="mobile"
+              noWrapper
+              noPlaceholder
+              className="w-full h-full object-cover"
+            />
+```
+
+`noWrapper` : évite le div wrapper qui casserait le layout (l'image est dans un `motion.div` avec position absolute).
+`noPlaceholder` : pas de blur placeholder pour un fond de menu.
+
+- [ ] **Vérifier visuellement**
+
+```bash
+npm run dev
+```
+Sur mobile, ouvrir le menu burger. Le fond doit s'afficher normalement. Dans DevTools Network, la requête doit cibler `/api/image?src=%2Fimages%2Fbg-menu-mobile.png&w=640&q=75`, pas `/images/bg-menu-mobile.png` directement.
+
+- [ ] **Commit**
+
+```bash
+git add app/components/Header/components/MenuMobile.tsx
+git commit -m "perf: menu mobile — image fond via OptimizedImage (WebP, cache SW)"
+```
+
+---
+
+## Vérification finale
+
+- [ ] **Build de production**
+
+```bash
+npm run build
+```
+Résultat attendu : build réussi, pas d'erreur Workbox, pas d'erreur TypeScript.
+
+- [ ] **Test SW en prod locale**
+
+```bash
+npm start
+```
+Ouvrir `http://localhost:4000` en mode mobile. Dans DevTools → Application → Service Workers, vérifier que le SW est actif. Dans Cache Storage, après avoir navigué sur quelques pages, vérifier que les caches `optimized-images`, `static-images` et `static-videos` existent et contiennent des entrées.
