@@ -7,6 +7,8 @@
   "scripts": {
     "icons": "node ./app/utils/scripts/generate-icons.js",
     "icons:watch": "npm-watch icons",
+    "images:optimize": "node scripts/optimize-images.js",
+    "prepare": "git config core.hooksPath .githooks",
     "dev:svg": "run-s icons icons:watch",
     "build": "remix vite:build --mode production",
     "postbuild": "prisma generate",
