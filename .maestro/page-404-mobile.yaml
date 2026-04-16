@@ -1,0 +1,15 @@
+appId: com.apple.mobilesafari
+---
+# Ouvre la page 404 mobile dans Safari sur le simulateur
+- openLink: http://localhost:4000/page-inexistante-404
+
+# Attend que la page charge
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Vérifie que le bouton Accueil est visible
+- assertVisible:
+    text: "Accueil"
+
+# Prend un screenshot pour vérification visuelle
+- takeScreenshot: page-404-mobile-result

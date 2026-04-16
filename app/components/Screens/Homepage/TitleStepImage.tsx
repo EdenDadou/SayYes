@@ -51,23 +51,37 @@ export default function TitleStepImage() {
   useEffect(() => {
     if (!isVisible) return;
 
-    // Incrémenter le nombre d'étapes actives toutes les 500ms, puis boucle
-    const interval = setInterval(() => {
-      setActiveSteps((prev) => {
-        // Après la 4ème étape, on repart à 0 pour boucler l'animation
-        if (prev >= 4) {
-          return 0;
-        }
-        const newStep = prev + 1;
-        setJustCompletedStep(newStep);
-        setTimeout(() => {
-          setJustCompletedStep(null);
-        }, 300);
-        return newStep;
-      });
-    }, 500);
+    const STEP_DELAY = 1200; // délai entre chaque étape
+    const PAUSE_AT_END = 2500; // pause à l'étape 4 avant reset
+    const RESET_DELAY = 400; // durée du reset à 0 avant de repartir
 
-    return () => clearInterval(interval);
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let currentStep = 1;
+
+    const advance = () => {
+      if (currentStep < 4) {
+        currentStep++;
+        setActiveSteps(currentStep);
+        setJustCompletedStep(currentStep);
+        setTimeout(() => setJustCompletedStep(null), 600);
+        timeoutId = setTimeout(advance, STEP_DELAY);
+      } else {
+        // Pause à l'étape 4 puis reset progressif
+        timeoutId = setTimeout(() => {
+          setActiveSteps(0);
+          timeoutId = setTimeout(() => {
+            currentStep = 1;
+            setActiveSteps(1);
+            setJustCompletedStep(1);
+            setTimeout(() => setJustCompletedStep(null), 600);
+            timeoutId = setTimeout(advance, STEP_DELAY);
+          }, RESET_DELAY);
+        }, PAUSE_AT_END);
+      }
+    };
+
+    timeoutId = setTimeout(advance, STEP_DELAY);
+    return () => clearTimeout(timeoutId);
   }, [isVisible]);
 
   // Fonction pour rendre une étape selon son état

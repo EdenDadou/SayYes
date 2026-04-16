@@ -65,6 +65,11 @@ export function getOptimizedImageUrl(
     return originalUrl;
   }
 
+  // Les SVG sont déjà vectoriels, pas besoin de les rasteriser via /api/image
+  if (/\.svg(\?.*)?$/i.test(originalUrl)) {
+    return originalUrl;
+  }
+
   // Normaliser les chemins relatifs
   let normalizedUrl = originalUrl;
 

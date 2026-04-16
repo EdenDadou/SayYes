@@ -5,6 +5,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
@@ -18,6 +19,7 @@ interface PortfolioContextType {
   error: string | null;
   fetchAllPortfolios: () => Promise<void>;
   fetchPortfolioBySlug: (slug: string) => Promise<void>;
+  initPortfolios: (data: PortfolioData[]) => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(
@@ -70,6 +72,15 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
     }
   }, [allPortfolios.length]);
 
+  const allPortfoliosLengthRef = useRef(allPortfolios.length);
+  allPortfoliosLengthRef.current = allPortfolios.length;
+
+  const initPortfolios = useCallback((data: PortfolioData[]) => {
+    if (allPortfoliosLengthRef.current === 0 && data.length > 0) {
+      setAllPortfolios(data);
+    }
+  }, []);
+
   const fetchPortfolioBySlug = useCallback(
     async (slug: string) => {
       // Utiliser le cache si disponible pour un affichage instantané
@@ -116,6 +127,7 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
       error,
       fetchAllPortfolios,
       fetchPortfolioBySlug,
+      initPortfolios,
     }),
     [
       portfolio,
@@ -127,6 +139,7 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
       fetchAllPortfolios,
       fetchPortfolioBySlug,
       portfolioCache,
+      initPortfolios,
     ]
   );
 

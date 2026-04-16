@@ -172,7 +172,7 @@ function HomeProjectCarouselDesktop({
 
   return (
     <div
-      className={`relative w-full flex flex-col items-center pt-16 gap-6 z-10 ${className}`}
+      className={`relative w-full flex flex-col items-center pt-16 gap-10 z-10 ${className}`}
     >
       <OptimizedImage
         src="./images/homepage/bg-halo-2.png"
@@ -259,7 +259,7 @@ function HomeProjectCarouselDesktop({
       </div>
 
       {/* Navigation Arrows */}
-      <div className="w-full flex flex-row justify-center items-center z-20 gap-16">
+      <div className="w-full flex flex-row justify-center items-center z-20" style={{ gap: "160px" }}>
         <button
           onClick={prevSlide}
           className="z-20 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group"
@@ -273,7 +273,7 @@ function HomeProjectCarouselDesktop({
           label="Voir tous nos projets"
           leftIcon={<Arrow className="w-6 h-6" />}
           textSize="M"
-          className="py-2 px-1"
+          className="py-2 px-1 mx-24"
           onClick={() => {
             navigate("/portfolio");
           }}

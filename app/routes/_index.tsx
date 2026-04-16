@@ -92,7 +92,7 @@ export default function Index() {
         </MobileLayout>
       ) : (
         <Desktoplayout footerType="home">
-          <div className="w-screen h-fit relative pt-20 flex flex-col gap-20">
+          <div className="w-screen h-fit relative pt-16 flex flex-col gap-20">
             {/* //Section 1 */}
             <FadeInView>
               <IntroSection />

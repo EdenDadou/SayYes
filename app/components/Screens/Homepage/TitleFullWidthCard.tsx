@@ -56,7 +56,7 @@ function AccompagnementCardsParallax() {
   });
 
   return (
-    <div ref={container} className="relative -mt-20">
+    <div ref={container} className="relative -mt-36">
       {cardsAccompagnement.map((card, index) => {
         const data = CardsAccompagnement({ ...card, isMobile: false });
         const targetScale =
@@ -87,17 +87,17 @@ export default function TitleFullWidthCard() {
   return isMobile ? (
     <section className="w-full pt-20 flex flex-col items-center justify-center gap-10">
       <div className="h-[3px] w-16 holographic-bg rounded-full" />
-      <div className="flex flex-col gap-4">
-        <h2 className="font-jakarta-semi-bold text-[34px] leading-[36px] text-center glassy tracking-[-1px] px-4">
+      <div className="flex flex-col gap-1">
+        <h2 className="font-jakarta-semi-bold text-[52px] leading-[54px] text-center glassy tracking-[-1px] px-4">
           Accompagnement sur-mesure
         </h2>
         <div className="flex flex-col items-center w-full text-white font-jakarta-semibold text-[24px] ">
           <p>En co-conception :</p>
           <div className="flex flex-row items-center gap-2">
             <p>Simple</p>
-            <Arrow className="w-[18px]" />
+            <Arrow className="w-[26px]" />
             <p>Efficace</p>
-            <Arrow className="w-[18px]" />
+            <Arrow className="w-[26px]" />
             <p>Prouvée</p>
           </div>
         </div>
@@ -127,21 +127,23 @@ export default function TitleFullWidthCard() {
             noPlaceholder
           />
         </div>
-        <div className="relative z-10 -mt-[90vh] flex flex-col justify-center items-center gap-8 w-full">
+        <div className="relative z-10 -mt-[90vh] flex flex-col justify-center items-center gap-0 w-full">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full my-6" />
-          <h2 className="font-jakarta-semi-bold text-[48px] leading-[56px] text-center glassy tracking-[-1px] whitespace-pre-line pb-2">
-            {`Accompagnement sur-mesure`}
-          </h2>
-          <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
-            <p>En co-conception :</p>
-            <p>Simple</p>
-            <Arrow className="w-[20px]" />
-            <p>Efficace</p>
-            <Arrow className="w-[20px]" />
-            <p>Prouvée</p>
+          <div className="flex flex-col items-center gap-2">
+            <h2 className="font-jakarta-semi-bold text-[56px] leading-[72px] text-center glassy tracking-[-0.05em] whitespace-pre-line">
+              {`Accompagnement sur-mesure`}
+            </h2>
+            <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta text-[39px]">
+              <p>En co-conception :</p>
+              <p>Simple</p>
+              <Arrow className="w-[34px]" />
+              <p>Efficace</p>
+              <Arrow className="w-[34px]" />
+              <p>Prouvée</p>
+            </div>
           </div>
           <AccompagnementCardsParallax />
-          <div className="flex flex-row items-center gap-8 justify-center -mt-32 w-[988px]">
+          <div className="flex flex-row items-center gap-8 justify-center -mt-[calc(50vh-277px)] w-[988px]">
             {cardsAccompagnementSmall.map((card) => {
               const data = CardsAccompagnementSmall(card);
               return data.content;
@@ -201,7 +203,7 @@ export const CardsAccompagnement = ({
                 {liste.map((item) => (
                   <li key={item} className="flex flex-row items-start gap-2">
                     <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF] mt-0.5" />
-                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[18px] md:tracking-[0px] tracking-[0px] whitespace-pre-line">
+                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[20px] md:tracking-[0.2px] tracking-[0.2px] whitespace-pre-line">
                       {item}
                     </p>
                   </li>
@@ -217,7 +219,7 @@ export const CardsAccompagnement = ({
 
 const cardsAccompagnement = [
   {
-    icon: "images/homepage/card-accompagnement/ampoule.png",
+    icon: "images/homepage/card-accompagnement/ampoule.svg",
     title: "On conseille",
     bgImage: "images/homepage/card-accompagnement/bg-1.png",
     bgImageMobile: "images/homepage/card-accompagnement/bg-1-mobile.png",
@@ -228,7 +230,7 @@ const cardsAccompagnement = [
     ],
   },
   {
-    icon: "images/homepage/card-accompagnement/pen.png",
+    icon: "images/homepage/card-accompagnement/pen.svg",
     title: "On Design",
     bgImage: "images/homepage/card-accompagnement/bg-2.png",
     bgImageMobile: "images/homepage/card-accompagnement/bg-2-mobile.png",
@@ -240,7 +242,7 @@ const cardsAccompagnement = [
     ],
   },
   {
-    icon: "images/homepage/card-accompagnement/setting.png",
+    icon: "images/homepage/card-accompagnement/setting.svg",
     title: "On Équipe",
     bgImage: "images/homepage/card-accompagnement/bg-3.png",
     bgImageMobile: "images/homepage/card-accompagnement/bg-3-mobile.png",
@@ -276,7 +278,7 @@ export const CardsAccompagnementSmall = ({
                 {liste.map((item) => (
                   <li key={item} className="flex flex-row items-start gap-2">
                     <Coche className="w-4 h-4 shrink-0 text-[#DCC4FF] mt-0.5" />
-                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[18px] md:tracking-[0px] tracking-[0px] whitespace-pre-line">
+                    <p className="text-white font-jakarta md:text-[16px] text-[14px] leading-[20px] md:tracking-[0.2px] tracking-[0.2px] whitespace-pre-line">
                       {item}
                     </p>
                   </li>
@@ -295,7 +297,7 @@ export const CardsAccompagnementSmall = ({
 
 const cardsAccompagnementSmall = [
   {
-    icon: "images/homepage/card-accompagnement/timer.png",
+    icon: "images/homepage/card-accompagnement/timer.svg",
     title: "Timing",
     liste: [
       "3 à 4 semaines en moyenne",
@@ -304,7 +306,7 @@ const cardsAccompagnementSmall = [
     ],
   },
   {
-    icon: "images/homepage/card-accompagnement/courbe.png",
+    icon: "images/homepage/card-accompagnement/courbe.svg",
     title: "Résultats",
     liste: [
       "Des projets cohérents de A à Z",

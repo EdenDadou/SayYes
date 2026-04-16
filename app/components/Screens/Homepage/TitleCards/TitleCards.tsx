@@ -113,14 +113,14 @@ export default function TitleCards() {
           {/* <BackgroundSideLueur /> */}
         </Suspense>
       </div>
-      <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16 pt-48 pb-14">
+      <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16 pt-[220px] pb-14">
         <div className="flex flex-col items-center w-[988px] justify-center gap-10">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
           <h2 className="glassy font-jakarta-semi-bold text-[56px] text-center leading-[52px] w-[55%] tracking-[-3px] weight-600">
             Reprenez la main sur votre identité visuelle !
           </h2>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 px-1">
           <div className="w-full flex flex-row gap-4">
             {rowCards.map((card, index) => (
               <Card
