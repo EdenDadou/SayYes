@@ -57,13 +57,14 @@ export default function TitleStepImage() {
 
     let timeoutId: ReturnType<typeof setTimeout>;
     let currentStep = 1;
+    const pendingTimers: ReturnType<typeof setTimeout>[] = [];
 
     const advance = () => {
       if (currentStep < 4) {
         currentStep++;
         setActiveSteps(currentStep);
         setJustCompletedStep(currentStep);
-        setTimeout(() => setJustCompletedStep(null), 600);
+        pendingTimers.push(setTimeout(() => setJustCompletedStep(null), 600));
         timeoutId = setTimeout(advance, STEP_DELAY);
       } else {
         // Pause à l'étape 4 puis reset progressif
@@ -73,7 +74,7 @@ export default function TitleStepImage() {
             currentStep = 1;
             setActiveSteps(1);
             setJustCompletedStep(1);
-            setTimeout(() => setJustCompletedStep(null), 600);
+            pendingTimers.push(setTimeout(() => setJustCompletedStep(null), 600));
             timeoutId = setTimeout(advance, STEP_DELAY);
           }, RESET_DELAY);
         }, PAUSE_AT_END);
@@ -81,7 +82,10 @@ export default function TitleStepImage() {
     };
 
     timeoutId = setTimeout(advance, STEP_DELAY);
-    return () => clearTimeout(timeoutId);
+    return () => {
+      clearTimeout(timeoutId);
+      pendingTimers.forEach(clearTimeout);
+    };
   }, [isVisible]);
 
   // Fonction pour rendre une étape selon son état

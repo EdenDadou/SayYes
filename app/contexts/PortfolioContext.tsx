@@ -5,7 +5,6 @@ import {
   useState,
   useCallback,
   useMemo,
-  useRef,
 } from "react";
 import { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 
@@ -72,13 +71,8 @@ export function PortfolioProvider({ children }: PortfolioProviderProps) {
     }
   }, [allPortfolios.length]);
 
-  const allPortfoliosLengthRef = useRef(allPortfolios.length);
-  allPortfoliosLengthRef.current = allPortfolios.length;
-
   const initPortfolios = useCallback((data: PortfolioData[]) => {
-    if (allPortfoliosLengthRef.current === 0 && data.length > 0) {
-      setAllPortfolios(data);
-    }
+    setAllPortfolios((prev) => (prev.length === 0 && data.length > 0 ? data : prev));
   }, []);
 
   const fetchPortfolioBySlug = useCallback(

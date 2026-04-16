@@ -1,4 +1,5 @@
 import ArrowLight from "~/assets/icons/ArrowLight";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 export const CardsIdentiteVisuelle = ({
   title,
   desc,
@@ -20,7 +21,7 @@ export const CardsIdentiteVisuelle = ({
         <div
           className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[34px] opacity-50"
           style={{
-            backgroundImage: `url(${img})`,
+            backgroundImage: `url(${getOptimizedImageUrl(img, "mobile")})`,
           }}
         />
         <div className="z-10 relative flex flex-col gap-4 h-full justify-start px-8 pt-20 text-white">
@@ -34,31 +35,25 @@ export const CardsIdentiteVisuelle = ({
         </div>
       </div>
     ) : (
-      // Desktop : positionnement pixel-perfect d'après Figma (card 318×373, interior 294×349 avec inset 12px)
-      // Width réduit à 316 pour laisser 2px de marge à la pseudo-bordure (inset -1px) dans le container 988px
+      // Desktop : card 318×373, interior 294×349 (inset 12px). Width à 316 = 2px de marge pour la pseudo-bordure dans le container 988px
       <div className="relative w-[316px] h-[373px] cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
-        {/* Background pattern — Figma: inset-3 (12px). Opacity 1 car le PNG est déjà sombre par nature */}
         <div
           className="absolute inset-3 bg-center bg-no-repeat bg-cover z-0 rounded-[34px]"
           style={{
-            backgroundImage: `url(${img})`,
+            backgroundImage: `url(${getOptimizedImageUrl(img, "desktop")})`,
           }}
         />
-        {/* Content layer — inner frame 294×349 */}
         <div className="absolute inset-3 z-10 text-white">
-          {/* Holographic bar — alignée au texte (left=34) comme sur la maquette */}
           <div
             className="absolute h-[4px] w-[60px] holographic-bg rounded-full"
             style={{ top: "95px", left: "34px" }}
           />
-          {/* Title — Figma: (34, 122), left-aligned (comme la maquette) */}
           <p
             className="absolute glassy font-jakarta-semi-bold text-[33px] leading-[40px] tracking-[-1px] whitespace-pre-line"
             style={{ top: "122px", left: "34px" }}
           >
             {title}
           </p>
-          {/* Description — gap modéré avec le titre (top: 253) */}
           <p
             className="absolute font-jakarta text-[18px] leading-[22px] whitespace-pre-line"
             style={{ top: "253px", left: "34px", width: "226px" }}

@@ -138,17 +138,14 @@ export default function TemoignagesCards() {
         <div className="relative h-[420px] w-full">
           {/* Navigation Arrows - à cheval sur les bords des 3 cards visibles */}
           <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20 pointer-events-none">
-            {currentIndex === 0 ? (
-              <div className="w-[77px] h-[77px] flex-shrink-0" />
-            ) : (
-              <button
-                onClick={prevSlide}
-                className="z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group pointer-events-auto"
-                aria-label="Projet précédent"
-              >
-                <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
-              </button>
-            )}
+            <button
+              onClick={prevSlide}
+              className="z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group pointer-events-auto"
+              aria-label="Projet précédent"
+              style={{ visibility: currentIndex === 0 ? "hidden" : "visible" }}
+            >
+              <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
+            </button>
 
             <button
               onClick={nextSlide}
