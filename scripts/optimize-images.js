@@ -8,7 +8,8 @@ const __dirname = resolve(fileURLToPath(import.meta.url), "..");
 const ROOT = resolve(__dirname, "..");
 const IMAGES_DIR = join(ROOT, "public/images");
 
-// Tailles générées — doit correspondre à SIZE_CONFIG dans optimizeImage.ts
+// Tailles générées statiquement — subset de SIZE_CONFIG (placeholder/mobile/tablet/desktop)
+// thumbnail (150px) et full (2560px) restent sur /api/image à la volée
 const SIZES = [
   { suffix: "-20", width: 20, quality: 30, enlarge: true },   // placeholder : toujours 20px
   { suffix: "-640", width: 640, quality: 75, enlarge: false },
@@ -58,6 +59,19 @@ async function processImage(srcPath) {
 async function main() {
   // Mode --file <path> : ne traite qu'une image (utilisé par le pre-commit hook)
   const fileArgIndex = process.argv.indexOf("--file");
+
+  // Validation --file
+  if (fileArgIndex !== -1 && !process.argv[fileArgIndex + 1]) {
+    console.error("Erreur : --file requiert un chemin en argument.");
+    process.exit(1);
+  }
+
+  // Guard IMAGES_DIR
+  if (fileArgIndex === -1 && !existsSync(IMAGES_DIR)) {
+    console.error(`Erreur : répertoire images introuvable : ${IMAGES_DIR}`);
+    process.exit(1);
+  }
+
   const sources =
     fileArgIndex !== -1
       ? [resolve(process.argv[fileArgIndex + 1])]
@@ -67,11 +81,16 @@ async function main() {
   let skipped = 0;
 
   for (const srcPath of sources) {
-    const generated = await processImage(srcPath);
-    if (generated.length > 0) {
-      console.log(`✓ ${basename(srcPath)} → ${generated.join(", ")}`);
-      processed++;
-    } else {
+    try {
+      const generated = await processImage(srcPath);
+      if (generated.length > 0) {
+        console.log(`✓ ${basename(srcPath)} → ${generated.join(", ")}`);
+        processed++;
+      } else {
+        skipped++;
+      }
+    } catch (err) {
+      console.error(`✗ ${basename(srcPath)}: ${err.message}`);
       skipped++;
     }
   }
