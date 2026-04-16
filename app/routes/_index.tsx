@@ -60,7 +60,7 @@ export default function Index() {
       {isLoading && <LoadingBar />}
       {isMobile ? (
         <MobileLayout>
-          <div className="w-full h-fit relative flex flex-col gap-16">
+          <div className="w-full h-fit relative flex flex-col gap-6">
             <FadeInView>
               <IntroSection />
             </FadeInView>

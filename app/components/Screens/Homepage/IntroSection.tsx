@@ -43,7 +43,7 @@ export default function IntroSection() {
   };
 
   return isMobile ? (
-    <section className="relative w-full flex flex-col gap-10 px-5 pb-4 text-white">
+    <section className="relative w-full flex flex-col gap-10 px-5 text-white">
       <OptimizedImage
         src="/images/homepage/bg-halo-mobile.png"
         alt="background"
@@ -118,9 +118,12 @@ export default function IntroSection() {
             <video
               ref={videoRef}
               src="/video/bureau.mp4"
+              autoPlay
               loop
               muted
               playsInline
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
               className="w-full h-full object-cover rounded-[10px]"
             />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
