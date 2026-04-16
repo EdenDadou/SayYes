@@ -114,16 +114,30 @@ export default defineConfig({
             },
           },
           {
-            // Vidéos /public/video/ et uploads bento
-            urlPattern: /^https?:\/\/[^/]+\/(video|uploads)\//,
+            // Vidéo principale /public/video/ — CacheFirst (fichier statique)
+            urlPattern: /^https?:\/\/[^/]+\/video\//,
             handler: "CacheFirst",
             options: {
               cacheName: "static-videos",
               expiration: {
-                maxEntries: 20,
+                maxEntries: 5,
                 maxAgeSeconds: 60 * 60 * 24 * 7, // 7 jours
               },
-              cacheableResponse: { statuses: [0, 200] },
+              cacheableResponse: { statuses: [0, 200, 206] },
+              rangeRequests: true,
+            },
+          },
+          {
+            // Uploads bento — StaleWhileRevalidate (fichiers éditables via admin)
+            urlPattern: /^https?:\/\/[^/]+\/uploads\//,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "uploads-media",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 jours
+              },
+              cacheableResponse: { statuses: [0, 200, 206] },
               rangeRequests: true,
             },
           },
