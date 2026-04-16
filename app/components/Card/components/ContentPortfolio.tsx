@@ -4,6 +4,7 @@ import { Link } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import "~/styles/tailwind.css";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 
 interface PropsContent {
   imageUrl?: string;
@@ -22,8 +23,8 @@ export default memo(function ContentPortfolio({
 }: PropsContent) {
   const prefetchedRef = useRef(false);
 
+  // Précharge l'image desktop optimisée au survol (desktop uniquement)
   const handleMouseEnter = useCallback(() => {
-    // Prefetch une seule fois par carte, desktop uniquement
     if (prefetchedRef.current || !imageUrl || !slug) return;
     if (typeof window === "undefined" || window.innerWidth < 768) return;
     prefetchedRef.current = true;
@@ -40,19 +41,23 @@ export default memo(function ContentPortfolio({
   return (
     <Link
       to={`/portfolio/${slug}`}
+      prefetch="intent"
       onMouseEnter={handleMouseEnter}
-      className="size-full relative overflow-hidden md:rounded-[16px] hover:rounded-[26px] rounded-[10px]  md:p-2 p-1 cursor-pointer
-      shadow-lg block"
+      className="size-full relative overflow-hidden md:rounded-[16px] hover:rounded-[26px] rounded-[10px] md:p-2 p-1 cursor-pointer shadow-lg block"
     >
-      <div
-        style={{
-          backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-        className={`${imageClasses}`}
-      >
+      <div className={imageClasses}>
+        {/* Image optimisée via /api/image — mobile 640px, desktop 1024px */}
+        {imageUrl && !videoUrl && (
+          <OptimizedImage
+            src={imageUrl}
+            alt={titre ?? ""}
+            mobileSize="mobile"
+            desktopSize="tablet"
+            noPlaceholder
+            noWrapper
+            className="absolute inset-0 w-full h-full object-cover md:rounded-[20px] rounded-[10px]"
+          />
+        )}
         {/* Gradient overlay - seulement sur les 20% inférieurs */}
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_45%,rgba(0,0,0,0.7)_80%,rgba(0,0,0,0.9)_100%)] md:rounded-[15px] rounded-[10px]" />
       </div>
