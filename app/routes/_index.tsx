@@ -1,6 +1,8 @@
 import type { MetaFunction } from "@remix-run/node";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useState, useEffect } from "react";
-import { useViewport } from "~/utils/hooks/useViewport";
+import { useViewport, isMobileUserAgent } from "~/utils/hooks/useViewport";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import MobileLayout from "~/components/Layout/Mobile";
 import Desktoplayout from "~/components/Layout/Desktop";
 import IntroSection from "~/components/Screens/Homepage/IntroSection";
@@ -17,6 +19,27 @@ import TitleStepImage from "~/components/Screens/Homepage/TitleStepImage";
 import FadeInView from "~/components/FadeInView";
 
 export const VIDEO_DURATION = 4.5;
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const userAgent = request.headers.get("User-Agent") || "";
+  const isMobile = isMobileUserAgent(userAgent);
+
+  const headers = new Headers();
+  if (isMobile) {
+    const titleUrl = getOptimizedImageUrl(
+      "/images/homepage/mobile/title.png",
+      "mobile"
+    );
+    const haloUrl = getOptimizedImageUrl(
+      "/images/homepage/bg-halo-mobile.png",
+      "tablet"
+    );
+    headers.append("Link", `<${titleUrl}>; rel=preload; as=image`);
+    headers.append("Link", `<${haloUrl}>; rel=preload; as=image`);
+  }
+
+  return json({}, { headers });
+}
 
 export const meta: MetaFunction = () => {
   return [

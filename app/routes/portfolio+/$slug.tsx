@@ -130,7 +130,7 @@ export default function PortfolioSlug() {
         // Petit délai pour une transition plus fluide
         setTimeout(() => {
           setIsLoading(false);
-        }, 800);
+        }, 300);
       }
     };
 

@@ -183,11 +183,12 @@ export const CardsSupport = ({
     borderClass: "light-border rounded-[40px]",
     content: (
       <div className="h-full w-full md:w-[422px] relative md:p-8 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
-        <div
-          className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[34px]"
-          style={{
-            backgroundImage: `url("${optimizedImage}")`,
-          }}
+        <img
+          src={optimizedImage}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover z-0 rounded-[34px]"
         />
         <div className="z-10 relative flex flex-col gap-4 h-full justify-end pt-4 pb-6 text-white">
           <p className="glassy font-jakarta-semi-bold md:text-[36px] text-[24px] leading-[36px] tracking-[-1px] whitespace-pre-line text-center">

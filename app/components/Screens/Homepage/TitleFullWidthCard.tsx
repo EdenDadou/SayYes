@@ -57,7 +57,7 @@ function AccompagnementCardsParallax() {
   });
 
   return (
-    <div ref={container} className="relative -mt-36">
+    <div ref={container} className="relative">
       {cardsAccompagnement.map((card, index) => {
         const data = CardsAccompagnement({ ...card, isMobile: false });
         const targetScale =
@@ -183,12 +183,12 @@ export const CardsAccompagnement = ({
     borderClass: "light-border rounded-[40px]",
     content: (
       <div className="h-full w-full md:w-[988px] relative md:p-14 p-6 cursor-pointer shadow-lg overflow-hidden rounded-[40px] max-h-full flex flex-col items-center md:items-start justify-end">
-        <div
-          className="absolute top-0 left-0 w-full h-full bg-center bg-no-repeat z-0"
-          style={{
-            backgroundImage: `url("${optimizedBg}")`,
-            backgroundSize: "cover",
-          }}
+        <img
+          src={optimizedBg}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute top-0 left-0 w-full h-full object-cover z-0"
         />
         <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center md:justify-start rounded-[40px] md:bg-black/90 bg-black/40 max-h-full w-full backdrop-blur-sm">
           <div className="relative flex flex-col md:gap-4 gap-2 justify-center py-2 overflow-hidden size-full rounded-[40px] md:p-12 p-6 max-h-full">

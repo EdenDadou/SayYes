@@ -94,7 +94,7 @@ export const CardBottomIdentiteVisuelle = {
       <div
         className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[20px]"
         style={{
-          backgroundImage: 'url("images/homepage/bottom-card-bg.png")',
+          backgroundImage: `url(${getOptimizedImageUrl("./images/homepage/bottom-card-bg.png", "mobile")})`,
         }}
       />
       <div className="relative z-10 h-full w-full flex flex-row md:items-center items-start justify-start md:justify-center md:px-10 gap-4 p-6 pt-8 md:p-6 md:gap-4">

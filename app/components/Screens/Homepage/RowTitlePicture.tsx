@@ -3,6 +3,23 @@ import Arrow from "~/assets/icons/Arrow";
 import "~/styles/tailwind.css";
 import OptimizedImage from "~/components/ui/OptimizedImage";
 
+function PartenaireGrid() {
+  return (
+    <div className="absolute inset-0 grid grid-cols-3 grid-rows-5 pointer-events-none py-5 gap-2">
+      {[...Array(15)].map((_, i) => {
+        const row = Math.floor(i / 3);
+        const col = i % 3;
+        const isBlack = (row + col) % 2 === 0;
+        return (
+          <div key={i} className="relative overflow-hidden">
+            {isBlack && <div className="absolute inset-0 glassy-overlay" />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function RowTitlePicture() {
   const isMobile = useViewport();
 
@@ -57,21 +74,14 @@ export default function RowTitlePicture() {
           </div>
         </div>
         <div className="relative overflow-hidden rounded-3xl border border-white/5">
-          <img src="./images/homepage/grid-partenaire.png" alt="" />
-          <div className="absolute inset-0 grid grid-cols-3 grid-rows-5 pointer-events-none py-5 gap-2">
-            {[...Array(15)].map((_, i) => {
-              const row = Math.floor(i / 3);
-              const col = i % 3;
-              const isBlack = (row + col) % 2 === 0;
-              return (
-                <div key={i} className="relative overflow-hidden">
-                  {isBlack && (
-                    <div className="absolute inset-0 glassy-overlay" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <OptimizedImage
+            src="./images/homepage/grid-partenaire.png"
+            alt=""
+            mobileSize="tablet"
+            noPlaceholder
+            noMobileOptimization
+          />
+          <PartenaireGrid />
         </div>
       </div>
     </section>
@@ -128,21 +138,13 @@ export default function RowTitlePicture() {
           </div>
         </div>
         <div className="-mt-10 relative overflow-hidden">
-          <img src="./images/homepage/grid-partenaire.png" alt="" />
-          <div className="absolute inset-0 grid grid-cols-3 grid-rows-5 pointer-events-none py-5 gap-2">
-            {[...Array(15)].map((_, i) => {
-              const row = Math.floor(i / 3);
-              const col = i % 3;
-              const isBlack = (row + col) % 2 === 0;
-              return (
-                <div key={i} className="relative overflow-hidden">
-                  {isBlack && (
-                    <div className="absolute inset-0 glassy-overlay" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <OptimizedImage
+            src="./images/homepage/grid-partenaire.png"
+            alt=""
+            desktopSize="tablet"
+            noPlaceholder
+          />
+          <PartenaireGrid />
         </div>
       </section>
     </div>

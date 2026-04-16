@@ -99,25 +99,22 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
   portfolio: PortfolioData;
 }) {
   // États pour le chargement progressif
-  const [loadStage, setLoadStage] = useState(0);
-  // Stage 0: rien (header via MobileLayout)
-  // Stage 1: fond
+  // Stage 1: fond (visible immédiatement - évite le flash noir)
   // Stage 2: hero title
   // Stage 3: photo main
   // Stage 4: reste du contenu
+  const [loadStage, setLoadStage] = useState(1);
 
   // Chargement progressif des éléments
   useEffect(() => {
     const timers: NodeJS.Timeout[] = [];
 
-    // Stage 1: fond apparaît après 100ms
-    timers.push(setTimeout(() => setLoadStage(1), 100));
-    // Stage 2: hero title après 300ms
-    timers.push(setTimeout(() => setLoadStage(2), 300));
-    // Stage 3: photo main après 500ms
-    timers.push(setTimeout(() => setLoadStage(3), 500));
-    // Stage 4: reste du contenu après 700ms
-    timers.push(setTimeout(() => setLoadStage(4), 700));
+    // Stage 2: hero title après 50ms
+    timers.push(setTimeout(() => setLoadStage(2), 50));
+    // Stage 3: photo main après 150ms
+    timers.push(setTimeout(() => setLoadStage(3), 150));
+    // Stage 4: reste du contenu après 250ms
+    timers.push(setTimeout(() => setLoadStage(4), 250));
 
     return () => timers.forEach(clearTimeout);
   }, []);
