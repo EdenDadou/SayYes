@@ -61,8 +61,10 @@ export default function CarouselCard() {
         <p>Digital</p>
         <Arrow className="w-[18px]" />
         <p>Vidéo</p>
-        <Arrow className="w-[18px]" />
-        <p>Facilitation graphique</p>
+        <span className="flex items-center gap-2">
+          <Arrow className="w-[18px]" />
+          <span>Facilitation graphique</span>
+        </span>
       </div>
       <div
         className="flex gap-4 overflow-x-auto pb-2 pl-[60px] pr-8 scrollbar-hide"

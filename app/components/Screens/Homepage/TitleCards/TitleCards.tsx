@@ -23,31 +23,36 @@ function TitleCardsParallaxMobile() {
     CardsIdentiteVisuelle({ ...card, isMobile: true })
   );
   const bottomCard = CardBottomIdentiteVisuelle;
-  const allCards = [...rowCards, bottomCard];
 
   return (
-    <div ref={container} className="relative w-full px-5 -mt-[40vh]">
-      {allCards.map((card, index) => {
+    <div ref={container} className="relative w-full px-5 mt-4">
+      {rowCards.map((card, index) => {
         const targetScale =
-          index === allCards.length - 1
+          index === rowCards.length - 1
             ? 1
-            : 1 - (allCards.length - index) * 0.03;
+            : 1 - (rowCards.length - index) * 0.03;
         return (
           <ParallaxCard
             key={index}
             index={index}
-            totalCards={allCards.length}
+            totalCards={rowCards.length}
             content={card.content}
             borderClass={card.borderClass}
             progress={scrollYProgress}
             targetScale={targetScale}
             isMobile
-            height={
-              index === allCards.length - 1 ? "146px" : `${card.height}px`
-            }
+            height={`${card.height}px`}
           />
         );
       })}
+      <div className="mt-[calc(458px-85vh)] mb-16">
+        <Card
+          height="146px"
+          borderRadius="30px"
+          content={bottomCard.content}
+          borderClass={bottomCard.borderClass}
+        />
+      </div>
     </div>
   );
 }
@@ -67,7 +72,7 @@ export default function TitleCards() {
   const bottomCard = CardBottomIdentiteVisuelle;
 
   return isMobile ? (
-    <div className="relative w-full">
+    <div className="relative w-full -mt-10">
       <div className="sticky top-0 w-full h-screen z-0 pointer-events-none">
         <div className="-translate-x-1/2 w-[200%] h-full">
           <OptimizedImage
@@ -80,7 +85,7 @@ export default function TitleCards() {
           />
         </div>
       </div>
-      <section className="relative w-full flex flex-col gap-0 items-center z-10 -mt-[99vh]">
+      <section className="relative w-full flex flex-col gap-0 items-center z-10 -mt-[93vh]">
         <div className="relative z-10 h-[3px] w-16 holographic-bg rounded-full mb-5" />
         <h2 className="relative z-10 text-center glassy font-jakarta-semi-bold text-[34px] leading-[40px] tracking-[-1px] whitespace-pre-line">
           {`Reprenez la main\nsur votre\nidentité visuelle !`}

@@ -13,6 +13,7 @@ interface ParallaxCardProps {
   targetScale: number;
   isMobile?: boolean;
   height?: string;
+  mobileOuterHeight?: string;
 }
 
 export default function ParallaxCard({
@@ -25,6 +26,7 @@ export default function ParallaxCard({
   targetScale,
   isMobile = false,
   height,
+  mobileOuterHeight,
 }: ParallaxCardProps) {
   const container = useRef<HTMLDivElement>(null);
   const scrollSegments = Math.max(totalCards - 1, 1);
@@ -52,9 +54,10 @@ export default function ParallaxCard({
   return (
     <div
       ref={container}
+      style={isMobile ? { height: mobileOuterHeight ?? "85vh" } : undefined}
       className={cn(
-        "flex items-center justify-center sticky",
-        isMobile ? "h-[85vh] top-8" : "h-screen top-0"
+        "flex justify-center sticky",
+        isMobile ? "items-start pt-8 top-[20vh]" : "items-center h-screen top-0"
       )}
     >
       <motion.div
