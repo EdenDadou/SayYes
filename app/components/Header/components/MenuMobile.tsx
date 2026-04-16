@@ -10,6 +10,7 @@ import Button from "~/components/Button";
 import { useLocation, useNavigate } from "@remix-run/react";
 import Localisation from "~/assets/icons/Localisation";
 import ChatBuble from "../assets/ChatBuble";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 
 interface MenuMobileProps {
   isOpen: boolean;
@@ -138,9 +139,12 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
             exit="exit"
             className="w-full h-full inset-0 absolute z-0"
           >
-            <img
+            <OptimizedImage
               src="/images/bg-menu-mobile.png"
               alt=""
+              mobileSize="mobile"
+              noWrapper
+              noPlaceholder
               className="w-full h-full object-cover"
             />
           </motion.div>
