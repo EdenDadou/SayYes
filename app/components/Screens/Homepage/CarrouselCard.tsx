@@ -19,8 +19,8 @@ export default function CarouselCard() {
     if (horizontalRef.current) {
       const totalWidth = horizontalRef.current.scrollWidth;
       const viewportWidth = window.innerWidth;
-      // Padding supplémentaire après la dernière carte (24vw)
-      const endPadding = viewportWidth * 0.24;
+      // Léger padding pour que la dernière carte soit légèrement rognée à droite
+      const endPadding = viewportWidth * 0.06;
       setScrollRange(totalWidth - viewportWidth + endPadding);
     }
   }, []);
@@ -65,7 +65,7 @@ export default function CarouselCard() {
         <p>Facilitation graphique</p>
       </div>
       <div
-        className="flex gap-4 overflow-x-auto pb-2 px-8 scrollbar-hide"
+        className="flex gap-4 overflow-x-auto pb-2 pl-[60px] pr-8 scrollbar-hide"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {supports.map((card, index) => {
@@ -136,7 +136,7 @@ export default function CarouselCard() {
             <motion.div
               ref={horizontalRef}
               style={{ x }}
-              className="flex gap-10 mt-12 pl-[calc(24vw)] pr-[calc(24vw)]"
+              className="flex gap-10 mt-12 pl-[60px]"
             >
               {supports.map((card, index) => {
                 const data = CardsSupport({ ...card, isMobile: false });
@@ -187,8 +187,8 @@ export const CardsSupport = ({
             backgroundImage: `url("${optimizedImage}")`,
           }}
         />
-        <div className="z-10 relative flex flex-col gap-4 h-full justify-end pt-4 pb-2 text-white">
-          <p className="glassy font-jakarta-semi-bold md:text-[36px] text-[24px] leading-[36px] tracking-[-1px] whitespace-pre-line text-center pb-1">
+        <div className="z-10 relative flex flex-col gap-4 h-full justify-end pt-4 pb-6 text-white">
+          <p className="glassy font-jakarta-semi-bold md:text-[36px] text-[24px] leading-[36px] tracking-[-1px] whitespace-pre-line text-center">
             {name}
           </p>
         </div>

@@ -5,7 +5,6 @@ import Card from "~/components/Card";
 import NoteStar from "~/assets/icons/NoteStar";
 import ScrollingBanner from "~/components/BrandBanner/ScrollingBanner";
 import OptimizedImage from "~/components/ui/OptimizedImage";
-import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import { useViewport } from "~/utils/hooks/useViewport";
 import ScrollingBannerMobile from "~/components/BrandBanner/ScrollingBannerMobile";
 
@@ -28,12 +27,10 @@ export default function TemoignagesCards() {
     );
   };
 
-  // Get items for display with infinite loop support
-  // We need 4 items: 1 partial left + 2 center + 1 partial right
+  // Get items for display: 3 full cards centered + 1 partial right
   const getVisibleItems = () => {
     const items = [];
-    // Start from -1 to get the left partial card
-    for (let i = -1; i < itemsPerView - 1; i++) {
+    for (let i = 0; i < itemsPerView; i++) {
       const index =
         (currentIndex + i + temoignagesCards.length) % temoignagesCards.length;
       items.push({ ...temoignagesCards[index], position: i });
@@ -133,14 +130,19 @@ export default function TemoignagesCards() {
 
       {/* Desktop Carousel Container */}
       <div className="hidden md:block relative w-full overflow-hidden">
+        {/* Gradient overlay droite pour effet partial sur la 4ème card */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
+          <div className="absolute right-0 top-0 bottom-0 w-[180px] bg-gradient-to-l from-[#0a0a0a] to-transparent" />
+        </div>
         {/* Carousel Content */}
         <div className="relative h-[420px] w-full">
-          {/* Navigation Arrows - centered vertically with cards */}
+          {/* Navigation Arrows - à cheval sur les bords des 3 cards visibles */}
           <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20 pointer-events-none">
             <button
               onClick={prevSlide}
               className="z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group pointer-events-auto"
               aria-label="Projet précédent"
+              style={{ visibility: currentIndex === 0 ? "hidden" : "visible" }}
             >
               <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
             </button>
@@ -180,9 +182,8 @@ export default function TemoignagesCards() {
               className="absolute flex items-center -translate-y-1/2"
               style={{
                 gap: `${gap}px`,
-                // 4 cards: [partial left, center1, center2, partial right]
-                // To center cards 1&2: offset by (1 full card + 1.5 gaps + half of center width)
-                left: `calc(50% - ${cardWidth * 2 + gap * 1.5}px)`,
+                // 3 cards centered + 1 partial right
+                left: `calc(50% - ${cardWidth * 1.5 + gap}px)`,
               }}
             >
               {getVisibleItems().map((temoignage) => {
@@ -214,30 +215,30 @@ export default function TemoignagesCards() {
 
 const temoignagesCards = [
   {
-    logo: "./images/homepage/temoignage-cards/volvo.png",
+    logo: "./images/homepage/logos_testimoniaux/logo_volvo.svg",
     texte:
       "“ Say Yes nous a accompagné dans notre projet du début à la fin, en prenant en considération tous nos besoins et nos attentes. L’équipe à été force de proposition et a réalisé une prestation impeccable devant nos clients. ”",
     auteur: "Tiffanie Juge",
     poste: "Responsable développement",
   },
   {
-    logo: "./images/homepage/temoignage-cards/societe_generale.png",
+    logo: "./images/homepage/logos_testimoniaux/logo_societe_generale.svg",
     texte:
       "“ C’est la 1ère fois en 20 ans que je rencontre une telle équipe capable de s’adapter parfaitement et surtout rapidement à la culture et aux enjeux d’une DSI de 7000 collaborateurs dans un contexte mondial. ”",
     auteur: "Laurent Martin",
     poste: "Responsable expérience collaborateurs",
   },
   {
-    logo: "./images/homepage/temoignage-cards/vade.png",
+    logo: "./images/homepage/logos_testimoniaux/logo_vade.svg",
     texte:
       "“ Say Yes nous a accompagné dans notre projet du début à la fin, en prenant en considération tous nos besoins et nos attentes. L’équipe à été force de proposition et a réalisé une prestation impeccable devant nos clients. ”",
     auteur: "Émilie Ravet",
     poste: "Communication & Brand manager",
   },
   {
-    logo: "",
+    logo: "./images/homepage/logos_testimoniaux/logo_cerballiance.svg",
     texte:
-      "“ L'équipe nous a accompagnés sur la refonte graphique de notre site web en réussissant l’exercice délicat de dépoussiérer un secteur très conventionnel, celui de la santé, en donnant à notre marque une identité reconnaissable sur le digital. ”",
+      "“ L’équipe nous a accompagnés sur la refonte graphique de notre site web en réussissant l’exercice délicat de dépoussiérer un secteur très conventionnel, celui de la santé, en donnant à notre marque une identité reconnaissable sur le digital. ”",
     auteur: "Dahbia Chemli",
     poste: "Responsable digital",
   },
@@ -254,7 +255,8 @@ export const CardsTemoignage = ({
   auteur: string;
   poste: string;
 }) => {
-  const optimizedLogo = logo ? getOptimizedImageUrl(logo, "thumbnail") : "";
+  // Les logos sont des SVG avec fond transparent, pas besoin d'optimisation
+  const optimizedLogo = logo || "";
   return {
     height: 413,
     image: "./images/homepage/identite-visuelle-1.png",

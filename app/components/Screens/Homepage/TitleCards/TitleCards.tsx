@@ -26,7 +26,7 @@ function TitleCardsParallaxMobile() {
   const allCards = [...rowCards, bottomCard];
 
   return (
-    <div ref={container} className="relative w-full px-5 -mt-16">
+    <div ref={container} className="relative w-full px-5 -mt-[40vh]">
       {allCards.map((card, index) => {
         const targetScale =
           index === allCards.length - 1
@@ -80,8 +80,8 @@ export default function TitleCards() {
           />
         </div>
       </div>
-      <section className="relative w-full flex flex-col gap-6 items-center z-10 -mt-[90vh]">
-        <div className="relative z-10 h-[3px] w-16 holographic-bg rounded-full" />
+      <section className="relative w-full flex flex-col gap-0 items-center z-10 -mt-[99vh]">
+        <div className="relative z-10 h-[3px] w-16 holographic-bg rounded-full mb-5" />
         <h2 className="relative z-10 text-center glassy font-jakarta-semi-bold text-[34px] leading-[40px] tracking-[-1px] whitespace-pre-line">
           {`Reprenez la main\nsur votre\nidentité visuelle !`}
         </h2>
@@ -113,14 +113,14 @@ export default function TitleCards() {
           {/* <BackgroundSideLueur /> */}
         </Suspense>
       </div>
-      <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16 pt-48 pb-14">
+      <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden gap-16 pt-[220px] pb-14">
         <div className="flex flex-col items-center w-[988px] justify-center gap-10">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
           <h2 className="glassy font-jakarta-semi-bold text-[56px] text-center leading-[52px] w-[55%] tracking-[-3px] weight-600">
             Reprenez la main sur votre identité visuelle !
           </h2>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 px-1">
           <div className="w-full flex flex-row gap-4">
             {rowCards.map((card, index) => (
               <Card

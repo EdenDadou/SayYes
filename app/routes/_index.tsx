@@ -60,7 +60,7 @@ export default function Index() {
       {isLoading && <LoadingBar />}
       {isMobile ? (
         <MobileLayout>
-          <div className="w-full h-fit relative flex flex-col gap-16">
+          <div className="w-full h-fit relative flex flex-col gap-6">
             <FadeInView>
               <IntroSection />
             </FadeInView>
@@ -92,7 +92,7 @@ export default function Index() {
         </MobileLayout>
       ) : (
         <Desktoplayout footerType="home">
-          <div className="w-screen h-fit relative pt-20 flex flex-col gap-20">
+          <div className="w-screen h-fit relative pt-16 flex flex-col gap-20">
             {/* //Section 1 */}
             <FadeInView>
               <IntroSection />

@@ -1,3 +1,7 @@
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { getPublicPortfolios } from "~/server/portfolio.server";
+import type { PortfolioData } from "~/utils/admin/manage-portfolio-types";
 import { useViewport } from "~/utils/hooks/useViewport";
 import Card from "~/components/Card";
 import PortfolioTitle from "~/components/Screens/Portfolio/components/PortfolioTitle";
@@ -10,20 +14,41 @@ import Desktoplayout from "~/components/Layout/Desktop";
 import MobileLayout from "~/components/Layout/Mobile";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePortfolio } from "~/contexts/PortfolioContext";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+
+export const links = () => [
+  { rel: "preload", href: "/images/portfolio/bg.png", as: "image" },
+];
+
+export async function loader() {
+  const portfolios = await getPublicPortfolios();
+  return json({ portfolios });
+}
 
 export default function Portfolio() {
-  const { filteredPortfolios, fetchAllPortfolios } = usePortfolio();
+  const { portfolios: serverPortfolios } = useLoaderData<typeof loader>();
+  const { filteredPortfolios, initPortfolios, activeFilters } = usePortfolio();
   const isMobile = useViewport();
 
-  // Fetch portfolios on mount
-  useEffect(() => {
-    fetchAllPortfolios();
-  }, [fetchAllPortfolios]);
+  // Remix's Jsonify<> infers null[] for categories; cast to the canonical client type
+  const typedServerPortfolios = serverPortfolios as unknown as PortfolioData[];
 
-  // Diviser les portfolios en deux groupes pour l'affichage
-  const portfolioTopCards = filteredPortfolios.slice(0, 6);
-  const portfolioBottomCards = filteredPortfolios.slice(6);
+  // Seed context once so filters work across route transitions without a client fetch
+  useEffect(() => {
+    initPortfolios(typedServerPortfolios);
+  }, [typedServerPortfolios, initPortfolios]);
+
+  // Use SSR data on first render; switch to context once filters are active
+  // (activeFilters.length > 0 handles the case where a filter yields 0 results)
+  const displayPortfolios =
+    filteredPortfolios.length > 0 || activeFilters.length > 0
+      ? filteredPortfolios
+      : typedServerPortfolios;
+
+  const [portfolioTopCards, portfolioBottomCards] = useMemo(
+    () => [displayPortfolios.slice(0, 6), displayPortfolios.slice(6)],
+    [displayPortfolios]
+  );
 
   return isMobile ? (
     <MobileLayout>
@@ -70,7 +95,7 @@ export default function Portfolio() {
           {/* Image ClientsWall — fade-in au scroll */}
           {portfolioBottomCards.length > 0 && (
             <motion.div
-              className="w-full px-4"
+              className="w-full -mx-2"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -188,6 +213,7 @@ export default function Portfolio() {
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
                 viewport={{ once: true, amount: 0.3 }}
+                style={{ transform: "scale(1.18)", transformOrigin: "center" }} /* slight zoom so image bleeds past grid margins */
               >
                 <img
                   src="/images/portfolio/ClientsWall.png"

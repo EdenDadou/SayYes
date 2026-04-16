@@ -1,5 +1,12 @@
 # SayYes - Guide projet complet
 
+## Règles critiques
+
+### Fichiers SVG
+- Ne **jamais** utiliser le tool `Read` sur des fichiers `.svg`
+- Pour lire le contenu d'un SVG, utiliser uniquement `Bash(cat fichier.svg)`
+- Raison : le tool `Read` envoie les SVG comme images à l'API → erreur 400 "Could not process image" qui corrompt tout le contexte de la conversation
+
 ## Vue d'ensemble
 
 Site vitrine / portfolio de l'agence **SayYes** (La Sainte Paire). Application full-stack Remix avec un back-office admin pour la gestion des portfolios et landing pages dynamiques.

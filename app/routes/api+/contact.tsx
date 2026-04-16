@@ -1,6 +1,7 @@
 import { json, type ActionFunctionArgs } from "@remix-run/node";
 import dns from "dns";
 import nodemailer from "nodemailer";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
 
 export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== "POST") {
@@ -24,6 +25,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Configuration du transporteur Brevo (force IPv4 pour éviter le timeout IPv6)
+    // `lookup` est une option runtime valide de nodemailer absente de @types/nodemailer — le cast est intentionnel
     const transporter = nodemailer.createTransport({
       host: process.env.BREVOS_SMTP_SERVER || "smtp-relay.brevo.com",
       port: parseInt(process.env.BREVOS_PORT || "587"),
@@ -32,16 +34,22 @@ export async function action({ request }: ActionFunctionArgs) {
         user: process.env.BREVOS_LOGIN || "",
         pass: process.env.BREVOS_API_KEY || "",
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
+      tls: { rejectUnauthorized: false },
       connectionTimeout: 5000,
       greetingTimeout: 5000,
       socketTimeout: 10000,
-      lookup: (hostname, options, callback) => {
+      lookup: (
+        hostname: string,
+        options: dns.LookupOneOptions,
+        callback: (
+          err: NodeJS.ErrnoException | null,
+          address: string,
+          family: number
+        ) => void
+      ) => {
         dns.lookup(hostname, { ...options, family: 4 }, callback);
       },
-    });
+    } as SMTPTransport.Options);
 
     // Préparation du contenu de l'email
     const emailContent = `

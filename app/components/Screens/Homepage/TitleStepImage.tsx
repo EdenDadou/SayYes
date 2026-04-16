@@ -33,7 +33,7 @@ export default function TitleStepImage() {
         });
       },
       {
-        threshold: 0.2, // Déclencher quand 20% de la section est visible
+        threshold: 0.1, // Déclencher quand 10% de la section est visible
       }
     );
 
@@ -51,24 +51,41 @@ export default function TitleStepImage() {
   useEffect(() => {
     if (!isVisible) return;
 
-    // Incrémenter le nombre d'étapes actives toutes les 3 secondes
-    const interval = setInterval(() => {
-      setActiveSteps((prev) => {
-        if (prev < 4) {
-          const newStep = prev + 1;
-          // Déclencher l'animation pour l'étape qui vient d'être complétée
-          setJustCompletedStep(newStep);
-          // Réinitialiser après l'animation (0.6s)
-          setTimeout(() => {
-            setJustCompletedStep(null);
-          }, 600);
-          return newStep;
-        }
-        return prev; // Arrêter à 4 étapes
-      });
-    }, 3000);
+    const STEP_DELAY = 1200; // délai entre chaque étape
+    const PAUSE_AT_END = 2500; // pause à l'étape 4 avant reset
+    const RESET_DELAY = 400; // durée du reset à 0 avant de repartir
 
-    return () => clearInterval(interval);
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let currentStep = 1;
+    const pendingTimers: ReturnType<typeof setTimeout>[] = [];
+
+    const advance = () => {
+      if (currentStep < 4) {
+        currentStep++;
+        setActiveSteps(currentStep);
+        setJustCompletedStep(currentStep);
+        pendingTimers.push(setTimeout(() => setJustCompletedStep(null), 600));
+        timeoutId = setTimeout(advance, STEP_DELAY);
+      } else {
+        // Pause à l'étape 4 puis reset progressif
+        timeoutId = setTimeout(() => {
+          setActiveSteps(0);
+          timeoutId = setTimeout(() => {
+            currentStep = 1;
+            setActiveSteps(1);
+            setJustCompletedStep(1);
+            pendingTimers.push(setTimeout(() => setJustCompletedStep(null), 600));
+            timeoutId = setTimeout(advance, STEP_DELAY);
+          }, RESET_DELAY);
+        }, PAUSE_AT_END);
+      }
+    };
+
+    timeoutId = setTimeout(advance, STEP_DELAY);
+    return () => {
+      clearTimeout(timeoutId);
+      pendingTimers.forEach(clearTimeout);
+    };
   }, [isVisible]);
 
   // Fonction pour rendre une étape selon son état

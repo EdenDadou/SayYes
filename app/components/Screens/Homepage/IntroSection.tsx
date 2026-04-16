@@ -43,7 +43,7 @@ export default function IntroSection() {
   };
 
   return isMobile ? (
-    <section className="relative w-full flex flex-col gap-10 px-5 pb-4 text-white">
+    <section className="relative w-full flex flex-col gap-10 px-5 text-white">
       <OptimizedImage
         src="/images/homepage/bg-halo-mobile.png"
         alt="background"
@@ -118,9 +118,12 @@ export default function IntroSection() {
             <video
               ref={videoRef}
               src="/video/bureau.mp4"
+              autoPlay
               loop
               muted
               playsInline
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
               className="w-full h-full object-cover rounded-[10px]"
             />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -157,20 +160,19 @@ export default function IntroSection() {
             <OptimizedImage
               src="/images/homepage/bg-section-1.png"
               alt="background"
-              className="absolute -top-[88px] left-0 w-full h-auto z-0 opacity-80"
+              className="absolute -top-[102px] left-0 w-full h-auto z-0 opacity-80"
               desktopSize="desktop"
               noPlaceholder
             />
-            {/* <BackgroundHomepage className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80" /> */}
           </Suspense>
         </motion.div>
       </AnimatePresence>
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden">
-        <div className="flex flex-col items-center w-[988px] justify-center gap-9 py-20">
+        <div className="flex flex-col items-center w-[988px] justify-center gap-5 py-20">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
           <TitleHomepage width={940} />
 
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center gap-1">
             <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
               <p>Branding</p>
               <Arrow className="w-[22px]" />
@@ -184,12 +186,12 @@ export default function IntroSection() {
               <Arrow className="w-[22px]" />
               <p>Illustration</p>
             </div>
-            <p className="text-white font-jakarta-semibold text-[28px]">
+            <p className="text-white font-jakarta-semibold text-[28px] -mt-1">
               Say Yes réunit toutes les expertises créatives
             </p>
           </div>
           <Button
-            className="mt-4"
+            className=""
             type="border"
             label="Démarrer un projet"
             leftIcon={<ChatBuble color="white" className="w-6 h-6" />}
