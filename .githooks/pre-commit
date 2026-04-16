@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+# Détecte les PNG/JPG nouvellement stagés dans public/images/
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^public/images/.*\.(png|jpe?g)$' || true)
+
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+echo "[pre-commit] Optimizing newly staged image(s)..."
+
+while IFS= read -r FILE; do
+  if [ -f "$FILE" ]; then
+    node scripts/optimize-images.js --file "$FILE"
+    BASENAME="${FILE%.*}"
+    for SIZE in 20 640 1024 1920; do
+      WEBP="${BASENAME}-${SIZE}.webp"
+      if [ -f "$WEBP" ]; then
+        git add "$WEBP"
+      fi
+    done
+  fi
+done <<< "$STAGED"
+
+echo "[pre-commit] Done."
