@@ -32,59 +32,51 @@ export default function LoadingBar({
       return () => clearInterval(interval);
     }
 
-    // Mode normal : détection du chargement réel de la page
-    const checkPageLoad = () => {
-      if (document.readyState === "complete") {
-        // Si la page est déjà chargée, on accélère la progression
-        setProgress(90);
-        setTimeout(() => {
-          setProgress(100);
-          setTimeout(() => {
-            setIsComplete(true);
-            onComplete?.();
-          }, 300);
-        }, 200);
-        return;
-      }
+    // Mode normal : timeout maximum 400ms pour ne pas bloquer sur les assets lourds (vidéo)
+    const completeBar = () => {
+      setProgress(100);
+      setTimeout(() => {
+        setIsComplete(true);
+        onComplete?.();
+      }, 300);
     };
 
-    // Vérifier immédiatement
-    checkPageLoad();
+    // Si la page est déjà chargée, compléter immédiatement
+    if (document.readyState === "complete") {
+      setProgress(90);
+      setTimeout(completeBar, 200);
+      return;
+    }
 
-    // Simulation du chargement avec une progression fluide
+    // Progression visuelle fluide
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsComplete(true);
-          setTimeout(() => {
-            onComplete?.();
-          }, 500);
-          return 100;
-        }
-        // Accélération progressive puis ralentissement vers la fin
+        if (prev >= 95) return prev; // Plafonner à 95% en attendant la complétion
         const increment =
           prev < 70 ? 2 + Math.random() * 3 : 0.5 + Math.random() * 1;
-        return Math.min(prev + increment, 100);
+        return Math.min(prev + increment, 95);
       });
     }, 50);
 
-    // Écouter le chargement de la page
-    window.addEventListener("load", () => {
+    // Forcer la complétion après 400ms maximum (ne pas attendre la vidéo)
+    const forceComplete = setTimeout(() => {
+      clearInterval(interval);
+      completeBar();
+    }, 400);
+
+    // Complétion anticipée si la page charge avant 400ms
+    const handleLoad = () => {
+      clearInterval(interval);
+      clearTimeout(forceComplete);
       setProgress(95);
-      setTimeout(() => {
-        setProgress(100);
-        clearInterval(interval);
-        setTimeout(() => {
-          setIsComplete(true);
-          onComplete?.();
-        }, 300);
-      }, 200);
-    });
+      setTimeout(completeBar, 200);
+    };
+    window.addEventListener("load", handleLoad);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener("load", () => {});
+      clearTimeout(forceComplete);
+      window.removeEventListener("load", handleLoad);
     };
   }, [onComplete, indefinite]);
 
