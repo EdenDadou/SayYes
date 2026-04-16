@@ -130,10 +130,10 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: "Mon App Remix",
-        short_name: "App Remix",
-        description: "Mon application Remix avec Tailwind CSS",
-        theme_color: "#ffffff",
+        name: "Say Yes",
+        short_name: "Say Yes",
+        description: "Say Yes — Agence créative, branding, digital, vidéo",
+        theme_color: "#0a0a0a",
         icons: [
           {
             src: "/icons/icon-192x192.png",
