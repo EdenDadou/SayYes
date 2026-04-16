@@ -23,7 +23,7 @@ function AccompagnementCardsParallaxMobile() {
   return (
     <div
       ref={container}
-      className="relative w-full px-4 py-6 flex flex-col gap-20"
+      className="relative w-full px-4 pt-6 pb-0 flex flex-col gap-8"
     >
       {allCards.map((card, index) => {
         const targetScale =
@@ -41,6 +41,7 @@ function AccompagnementCardsParallaxMobile() {
             targetScale={targetScale}
             isMobile
             height="575px"
+            mobileOuterHeight="630px"
           />
         );
       })}
@@ -85,10 +86,10 @@ export default function TitleFullWidthCard() {
   const isMobile = useViewport();
 
   return isMobile ? (
-    <section className="w-full pt-20 flex flex-col items-center justify-center gap-10">
+    <section className="w-full pt-20 flex flex-col items-center justify-center gap-4">
       <div className="h-[3px] w-16 holographic-bg rounded-full" />
       <div className="flex flex-col gap-1">
-        <h2 className="font-jakarta-semi-bold text-[52px] leading-[54px] text-center glassy tracking-[-1px] px-4">
+        <h2 className="font-jakarta-semi-bold text-[38px] leading-[44px] text-center glassy tracking-[-1px] px-4">
           Accompagnement sur-mesure
         </h2>
         <div className="flex flex-col items-center w-full text-white font-jakarta-semibold text-[24px] ">

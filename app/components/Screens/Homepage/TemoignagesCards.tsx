@@ -84,7 +84,7 @@ export default function TemoignagesCards() {
           <span>Sortlist 4.9 I 5</span>
         </div>
         <h2 className="font-jakarta-semi-bold text-[28px] md:text-[48px] leading-[32px] md:leading-[50px] text-center glassy tracking-[-1px] whitespace-pre-line">
-          {`Ils en parlent mieux que nous !`}
+          {`Ils en parlent mieux que nous`}
         </h2>
       </div>
 
@@ -108,7 +108,7 @@ export default function TemoignagesCards() {
                 style={{ width: `${mobileCardWidth}px` }}
               >
                 <Card
-                  height="380px"
+                  height="420px"
                   borderRadius={data.borderRadius + "px"}
                   content={data.content}
                   borderClass={data.borderClass}
@@ -135,7 +135,7 @@ export default function TemoignagesCards() {
           <div className="absolute right-0 top-0 bottom-0 w-[180px] bg-gradient-to-l from-[#0a0a0a] to-transparent" />
         </div>
         {/* Carousel Content */}
-        <div className="relative h-[420px] w-full">
+        <div className="relative h-[460px] w-full">
           {/* Navigation Arrows - à cheval sur les bords des 3 cards visibles */}
           <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20 pointer-events-none">
             <button
@@ -258,10 +258,10 @@ export const CardsTemoignage = ({
   // Les logos sont des SVG avec fond transparent, pas besoin d'optimisation
   const optimizedLogo = logo || "";
   return {
-    height: 413,
+    height: 450,
     image: "./images/homepage/identite-visuelle-1.png",
-    borderRadius: "40px",
-    borderClass: "light-border rounded-[40px]",
+    borderRadius: "32px",
+    borderClass: "light-border rounded-[32px]",
     content: (
       <div className="size-full md:p-3 p-2">
         <div className="h-full flex items-center justify-center rounded-[24px] relative overflow-hidden bg-black/70">

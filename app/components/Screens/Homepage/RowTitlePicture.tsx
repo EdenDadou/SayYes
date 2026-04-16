@@ -66,7 +66,7 @@ export default function RowTitlePicture() {
               return (
                 <div key={i} className="relative overflow-hidden">
                   {isBlack && (
-                    <div className="absolute inset-0 glassy-overlay rounded-3xl" />
+                    <div className="absolute inset-0 glassy-overlay" />
                   )}
                 </div>
               );
@@ -137,7 +137,7 @@ export default function RowTitlePicture() {
               return (
                 <div key={i} className="relative overflow-hidden">
                   {isBlack && (
-                    <div className="absolute inset-0 glassy-overlay rounded-3xl" />
+                    <div className="absolute inset-0 glassy-overlay" />
                   )}
                 </div>
               );

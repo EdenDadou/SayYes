@@ -251,18 +251,19 @@
     rgba(255, 255, 255, 0) 70%,
     rgba(255, 255, 255, 0) 100%
   );
-  animation: glassy-shimmer-diagonal 4s linear infinite;
+  background-size: 400% 100%;
+  animation: glassy-shimmer-diagonal 3s linear infinite;
 }
 
 @keyframes glassy-shimmer-diagonal {
   0% {
-    transform: translateX(100%);
+    background-position: 0% 0;
   }
   20% {
-    transform: translateX(-100%);
+    background-position: 100% 0;
   }
   100% {
-    transform: translateX(-100%);
+    background-position: 100% 0;
   }
 }
 

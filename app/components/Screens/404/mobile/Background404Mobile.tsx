@@ -1,7 +1,18 @@
+import BackgroundModalMobile from "~/components/Screens/ModalContact/assets/BackgroundModalMobile";
+
 export default function Background404Mobile() {
   return (
     <>
-      {/* Fond complet — gradient violet + titre (bgMobile.png) */}
+      {/* Dégradé bleu/violet — positionné en bas, fond de tout */}
+      <BackgroundModalMobile
+        className="absolute bottom-0 left-0 w-full"
+        aria-hidden="true"
+        style={{ height: "62%" }}
+      />
+
+      {/* bgMobile.png : texte + ligne lumineuse par-dessus le dégradé.
+          mix-blend-mode screen : les zones noires deviennent transparentes,
+          le texte blanc et la ligne restent visibles */}
       <div
         className="absolute inset-0 w-full h-full"
         aria-hidden="true"
@@ -10,10 +21,11 @@ export default function Background404Mobile() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          mixBlendMode: "screen",
         }}
       />
 
-      {/* GIF animé — backgroundImage CSS intentionnel car Sharp/OptimizedImage ne supporte pas les GIFs */}
+      {/* GIF animé — en haut, fondu vers transparent en bas pour révéler le dégradé */}
       <div
         className="absolute top-0 left-0 w-full"
         aria-hidden="true"
@@ -33,13 +45,13 @@ export default function Background404Mobile() {
               "linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, rgba(0,0,0,0))",
           }}
         />
-        {/* Gradient bas */}
+        {/* Gradient bas — fondu vers transparent pour révéler le fond bleu/violet */}
         <div
           className="absolute bottom-0 left-0 w-full"
           style={{
-            height: "15vh",
+            height: "18vh",
             background:
-              "linear-gradient(to top, rgba(0, 0, 0, 1) 20%, rgba(0,0,0,0))",
+              "linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0))",
           }}
         />
         {/* Gradient gauche */}
