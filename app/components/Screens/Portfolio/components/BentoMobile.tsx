@@ -79,6 +79,10 @@ const OptimizedVideo = memo(function OptimizedVideo({
   const ref = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const srcRef = useRef(src);
+  // Sync srcRef if src prop changes after mount
+  useEffect(() => {
+    srcRef.current = src;
+  }, [src]);
   const isInView = useInView(ref, { once: false, margin: "300px" });
 
   // Pré-charger la vidéo 600px avant d'entrer dans le viewport
@@ -100,6 +104,8 @@ const OptimizedVideo = memo(function OptimizedVideo({
     return () => observer.disconnect();
   }, []);
 
+  // Guard intentionnel : si src n'est pas encore assigné (observer en attente),
+  // on retourne tôt. onCanPlay/onLoadedMetadata relancent attemptPlay dès que src est prêt.
   const attemptPlay = () => {
     const video = videoRef.current;
     if (!video || !video.src) return;
