@@ -1,5 +1,5 @@
 import { cn } from "~/utils/ui/ui";
-import { useNavigate } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import "~/styles/tailwind.css";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
@@ -21,7 +21,6 @@ export default function CardHomePagePortfolio({
   slug,
   isMobile,
 }: PropsContent) {
-  const navigate = useNavigate();
   const imageClasses = cn(
     "h-full flex items-center justify-center md:rounded-[45px] rounded-[10px] relative"
   );
@@ -31,12 +30,10 @@ export default function CardHomePagePortfolio({
     : undefined;
 
   return (
-    <div
-      className="size-full relative overflow-hidden md:rounded-[45px] rounded-[14px]  p-2 cursor-pointer
-      shadow-lg"
-      onClick={() => {
-        navigate(`/portfolio/${slug}`);
-      }}
+    <Link
+      to={`/portfolio/${slug}`}
+      prefetch="intent"
+      className="size-full relative overflow-hidden md:rounded-[45px] rounded-[14px] p-2 cursor-pointer shadow-lg block"
     >
       <div
         style={{
@@ -69,6 +66,6 @@ export default function CardHomePagePortfolio({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
