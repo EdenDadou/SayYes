@@ -100,6 +100,33 @@ export default defineConfig({
               cacheableResponse: { statuses: [0, 200] },
             },
           },
+          {
+            // Images statiques /public/images/
+            urlPattern: /^https?:\/\/[^/]+\/images\//,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "static-images",
+              expiration: {
+                maxEntries: 150,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 jours
+              },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Vidéos /public/video/ et uploads bento
+            urlPattern: /^https?:\/\/[^/]+\/(video|uploads)\//,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "static-videos",
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 jours
+              },
+              cacheableResponse: { statuses: [0, 200] },
+              rangeRequests: true,
+            },
+          },
         ],
       },
       manifest: {
