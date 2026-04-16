@@ -1,14 +1,13 @@
 import type { MetaFunction } from "@remix-run/node";
 import { useViewport } from "~/utils/hooks/useViewport";
 import { AnimatePresence, motion } from "framer-motion";
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import TitleHomepage from "~/assets/icons/TitleHomepage";
 import "~/styles/tailwind.css";
 import Arrow from "~/assets/icons/Arrow";
 import Button from "~/components/Button";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
 import Card from "~/components/Card";
-import { useEffect, useRef, useState } from "react";
 import Play from "~/assets/icons/Play";
 import Pause from "~/assets/icons/Pause";
 import { useModalContact } from "~/contexts/ModalContactContext";
@@ -142,6 +141,7 @@ export default function IntroSection() {
               loop
               muted
               playsInline
+              preload="none"
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
               className="w-full h-full object-cover rounded-[10px]"

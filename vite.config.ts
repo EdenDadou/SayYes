@@ -89,7 +89,7 @@ export default defineConfig({
           {
             // Cache CacheFirst pour les images optimisées par /api/image
             // Après la 1ère visite, les images sont servies depuis le cache local
-            urlPattern: /^\/api\/image\?/,
+            urlPattern: /\/api\/image\?/,
             handler: "CacheFirst",
             options: {
               cacheName: "optimized-images",

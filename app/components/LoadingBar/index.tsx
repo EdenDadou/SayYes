@@ -69,17 +69,19 @@ export default function LoadingBar({
     }, 400);
 
     // Complétion anticipée si la page charge avant 400ms
+    let loadCompleteTimer: ReturnType<typeof setTimeout>;
     const handleLoad = () => {
       clearInterval(interval);
       clearTimeout(forceComplete);
       setProgress(95);
-      setTimeout(completeBar, 200);
+      loadCompleteTimer = setTimeout(completeBar, 200);
     };
     window.addEventListener("load", handleLoad);
 
     return () => {
       clearInterval(interval);
       clearTimeout(forceComplete);
+      clearTimeout(loadCompleteTimer);
       clearTimeout(completeTimer);
       window.removeEventListener("load", handleLoad);
     };
