@@ -91,6 +91,7 @@ async function main() {
       }
     } catch (err) {
       console.error(`✗ ${basename(srcPath)}: ${err.message}`);
+      if (fileArgIndex !== -1) process.exit(1); // en mode --file, bloquer le commit
       skipped++;
     }
   }
