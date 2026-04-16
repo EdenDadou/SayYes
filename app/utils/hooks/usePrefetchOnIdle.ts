@@ -1,10 +1,10 @@
 import { useEffect } from "react";
+import { MOBILE_BREAKPOINT } from "~/utils/hooks/useViewport";
 
 const ROUTES_TO_PREFETCH = ["/solutions", "/portfolio"];
 
 const IMAGES_TO_PREFETCH = [
   "/images/bg-menu-mobile.png",
-  "/images/solutions/Card1.png",
   "/images/solutions/Card2.png",
   "/images/solutions/Card3.png",
   "/images/solutions/Card4.png",
@@ -30,7 +30,7 @@ function injectPrefetchLink(href: string, as?: string): HTMLLinkElement {
 export function usePrefetchOnIdle(): void {
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.innerWidth >= 768) return;
+    if (window.innerWidth >= MOBILE_BREAKPOINT) return;
 
     const links: HTMLLinkElement[] = [];
 
@@ -47,10 +47,22 @@ export function usePrefetchOnIdle(): void {
       }
     };
 
-    const timer = setTimeout(prefetch, 2000);
+    let idleId: number | ReturnType<typeof setTimeout> | null = null;
+
+    if ("requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(prefetch, { timeout: 3000 });
+    } else {
+      idleId = setTimeout(prefetch, 2000);
+    }
 
     return () => {
-      clearTimeout(timer);
+      if (idleId !== null) {
+        if ("requestIdleCallback" in window && typeof idleId === "number") {
+          window.cancelIdleCallback(idleId);
+        } else {
+          clearTimeout(idleId as ReturnType<typeof setTimeout>);
+        }
+      }
       links.forEach((link) => link.parentNode?.removeChild(link));
     };
   }, []);
