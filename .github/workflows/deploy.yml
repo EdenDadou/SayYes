@@ -54,8 +54,10 @@ jobs:
           df -h . || true
 
           echo "📦 Installation des dépendances..."
-          # npm ci installe exactement le package-lock.json (déterministe, plus rapide)
-          npm ci --legacy-peer-deps || { echo "❌ Échec npm ci"; exit 1; }
+          # Supprimer le lock file pour laisser npm résoudre sur Node VPS (v20)
+          # Le lock file macOS (Node v25) génère des conflits vite-node/vite incompatibles
+          rm -f package-lock.json yarn.lock
+          npm install --legacy-peer-deps || { echo "❌ Échec npm install"; exit 1; }
 
           echo "🗄️ Configuration de la base de données..."
           # Créer le fichier .env avec DATABASE_URL
