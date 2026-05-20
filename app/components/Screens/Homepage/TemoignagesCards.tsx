@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Card from "~/components/Card";
@@ -13,7 +13,7 @@ export default function TemoignagesCards() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const itemsPerView = 4; // Affiche 4 cartes: 2 complètes au centre + 2 bouts sur les côtés
+  const itemsPerView = 4;
 
   const nextSlide = () => {
     setDirection(1);
@@ -27,7 +27,6 @@ export default function TemoignagesCards() {
     );
   };
 
-  // Get items for display: 3 full cards centered + 1 partial right
   const getVisibleItems = () => {
     const items = [];
     for (let i = 0; i < itemsPerView; i++) {
@@ -38,22 +37,33 @@ export default function TemoignagesCards() {
     return items;
   };
 
-  // Card width + gap
-  const cardWidth = 314;
+  const gap = 24;
   const mobileCardWidth = 280;
-  const gap = 16;
+  const [cardWidth, setCardWidth] = useState(360);
+  useEffect(() => {
+    const computeWidth = () => {
+      const sideOverflow = 80;
+      const w = (window.innerWidth + sideOverflow - 3 * gap) / 4;
+      setCardWidth(Math.round(Math.max(280, Math.min(350, w))));
+    };
+    computeWidth();
+    window.addEventListener("resize", computeWidth);
+    return () => window.removeEventListener("resize", computeWidth);
+  }, []);
 
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? cardWidth + gap : -(cardWidth + gap),
+      opacity: 1,
     }),
     center: {
       zIndex: 1,
       x: 0,
       opacity: 1,
     },
-    exit: (_direction: number) => ({
+    exit: (direction: number) => ({
       zIndex: 0,
+      x: direction > 0 ? -(cardWidth + gap) : cardWidth + gap,
       opacity: 1,
     }),
   };
@@ -61,6 +71,13 @@ export default function TemoignagesCards() {
   const swipeConfidenceThreshold = 5000;
   const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
+  };
+
+  // Synchronise l'animation light-border entre tous les remounts :
+  // delay négatif = la card démarre directement à la phase globale.
+  const getBorderAnimDelay = () => {
+    if (typeof window === "undefined") return "0s";
+    return `${-((performance.now() / 1000) % 10)}s`;
   };
 
   return (
@@ -130,19 +147,13 @@ export default function TemoignagesCards() {
 
       {/* Desktop Carousel Container */}
       <div className="hidden md:block relative w-full overflow-hidden">
-        {/* Gradient overlay droite pour effet partial sur la 4ème card */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
-          <div className="absolute right-0 top-0 bottom-0 w-[180px] bg-gradient-to-l from-[#0a0a0a] to-transparent" />
-        </div>
-        {/* Carousel Content */}
         <div className="relative h-[460px] w-full">
-          {/* Navigation Arrows - à cheval sur les bords des 3 cards visibles */}
-          <div className="absolute top-1/2 -translate-y-1/2 w-[1050px] left-1/2 -translate-x-1/2 flex flex-row justify-between items-center z-20 pointer-events-none">
+          {/* Navigation Arrows */}
+          <div className="absolute top-1/2 -translate-y-1/2 w-full left-0 px-12 flex flex-row justify-between items-center z-20 pointer-events-none">
             <button
               onClick={prevSlide}
               className="z-20 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all duration-300 group pointer-events-auto"
               aria-label="Projet précédent"
-              style={{ visibility: currentIndex === 0 ? "hidden" : "visible" }}
             >
               <ArrowLight className="w-[77px] h-[77px] text-white rotate-180 group-hover:scale-110 transition-transform" />
             </button>
@@ -169,10 +180,8 @@ export default function TemoignagesCards() {
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.5}
-              onDragEnd={(e, { offset, velocity }) => {
+              onDragEnd={(_e, { offset, velocity }) => {
                 const swipe = swipePower(offset.x, velocity.x);
-
-                // Déclenche soit par vélocité, soit par distance parcourue
                 if (swipe < -swipeConfidenceThreshold || offset.x < -100) {
                   nextSlide();
                 } else if (swipe > swipeConfidenceThreshold || offset.x > 100) {
@@ -182,17 +191,30 @@ export default function TemoignagesCards() {
               className="absolute flex items-center -translate-y-1/2"
               style={{
                 gap: `${gap}px`,
-                // 3 cards centered + 1 partial right
-                left: `calc(50% - ${cardWidth * 1.5 + gap}px)`,
+                left: `calc(50% - ${cardWidth * 2 + gap * 1.5}px)`,
               }}
             >
               {getVisibleItems().map((temoignage) => {
                 const data = CardsTemoignage(temoignage);
+                const isLeftEdge = temoignage.position === 0;
+                const isRightEdge =
+                  temoignage.position === itemsPerView - 1;
+                const overlayGradient = isLeftEdge
+                  ? "linear-gradient(to left, rgba(10,10,10,0) 50%, rgba(10,10,10,1) 100%)"
+                  : isRightEdge
+                  ? "linear-gradient(to right, rgba(10,10,10,0) 50%, rgba(10,10,10,1) 100%)"
+                  : null;
                 return (
                   <div
                     key={`${temoignage.auteur}-${temoignage.position}`}
-                    className="flex-shrink-0"
-                    style={{ width: `${cardWidth}px`, pointerEvents: "auto" }}
+                    className="flex-shrink-0 relative"
+                    style={
+                      {
+                        width: `${cardWidth}px`,
+                        pointerEvents: "auto",
+                        "--border-anim-delay": getBorderAnimDelay(),
+                      } as React.CSSProperties
+                    }
                     onPointerDown={(e) => e.stopPropagation()}
                   >
                     <Card
@@ -201,6 +223,12 @@ export default function TemoignagesCards() {
                       content={data.content}
                       borderClass={data.borderClass}
                     />
+                    {overlayGradient && (
+                      <div
+                        className="absolute inset-0 pointer-events-none rounded-[32px]"
+                        style={{ background: overlayGradient }}
+                      />
+                    )}
                   </div>
                 );
               })}
@@ -266,7 +294,7 @@ export const CardsTemoignage = ({
       <div className="size-full md:p-3 p-2">
         <div className="h-full flex items-center justify-center rounded-[24px] relative overflow-hidden bg-black/70">
           <div className="white-halo absolute -top-100 -translate-y-[60%] -left-100 -translate-x-1/2 w-full h-full z-0" />
-          <div className="purple-halo absolute -bottom-100 translate-y-[60%] left-0 w-full h-full z-0" />
+          <div className="card-purple-halo absolute -bottom-1/3 left-1/2 -translate-x-1/2 w-[140%] h-[80%] z-0 pointer-events-none" />
           <div className="flex flex-col p-8 gap-6">
             {optimizedLogo && (
               <img

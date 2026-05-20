@@ -30,7 +30,7 @@ export default function ContentSuccess({
       <div
         className="absolute right-4 w-[753px] h-[489px]"
         style={{
-          backgroundImage: 'url("images/404/404.gif")',
+          backgroundImage: 'url("/images/404/404.gif")',
           backgroundSize: "100% 100%",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "right center",

@@ -97,9 +97,6 @@ export default function CarouselCard() {
       <div style={{ height: `${supports.length * 50}vh` }}>
         {/* Sticky container qui reste fixe pendant le scroll */}
         <div className="sticky top-0 h-screen flex flex-col justify-center items-center">
-          {/* Backgrounds positionnés en dehors du flux */}
-          {/* <BackgroundSideLueur className="absolute right-0 h-auto z-0 w-1/2 top-80 pointer-events-none" />
-          <BackgroundSideLueur className="scale-x-[-1] absolute left-0 h-auto z-0 w-[60%] pointer-events-none" /> */}
           <OptimizedImage
             src="./images/homepage/bg-halo.png"
             alt="background"
@@ -178,11 +175,11 @@ export const CardsSupport = ({
   return {
     height: 422,
     image: "./images/homepage/identite-visuelle-1.png",
-    borderRadius: 40,
+    borderRadius: 48,
     name,
-    borderClass: "light-border rounded-[40px]",
+    borderClass: "light-border rounded-[48px]",
     content: (
-      <div className="h-full w-full md:w-[422px] relative md:p-8 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
+      <div className="h-full w-full md:w-[422px] relative md:p-8 p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[48px]">
         <img
           src={optimizedImage}
           alt=""

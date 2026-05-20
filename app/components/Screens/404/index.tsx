@@ -27,7 +27,7 @@ export default function Page404() {
         <div
           className="absolute right-0 w-[780px] h-[480px] z-0"
           style={{
-            backgroundImage: 'url("images/404/404.gif")',
+            backgroundImage: 'url("/images/404/404.gif")',
             backgroundSize: "100% 100%",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right center",
@@ -44,7 +44,7 @@ export default function Page404() {
               <div
                 className="w-full h-full"
                 style={{
-                  backgroundImage: 'url("images/404/Title404.png")',
+                  backgroundImage: 'url("/images/404/Title404.png")',
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "608px 359px",
                 }}

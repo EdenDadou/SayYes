@@ -180,7 +180,7 @@ export default function IntroSection() {
             <OptimizedImage
               src="/images/homepage/bg-section-1.png"
               alt="background"
-              className="absolute -top-[102px] left-0 w-full h-auto z-0 opacity-80"
+              className="absolute -top-[104px] left-0 w-full h-auto z-0 opacity-80"
               desktopSize="desktop"
               noPlaceholder
             />
@@ -206,7 +206,7 @@ export default function IntroSection() {
               <Arrow className="w-[22px]" />
               <p>Illustration</p>
             </div>
-            <p className="text-white font-jakarta-semibold text-[28px] -mt-1">
+            <p className="text-white font-jakarta-semibold text-[28px] -mt-2">
               Say Yes réunit toutes les expertises créatives
             </p>
           </div>

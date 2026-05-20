@@ -70,8 +70,8 @@ export default function ContentSolutionMobile({
               "linear-gradient(to top, black 60%, transparent 100%)",
           }}
         />
-        <div className="relative w-full h-full flex flex-col items-center justify-center z-20 pb-16 px-2">
-          <div className="relative z-10 flex flex-col items-start md:justify-center justify-end size-full px-4 md:px-20 gap-4">
+        <div className="relative w-full h-full flex flex-col items-center justify-center z-20 px-2">
+          <div className="relative z-10 flex flex-col items-start justify-center size-full px-4 md:px-20 gap-4">
             {subtitle !== "last" && (
               <div className="flex flex-row items-center justify-center gap-2 text-[#9DA4AA]">
                 <Star className="w-4 h-4" fill="rgb(255 255 255 / 0.5)" />

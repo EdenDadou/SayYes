@@ -35,3 +35,13 @@
   background: linear-gradient(180deg, #000 -56.69%, #989898 43.73%);
   filter: blur(90.97603607177734px);
 }
+
+.card-purple-halo {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(79, 11, 172, 0.55) 0%,
+    rgba(79, 11, 172, 0.25) 35%,
+    rgba(79, 11, 172, 0) 70%
+  );
+  filter: blur(40px);
+}
