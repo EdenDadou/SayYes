@@ -2,7 +2,6 @@ import type { MetaFunction } from "@remix-run/node";
 import { useViewport } from "~/utils/hooks/useViewport";
 import { AnimatePresence, motion } from "framer-motion";
 import { Suspense, useEffect, useRef, useState } from "react";
-import TitleHomepage from "~/assets/icons/TitleHomepage";
 import "~/styles/tailwind.css";
 import Arrow from "~/assets/icons/Arrow";
 import Button from "~/components/Button";
@@ -179,7 +178,14 @@ export default function IntroSection() {
       <section className="relative z-10 md:w-[988px] mx-auto flex flex-col justify-center items-center overflow-hidden">
         <div className="flex flex-col items-center w-[988px] justify-center gap-5 py-20">
           <div className="h-[3px] md:w-36 w-20 holographic-bg rounded-full" />
-          <TitleHomepage width={940} />
+          <img
+            src="/images/homepage/title-desktop.svg"
+            alt="Say Yes"
+            width={940}
+            height={203}
+            loading="eager"
+            decoding="async"
+          />
 
           <div className="flex flex-col items-center justify-center gap-1">
             <div className="flex flex-row items-center gap-3 w-full justify-center text-white font-jakarta-semibold text-[28px]">
