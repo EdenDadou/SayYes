@@ -163,20 +163,35 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
           fetchPriority="high"
         />
       ) : null}
-      {/* Fond - Stage 1 */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: loadStage >= 1 ? 1 : 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+      {/* Couche fonds — dimensions fixes, indépendantes du contenu qui charge */}
+      <div
+        className="absolute inset-x-0 top-0 z-0 pointer-events-none"
+        aria-hidden
       >
-        <BackgroundProjectMobile1
-          className="absolute inset-0 w-screen object-cover z-10"
-          color={portfolio.couleur}
+        {/* Fond hero (Stage 1) — hauteur fixe pour couvrir intro + photo */}
+        <motion.div
+          className="absolute inset-x-0 top-0"
+          style={{ height: "820px" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: loadStage >= 1 ? 1 : 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <BackgroundProjectMobile1
+            className="absolute inset-0 w-full h-full"
+            preserveAspectRatio="xMidYMid slice"
+            color={portfolio.couleur}
+          />
+          {/* Dégradé blanc en bas du SVG pour fondu vers les sections bg-white */}
+          <div className="absolute bottom-0 left-0 right-0 h-[120px] bg-gradient-to-t from-white to-transparent" />
+        </motion.div>
+        {/* Aplat blanc qui prolonge le hero jusqu'au bento 1 */}
+        <div
+          className="absolute left-0 right-0 bg-white"
+          style={{ top: "820px", height: "1500px" }}
         />
-        <div className="absolute z-2 bg-white inset-0 h-[1500px]" />
-      </motion.div>
+      </div>
       <main
-        className="w-screen h-fit relative overflow-hidden py-8 mobile-optimized-scroll z-30"
+        className="w-full h-fit relative overflow-hidden py-8 mobile-optimized-scroll z-10"
         style={mobileScrollContainerStyle}
       >
         {/* Main Content */}
@@ -352,12 +367,19 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
             animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
             transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
           >
-            <BackgroundProject2
-              fill={portfolio.couleur}
-              className="absolute left-0 right-0 top-0 w-screen"
-              style={{ height: "auto", minHeight: "100%" }}
-              preserveAspectRatio="xMidYMin slice"
-            />
+            {/* Wrapper à hauteur fixe : découple le SVG du Bento qui grandit
+                au lazy-load des images (sinon le blur SVG se redessine au scroll). */}
+            <div
+              className="absolute left-0 right-0 top-0 w-full pointer-events-none"
+              style={{ height: "900px" }}
+              aria-hidden
+            >
+              <BackgroundProject2
+                fill={portfolio.couleur}
+                className="absolute inset-0 w-full h-full"
+                preserveAspectRatio="xMidYMid slice"
+              />
+            </div>
             <AnimatedSection className="relative z-50 bg-white -mt-40">
               <h2 className="flex flex-col justify-center items-center text-[26px] font-bold text-black font-jakarta-bold z-50">
                 <span className="flex flex-row items-center justify-center gap-2 font-jakarta-semi-bold tracking-[-1px] leading-[30px]">
@@ -440,17 +462,21 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
           </motion.section>
         </div>
 
-        {/* Background 3 - Stage 4 */}
+        {/* Background 3 - Stage 4
+            Hauteur fixe en svh (small viewport height : ne bouge pas quand
+            la barre URL mobile se rétracte). Position ancrée en bottom du main
+            mais avec une hauteur figée → le SVG ne se redimensionne pas. */}
         <motion.div
-          className="absolute left-0 right-0 -bottom-28 w-screen z-0"
+          className="absolute left-0 right-0 -bottom-28 w-full z-0 pointer-events-none"
           style={{ height: "120svh" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+          aria-hidden
         >
           <BackgroundProject3
             fill={portfolio.couleur}
-            className="w-full h-full"
+            className="absolute inset-0 w-full h-full"
             preserveAspectRatio="xMidYMid slice"
           />
         </motion.div>

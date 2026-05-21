@@ -104,18 +104,6 @@ section {
   right: 0;
 }
 
-/* Mobile uniquement : réduire le blur du header sticky pour éviter le jank
-   au scroll. Le backdrop-filter blur(30px) hérité de .border-custom force
-   iOS Safari à re-sampler les pixels sous le header (incl. title hero) à
-   chaque frame de scroll. blur(10px) reste visuellement très proche pour
-   un coût GPU bien moindre. */
-@media (max-width: 767px) {
-  .header-custom.border-custom {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-}
-
 /* ============================================
    OPTIMISATIONS PERFORMANCE MOBILE
    ============================================ */

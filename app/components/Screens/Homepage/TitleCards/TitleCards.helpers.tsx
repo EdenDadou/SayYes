@@ -17,9 +17,9 @@ export const CardsIdentiteVisuelle = ({
     borderRadius: "40px",
     borderClass: "light-border rounded-[40px]",
     content: isMobile ? (
-      <div className="h-full w-full relative p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm bg-white/5 rounded-[40px]">
+      <div className="h-full w-full relative p-4 cursor-pointer shadow-lg overflow-hidden backdrop-blur-sm rounded-[40px]">
         <div
-          className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[34px] opacity-50"
+          className="absolute inset-3 w-[calc(100%-24px)] h-[calc(100%-24px)] object-cover bg-center bg-no-repeat bg-cover z-0 rounded-[34px]"
           style={{
             backgroundImage: `url(${getOptimizedImageUrl(img, "mobile")})`,
           }}

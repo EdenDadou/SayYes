@@ -13,6 +13,9 @@ interface HeaderProps {
   isOpenMenu: boolean;
 }
 
+const HIDE_THRESHOLD = 100;
+const DIRECTION_DELTA = 5;
+
 const HeaderMobile = ({
   setIsOpenModalContact,
   setIsOpenMenu,
@@ -21,90 +24,100 @@ const HeaderMobile = ({
 }: HeaderProps) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
+  const isVisibleRef = useRef(true);
   const lastScrollY = useRef(0);
   const { scrollY } = useScroll();
 
-  // Force header visible when menu opens
+  const updateVisibility = (next: boolean) => {
+    if (isVisibleRef.current === next) return;
+    isVisibleRef.current = next;
+    setIsVisible(next);
+  };
+
   useEffect(() => {
-    if (isOpenMenu) {
-      setIsVisible(true);
-    }
+    if (isOpenMenu) updateVisibility(true);
   }, [isOpenMenu]);
 
-  // Listen to scroll changes
   useMotionValueEvent(scrollY, "change", (latest) => {
-    // Keep header visible when menu is open
     if (isOpenMenu) {
-      if (!isVisible) setIsVisible(true);
+      updateVisibility(true);
       return;
     }
-    const direction = latest > lastScrollY.current ? "down" : "up";
-    const shouldHide = latest > 100 && direction === "down";
-    const shouldShow = direction === "up" || latest < 100;
-    if (shouldHide && isVisible) {
-      setIsVisible(false);
-    } else if (shouldShow && !isVisible) {
-      setIsVisible(true);
+    const delta = latest - lastScrollY.current;
+    if (Math.abs(delta) < DIRECTION_DELTA) return;
+
+    if (latest < HIDE_THRESHOLD) {
+      updateVisibility(true);
+    } else if (delta > 0) {
+      updateVisibility(false);
+    } else {
+      updateVisibility(true);
     }
     lastScrollY.current = latest;
   });
 
   return (
-    <motion.div
-      className="header-custom border-custom flex flex-row justify-between items-center mx-4 h-[60px] px-2 mb-20 z-[60]"
-      initial={{ y: 0, opacity: 1 }}
-      animate={{
-        y: isVisible ? 0 : -130,
-        opacity: isVisible ? 1 : 0,
-      }}
-      transition={{
-        type: "tween",
-        duration: 0.3,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-      style={{ willChange: "transform" }}
-    >
-      {/* Section gauche */}
-      <div className="flex justify-start z-10 relative">
-        <Button
-          ariaLabel={isOpenMenu ? "Fermer le menu" : "Ouvrir le menu"}
-          leftIcon={
-            <AnimatedBurgerMenu
-              isOpen={isOpenMenu}
-              className="text-black hover:text-black -m-1"
-            />
-          }
-          type="mobile"
-          onClick={() => {
-            setIsOpenMenu(!isOpenMenu);
-            if (!isOpenMenu) {
-              setIsOpenModalContact(false); // Ferme la modal contact si on ouvre le menu
+    <div className="sticky top-5 z-[60] mx-4 mb-20">
+      <motion.header
+        className="border-custom flex flex-row justify-between items-center h-[60px] px-2 rounded-[78px]"
+        initial={false}
+        animate={{
+          y: isVisible ? 0 : -130,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{
+          type: "tween",
+          duration: 0.3,
+          ease: [0.25, 0.1, 0.25, 1],
+        }}
+        style={{
+          willChange: "transform, opacity",
+          transform: "translateZ(0)",
+          WebkitBackfaceVisibility: "hidden",
+          backfaceVisibility: "hidden",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+        }}
+      >
+        <div className="flex justify-start z-10 relative">
+          <Button
+            ariaLabel={isOpenMenu ? "Fermer le menu" : "Ouvrir le menu"}
+            leftIcon={
+              <AnimatedBurgerMenu
+                isOpen={isOpenMenu}
+                className="text-black hover:text-black -m-1"
+              />
             }
-          }}
-        />
-      </div>
+            type="mobile"
+            onClick={() => {
+              setIsOpenMenu(!isOpenMenu);
+              if (!isOpenMenu) {
+                setIsOpenModalContact(false);
+              }
+            }}
+          />
+        </div>
 
-      {/* Logo centré */}
-      <LogoSayYes
-        className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[5px] z-0"
-        onClick={() => navigate("/")}
-        width={98}
-        height={80}
-      />
-
-      {/* Section droite */}
-      <div className="flex justify-end z-10 relative">
-        <Button
-          ariaLabel="Ouvrir le formulaire de contact"
-          leftIcon={<ChatBuble />}
-          type="mobile"
-          onClick={() => {
-            setIsOpenModalContact(!isOpenModalContact);
-            setIsOpenMenu(false); // Ferme le menu si on ouvre la modal contact
-          }}
+        <LogoSayYes
+          className="cursor-pointer absolute left-1/2 -translate-x-1/2 -top-[5px] z-0"
+          onClick={() => navigate("/")}
+          width={98}
+          height={80}
         />
-      </div>
-    </motion.div>
+
+        <div className="flex justify-end z-10 relative">
+          <Button
+            ariaLabel="Ouvrir le formulaire de contact"
+            leftIcon={<ChatBuble />}
+            type="mobile"
+            onClick={() => {
+              setIsOpenModalContact(!isOpenModalContact);
+              setIsOpenMenu(false);
+            }}
+          />
+        </div>
+      </motion.header>
+    </div>
   );
 };
 
