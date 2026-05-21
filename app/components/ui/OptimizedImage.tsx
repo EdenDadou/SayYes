@@ -16,11 +16,9 @@ import { MOBILE_BREAKPOINT } from "~/utils/hooks/useViewport";
 import type { RootLoaderData } from "~/root";
 
 const mobileOptimizedStyle: CSSProperties = {
-  willChange: "auto",
   transform: "translateZ(0)",
   backfaceVisibility: "hidden",
   WebkitBackfaceVisibility: "hidden",
-  contain: "layout style paint",
 };
 
 interface OptimizedImageProps

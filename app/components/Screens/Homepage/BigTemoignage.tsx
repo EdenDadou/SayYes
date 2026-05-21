@@ -72,7 +72,12 @@ export default function BigTemoignage() {
               "/images/homepage/icone-logiciel-mobile-1.png",
               "mobile"
             )}
-            style={{ y: y1Mobile }}
+            style={{
+              y: y1Mobile,
+              translateZ: 0,
+              willChange: "transform",
+              backfaceVisibility: "hidden",
+            }}
             className="relative z-0 top-6 w-[60%] mx-auto"
             alt="icones logiciels"
           />
@@ -81,7 +86,12 @@ export default function BigTemoignage() {
               "/images/homepage/icone-logiciel-mobile-2.png",
               "mobile"
             )}
-            style={{ y: y2Mobile }}
+            style={{
+              y: y2Mobile,
+              translateZ: 0,
+              willChange: "transform",
+              backfaceVisibility: "hidden",
+            }}
             className="absolute top-0 z-10 w-full"
             alt="icones logiciels"
           />

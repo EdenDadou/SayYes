@@ -180,7 +180,7 @@ export default function IntroSection() {
             <OptimizedImage
               src="/images/homepage/bg-section-1.png"
               alt="background"
-              className="absolute -top-[104px] left-0 w-full h-auto z-0 opacity-80"
+              className="absolute -top-[109px] left-0 w-full h-auto z-0 opacity-80"
               desktopSize="desktop"
               noPlaceholder
             />
