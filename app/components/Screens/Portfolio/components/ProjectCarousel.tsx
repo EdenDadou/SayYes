@@ -165,6 +165,7 @@ export default function ProjectCarousel({
                         titre={project.titre}
                         topTitle={portfolio?.topTitle}
                         slug={project.slug}
+                        reloadDocument
                       />
                     }
                     borderClass="card-hover rounded-[28px]"

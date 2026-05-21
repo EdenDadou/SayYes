@@ -34,6 +34,7 @@ const PhotoMain = memo(function PhotoMain({
   onImageLoad,
 }: PhotoMainProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(isMobileProp ?? false);
 
@@ -43,6 +44,28 @@ const PhotoMain = memo(function PhotoMain({
       setIsMobile(window.innerWidth < 768);
     }
   }, [isMobileProp]);
+
+  // Si l'image est déjà cachée (preload HTTP LCP), le `load` event peut se
+  // déclencher avant que React n'attache son listener. On vérifie `complete`
+  // au montage pour ne pas rester bloqué sur le placeholder flou.
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      setIsLoaded(true);
+      onImageLoad?.();
+    }
+  }, [onImageLoad]);
+
+  // Fallback de sécurité : si onLoad n'a pas été reçu après 5s, on révèle
+  // l'image quand même pour éviter un blur permanent (cf. OptimizedImage).
+  useEffect(() => {
+    if (isLoaded) return;
+    const timeout = setTimeout(() => {
+      setIsLoaded(true);
+      onImageLoad?.();
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [isLoaded, onImageLoad]);
 
   // Désactiver l'effet parallax sur mobile pour éviter les recalculs coûteux
   const { scrollYProgress } = useScroll({
@@ -100,6 +123,7 @@ const PhotoMain = memo(function PhotoMain({
         className="w-full h-full relative"
       >
         <motion.img
+          ref={imgRef}
           src={optimizedSrc}
           srcSet={srcSet}
           sizes={sizes}

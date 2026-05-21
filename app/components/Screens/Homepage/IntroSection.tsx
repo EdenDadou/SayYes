@@ -26,7 +26,7 @@ export const meta: MetaFunction = () => {
 export default function IntroSection() {
   const isMobile = useViewport();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const { openModalContact } = useModalContact();
 
   const togglePlay = () => {
@@ -122,7 +122,7 @@ export default function IntroSection() {
         borderClass="light-border rounded-[14px]"
         content={
           <div
-            className="size-full relative p-2 cursor-pointer shadow-lg"
+            className="size-full relative p-2 cursor-pointer shadow-lg group"
             onClick={togglePlay}
           >
             <video
@@ -140,7 +140,9 @@ export default function IntroSection() {
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div
                 className={`w-16 h-16 rounded-full backdrop-blur-2xl flex items-center justify-center transition-opacity duration-300 border border-white ${
-                  isPlaying ? "opacity-0 hover:opacity-100" : "opacity-100"
+                  isPlaying
+                    ? "opacity-0 group-hover:opacity-100"
+                    : "opacity-100"
                 }`}
               >
                 {!isPlaying ? (
@@ -221,7 +223,7 @@ export default function IntroSection() {
           borderRadius="40px"
           content={
             <div
-              className="size-full relative md:p-5 p-1 cursor-pointer shadow-lg"
+              className="size-full relative md:p-5 p-1 cursor-pointer shadow-lg group"
               onClick={togglePlay}
             >
               <video
@@ -232,6 +234,8 @@ export default function IntroSection() {
                 autoPlay
                 playsInline
                 preload="metadata"
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
                 className="w-full h-full object-cover rounded-[23px]"
               />
 
@@ -239,7 +243,9 @@ export default function IntroSection() {
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div
                   className={`w-20 h-20 rounded-full backdrop-blur-2xl flex items-center justify-center transition-opacity duration-300  border border-white ${
-                    isPlaying ? "opacity-0 hover:opacity-100" : "opacity-100"
+                    isPlaying
+                      ? "opacity-0 group-hover:opacity-100"
+                      : "opacity-100"
                   }`}
                 >
                   {!isPlaying ? (

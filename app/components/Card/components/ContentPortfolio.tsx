@@ -12,6 +12,7 @@ interface PropsContent {
   titre?: string;
   topTitle?: string;
   slug?: string;
+  reloadDocument?: boolean;
 }
 
 export default memo(function ContentPortfolio({
@@ -20,6 +21,7 @@ export default memo(function ContentPortfolio({
   titre,
   topTitle,
   slug,
+  reloadDocument = false,
 }: PropsContent) {
   const prefetchedRef = useRef(false);
 
@@ -42,6 +44,7 @@ export default memo(function ContentPortfolio({
     <Link
       to={`/portfolio/${slug}`}
       prefetch="intent"
+      reloadDocument={reloadDocument}
       onMouseEnter={handleMouseEnter}
       className="size-full relative overflow-hidden md:rounded-[16px] hover:rounded-[26px] rounded-[10px] md:p-2 p-1 cursor-pointer shadow-lg block"
     >

@@ -4,7 +4,7 @@ import { useState, useCallback, memo } from "react";
 import ModalContact from "~/components/Screens/ModalContact";
 import Footer from "~/components/Footer";
 import "~/styles/tailwind.css";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLocation } from "@remix-run/react";
 import { ModalContactProvider } from "~/contexts/ModalContactContext";
 
@@ -39,17 +39,14 @@ const Desktoplayout = memo(function Desktoplayout({
       <main className="w-full h-fit relative flex flex-col">
         <ModalContact isOpen={isOpenModalContact} close={closeModal} />
         <Header setIsOpenModalContact={setIsOpenModalContact} />
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          {children}
+        </motion.div>
         {footer ? (
           <Footer
             setIsOpenModalContact={setIsOpenModalContact}

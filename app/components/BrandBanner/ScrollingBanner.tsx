@@ -3,7 +3,7 @@ import SvgStars from "../../assets/icons/Stars";
 
 const ScrollingBanner = () => {
   return (
-    <div className="relative bg-drop-grey filter w-full md:h-[100px] bottom-0 left-0 right-0 flex items-center overflow-hidden">
+    <div className="relative bg-drop-grey filter w-full md:h-[100px] 2xl:h-[120px] bottom-0 left-0 right-0 flex items-center overflow-hidden">
       {/* Overlay sombre à gauche */}
       <div className="absolute left-0 top-0 h-full w-[600px] bg-gradient-to-r from-[rgba(10,10,10,1)] via-[rgba(10,10,10,1)]/100 to-transparent pointer-events-none z-10"></div>
 
@@ -11,13 +11,13 @@ const ScrollingBanner = () => {
       <div className="absolute right-0 top-0 h-full w-[200px] bg-gradient-to-l from-[rgba(10,10,10,1)] via-[rgba(10,10,10,1)]/50 to-transparent pointer-events-none z-10"></div>
 
       <div className="w-full flex flex-col z-20 pl-10 items-start">
-        <p className="font-jakarta-semi-bold md:text-3xl 2xl:text-6xl w-[300px] pl-1">
+        <p className="font-jakarta-semi-bold md:text-3xl 2xl:text-4xl w-[300px] 2xl:w-[360px] pl-1 leading-tight whitespace-nowrap">
           4.9 <span className="font-jakarta font-extralight">I</span> 5
           Shortlist
         </p>
         <div className="flex flex-row items-center justify-center">
           <SvgStars className="w-20" />
-          <p className="font-jakarta md:text-md 2xl:text-3xl holographic-text">
+          <p className="font-jakarta md:text-md 2xl:text-xl holographic-text">
             Clients conquis
           </p>
         </div>

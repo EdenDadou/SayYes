@@ -197,12 +197,17 @@ export default function PortfolioSlug() {
               animate={{ opacity: loadStage >= 1 ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="absolute inset-0 z-0"
+              className="absolute top-0 left-0 right-0 z-0 pointer-events-none"
             >
-              <BackgroundProject1
-                fill={portfolio.couleur}
-                className="absolute top-0 left-0 right-0 w-screen object-cover"
-              />
+              <div className="relative w-screen h-[700px]">
+                <BackgroundProject1
+                  fill={portfolio.couleur}
+                  preserveAspectRatio="none"
+                  className="block w-full h-full"
+                />
+                <div className="absolute bottom-0 left-0 right-0 h-[140px] bg-gradient-to-t from-white to-transparent" />
+              </div>
+              <div className="w-full bg-white h-[600px]" />
             </motion.div>
           </AnimatePresence>
           <motion.main
@@ -337,7 +342,7 @@ export default function PortfolioSlug() {
                   </section>
 
                   {/* Deliverables */}
-                  <div className="flex justify-center pb-[100px] bg-white px-8 z-20">
+                  <div className="relative flex justify-center pb-[100px] bg-white px-8 z-20">
                     <div className="w-[990px] flex flex-col">
                       <h2 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-semi-bold tracking-[-1px]">
                         <Star className="w-6 h-6" fill="black" />
