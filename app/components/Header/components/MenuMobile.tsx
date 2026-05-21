@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "@remix-run/react";
 import Localisation from "~/assets/icons/Localisation";
 import ChatBuble from "../assets/ChatBuble";
 import OptimizedImage from "~/components/ui/OptimizedImage";
+import { useModalContact } from "~/contexts/ModalContactContext";
 
 interface MenuMobileProps {
   isOpen: boolean;
@@ -83,6 +84,14 @@ const backgroundVariants = {
 export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { openModalContact } = useModalContact();
+
+  function handleOpenContact() {
+    close();
+    setTimeout(() => {
+      openModalContact();
+    }, 550);
+  }
 
   // Disable body scroll when menu is open
   useEffect(() => {
@@ -242,6 +251,7 @@ export default function MenuMobile({ isOpen, close }: MenuMobileProps) {
                 label="Parlons design !"
                 type="plain"
                 leftIcon={<ChatBuble />}
+                onClick={handleOpenContact}
               />
             </motion.div>
           </div>

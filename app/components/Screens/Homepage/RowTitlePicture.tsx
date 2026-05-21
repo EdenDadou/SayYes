@@ -73,13 +73,14 @@ export default function RowTitlePicture() {
             </p>
           </div>
         </div>
-        <div className="relative overflow-hidden rounded-3xl border border-white/5">
+        <div className="relative overflow-hidden rounded-3xl border border-white/5 w-[80vw]">
           <OptimizedImage
             src="./images/homepage/grid-partenaire.png"
             alt=""
             mobileSize="tablet"
             noPlaceholder
             noMobileOptimization
+            className="w-full h-auto block"
           />
           <PartenaireGrid />
         </div>
