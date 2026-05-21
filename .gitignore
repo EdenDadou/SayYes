@@ -8,3 +8,6 @@ node_modules
 /generated/prisma
 
 /public/uploads/*
+
+# Backup local de la vidéo originale avant compression (ne pas commit)
+public/video/bureau.original.mp4

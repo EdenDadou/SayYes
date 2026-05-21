@@ -58,6 +58,7 @@ export default function IntroSection() {
         mobileSize="tablet"
         noPlaceholder
         noMobileOptimization
+        priority
       />
       <GridBg className="absolute -top-36 w-full left-0 right-0 h-auto z-0 opacity-80" />
       <div className="relative z-10 flex flex-col items-center gap-7">
