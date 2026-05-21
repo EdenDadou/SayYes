@@ -146,8 +146,23 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
     margin: "-50px",
   });
 
+  const lcpPhoto = portfolio.photoMain || portfolio.photoCouverture;
+  const lcpSrcSet = lcpPhoto
+    ? `${getOptimizedImageUrl(lcpPhoto, "mobile")} 640w, ${getOptimizedImageUrl(lcpPhoto, "tablet")} 1024w`
+    : "";
+
   return (
     <MobileLayout>
+      {lcpPhoto ? (
+        <link
+          rel="preload"
+          as="image"
+          href={getOptimizedImageUrl(lcpPhoto, "tablet")}
+          imageSrcSet={lcpSrcSet}
+          imageSizes="calc(100vw - 32px)"
+          fetchPriority="high"
+        />
+      ) : null}
       {/* Fond - Stage 1 */}
       <motion.div
         initial={{ opacity: 0 }}

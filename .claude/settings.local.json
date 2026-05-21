@@ -8,7 +8,11 @@
       "Bash(mkdir:*)",
       "Bash(test:*)",
       "Bash(npx chrome-devtools-mcp@latest:*)",
-      "Bash(find /Users/eden/Desktop/BANZAI/Projets/SayYes/SayYes/app/server -type f -exec wc -l {} +)"
+      "Bash(find /Users/eden/Desktop/BANZAI/Projets/SayYes/SayYes/app/server -type f -exec wc -l {} +)",
+      "Bash(export CHROME_PATH=\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\")",
+      "Bash(rm -f /tmp/lh-after/*)",
+      "Bash(npx --yes lighthouse http://localhost:4000/portfolio/codeworks --form-factor=mobile --screenEmulation.mobile=true --screenEmulation.width=375 --screenEmulation.height=667 --screenEmulation.deviceScaleFactor=2 --throttling-method=simulate --only-categories=performance --output=json --output-path=/tmp/lh-after/codeworks-after '--chrome-flags=--headless=new --no-sandbox --ignore-certificate-errors' --quiet)",
+      "Bash(python3)"
     ],
     "deny": [],
     "ask": []

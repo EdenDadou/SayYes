@@ -30,10 +30,12 @@ const OptimizedImage = memo(function OptimizedImage({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "300px" });
 
-  // Utiliser l'URL optimisée pour mobile
+  // Utiliser l'URL optimisée pour mobile.
+  // mobileOnly : restreint le srcSet à [mobile, tablet] pour éviter que le DPR force
+  // le téléchargement de la version 1920w (~400 KB par image bento) sur écran Retina.
   const optimizedSrc = getOptimizedImageUrl(src, "mobile");
-  const srcSet = generateSrcSet(src);
-  const sizes = generateSizes();
+  const srcSet = generateSrcSet(src, { mobileOnly: true });
+  const sizes = generateSizes({ mobileOnly: true });
 
   return (
     <motion.div

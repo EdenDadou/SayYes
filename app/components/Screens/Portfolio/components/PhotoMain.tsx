@@ -73,15 +73,10 @@ const PhotoMain = memo(function PhotoMain({
 
   // Mobile : srcSet restreint à mobile+tablet pour éviter que le DPR pousse le navigateur
   // à télécharger la version 1920w (~670 KB) sur un écran de 375px.
-  // Largeur d'affichage = viewport - 32px (padding px-4 du parent).
-  const srcSet = isMobile
-    ? `${getOptimizedImageUrl(photo, "mobile")} 640w, ${getOptimizedImageUrl(photo, "tablet")} 1024w`
-    : generateSrcSet(photo) || undefined;
-  const sizes = isMobile
-    ? "calc(100vw - 32px)"
-    : srcSet
-      ? generateSizes()
-      : undefined;
+  const srcSet = generateSrcSet(photo, { mobileOnly: isMobile }) || undefined;
+  const sizes = srcSet
+    ? generateSizes({ mobileOnly: isMobile })
+    : undefined;
 
   return (
     <div

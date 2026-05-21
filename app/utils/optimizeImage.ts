@@ -109,9 +109,15 @@ export function getOptimizedImageUrl(
 }
 
 /**
- * Génère un srcset pour les images responsives
+ * Génère un srcset pour les images responsives.
+ * mobileOnly = true exclut la candidate "desktop" (1920w) : sur un viewport ≤640px
+ * avec DPR=2-3, le navigateur calcule (640×3 = 1920px) et choisit la version la plus
+ * large du srcset → 1920w. Limiter à [mobile, tablet] économise ~500 KB par image.
  */
-export function generateSrcSet(originalUrl: string): string {
+export function generateSrcSet(
+  originalUrl: string,
+  opts: { mobileOnly?: boolean } = {}
+): string {
   if (!originalUrl) return "";
 
   // Pas de srcset pour les vidéos ou URLs externes
@@ -122,7 +128,9 @@ export function generateSrcSet(originalUrl: string): string {
     return "";
   }
 
-  const sizes: ImageSize[] = ["mobile", "tablet", "desktop"];
+  const sizes: ImageSize[] = opts.mobileOnly
+    ? ["mobile", "tablet"]
+    : ["mobile", "tablet", "desktop"];
 
   return sizes
     .map((size) => {
@@ -134,8 +142,11 @@ export function generateSrcSet(originalUrl: string): string {
 }
 
 /**
- * Génère l'attribut sizes pour le srcset
+ * Génère l'attribut sizes pour le srcset.
+ * mobileOnly = true → hint plus précis (full viewport - padding latéral),
+ * évite de gonfler la candidate choisie par le navigateur sur écrans Retina.
  */
-export function generateSizes(): string {
+export function generateSizes(opts: { mobileOnly?: boolean } = {}): string {
+  if (opts.mobileOnly) return "calc(100vw - 32px)";
   return "(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px";
 }

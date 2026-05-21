@@ -5,6 +5,13 @@ on:
     branches:
       - main
 
+# Empêche deux déploiements simultanés sur la même branche : si un nouveau push
+# arrive pendant qu'un run est en cours, l'ancien est annulé. Évite les courses
+# entre deux `rm -rf node_modules && npm install` sur le VPS.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
