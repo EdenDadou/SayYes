@@ -12,6 +12,7 @@ import ChatBuble from "../Header/assets/ChatBuble";
 import Localisation from "~/assets/icons/Localisation";
 import Star from "~/assets/icons/Star";
 import { Link } from "@remix-run/react";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 interface IFooterProps {
   setIsOpenModalContact: (value: boolean) => void;
@@ -69,23 +70,35 @@ export default function Footer({
         />
         {footerType === "home" ? (
           <motion.img
-            src="/images/footer/HaloPurple.png"
+            src={getOptimizedImageUrl(
+              "/images/footer/HaloPurple.png",
+              "desktop"
+            )}
             alt="footer"
+            loading="lazy"
+            decoding="async"
             className="w-full h-full absolute bottom-0 left-0 pointer-events-none"
             style={{ opacity }}
           />
         ) : (
           <motion.img
-            src="/images/footer/Halo.png"
+            src={getOptimizedImageUrl("/images/footer/Halo.png", "desktop")}
             alt="footer"
+            loading="lazy"
+            decoding="async"
             className="w-full h-full absolute top-0 left-0 pointer-events-none"
             style={{ opacity }}
           />
         )}
 
         <motion.img
-          src="/images/footer/HaloBottom.png"
+          src={getOptimizedImageUrl(
+            "/images/footer/HaloBottom.png",
+            "desktop"
+          )}
           alt="footer"
+          loading="lazy"
+          decoding="async"
           className="w-full h-full absolute -bottom-20 left-0 pointer-events-none"
           style={{ opacity: opacitySecondary }}
         />

@@ -94,9 +94,7 @@ export default function Index() {
       {isMobile ? (
         <MobileLayout>
           <div className="w-full h-fit relative flex flex-col gap-16">
-            <FadeInView>
-              <IntroSection />
-            </FadeInView>
+            <IntroSection />
             <FadeInView>
               <TitleCards />
             </FadeInView>
@@ -129,9 +127,7 @@ export default function Index() {
         <Desktoplayout footerType="home">
           <div className="w-screen h-fit relative pt-16 flex flex-col gap-20">
             {/* //Section 1 */}
-            <FadeInView>
-              <IntroSection />
-            </FadeInView>
+            <IntroSection />
             {/* //Section 2 */}
             <FadeInView>
               <TitleCards />

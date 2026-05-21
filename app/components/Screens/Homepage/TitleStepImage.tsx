@@ -298,7 +298,6 @@ export default function TitleStepImage() {
               src="./images/homepage/step-img.png"
               alt="step-image"
               mobileSize="mobile"
-              priority
             />
           </div>
         }
@@ -368,7 +367,6 @@ export default function TitleStepImage() {
                   src="./images/homepage/step-img.png"
                   alt="step-image"
                   desktopSize="desktop"
-                  priority
                 />
               </div>
             }

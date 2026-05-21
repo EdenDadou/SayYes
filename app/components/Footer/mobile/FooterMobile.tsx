@@ -10,6 +10,7 @@ import LogoSayYesColor from "~/components/Header/assets/LogoSayYesColor";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
 import { Link } from "@remix-run/react";
 import { useRef } from "react";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 interface IFooterMobileProps {
   setIsOpenModalContact: (value: boolean) => void;
@@ -40,16 +41,20 @@ export default function FooterMobile({
       >
         <SayYesFooter className="w-full h-fit absolute" />
         <motion.img
-          src="/images/footer/Halo.png"
+          src={getOptimizedImageUrl("/images/footer/Halo.png", "tablet")}
           alt="footer"
+          loading="lazy"
+          decoding="async"
           className="w-screen h-full absolute inset-0 object-cover z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: isInView ? 1 : 0 }}
           transition={{ duration: 2.5 }}
         />
         <motion.img
-          src="/images/footer/HaloBottom.png"
+          src={getOptimizedImageUrl("/images/footer/HaloBottom.png", "tablet")}
           alt="footer"
+          loading="lazy"
+          decoding="async"
           className="w-full h-[80px] absolute -bottom-5 left-0 object-cover"
           initial={{ opacity: 0 }}
           animate={{ opacity: isInView ? 1 : 0 }}
