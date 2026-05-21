@@ -41,27 +41,14 @@ export default function IntroSection() {
     }
   };
 
-  // Lazy loading de la vidéo sur mobile : charge uniquement quand visible
+  // Garantit la lecture auto après l'hydratation (au cas où l'attribut autoPlay
+  // serait ignoré par le navigateur sur mobile en cold start)
   useEffect(() => {
-    if (!isMobile || !videoRef.current) return;
-    const video = videoRef.current;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.src = "/video/bureau.mp4";
-          video.play().catch(() => {
-            // Autoplay bloqué par le navigateur — l'utilisateur cliquera
-          });
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, [isMobile]);
+    if (!videoRef.current) return;
+    videoRef.current.play().catch(() => {
+      // Autoplay bloqué par le navigateur — l'utilisateur cliquera
+    });
+  }, []);
 
   return isMobile ? (
     <section className="relative w-full flex flex-col gap-10 px-5 text-white">
@@ -138,10 +125,12 @@ export default function IntroSection() {
           >
             <video
               ref={videoRef}
+              src="/video/bureau.mp4"
               loop
               muted
+              autoPlay
               playsInline
-              preload="none"
+              preload="metadata"
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
               className="w-full h-full object-cover rounded-[10px]"
@@ -231,8 +220,9 @@ export default function IntroSection() {
                 src="/video/bureau.mp4"
                 loop
                 muted
+                autoPlay
                 playsInline
-                preload="none"
+                preload="metadata"
                 className="w-full h-full object-cover rounded-[23px]"
               />
 
