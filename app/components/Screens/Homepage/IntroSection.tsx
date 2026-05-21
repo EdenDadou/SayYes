@@ -62,13 +62,15 @@ export default function IntroSection() {
       <GridBg className="absolute -top-36 w-full left-0 right-0 h-auto z-0 opacity-80" />
       <div className="relative z-10 flex flex-col items-center gap-7">
         <div className="h-[3px] w-16 holographic-bg rounded-full" />
-        <OptimizedImage
-          src="/images/homepage/mobile/title.png"
+        <img
+          src="/images/homepage/mobile/title-640.webp"
           alt="Say Yes"
-          mobileSize="mobile"
-          className="w-full"
-          priority
-          noPlaceholder
+          width={640}
+          height={178}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          className="w-full h-auto"
         />
         <div className="flex flex-col gap-1 text-[18px] leading-[22px] font-jakarta-semibold items-center">
           <div className="flex flex-row items-center gap-2">

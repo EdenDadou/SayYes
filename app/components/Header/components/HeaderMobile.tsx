@@ -35,13 +35,15 @@ const HeaderMobile = ({
   useMotionValueEvent(scrollY, "change", (latest) => {
     // Keep header visible when menu is open
     if (isOpenMenu) {
-      setIsVisible(true);
+      if (!isVisible) setIsVisible(true);
       return;
     }
     const direction = latest > lastScrollY.current ? "down" : "up";
-    if (latest > 100 && direction === "down") {
+    const shouldHide = latest > 100 && direction === "down";
+    const shouldShow = direction === "up" || latest < 100;
+    if (shouldHide && isVisible) {
       setIsVisible(false);
-    } else if (direction === "up" || latest < 100) {
+    } else if (shouldShow && !isVisible) {
       setIsVisible(true);
     }
     lastScrollY.current = latest;
@@ -60,6 +62,7 @@ const HeaderMobile = ({
         duration: 0.3,
         ease: [0.25, 0.1, 0.25, 1],
       }}
+      style={{ willChange: "transform" }}
     >
       {/* Section gauche */}
       <div className="flex justify-start z-10 relative">
