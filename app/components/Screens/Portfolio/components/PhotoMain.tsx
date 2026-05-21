@@ -71,8 +71,17 @@ const PhotoMain = memo(function PhotoMain({
   // Placeholder ultra léger (20px, très compressé) pour effet blur pendant le chargement
   const placeholderSrc = getOptimizedImageUrl(photo, "placeholder");
 
-  const srcSet = generateSrcSet(photo) || undefined;
-  const sizes = srcSet ? generateSizes() : undefined;
+  // Mobile : srcSet restreint à mobile+tablet pour éviter que le DPR pousse le navigateur
+  // à télécharger la version 1920w (~670 KB) sur un écran de 375px.
+  // Largeur d'affichage = viewport - 32px (padding px-4 du parent).
+  const srcSet = isMobile
+    ? `${getOptimizedImageUrl(photo, "mobile")} 640w, ${getOptimizedImageUrl(photo, "tablet")} 1024w`
+    : generateSrcSet(photo) || undefined;
+  const sizes = isMobile
+    ? "calc(100vw - 32px)"
+    : srcSet
+      ? generateSizes()
+      : undefined;
 
   return (
     <div

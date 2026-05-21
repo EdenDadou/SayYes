@@ -69,6 +69,7 @@ export default function IntroSection() {
           mobileSize="mobile"
           className="w-full"
           priority
+          noPlaceholder
         />
         <div className="flex flex-col gap-1 text-[18px] leading-[22px] font-jakarta-semibold items-center">
           <div className="flex flex-row items-center gap-2">
