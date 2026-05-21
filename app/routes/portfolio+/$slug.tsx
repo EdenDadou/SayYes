@@ -6,7 +6,8 @@ import {
 import { useParams, useLoaderData } from "@remix-run/react";
 import { getPortfolioBySlug } from "~/server/portfolio.server";
 import type { PortfolioData } from "~/utils/admin/manage-portfolio-types";
-import { useViewport } from "~/utils/hooks/useViewport";
+import { isMobileUserAgent, useViewport } from "~/utils/hooks/useViewport";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import LoadingBar from "~/components/LoadingBar";
 import BackgroundProject1 from "~/components/Screens/PortfolioProject/BackgroundProject1";
@@ -26,14 +27,31 @@ import { useEffect, useState, useCallback } from "react";
 import { useMetaData } from "~/utils/hooks/useMetaData";
 import { AnimatePresence, motion } from "framer-motion";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const slug = params.slug;
   if (!slug) throw new Response("Not found", { status: 404 });
 
   const portfolio = await getPortfolioBySlug(slug);
   if (!portfolio) throw new Response("Not found", { status: 404 });
 
-  return json({ portfolio });
+  // Préload du LCP (photo principale) côté headers HTTP : garanti d'être
+  // traité par le navigateur avant le parsing du HTML, contrairement au
+  // <link rel=preload> injecté via React 18.2 qui n'est pas hoisté dans <head>.
+  const headers = new Headers();
+  const lcpPhoto = portfolio.photoMain || portfolio.photoCouverture;
+  if (lcpPhoto) {
+    const isMobile = isMobileUserAgent(request.headers.get("User-Agent") || "");
+    const lcpUrl = getOptimizedImageUrl(
+      lcpPhoto,
+      isMobile ? "tablet" : "desktop"
+    );
+    headers.append(
+      "Link",
+      `<${lcpUrl}>; rel=preload; as=image; fetchpriority=high`
+    );
+  }
+
+  return json({ portfolio }, { headers });
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

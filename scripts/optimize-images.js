@@ -17,6 +17,13 @@ const SIZES = [
   { suffix: "-1920", width: 1920, quality: 85, enlarge: false },
 ];
 
+// Sources volontairement upscalées (contenu flou/halo où l'upscaling est
+// visuellement invisible). Évite le warning Lighthouse image-size-responsive
+// sur les écrans DPR 2-3 quand la source d'origine est trop petite.
+const UPSCALE_BASENAMES = new Set([
+  "bg-halo-mobile.png",
+]);
+
 function findImages(dir) {
   const results = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -34,6 +41,7 @@ async function processImage(srcPath) {
   const ext = extname(srcPath);
   const base = srcPath.slice(0, -ext.length);
   const generated = [];
+  const allowUpscale = UPSCALE_BASENAMES.has(basename(srcPath));
 
   for (const { suffix, width, quality, enlarge } of SIZES) {
     const outPath = `${base}${suffix}.webp`;
@@ -45,8 +53,13 @@ async function processImage(srcPath) {
       if (outMtime > srcMtime) continue;
     }
 
+    const withoutEnlargement = !(enlarge || allowUpscale);
     await sharp(srcPath)
-      .resize({ width, withoutEnlargement: !enlarge })
+      .resize({
+        width,
+        withoutEnlargement,
+        kernel: allowUpscale ? "lanczos3" : undefined,
+      })
       .webp({ quality })
       .toFile(outPath);
 
