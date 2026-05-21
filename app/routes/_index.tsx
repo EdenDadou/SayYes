@@ -94,9 +94,7 @@ export default function Index() {
       {isMobile ? (
         <MobileLayout>
           <div className="w-full h-fit relative flex flex-col gap-16">
-            <FadeInView>
-              <IntroSection />
-            </FadeInView>
+            <IntroSection />
             <FadeInView>
               <TitleCards />
             </FadeInView>
