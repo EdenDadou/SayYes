@@ -57,7 +57,6 @@ export default function IntroSection() {
         className="absolute -top-36 left-0 w-full h-auto z-0 opacity-80"
         mobileSize="tablet"
         noPlaceholder
-        noMobileOptimization
         priority
       />
       <GridBg className="absolute -top-36 w-full left-0 right-0 h-auto z-0 opacity-80" />
