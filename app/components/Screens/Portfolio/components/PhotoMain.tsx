@@ -61,19 +61,18 @@ const PhotoMain = memo(function PhotoMain({
     return null;
   }
 
-  // Sur mobile: image optimisée 640px sans srcSet (on sait déjà la taille)
-  // Sur desktop: srcSet complet pour responsive
+  // Baseline mobile en "tablet" (1024px) pour rester net sur écran Retina DPR2-3.
+  // srcSet fourni dans tous les cas : le navigateur choisit la meilleure taille selon le DPR.
   const optimizedSrc = getOptimizedImageUrl(
     photo,
-    isMobile ? "mobile" : "desktop"
+    isMobile ? "tablet" : "desktop"
   );
 
   // Placeholder ultra léger (20px, très compressé) pour effet blur pendant le chargement
   const placeholderSrc = getOptimizedImageUrl(photo, "placeholder");
 
-  // Sur mobile, pas besoin de srcSet - on charge directement la bonne taille
-  const srcSet = isMobile ? undefined : generateSrcSet(photo) || undefined;
-  const sizes = isMobile ? undefined : srcSet ? generateSizes() : undefined;
+  const srcSet = generateSrcSet(photo) || undefined;
+  const sizes = srcSet ? generateSizes() : undefined;
 
   return (
     <div
@@ -81,22 +80,20 @@ const PhotoMain = memo(function PhotoMain({
       className={`relative w-full rounded-2xl overflow-hidden ${isMobile ? "h-[500px]" : "h-[650px]"} ${className}`}
       style={isMobile ? mobileOptimizedStyle : undefined}
     >
-      {/* Placeholder flou en arrière-plan */}
-      {!isLoaded && (
-        <img
-          src={placeholderSrc}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-center blur-xl scale-110"
-          style={{ filter: "blur(20px)" }}
-        />
-      )}
+      {/* Placeholder flou en arrière-plan — reste monté pour un cross-fade propre */}
+      <img
+        src={placeholderSrc}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover object-center blur-xl scale-110 transition-opacity duration-500 ease-out"
+        style={{ filter: "blur(20px)", opacity: isLoaded ? 0 : 1 }}
+      />
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="w-full h-full"
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full h-full relative"
       >
         <motion.img
           src={optimizedSrc}

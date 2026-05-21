@@ -428,7 +428,7 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
         {/* Background 3 - Stage 4 */}
         <motion.div
           className="absolute left-0 right-0 -bottom-28 w-screen z-0"
-          style={{ height: "120vh" }}
+          style={{ height: "120svh" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
           transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}

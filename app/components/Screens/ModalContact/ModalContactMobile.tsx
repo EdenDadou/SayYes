@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useFetcher } from "@remix-run/react";
+import { useFetcher, useNavigate } from "@remix-run/react";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Close from "~/assets/icons/Close";
 import Localisation from "~/assets/icons/Localisation";
 import Tel from "~/assets/icons/Tel";
 import ArrowFull from "~/assets/icons/ArrowFull";
+import Coche from "~/assets/icons/Coche";
 import BackgroundModalMobile from "./assets/BackgroundModalMobile";
 import "~/styles/tailwind.css";
 import ChatBuble from "~/components/Header/assets/ChatBuble";
@@ -69,6 +70,7 @@ export default function ModalContactMobile({
   close,
 }: ModalModalContactProps) {
   const fetcher: any = useFetcher();
+  const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
@@ -76,6 +78,17 @@ export default function ModalContactMobile({
       setSuccess(true);
     }
   }, [fetcher.state, fetcher.data]);
+
+  const handleSuccessClose = () => {
+    setSuccess(false);
+    close();
+  };
+
+  const handleAccueil = () => {
+    setSuccess(false);
+    close();
+    navigate("/");
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -109,10 +122,122 @@ export default function ModalContactMobile({
           exit="exit"
           className="fixed inset-0 z-50 flex flex-col items-center w-full h-screen overflow-y-auto pt-20"
           style={{
-            background: "rgba(0, 0, 0, 0.30)",
-            backdropFilter: "blur(25px)",
+            background: success ? "#000000" : "rgba(0, 0, 0, 0.30)",
+            backdropFilter: success ? "none" : "blur(25px)",
           }}
         >
+          {success ? (
+            <div className="relative w-full min-h-[calc(100vh-5rem)] flex flex-col items-center">
+              <motion.button
+                custom={0}
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="absolute top-4 right-6 text-white cursor-pointer z-30 hover:opacity-70 bg-white/10 backdrop-blur-md rounded-full p-2"
+                onClick={handleSuccessClose}
+                whileTap={{ scale: 0.9 }}
+                aria-label="Fermer"
+              >
+                <Close />
+              </motion.button>
+
+              <BackgroundModalMobile
+                className="absolute bottom-0 left-0 w-full pointer-events-none"
+                aria-hidden="true"
+                style={{ height: "62%" }}
+              />
+
+              <div
+                className="absolute top-0 left-0 w-full pointer-events-none"
+                aria-hidden="true"
+                style={{
+                  backgroundImage: 'url("/images/404/404.gif")',
+                  backgroundSize: "180vw",
+                  backgroundPositionX: "-40vw",
+                  backgroundRepeat: "no-repeat",
+                  height: "52vh",
+                }}
+              >
+                <div
+                  className="absolute top-0 left-0 w-full h-24"
+                  style={{
+                    background:
+                      "linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0))",
+                  }}
+                />
+                <div
+                  className="absolute bottom-0 left-0 w-full"
+                  style={{
+                    height: "18vh",
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0))",
+                  }}
+                />
+                <div
+                  className="absolute left-0 top-0 w-16 h-full"
+                  style={{
+                    background:
+                      "linear-gradient(to right, rgba(0,0,0,0.9) 15%, rgba(0,0,0,0))",
+                  }}
+                />
+                <div
+                  className="absolute right-0 top-0 w-16 h-full"
+                  style={{
+                    background:
+                      "linear-gradient(to left, rgba(0,0,0,0.9), rgba(0,0,0,0))",
+                  }}
+                />
+              </div>
+
+              <motion.div
+                custom={1}
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="relative z-10 flex flex-col items-center mt-[42vh] px-6 w-full"
+              >
+                <div className="h-[3px] w-16 holographic-bg rounded-full mb-5" />
+
+                <div className="flex flex-col items-center gap-2 mb-6">
+                  <Coche
+                    className="w-5 h-5"
+                    color="#ffffff"
+                    aria-hidden="true"
+                  />
+                  <p className="text-white font-jakarta text-[15px]">
+                    Message envoyé !
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-center text-center">
+                  <p className="text-[34px] leading-[40px] text-white font-jakarta-bold">
+                    Nous vous
+                  </p>
+                  <p className="text-[34px] leading-[40px] text-white font-jakarta-bold">
+                    rappelons dans
+                  </p>
+                  <h1 className="text-[34px] leading-[40px] text-white flex flex-row items-center gap-3 font-jakarta-bold holographic-text tracking-tight">
+                    <ArrowLight className="w-9 h-9 shrink-0" />
+                    les plus bref délais !
+                  </h1>
+                </div>
+
+                <p className="text-white font-jakarta text-[16px] mt-4 mb-10 text-center">
+                  Bonne journée et à très vite.
+                </p>
+
+                <Button
+                  type="border"
+                  onClick={handleAccueil}
+                  label="Accueil"
+                  leftIcon={<ArrowFull className="w-6 h-6" />}
+                  textSize="L"
+                />
+              </motion.div>
+            </div>
+          ) : (
           <div
             className="flex flex-col items-center justify-start gap-8 z-20 pt-20 relative w-full px-4"
             style={{
@@ -214,30 +339,11 @@ export default function ModalContactMobile({
               >
                 <BackgroundModalMobile className="absolute inset-0  w-full h-full z-0 rounded-[20px] object-contain blur-3xl" />
 
-                {success ? (
-                  <div className="relative z-20 flex flex-col items-center justify-center gap-6 py-8 text-center">
-                    <p className="text-white font-jakarta-bold text-xl holographic-text">
-                      Message envoyé !
-                    </p>
-                    <p className="text-white font-jakarta text-base">
-                      Nous vous rappelons dans les plus brefs délais.
-                    </p>
-                    <Button
-                      type="border"
-                      label="Fermer"
-                      onClick={() => {
-                        setSuccess(false);
-                        close();
-                      }}
-                      leftIcon={<ArrowFull className="w-6 h-6" />}
-                    />
-                  </div>
-                ) : (
-                  <fetcher.Form
-                    method="post"
-                    action="/api/contact"
-                    className="relative w-full h-full flex flex-col gap-4 justify-center text-center z-20"
-                  >
+                <fetcher.Form
+                  method="post"
+                  action="/api/contact"
+                  className="relative w-full h-full flex flex-col gap-4 justify-center text-center z-20"
+                >
                     <label className="block">
                       <span className="text-sm text-white font-jakarta mb-2 block">
                         Nom et prénom*
@@ -342,10 +448,10 @@ export default function ModalContactMobile({
                       />
                     </div>
                   </fetcher.Form>
-                )}
               </Card>
             </motion.div>
           </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

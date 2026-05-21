@@ -106,16 +106,24 @@ export default function PortfolioSlug() {
     if (isMobile === false && portfolio) {
       const timers: NodeJS.Timeout[] = [];
 
+      // Toujours utiliser Math.max pour éviter les retours en arrière de loadStage
+      // (sinon un timer plus tardif peut redescendre l'état et faire clignoter la photo)
       // Stage 1: fond apparaît après 50ms
-      timers.push(setTimeout(() => setLoadStage(1), 50));
-      // Stage 2: hero title après 150ms
-      timers.push(setTimeout(() => setLoadStage(2), 150));
-      // Stage 3: photo main après 250ms
       timers.push(
-        setTimeout(() => setLoadStage((prev) => Math.max(prev, 3)), 100)
+        setTimeout(() => setLoadStage((prev) => Math.max(prev, 1)), 50)
+      );
+      // Stage 2: hero title après 100ms
+      timers.push(
+        setTimeout(() => setLoadStage((prev) => Math.max(prev, 2)), 100)
+      );
+      // Stage 3: photo main après 150ms
+      timers.push(
+        setTimeout(() => setLoadStage((prev) => Math.max(prev, 3)), 150)
       );
       // Stage 4: contenu après 400ms (ne pas attendre onLoad — image déjà en cache)
-      timers.push(setTimeout(() => setLoadStage(4), 400));
+      timers.push(
+        setTimeout(() => setLoadStage((prev) => Math.max(prev, 4)), 400)
+      );
 
       return () => timers.forEach(clearTimeout);
     }
