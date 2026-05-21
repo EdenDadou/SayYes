@@ -67,6 +67,7 @@ const HeaderMobile = ({
       {/* Section gauche */}
       <div className="flex justify-start z-10 relative">
         <Button
+          ariaLabel={isOpenMenu ? "Fermer le menu" : "Ouvrir le menu"}
           leftIcon={
             <AnimatedBurgerMenu
               isOpen={isOpenMenu}
@@ -94,6 +95,7 @@ const HeaderMobile = ({
       {/* Section droite */}
       <div className="flex justify-end z-10 relative">
         <Button
+          ariaLabel="Ouvrir le formulaire de contact"
           leftIcon={<ChatBuble />}
           type="mobile"
           onClick={() => {

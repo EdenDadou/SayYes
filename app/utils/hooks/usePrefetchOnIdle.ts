@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { MOBILE_BREAKPOINT } from "~/utils/hooks/useViewport";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 const ROUTES_TO_PREFETCH = ["/solutions", "/portfolio"];
 
@@ -40,9 +41,10 @@ export function usePrefetchOnIdle(): void {
         links.push(injectPrefetchLink(route, "document"));
       }
 
-      // Images via /api/image → passent dans le SW CacheFirst
+      // Images : pointe directement sur le WebP statique mobile (640w),
+      // bypass /api/image qui ferait juste rediriger vers la même chose.
       for (const imgPath of IMAGES_TO_PREFETCH) {
-        const url = `/api/image?src=${encodeURIComponent(imgPath)}&w=640&q=75`;
+        const url = getOptimizedImageUrl(imgPath, "mobile");
         links.push(injectPrefetchLink(url, "image"));
       }
     };

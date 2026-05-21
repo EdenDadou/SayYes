@@ -1,3 +1,4 @@
+import type { MetaFunction } from "@remix-run/node";
 import { useRef } from "react";
 import ParallaxCard from "~/components/Card/ParallaxCard";
 import { solutionsCards } from "~/components/Screens/Solutions/data";
@@ -5,10 +6,27 @@ import { useViewport } from "~/utils/hooks/useViewport";
 import SolutionTitleMobile from "~/components/Screens/Solutions/components/SolutionTitleMobile";
 import Desktoplayout from "~/components/Layout/Desktop";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 import MobileLayout from "~/components/Layout/Mobile";
 import "~/styles/tailwind.css";
 import SolutionTitle from "~/components/Screens/Solutions/components/SolutionTitle";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
+
+export const meta: MetaFunction = () => [
+  { title: "Nos solutions créatives — Say Yes" },
+  {
+    name: "description",
+    content:
+      "Identité visuelle, print, digital, vidéo, facilitation graphique, illustration : Say Yes accompagne votre marque à chaque étape, de la stratégie aux supports.",
+  },
+  { property: "og:title", content: "Nos solutions créatives — Say Yes" },
+  {
+    property: "og:description",
+    content:
+      "Identité visuelle, print, digital, vidéo, facilitation graphique : Say Yes accompagne votre marque à chaque étape.",
+  },
+  { property: "og:type", content: "website" },
+];
 
 // Variants pour les animations d'entrée
 const fadeInUp = {
@@ -123,10 +141,14 @@ export default function Solutions() {
             transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
             className="sticky top-0 -mt-20 w-full h-screen z-0 pointer-events-none"
           >
-            <img
+            <OptimizedImage
               src="/images/portfolio/bg.png"
               alt="Background"
               className="w-full h-full object-cover opacity-80"
+              mobileSize="mobile"
+              desktopSize="desktop"
+              noPlaceholder
+              priority
             />
           </motion.div>
         </AnimatePresence>

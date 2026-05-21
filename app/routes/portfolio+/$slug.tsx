@@ -321,10 +321,10 @@ export default function PortfolioSlug() {
                   {/* Deliverables */}
                   <div className="flex justify-center pb-[100px] bg-white px-8 z-20">
                     <div className="w-[990px] flex flex-col">
-                      <h3 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-semi-bold tracking-[-1px]">
+                      <h2 className=" flex flex-row items-center gap-2 text-2xl text-black mb-6 font-jakarta-semi-bold tracking-[-1px]">
                         <Star className="w-6 h-6" fill="black" />
                         Notre accompagnement
-                      </h3>
+                      </h2>
                       <div className="flex flex-row gap-5 w-full">
                         {portfolio.livrable.map(
                           (item: string, index: number) => (

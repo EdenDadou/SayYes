@@ -2,6 +2,7 @@ import Coche from "~/assets/icons/Coche";
 import Star from "~/assets/icons/Star";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import { cn } from "~/utils/ui/ui";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 import "~/styles/tailwind.css";
 
@@ -25,6 +26,13 @@ export default function ContentSolutionMobile({
   const imageClasses = cn(
     "h-full flex items-center justify-center rounded-[15px] relative"
   );
+  const optimizedImageUrl = imageUrl
+    ? getOptimizedImageUrl(imageUrl, "mobile")
+    : undefined;
+  const masqueUrl = getOptimizedImageUrl(
+    "/images/solutions/MasqueMobile.png",
+    "mobile"
+  );
 
   return (
     <div className="size-full p-2">
@@ -47,7 +55,9 @@ export default function ContentSolutionMobile({
           <div
             className={imageClasses}
             style={{
-              backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
+              backgroundImage: videoUrl
+                ? undefined
+                : `url(${optimizedImageUrl})`,
               backgroundSize: "200% 60%",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "top right",
@@ -63,7 +73,7 @@ export default function ContentSolutionMobile({
         <div
           className="absolute inset-0 size-full z-10 rounded-[16px]"
           style={{
-            backgroundImage: "url(/images/solutions/MasqueMobile.png)",
+            backgroundImage: `url(${masqueUrl})`,
             backgroundSize: "cover",
             maskImage: "linear-gradient(to top, gray 50%, transparent 100%)",
             WebkitMaskImage:

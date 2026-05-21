@@ -311,10 +311,10 @@ const PortfolioProjectMobile = memo(function PortfolioProjectMobile({
             animate={{ opacity: loadStage >= 4 ? 1 : 0 }}
             transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
           >
-            <h3 className="flex flex-row items-center gap-2 text-[20px] text-black font-jakarta-semi-bold tracking-[-1px]">
+            <h2 className="flex flex-row items-center gap-2 text-[20px] text-black font-jakarta-semi-bold tracking-[-1px]">
               <Star className="w-4 h-4" fill="black" />
               Notre accompagnement
-            </h3>
+            </h2>
             <motion.div
               ref={deliverablesRef}
               className="flex flex-row flex-nowrap gap-2 w-screen overflow-x-scroll scrollbar-hide"

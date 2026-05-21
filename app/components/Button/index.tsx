@@ -7,6 +7,7 @@ interface IButtonProps {
   htmlType?: "button" | "submit" | "reset";
   disabled?: boolean;
   className?: string;
+  ariaLabel?: string;
 }
 
 const Button = ({
@@ -18,11 +19,13 @@ const Button = ({
   htmlType = "button",
   disabled = false,
   className = "",
+  ariaLabel,
 }: IButtonProps) => {
   return (
     <button
       type={htmlType}
       disabled={disabled}
+      aria-label={ariaLabel ?? (label ? undefined : "Bouton")}
       className={`w-fit cursor-pointer rounded-full ${className} ${
         type === "plain"
           ? "group border-custom h-[74px] p-2 "

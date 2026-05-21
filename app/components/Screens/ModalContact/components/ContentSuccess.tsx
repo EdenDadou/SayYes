@@ -41,6 +41,7 @@ export default function ContentSuccess({
       <div className="relative w-full h-full rounded-xl flex flex-row overflow-hidden px-20">
         <Masque className="absolute inset-0 w-full h-full object-cover rounded-xl z-10 bg-black/10" />
         <button
+          aria-label="Fermer"
           className="absolute top-4 right-4 text-white cursor-pointer z-30 hover:opacity-70"
           onClick={handleClose}
         >

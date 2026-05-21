@@ -3,6 +3,7 @@ import Star from "~/assets/icons/Star";
 import ArrowLight from "~/assets/icons/ArrowLight";
 import Masque from "~/components/Card/components/Solution/Masque";
 import { useViewport } from "~/utils/hooks/useViewport";
+import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 
 import "~/styles/tailwind.css";
 import ContentSolutionMobile from "./ContentSolutionMobile";
@@ -40,7 +41,10 @@ export default function ContentSolution({
       <div
         className="size-full flex items-center justify-center rounded-[16px] relative"
         style={{
-          backgroundImage: videoUrl ? undefined : `url(${imageUrl})`,
+          backgroundImage:
+            videoUrl || !imageUrl
+              ? undefined
+              : `url(${getOptimizedImageUrl(imageUrl, "desktop")})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

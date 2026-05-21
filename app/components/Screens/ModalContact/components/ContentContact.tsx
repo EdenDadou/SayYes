@@ -49,6 +49,7 @@ export default function ContentContact({
         {/* <BackgroundModal className="absolute inset-0 w-full h-full z-0 rounded-[20px]" /> */}
 
         <button
+          aria-label="Fermer le formulaire de contact"
           className="absolute top-4 right-4 text-white cursor-pointer z-30 hover:opacity-70"
           onClick={close}
         >

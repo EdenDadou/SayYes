@@ -1,9 +1,20 @@
+import type { MetaFunction } from "@remix-run/node";
 import Desktoplayout from "~/components/Layout/Desktop";
 import MobileLayout from "~/components/Layout/Mobile";
 import { useViewport } from "~/utils/hooks/useViewport";
 import Background from "~/assets/icons/Background";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
 import { AnimatePresence, motion } from "framer-motion";
+
+export const meta: MetaFunction = () => [
+  { title: "Mentions légales — Say Yes" },
+  {
+    name: "description",
+    content:
+      "Mentions légales de l'agence créative Say Yes (La Sainte Paire) : éditeur du site, hébergement, propriété intellectuelle.",
+  },
+  { name: "robots", content: "noindex, follow" },
+];
 
 export default function MentionLegale() {
   const isMobile = useViewport();

@@ -14,6 +14,7 @@ import type { Bloc } from "~/types/landing-page";
 import { useViewport } from "~/utils/hooks/useViewport";
 import Desktoplayout from "~/components/Layout/Desktop";
 import MobileLayout from "~/components/Layout/Mobile";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 import { usePortfolio } from "~/contexts/PortfolioContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { Suspense, lazy } from "react";
@@ -64,10 +65,14 @@ export default function LandingPagePublic() {
             transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
           >
             {/* <Background className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80" /> */}
-            <img
+            <OptimizedImage
               src="/images/portfolio/bg.png"
               alt="Background"
               className="absolute -top-20 left-0 w-full h-auto z-0 opacity-80"
+              mobileSize="mobile"
+              desktopSize="desktop"
+              noPlaceholder
+              priority
             />
           </motion.div>
         </AnimatePresence>

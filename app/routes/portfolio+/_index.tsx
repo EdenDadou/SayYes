@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node";
+import { json, type MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getPublicPortfolios } from "~/server/portfolio.server";
 import type { PortfolioData } from "~/utils/admin/manage-portfolio-types";
@@ -9,6 +9,7 @@ import PortfolioTitleMobile from "~/components/Screens/Portfolio/components/Port
 import Filter from "~/components/Screens/Portfolio/components/Filter";
 import ContentPortfolio from "~/components/Card/components/ContentPortfolio";
 import BackgroundMobile from "~/assets/icons/BackgroundMobile";
+import OptimizedImage from "~/components/ui/OptimizedImage";
 import "~/styles/tailwind.css";
 import Desktoplayout from "~/components/Layout/Desktop";
 import MobileLayout from "~/components/Layout/Mobile";
@@ -17,7 +18,23 @@ import { usePortfolio } from "~/contexts/PortfolioContext";
 import { useEffect, useMemo } from "react";
 
 export const links = () => [
-  { rel: "preload", href: "/images/portfolio/bg.png", as: "image" },
+  { rel: "preload", href: "/images/portfolio/bg-640.webp", as: "image" },
+];
+
+export const meta: MetaFunction = () => [
+  { title: "Portfolio — Say Yes" },
+  {
+    name: "description",
+    content:
+      "Découvrez les projets de l'agence Say Yes : identité visuelle, facilitation graphique, illustration, motion design, et plus pour des marques engagées.",
+  },
+  { property: "og:title", content: "Portfolio — Say Yes" },
+  {
+    property: "og:description",
+    content:
+      "Découvrez les projets de l'agence créative Say Yes : identité, facilitation graphique, illustration, motion design.",
+  },
+  { property: "og:type", content: "website" },
 ];
 
 export async function loader() {
@@ -154,10 +171,14 @@ export default function Portfolio() {
             transition={{ duration: 0.9, ease: "easeInOut", delay: 0.2 }}
           >
             {/* <Background className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80" /> */}
-            <img
+            <OptimizedImage
               src="/images/portfolio/bg.png"
               alt="Background"
               className="absolute -top-48 left-0 w-full h-auto z-0 opacity-80"
+              mobileSize="mobile"
+              desktopSize="desktop"
+              noPlaceholder
+              priority
             />
           </motion.div>
         </AnimatePresence>
