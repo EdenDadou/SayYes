@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useViewport, isMobileUserAgent } from "~/utils/hooks/useViewport";
 import { getOptimizedImageUrl } from "~/utils/optimizeImage";
 import MobileLayout from "~/components/Layout/Mobile";
@@ -13,11 +13,19 @@ import CarouselCard from "~/components/Screens/Homepage/CarrouselCard";
 import LoadingBar from "~/components/LoadingBar";
 import TitleFullWidthCard from "~/components/Screens/Homepage/TitleFullWidthCard";
 import BigTemoignage from "~/components/Screens/Homepage/BigTemoignage";
-import TemoignagesCards from "~/components/Screens/Homepage/TemoignagesCards";
-import HomeProjectCarousel from "~/components/Screens/Homepage/HomeProjectCarroussel";
-import TitleStepImage from "~/components/Screens/Homepage/TitleStepImage";
 import FadeInView from "~/components/FadeInView";
 import { usePrefetchOnIdle } from "~/utils/hooks/usePrefetchOnIdle";
+
+// Sections below-the-fold : code-split pour alléger le bundle initial
+const TemoignagesCards = lazy(
+  () => import("~/components/Screens/Homepage/TemoignagesCards")
+);
+const HomeProjectCarousel = lazy(
+  () => import("~/components/Screens/Homepage/HomeProjectCarroussel")
+);
+const TitleStepImage = lazy(
+  () => import("~/components/Screens/Homepage/TitleStepImage")
+);
 
 export const VIDEO_DURATION = 4.5;
 
@@ -104,15 +112,17 @@ export default function Index() {
             <FadeInView>
               <TitleFullWidthCard />
             </FadeInView>
-            <FadeInView>
-              <TemoignagesCards />
-            </FadeInView>
-            <FadeInView>
-              <HomeProjectCarousel />
-            </FadeInView>
-            <FadeInView>
-              <TitleStepImage />
-            </FadeInView>
+            <Suspense fallback={null}>
+              <FadeInView>
+                <TemoignagesCards />
+              </FadeInView>
+              <FadeInView>
+                <HomeProjectCarousel />
+              </FadeInView>
+              <FadeInView>
+                <TitleStepImage />
+              </FadeInView>
+            </Suspense>
           </div>
         </MobileLayout>
       ) : (
@@ -142,18 +152,20 @@ export default function Index() {
             <FadeInView>
               <TitleFullWidthCard />
             </FadeInView>
-            {/* //Section 7 */}
-            <FadeInView>
-              <TemoignagesCards />
-            </FadeInView>
-            {/* //Section 8 */}
-            <FadeInView>
-              <HomeProjectCarousel />
-            </FadeInView>
-            {/* //Section 9 */}
-            <FadeInView>
-              <TitleStepImage />
-            </FadeInView>
+            <Suspense fallback={null}>
+              {/* //Section 7 */}
+              <FadeInView>
+                <TemoignagesCards />
+              </FadeInView>
+              {/* //Section 8 */}
+              <FadeInView>
+                <HomeProjectCarousel />
+              </FadeInView>
+              {/* //Section 9 */}
+              <FadeInView>
+                <TitleStepImage />
+              </FadeInView>
+            </Suspense>
           </div>
         </Desktoplayout>
       )}

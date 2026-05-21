@@ -23,11 +23,12 @@ export function useViewport() {
   const rootData = useRouteLoaderData<RootLoaderData>("root");
 
   const [isMobile, setIsMobile] = useState<boolean | null>(() => {
-    // Côté serveur : pas de window, on retourne null (sera résolu à l'hydration)
-    if (typeof window === "undefined") return null;
-    // Côté client : utiliser la valeur SSR calculée via User-Agent (disponible immédiatement)
+    // Utiliser la valeur SSR (User-Agent) des deux côtés : garantit que serveur et
+    // client rendent le même HTML lors de l'hydratation (fix React #418 / #423).
     if (rootData?.isMobileSSR !== undefined) return rootData.isMobileSSR;
-    // Fallback : détecter directement (cas edge sans rootData)
+    // Côté serveur sans rootData : null (sera résolu à l'hydration)
+    if (typeof window === "undefined") return null;
+    // Fallback client : détecter directement (cas edge sans rootData)
     return detectMobile();
   });
 

@@ -232,6 +232,7 @@ export default function IntroSection() {
                 loop
                 muted
                 playsInline
+                preload="none"
                 className="w-full h-full object-cover rounded-[23px]"
               />
 

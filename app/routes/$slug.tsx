@@ -12,12 +12,16 @@ import { getLandingPageBySlug } from "~/server/landing-page.server";
 import { BlocRenderer } from "~/components/LandingPage";
 import type { Bloc } from "~/types/landing-page";
 import { useViewport } from "~/utils/hooks/useViewport";
-import Page404 from "~/components/Screens/404";
-import Page404Mobile from "~/components/Screens/404/mobile/Page404Mobile";
 import Desktoplayout from "~/components/Layout/Desktop";
 import MobileLayout from "~/components/Layout/Mobile";
 import { usePortfolio } from "~/contexts/PortfolioContext";
 import { AnimatePresence, motion } from "framer-motion";
+import { Suspense, lazy } from "react";
+
+const Page404 = lazy(() => import("~/components/Screens/404"));
+const Page404Mobile = lazy(
+  () => import("~/components/Screens/404/mobile/Page404Mobile")
+);
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { slug } = params;
@@ -104,7 +108,11 @@ export function ErrorBoundary() {
 
   // Afficher la page 404 uniquement pour les erreurs de route (404)
   if (isRouteErrorResponse(error) && error.status === 404) {
-    return !isMobile ? <Page404 /> : <Page404Mobile />;
+    return (
+      <Suspense fallback={null}>
+        {!isMobile ? <Page404 /> : <Page404Mobile />}
+      </Suspense>
+    );
   }
 
   // Pour les autres erreurs, on peut afficher un message générique
