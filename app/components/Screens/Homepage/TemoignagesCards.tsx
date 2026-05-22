@@ -12,6 +12,7 @@ export default function TemoignagesCards() {
   const isMobile = useViewport();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const itemsPerView = 4;
 
@@ -115,6 +116,18 @@ export default function TemoignagesCards() {
             msOverflowStyle: "none",
             WebkitOverflowScrolling: "touch",
           }}
+          onScroll={(e) => {
+            const container = e.currentTarget;
+            const center = container.scrollLeft + container.clientWidth / 2;
+            const itemStride = mobileCardWidth + 16; // card width + gap-4
+            const firstCardCenter = 16 + mobileCardWidth / 2; // px-4 padding + half card
+            const index = Math.round((center - firstCardCenter) / itemStride);
+            const clamped = Math.max(
+              0,
+              Math.min(temoignagesCards.length - 1, index)
+            );
+            if (clamped !== mobileActiveIndex) setMobileActiveIndex(clamped);
+          }}
         >
           {temoignagesCards.map((temoignage, index) => {
             const data = CardsTemoignage(temoignage);
@@ -139,7 +152,9 @@ export default function TemoignagesCards() {
           {temoignagesCards.map((_, index) => (
             <div
               key={`dot-${index}`}
-              className="w-2 h-2 rounded-full bg-white/30"
+              className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                index === mobileActiveIndex ? "bg-white" : "bg-white/30"
+              }`}
             />
           ))}
         </div>

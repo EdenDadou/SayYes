@@ -182,13 +182,17 @@ export const CardsAccompagnement = ({
     title,
     borderClass: "light-border rounded-[40px]",
     content: (
-      <div className="h-full w-full md:w-[988px] relative md:p-14 p-6 cursor-pointer shadow-lg overflow-hidden rounded-[40px] max-h-full flex flex-col items-center md:items-start justify-end">
+      <div className="h-full w-full md:w-[988px] relative md:p-14 p-6 cursor-pointer shadow-lg overflow-hidden rounded-[40px] max-h-full flex flex-col items-center md:items-start justify-end md:border-0 border border-white/15">
         <img
           src={optimizedBg}
           alt=""
           aria-hidden="true"
           loading="lazy"
-          className="absolute top-0 left-0 w-full h-full object-cover z-0"
+          className="absolute top-0 left-0 w-full h-full object-cover md:object-center object-top md:scale-100 scale-110 z-0"
+        />
+        <div
+          aria-hidden="true"
+          className="md:hidden pointer-events-none absolute inset-x-0 bottom-0 h-28 z-20 bg-gradient-to-t from-gray-300/40 via-gray-300/15 to-transparent rounded-b-[40px]"
         />
         <div className="border-grey-animed z-10 relative md:h-full h-[344px] md:w-[335px] justify-center md:justify-start rounded-[40px] md:bg-black/90 bg-black/40 max-h-full w-full backdrop-blur-sm">
           <div className="relative flex flex-col md:gap-4 gap-2 justify-center py-2 overflow-hidden size-full rounded-[40px] md:p-12 p-6 max-h-full">

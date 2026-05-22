@@ -3,7 +3,15 @@ import SvgStars from "../../assets/icons/Stars";
 
 const ScrollingBannerMobile = () => {
   return (
-    <div className="relative bg-drop-grey filter w-full bottom-0 left-0 right-0 flex items-center overflow-hidden">
+    <div
+      className="relative bg-drop-grey w-full bottom-0 left-0 right-0 flex items-center overflow-hidden"
+      style={{
+        backdropFilter: "none",
+        WebkitBackdropFilter: "none",
+        backgroundColor: "rgba(30,30,30,0.85)",
+        contain: "paint",
+      }}
+    >
       {/* Overlay sombre à gauche */}
       <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-[rgba(10,10,10,1)] via-[rgba(10,10,10,1)]/100 to-transparent pointer-events-none z-10"></div>
 

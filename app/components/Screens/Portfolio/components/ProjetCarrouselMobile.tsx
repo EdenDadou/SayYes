@@ -44,6 +44,7 @@ export default function ProjectCarouselMobile({
                     titre={project.titre}
                     topTitle={portfolio?.topTitle}
                     slug={project.slug}
+                    reloadDocument
                   />
                 }
                 borderClass="card-hover"

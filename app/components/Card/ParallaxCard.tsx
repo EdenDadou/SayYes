@@ -51,13 +51,24 @@ export default function ParallaxCard({
     hasNextCard ? 0 : 1,
   ]);
 
+  const cardHeightPx =
+    isMobile && height ? parseInt(height, 10) : null;
+  const mobileStickyTop =
+    cardHeightPx && !Number.isNaN(cardHeightPx)
+      ? `calc(50vh - ${cardHeightPx / 2}px)`
+      : "20vh";
+
   return (
     <div
       ref={container}
-      style={isMobile ? { height: mobileOuterHeight ?? "85vh" } : undefined}
+      style={
+        isMobile
+          ? { height: mobileOuterHeight ?? "85vh", top: mobileStickyTop }
+          : undefined
+      }
       className={cn(
         "flex justify-center sticky",
-        isMobile ? "items-start pt-8 top-[20vh]" : "items-center h-screen top-0"
+        isMobile ? "items-start" : "items-center h-screen top-0"
       )}
     >
       <motion.div

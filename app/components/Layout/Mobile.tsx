@@ -5,6 +5,7 @@ import FooterMobile from "../Footer/mobile/FooterMobile";
 import ModalContactMobile from "../Screens/ModalContact/ModalContactMobile";
 import MenuMobile from "../Header/components/MenuMobile";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLocation } from "@remix-run/react";
 import { ModalContactProvider } from "~/contexts/ModalContactContext";
 
 interface ILayoutProps {
@@ -20,6 +21,7 @@ export default function MobileLayout({
 }: ILayoutProps) {
   const [isOpenModalContact, setIsOpenModalContact] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const location = useLocation();
 
   const openModal = useCallback(() => setIsOpenModalContact(true), []);
 
@@ -45,8 +47,9 @@ export default function MobileLayout({
           isOpenModalContact={isOpenModalContact}
           isOpenMenu={isOpenMenu}
         />
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.div
+            key={location.pathname}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
